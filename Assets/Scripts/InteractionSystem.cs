@@ -1,15 +1,22 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class InteractionSystem : PlayerCore {
+public class InteractionSystem : PlayerCore
+{
+    public float pushStrength = 6.0f;
+    private Rigidbody rbody;
 
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+    void Start()
+    {
+        rbody = GetComponent<Rigidbody>();
+    }
+
+    void OnCollisionEnter(Collision coll)
+    {
+        if (coll.collider.tag == "Player")
+        {
+
+            rbody.AddForce(transform.forward * pushStrength);
+        }
+    }
 }
