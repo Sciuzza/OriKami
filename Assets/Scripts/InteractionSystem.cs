@@ -70,7 +70,7 @@ public class InteractionSystem : PlayerCore
             currentForm = forms.frog;
             msLink.SettingMeshBounds(currentActForm);
         }
-        else if (Input.GetKeyDown("3") && currentForm != forms.dragon)
+        else if (Input.GetKeyDown("3") && currentForm != forms.dragon && !msLink.isOnGround)
         {
             dragon.SetActive(true);
             GameObject.FindGameObjectWithTag(currentActForm).SetActive(false);
@@ -88,5 +88,14 @@ public class InteractionSystem : PlayerCore
         }
 
 
+    }
+
+    public void SwitchToStandard()
+    {
+        standard.SetActive(true);
+        GameObject.FindGameObjectWithTag(currentActForm).SetActive(false);
+        currentActForm = "Standard Form";
+        currentForm = forms.standard;
+        msLink.SettingMeshBounds(currentActForm);
     }
 }

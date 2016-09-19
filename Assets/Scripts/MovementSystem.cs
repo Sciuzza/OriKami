@@ -8,13 +8,14 @@ public class MovementSystem : PlayerCore
     private float maxSpeed = 50f;
     private float jumpStrength = 19000f;
     private float rollStrength = 8000f;
-    private float flyStrength = 5000f;
+    private float flyStrength = 30f;
+    private float flyPlaningCoefficient = 1;
 
     private Rigidbody rbLink;
 
     Bounds meshBounds;
 
-    private bool isOnGround = true;
+    public bool isOnGround = true;
     private bool isJumping = false;
     private bool isRolling = false;
     private bool isFlying = false;
@@ -57,13 +58,17 @@ public class MovementSystem : PlayerCore
                 Roll();
                 isRolling = false;
             }
+            else if (isFlying)
+            {
+                isFlying = false;
+                isLink.SwitchToStandard();
+            }
         }
         else
         {
             if (isFlying)
             {
                 Fly();
-                isFlying = false;
             }
             else
 
@@ -84,8 +89,11 @@ public class MovementSystem : PlayerCore
             isJumping = true;
         else if (isOnGround && Input.GetButtonDown("Jump") && isLink.currentForm == forms.armadillo)
             isRolling = true;
-        else if (!isOnGround && Input.GetButtonDown("Jump") && isLink.currentForm == forms.dragon)
+        else if (!isOnGround && isLink.currentForm == forms.dragon)
+        {
             isFlying = true;
+            flyPlaningCoefficient -= Time.deltaTime / 1.5f;
+        }
     }
 
     private void LimitVelocity()
@@ -104,17 +112,15 @@ public class MovementSystem : PlayerCore
         int layerMask = 1 << LayerMask.NameToLayer("Collision");
 
 
-        if (meshBounds != null)
-        {
+       
             if (Physics.Raycast(transform.position + meshBounds.center, Vector3.down, meshBounds.extents.y, layerMask))
             {
                 return true;
             }
             else
                 return false;
-        }
-        else
-            return false;
+        
+     
     }
 
     private void Jump()
@@ -129,7 +135,7 @@ public class MovementSystem : PlayerCore
 
     private void Fly()
     {
-        rbLink.AddForce(new Vector3(0, flyStrength, flyStrength * 20));
+        rbLink.AddForce(new Vector3(0, flyStrength * flyPlaningCoefficient, 0));
     }
 
     public void SettingMeshBounds(string currentForm)
