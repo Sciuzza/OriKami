@@ -3,8 +3,30 @@ using System.Collections;
 
 public class UiManager : MonoBehaviour {
 
-	// Use this for initialization
-	void Start () {
+
+    #region SingleTone
+    [HideInInspector]
+    public static UiManager instance = null;
+
+    void Awake()
+    {
+
+
+        if (instance == null)
+            instance = this;
+        else if (instance != this)
+            Destroy(gameObject);
+
+
+
+       
+
+    }
+    #endregion
+
+
+    // Use this for initialization
+    void Start () {
 	
 	}
 	
