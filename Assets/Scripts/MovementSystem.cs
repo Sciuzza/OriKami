@@ -4,12 +4,12 @@ using System.Collections;
 public class MovementSystem : PlayerCore
 {
 
-    private float acceleration = 150f;
-    private float maxSpeed = 50f;
-    private float jumpStrength = 19000f;
-    private float rollStrength = 8000f;
-    private float flyStrength = 30f;
-    private float flyPlaningCoefficient = 1;
+    public float acceleration = 150f;
+    public float maxSpeed = 1000f;
+    public float jumpStrength = 19000f;
+    public float rollStrength = 8000f;
+    public float flyStrength = 30f;
+    public float flyPlaningCoefficient = 1;
 
     private Rigidbody rbLink;
 
