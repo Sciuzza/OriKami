@@ -1,15 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-
-
-
-
-
 public class InteractionSystem : PlayerCore
 {
-    /*
-    public float pushStrength = 6.0f;
+    
+  /*  public float pushStrength = 6.0f;
     private Rigidbody rbody;
 
     void Start()
@@ -24,8 +19,8 @@ public class InteractionSystem : PlayerCore
 
             rbody.AddForce(transform.forward * pushStrength);
         }
-    }
-    */
+    }*/
+    
 
     public forms currentForm = forms.standard;
 
