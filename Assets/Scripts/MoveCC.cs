@@ -19,19 +19,14 @@ public class MoveCC : MonoBehaviour
     private bool isRolling = false;
     private bool isFlying = false;
 
+    private float rollingTime = 0.0f;
+    
+    
 
-    private float standSpeed = 50f;
-    private float frogSpeed = 20f;
-    private float dragSpeed = 70f;
-    private float armaSpeed = 35f;
-    private float rotateSpeed = 1f;
+  
+    private Vector3 jumpDirection, glideDirection;
 
-    private float jumpStrength = 50.0f;
-    private float frogGravity = 100.0f;
-    private Vector3 jumpDirection;
-
-    private float craneGravity = 50.0f;
-    private float moveSpeedInAir = 10.0f;
+  
 
 
     // Use this for initialization
@@ -46,29 +41,32 @@ public class MoveCC : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.Rotate(0, Input.GetAxis("Horizontal") * rotateSpeed, 0);
+
+        Physics.gravity = DesignerT.instance.GeneralTweaks.globalGravity * Vector3.down;
+
+        transform.Rotate(0, Input.GetAxis("Horizontal") * DesignerT.instance.GeneralTweaks.rotateSpeed, 0);
         Vector3 forward = transform.TransformDirection(Vector3.forward);
 
         if (isLink.currentForm == forms.standard && !isJumping && !isFlying)
         {
-            float curSpeed = standSpeed * Input.GetAxis("Vertical");
+            float curSpeed = DesignerT.instance.GestioneMovimento.standMove.moveSpeed * Input.GetAxis("Vertical");
             ccLink.SimpleMove(forward * curSpeed);
         }
         else if (isLink.currentForm == forms.frog && !isJumping && !isFlying)
         {
-            float curSpeed = frogSpeed * Input.GetAxis("Vertical");
+            float curSpeed = DesignerT.instance.GestioneMovimento.frogMove.moveSpeed * Input.GetAxis("Vertical");
             ccLink.SimpleMove(forward * curSpeed);
         }
-        else if (isLink.currentForm == forms.armadillo && !isJumping && !isFlying)
+        else if (isLink.currentForm == forms.armadillo && !isJumping && !isFlying && !isRolling)
         {
-            float curSpeed = armaSpeed * Input.GetAxis("Vertical");
+            float curSpeed = DesignerT.instance.GestioneMovimento.armaMove.moveSpeed * Input.GetAxis("Vertical");
             ccLink.SimpleMove(forward * curSpeed);
         }
         else if (isLink.currentForm == forms.dragon)
         {
-            float curSpeed = dragSpeed * Input.GetAxis("Vertical");
-            forward.y -= craneGravity * Time.deltaTime;
-            ccLink.Move(forward * Time.deltaTime * dragSpeed);
+            glideDirection = this.transform.forward * DesignerT.instance.GestioneMovimento.craneMove.glideSpeed;
+            glideDirection.y -= DesignerT.instance.GeneralTweaks.glideGravity * Time.deltaTime;
+            ccLink.Move(glideDirection * Time.deltaTime);
 
         }
 
@@ -80,25 +78,41 @@ public class MoveCC : MonoBehaviour
         if (ccLink.isGrounded && Input.GetButtonDown("Jump"))
         {
             if (isLink.currentForm == forms.frog)
-                jumpDirection = (this.transform.up + this.transform.forward) * jumpStrength;
+            {
+                jumpDirection = (this.transform.up + this.transform.forward) * DesignerT.instance.GestioneMovimento.frogMove.jumpStrength;
+                isJumping = true;
+            }
             else if (isLink.currentForm == forms.standard)
-                jumpDirection = (this.transform.up + this.transform.forward) * jumpStrength / 2;
-
-            isJumping = true;
+            {
+                jumpDirection = (this.transform.up + this.transform.forward) * DesignerT.instance.GestioneMovimento.standMove.jumpStrength;
+                isJumping = true;
+            }
+            else if (isLink.currentForm == forms.armadillo)
+            {
+                isRolling = true;
+            }
         }
 
         if (isJumping)
         {
-
-
-            jumpDirection.y -= frogGravity * Time.deltaTime;
+            jumpDirection.y -= DesignerT.instance.GeneralTweaks.jumpGravity * Time.deltaTime;
             ccLink.Move(jumpDirection * Time.deltaTime);
-
-
-
 
             if (ccLink.isGrounded)
                 isJumping = false;
+        }
+
+        if (isRolling)
+        {
+            rollingTime += Time.deltaTime;
+            ccLink.SimpleMove(this.transform.forward * DesignerT.instance.GestioneMovimento.armaMove.rollingStrength);
+
+            if (rollingTime >= DesignerT.instance.GestioneMovimento.armaMove.rollingTime)
+            {
+                rollingTime = 0;
+                isRolling = false;
+            }
+
         }
 
         if (!ccLink.isGrounded && isLink.currentForm == forms.dragon)
