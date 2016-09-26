@@ -4,7 +4,7 @@ using System.Collections;
 public class TrapsManager : MonoBehaviour
 {
 
-
+/*
     public float sphereSpeed;
     float sphereRotation = 5f;
     Transform targetTr;
@@ -70,5 +70,5 @@ public class TrapsManager : MonoBehaviour
         }
 
     }
-
+    */
 }
