@@ -8,7 +8,7 @@ public class CameraManager : MonoBehaviour {
     private Transform lookAt;
     private Transform camTransform;
 
-    private float distance = 200.0f;
+    private float distance = 15.0f;
     private float currentx = 0.0f;
     private float currenty = 0.0f;
     private float sensitivityX = 4.0f;
@@ -63,7 +63,7 @@ public class CameraManager : MonoBehaviour {
 
         distance -= Input.GetAxis("Mouse ScrollWheel") * sensitivityZoom;
 
-        distance = Mathf.Clamp(distance, 50, 300);
+        distance = Mathf.Clamp(distance, 5, 30);
         currenty = Mathf.Clamp(currenty, Y_ANGLE_MIN, Y_ANGLE_MAX);
     }
 

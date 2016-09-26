@@ -1,11 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
-using UnityEngine.SceneManagement;
 
 public class TrapsManager : MonoBehaviour
 {
 
-
+/*
     public float sphereSpeed;
     float sphereRotation = 5f;
     Transform targetTr;
@@ -13,29 +12,26 @@ public class TrapsManager : MonoBehaviour
     public Transform B;
     Transform rotationSphere;
     bool isDirectionRight = true;
-    Rigidbody rbody;
 
 
     #region SingleTone
     [HideInInspector]
     public static TrapsManager instance = null;
 
-    void Start()
-    {
-        rbody = GetComponent<Rigidbody>();
-    }
-
     void Awake()
     {
 
-       /* if (instance == null)
+        if (instance == null)
             instance = this;
-        else if (instance != this)   // da controllare non fa funzionare il prefab delle trappole in movimento
+        else if (instance != this)
             Destroy(gameObject);
-        */      
+
+
+
+        
 
         #endregion
-        
+
         targetTr = A;
     }
 
@@ -72,20 +68,7 @@ public class TrapsManager : MonoBehaviour
 
             }
         }
-        
 
     }
-
-
-
-   /* void OnCollisionEnter(Collision coll)
-    {
-        if (coll.collider.tag == "Player")
-        {
-
-            SceneManager.LoadScene (SceneManager.GetActiveScene ().name);
-        }
-    }*/
-
-
+    */
 }
