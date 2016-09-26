@@ -1,43 +1,25 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+public enum forms { standard, frog, dragon, armadillo };
+
+public class InterCC : MonoBehaviour {
 
 
+    private MoveCC moveLink;
+    private CharacterController ccLink;
 
-
-
-public class InteractionSystem : PlayerCore
-{
-    /*
-    public float pushStrength = 6.0f;
-    private Rigidbody rbody;
-
-    void Start()
-    {
-        rbody = GetComponent<Rigidbody>();
-    }
-
-    void OnCollisionEnter(Collision coll)
-    {
-        if (coll.collider.tag == "Player")
-        {
-
-            rbody.AddForce(transform.forward * pushStrength);
-        }
-    }
-    */
-
+    // to be placed on static script
+    private string currentActForm = "Standard Form";
+    private GameObject frog, standard, dragon, armadillo;
     public forms currentForm = forms.standard;
 
-    string currentActForm = "Standard Form";
 
-    GameObject frog, standard, dragon, armadillo;
+    // Use this for initialization
+    void Awake () {
 
-    MovementSystem msLink;
-
-    void Awake()
-    {
-        msLink = GameObject.FindGameObjectWithTag("Player").GetComponent<MovementSystem>();
+        moveLink = GetComponent<MoveCC>();
+        ccLink = GetComponent<CharacterController>();
 
         frog = GameObject.FindGameObjectWithTag("Frog Form");
         frog.SetActive(false);
@@ -50,17 +32,21 @@ public class InteractionSystem : PlayerCore
 
         armadillo = GameObject.FindGameObjectWithTag("Armadillo Form");
         armadillo.SetActive(false);
-    }
 
-    void Update()
-    {
+        
+
+    }
+	
+	// Update is called once per frame
+	void Update () {
+
         if (Input.GetKeyDown("1") && currentForm != forms.standard)
         {
             standard.SetActive(true);
             GameObject.FindGameObjectWithTag(currentActForm).SetActive(false);
             currentActForm = "Standard Form";
             currentForm = forms.standard;
-            msLink.SettingMeshBounds(currentActForm);
+            
         }
         else if (Input.GetKeyDown("2") && currentForm != forms.frog)
         {
@@ -68,15 +54,15 @@ public class InteractionSystem : PlayerCore
             GameObject.FindGameObjectWithTag(currentActForm).SetActive(false);
             currentActForm = "Frog Form";
             currentForm = forms.frog;
-            msLink.SettingMeshBounds(currentActForm);
+           
         }
-        else if (Input.GetKeyDown("3") && currentForm != forms.dragon && !msLink.isOnGround)
+        else if (Input.GetKeyDown("3") && currentForm != forms.dragon && !ccLink.isGrounded)
         {
             dragon.SetActive(true);
             GameObject.FindGameObjectWithTag(currentActForm).SetActive(false);
             currentActForm = "Dragon Form";
             currentForm = forms.dragon;
-            msLink.SettingMeshBounds(currentActForm);
+           
         }
         else if (Input.GetKeyDown("4") && currentForm != forms.armadillo)
         {
@@ -84,18 +70,7 @@ public class InteractionSystem : PlayerCore
             GameObject.FindGameObjectWithTag(currentActForm).SetActive(false);
             currentActForm = "Armadillo Form";
             currentForm = forms.armadillo;
-            msLink.SettingMeshBounds(currentActForm);
+            
         }
-
-
-    }
-
-    public void SwitchToStandard()
-    {
-        standard.SetActive(true);
-        GameObject.FindGameObjectWithTag(currentActForm).SetActive(false);
-        currentActForm = "Standard Form";
-        currentForm = forms.standard;
-        msLink.SettingMeshBounds(currentActForm);
     }
 }
