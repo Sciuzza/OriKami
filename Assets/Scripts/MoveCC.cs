@@ -26,9 +26,13 @@ public class MoveCC : MonoBehaviour
     private float armaSpeed = 35f;
     private float rotateSpeed = 1f;
 
-    private float jumpStrength = 20.0f;
-    private float frogGravity = 10.0f;
-    private Vector3 jumpDirection; 
+    private float jumpStrength = 50.0f;
+    private float frogGravity = 100.0f;
+    private Vector3 jumpDirection;
+
+    private float craneGravity = 50.0f;
+    private float moveSpeedInAir = 10.0f;
+
 
     // Use this for initialization
     void Awake()
@@ -45,25 +49,27 @@ public class MoveCC : MonoBehaviour
         transform.Rotate(0, Input.GetAxis("Horizontal") * rotateSpeed, 0);
         Vector3 forward = transform.TransformDirection(Vector3.forward);
 
-        if (isLink.currentForm == forms.standard)
+        if (isLink.currentForm == forms.standard && !isJumping && !isFlying)
         {
             float curSpeed = standSpeed * Input.GetAxis("Vertical");
             ccLink.SimpleMove(forward * curSpeed);
         }
-        else if (isLink.currentForm == forms.frog)
+        else if (isLink.currentForm == forms.frog && !isJumping && !isFlying)
         {
             float curSpeed = frogSpeed * Input.GetAxis("Vertical");
             ccLink.SimpleMove(forward * curSpeed);
         }
-        else if (isLink.currentForm == forms.armadillo)
+        else if (isLink.currentForm == forms.armadillo && !isJumping && !isFlying)
         {
             float curSpeed = armaSpeed * Input.GetAxis("Vertical");
             ccLink.SimpleMove(forward * curSpeed);
         }
-        else if (isLink.currentForm == forms.dragon && !ccLink.isGrounded)
+        else if (isLink.currentForm == forms.dragon)
         {
             float curSpeed = dragSpeed * Input.GetAxis("Vertical");
-            ccLink.SimpleMove(forward * curSpeed);
+            forward.y -= craneGravity * Time.deltaTime;
+            ccLink.Move(forward * Time.deltaTime * dragSpeed);
+
         }
 
         if (ccLink.isGrounded)
@@ -71,25 +77,49 @@ public class MoveCC : MonoBehaviour
         else
             isGrounded = false;
 
-        if (ccLink.isGrounded && Input.GetButtonDown("Jump") && isLink.currentForm == forms.frog && !isJumping)
+        if (ccLink.isGrounded && Input.GetButtonDown("Jump"))
         {
-            jumpDirection = (this.transform.up + this.transform.forward) * jumpStrength;
-            //jumpDirection = transform.TransformDirection(jumpDirection);
+            if (isLink.currentForm == forms.frog)
+                jumpDirection = (this.transform.up + this.transform.forward) * jumpStrength;
+            else if (isLink.currentForm == forms.standard)
+                jumpDirection = (this.transform.up + this.transform.forward) * jumpStrength / 2;
+
             isJumping = true;
         }
 
         if (isJumping)
         {
-           
-                jumpDirection.y -= frogGravity * Time.deltaTime;
-                ccLink.Move(jumpDirection * Time.deltaTime);
-           
+
+
+            jumpDirection.y -= frogGravity * Time.deltaTime;
+            ccLink.Move(jumpDirection * Time.deltaTime);
+
+
+
+
+            if (ccLink.isGrounded)
+                isJumping = false;
+        }
+
+        if (!ccLink.isGrounded && isLink.currentForm == forms.dragon)
+        {
+            if (isJumping)
+                isJumping = false;
+            if (!isFlying)
+                isFlying = true;
+
+        }
+
+        if (ccLink.isGrounded && isLink.currentForm == forms.dragon)
+        {
+            isFlying = false;
+            isLink.SwitchToStandard();
         }
 
     }
 
 
- 
+
 
 
 }

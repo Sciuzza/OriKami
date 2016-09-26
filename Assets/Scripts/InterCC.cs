@@ -73,4 +73,12 @@ public class InterCC : MonoBehaviour {
             
         }
     }
+
+    public void SwitchToStandard()
+    {
+        standard.SetActive(true);
+        GameObject.FindGameObjectWithTag(currentActForm).SetActive(false);
+        currentActForm = "Standard Form";
+        currentForm = forms.standard;
+    }
 }

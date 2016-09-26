@@ -1,15 +1,47 @@
 fileFormatVersion: 2
-guid: 868cb04afd9c74f4192934f57cfaf445
-timeCreated: 1474875987
+guid: 2aa3069f6c30e5045ad3e5b2b3df4390
+timeCreated: 1474882227
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
   fileIDToRecycleName:
-    100000: //RootNode
-    400000: //RootNode
-    2300000: //RootNode
-    3300000: //RootNode
-    4300000: modello
+    100000: armadillo
+    100002: Box001
+    100004: //RootNode
+    100006: Plane001
+    100008: Plane002
+    100010: Plane003
+    100012: ref_altezza
+    100014: ref_misure_def
+    400000: armadillo
+    400002: Box001
+    400004: //RootNode
+    400006: Plane001
+    400008: Plane002
+    400010: Plane003
+    400012: ref_altezza
+    400014: ref_misure_def
+    2300000: armadillo
+    2300002: Box001
+    2300004: Plane001
+    2300006: Plane002
+    2300008: Plane003
+    2300010: ref_altezza
+    2300012: ref_misure_def
+    3300000: armadillo
+    3300002: Box001
+    3300004: Plane001
+    3300006: Plane002
+    3300008: Plane003
+    3300010: ref_altezza
+    3300012: ref_misure_def
+    4300000: Box001
+    4300002: ref_altezza
+    4300004: Plane001
+    4300006: ref_misure_def
+    4300008: armadillo
+    4300010: Plane002
+    4300012: Plane003
   materials:
     importMaterials: 1
     materialName: 0
