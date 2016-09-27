@@ -20,13 +20,13 @@ public class MoveCC : MonoBehaviour
     private bool isFlying = false;
 
     private float rollingTime = 0.0f;
-    
-    
 
-  
+
+
+
     private Vector3 jumpDirection, glideDirection;
 
-  
+
 
 
     // Use this for initialization
