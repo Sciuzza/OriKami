@@ -34,7 +34,7 @@ public class InterCC : MonoBehaviour {
         armadillo.SetActive(false);
 
         
-
+        
     }
 	
 	// Update is called once per frame

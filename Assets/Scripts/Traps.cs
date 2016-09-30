@@ -12,9 +12,7 @@ public class Traps : MonoBehaviour
     public Transform B;
     Transform rotationSphere;
     bool isDirectionRight = true;
-    
-
-    
+        
     void Start()
     {
         targetTr = A;
