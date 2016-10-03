@@ -77,7 +77,7 @@ public class InterCC : MonoBehaviour {
             coreLink.currentForm = forms.standard;
 
         }
-        else if (Input.GetKeyDown("2") && coreLink.currentForm != forms.frog)
+        else if (Input.GetAxis("LRTButton") > 0 && coreLink.currentForm != forms.frog)
         {
             coreLink.frog.SetActive(true);
             GameObject.FindGameObjectWithTag(coreLink.currentActForm).SetActive(false);
@@ -85,7 +85,7 @@ public class InterCC : MonoBehaviour {
             coreLink.currentForm = forms.frog;
 
         }
-        else if (Input.GetKeyDown("3") && coreLink.currentForm != forms.dragon && !ccLink.isGrounded)
+        else if (Input.GetAxis("LRTButton") < 0 && coreLink.currentForm != forms.dragon && !ccLink.isGrounded)
         {
             coreLink.dragon.SetActive(true);
             GameObject.FindGameObjectWithTag(coreLink.currentActForm).SetActive(false);
@@ -93,7 +93,7 @@ public class InterCC : MonoBehaviour {
             coreLink.currentForm = forms.dragon;
 
         }
-        else if (Input.GetKeyDown("4") && coreLink.currentForm != forms.armadillo)
+        else if (Input.GetButtonDown("LBButton") && coreLink.currentForm != forms.armadillo)
         {
             coreLink.armadillo.SetActive(true);
             GameObject.FindGameObjectWithTag(coreLink.currentActForm).SetActive(false);
@@ -101,6 +101,9 @@ public class InterCC : MonoBehaviour {
             coreLink.currentForm = forms.armadillo;
 
         }
+
+
+        
     }
 
 }

@@ -5,7 +5,7 @@ using UnityEngine.Events;
 public class PlCore : MonoBehaviour {
 
 
-  
+    public UnityEvent brokeSomething;
 
     private Movement currentMoveValues;
     public Movement CurrentMoveValues
@@ -51,6 +51,16 @@ public class PlCore : MonoBehaviour {
         SettingStandardForm();
     }
 
+    void OnTriggerEnter(Collider objectHit)
+    {
+       
+
+        if (objectHit.gameObject.GetComponentInParent<DestroyableObjects>() != null && this.GetComponent<MoveCC>().isRolling)
+        {
+            brokeSomething.Invoke();
+           
+        }
+    }
 
     private void SettingDefaultValues()
     {

@@ -15,7 +15,7 @@ public class MoveCC : MonoBehaviour
 
     private bool isGrounded = false;
     private bool isJumping = false;
-    private bool isRolling = false;
+    public bool isRolling = false;
     private bool isFlying = false;
 
     private float rollingTime = 0.0f;
@@ -48,25 +48,40 @@ public class MoveCC : MonoBehaviour
 
         if (coreLink.currentForm == forms.standard && !isJumping && !isFlying)
         {
+            float curSpeed;
 
-            float curSpeed = coreLink.CurrentMoveValues.standMove.moveSpeed * Input.GetAxis("Vertical");
+            if (Input.GetAxis("Vertical") != 0)
+                curSpeed = coreLink.CurrentMoveValues.standMove.moveSpeed * Input.GetAxis("Vertical");
+            else
+                curSpeed = coreLink.CurrentMoveValues.standMove.moveSpeed * -Input.GetAxis("LJVer");
+
             ccLink.SimpleMove(forward * curSpeed);
-
-
         }
         else if (coreLink.currentForm == forms.frog && !isJumping && !isFlying)
         {
 
-            float curSpeed = coreLink.CurrentMoveValues.frogMove.moveSpeed * Input.GetAxis("Vertical");
+            float curSpeed;
+
+            if (Input.GetAxis("Vertical") != 0)
+                curSpeed = coreLink.CurrentMoveValues.frogMove.moveSpeed * Input.GetAxis("Vertical");
+            else
+                curSpeed = coreLink.CurrentMoveValues.frogMove.moveSpeed * -Input.GetAxis("LJVer");
+
             ccLink.SimpleMove(forward * curSpeed);
 
 
         }
         else if (coreLink.currentForm == forms.armadillo && !isJumping && !isFlying && !isRolling)
         {
+            float curSpeed;
 
-            float curSpeed = coreLink.CurrentMoveValues.armaMove.moveSpeed * Input.GetAxis("Vertical");
+            if (Input.GetAxis("Vertical") != 0)
+                curSpeed = coreLink.CurrentMoveValues.armaMove.moveSpeed * Input.GetAxis("Vertical");
+            else
+                curSpeed = coreLink.CurrentMoveValues.armaMove.moveSpeed * -Input.GetAxis("LJVer");
+
             ccLink.SimpleMove(forward * curSpeed);
+
 
         }
         else if (coreLink.currentForm == forms.dragon)
@@ -82,7 +97,7 @@ public class MoveCC : MonoBehaviour
         else
             isGrounded = false;
 
-        if (ccLink.isGrounded && (Input.GetButtonDown("Jump")))
+        if (ccLink.isGrounded && (Input.GetButtonDown("Jump") || Input.GetButtonDown("AButton")))
         {
 
 
@@ -142,6 +157,9 @@ public class MoveCC : MonoBehaviour
         }
 
     }
+
+
+
 
 }
 

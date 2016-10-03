@@ -4,13 +4,15 @@ using System.Collections;
 public class DestroyableObjects : MonoBehaviour {
 
     
-
-    void OnTriggerEnter(Collider coll)
+    void Awake()
     {
-        if (coll.tag == "Armadillo Form")
-        {
-            Debug.Log("FANCULO");
-            Destroy(this.gameObject);
-        }
+        GameObject.FindGameObjectWithTag("Player").GetComponent<PlCore>().brokeSomething.AddListener(DestroyingMySelf);
+    }
+
+
+
+  private void DestroyingMySelf()
+    {
+        Destroy(this.gameObject);
     }
 }
