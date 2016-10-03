@@ -48,42 +48,26 @@ public class MoveCC : MonoBehaviour
 
         if (coreLink.currentForm == forms.standard && !isJumping && !isFlying)
         {
-            if (Input.GetAxis("Vertical") != 0)
-            {
-                float curSpeed = coreLink.CurrentMoveValues.standMove.moveSpeed * Input.GetAxis("Vertical");
-                ccLink.SimpleMove(forward * curSpeed);
-            }
-            else
-            {
-                float curSpeed = coreLink.CurrentMoveValues.standMove.moveSpeed * Input.GetAxis("LJVer");
-                ccLink.SimpleMove(forward * curSpeed);
-            }
+
+            float curSpeed = coreLink.CurrentMoveValues.standMove.moveSpeed * Input.GetAxis("Vertical");
+            ccLink.SimpleMove(forward * curSpeed);
+
+
         }
         else if (coreLink.currentForm == forms.frog && !isJumping && !isFlying)
         {
-            if (Input.GetAxis("Vertical") != 0)
-            {
-                float curSpeed = coreLink.CurrentMoveValues.frogMove.moveSpeed * Input.GetAxis("Vertical");
-                ccLink.SimpleMove(forward * curSpeed);
-            }
-            else
-            {
-                float curSpeed = coreLink.CurrentMoveValues.frogMove.moveSpeed * Input.GetAxis("LJVer");
-                ccLink.SimpleMove(forward * curSpeed);
-            }
+
+            float curSpeed = coreLink.CurrentMoveValues.frogMove.moveSpeed * Input.GetAxis("Vertical");
+            ccLink.SimpleMove(forward * curSpeed);
+
+
         }
         else if (coreLink.currentForm == forms.armadillo && !isJumping && !isFlying && !isRolling)
         {
-            if (Input.GetAxis("Vertical") != 0)
-            {
-                float curSpeed = coreLink.CurrentMoveValues.armaMove.moveSpeed * Input.GetAxis("Vertical");
-                ccLink.SimpleMove(forward * curSpeed);
-            }
-            else
-            {
-                float curSpeed = coreLink.CurrentMoveValues.armaMove.moveSpeed * Input.GetAxis("LJVer");
-                ccLink.SimpleMove(forward * curSpeed);
-            }
+
+            float curSpeed = coreLink.CurrentMoveValues.armaMove.moveSpeed * Input.GetAxis("Vertical");
+            ccLink.SimpleMove(forward * curSpeed);
+
         }
         else if (coreLink.currentForm == forms.dragon)
         {
@@ -98,69 +82,69 @@ public class MoveCC : MonoBehaviour
         else
             isGrounded = false;
 
-        if (ccLink.isGrounded && (Input.GetButtonDown("Jump") || Input.GetButtonDown("AButton")))
+        if (ccLink.isGrounded && (Input.GetButtonDown("Jump")))
         {
 
 
-            {
-                if (coreLink.currentForm == forms.frog)
-                {
-                    jumpDirection = (this.transform.up + this.transform.forward) * coreLink.CurrentMoveValues.frogMove.jumpStrength;
-                    isJumping = true;
-                }
-                else if (coreLink.currentForm == forms.standard)
-                {
-                    jumpDirection = (this.transform.up + this.transform.forward) * coreLink.CurrentMoveValues.standMove.jumpStrength;
-                    isJumping = true;
-                }
-                else if (coreLink.currentForm == forms.armadillo)
-                {
-                    isRolling = true;
-                }
 
+            if (coreLink.currentForm == forms.frog)
+            {
+                jumpDirection = (this.transform.up + this.transform.forward) * coreLink.CurrentMoveValues.frogMove.jumpStrength;
+                isJumping = true;
             }
-
-            if (isJumping)
+            else if (coreLink.currentForm == forms.standard)
             {
-                jumpDirection.y -= coreLink.GeneralValues.jumpGravity * Time.deltaTime;
-                ccLink.Move(jumpDirection * Time.deltaTime);
-
-                if (ccLink.isGrounded)
-                    isJumping = false;
+                jumpDirection = (this.transform.up + this.transform.forward) * coreLink.CurrentMoveValues.standMove.jumpStrength;
+                isJumping = true;
             }
-
-            if (isRolling)
+            else if (coreLink.currentForm == forms.armadillo)
             {
-                rollingTime += Time.deltaTime;
-                ccLink.SimpleMove(this.transform.forward * coreLink.CurrentMoveValues.armaMove.rollingStrength);
-
-                if (rollingTime >= coreLink.CurrentMoveValues.armaMove.rollingTime)
-                {
-                    rollingTime = 0;
-                    isRolling = false;
-                }
-
-            }
-
-            if (!ccLink.isGrounded && coreLink.currentForm == forms.dragon)
-            {
-                if (isJumping)
-                    isJumping = false;
-                if (!isFlying)
-                    isFlying = true;
-
-            }
-
-            if (ccLink.isGrounded && coreLink.currentForm == forms.dragon)
-            {
-                isFlying = false;
-                coreLink.SwitchToStandard();
+                isRolling = true;
             }
 
         }
 
+        if (isJumping)
+        {
+            jumpDirection.y -= coreLink.GeneralValues.jumpGravity * Time.deltaTime;
+            ccLink.Move(jumpDirection * Time.deltaTime);
+
+            if (ccLink.isGrounded)
+                isJumping = false;
+        }
+
+        if (isRolling)
+        {
+            rollingTime += Time.deltaTime;
+            ccLink.SimpleMove(this.transform.forward * coreLink.CurrentMoveValues.armaMove.rollingStrength);
+
+            if (rollingTime >= coreLink.CurrentMoveValues.armaMove.rollingTime)
+            {
+                rollingTime = 0;
+                isRolling = false;
+            }
+
+        }
+
+        if (!ccLink.isGrounded && coreLink.currentForm == forms.dragon)
+        {
+            if (isJumping)
+                isJumping = false;
+            if (!isFlying)
+                isFlying = true;
+
+        }
+
+        if (ccLink.isGrounded && coreLink.currentForm == forms.dragon)
+        {
+            isFlying = false;
+            coreLink.SwitchToStandard();
+        }
+
     }
 
-
-
 }
+
+
+
+
