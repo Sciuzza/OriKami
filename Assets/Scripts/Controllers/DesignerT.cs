@@ -2,6 +2,8 @@
 using System.Collections;
 
 
+public enum playMode { KMInput, JoyInput };
+
 #region Structs
 [System.Serializable]
 public struct standardM
@@ -36,6 +38,14 @@ public struct craneM
 }
 
 [System.Serializable]
+public struct dolphin
+{
+    public float swimSpeed;
+    public float jumpStrength;
+
+}
+
+[System.Serializable]
 public struct generalTweaks
 {
     public float globalGravity;
@@ -43,6 +53,7 @@ public struct generalTweaks
     public float glideGravity;
     [Range(0.5f, 5)]
     public float rotateSpeed;
+    public playMode currentInput;
 
 }
 
@@ -54,6 +65,7 @@ public struct Movement
     public frogM frogMove;
     public craneM craneMove;
     public armaM armaMove;
+    public dolphin dolphinMove;
 }
 
 [System.Serializable]
@@ -64,12 +76,12 @@ public struct CameraPlayer
     [Range(10, 150)]
     public float distanceMax;
     [Range(5, 20)]
-    public float startingDistance; 
+    public float currentDistance; 
     [Range(0.5f, 10)]
     public float sensitivityX;
     [Range(0.5f, 10)]
     public float sensitivityY;
-    [Range(5, 50)]
+    [Range(0.1f, 50)]
     public float sensitivityZoom;
     [Range(0, 50)]
     public float yAngleMin;

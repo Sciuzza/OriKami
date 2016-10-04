@@ -2,6 +2,9 @@
 using System.Collections;
 using UnityEngine.Events;
 
+
+public enum forms { standard, frog, crane, armadillo, dolphin };
+
 public class PlCore : MonoBehaviour {
 
 
@@ -38,12 +41,20 @@ public class PlCore : MonoBehaviour {
 
     // to be placed on static script
     public string currentActForm = "Standard Form";
-    public GameObject frog, standard, dragon, armadillo;
+    public GameObject frog, standard, dragon, armadillo, dolphin;
     public forms currentForm = forms.standard;
 
-   
+    public bool isJumping = false;
+    public bool isRolling = false;
+    public bool isFlying = false;
+    public float rollingTime = 0.0f;
+    public bool isInWater = false;
 
-    
+
+    public bool vFissureAbilityisOn = false;
+    public Quaternion vTriggerRotation, vGuidanceRotation;
+    public Vector3 vTriggerMidPosition, vGuidanceFinPosition;
+
     private void Awake()
     {
         SettingDefaultValues();
@@ -54,11 +65,30 @@ public class PlCore : MonoBehaviour {
     void OnTriggerEnter(Collider objectHit)
     {
        
-
-        if (objectHit.gameObject.GetComponentInParent<DestroyableObjects>() != null && this.GetComponent<MoveCC>().isRolling)
+        if (objectHit.gameObject.GetComponentInParent<DestroyableObjects>() != null && isRolling)
         {
             brokeSomething.Invoke();
            
+        }
+
+        if ( objectHit.gameObject.name == "VMove Guidance" && vFissureAbilityisOn)
+        {
+            vGuidanceRotation = objectHit.transform.rotation;
+
+        }
+
+      
+    }
+
+    void OnTriggerStay(Collider objectHit)
+    {
+        if (objectHit.gameObject.name == "VAbility Trigger" && Input.GetButtonDown("XButton") && currentForm == forms.standard && !vFissureAbilityisOn)
+        {
+            vFissureAbilityisOn = true;
+            vTriggerRotation = objectHit.transform.rotation;
+            vTriggerMidPosition = objectHit.transform.position;
+            vTriggerMidPosition.y = 0.0f;
+                        
         }
     }
 
@@ -78,6 +108,9 @@ public class PlCore : MonoBehaviour {
         defaultMove.armaMove.rollingStrength = 5;
         defaultMove.armaMove.rollingTime = 0.5f;
 
+        defaultMove.dolphinMove.swimSpeed = 10;
+        defaultMove.dolphinMove.jumpStrength = 8;
+
         CurrentMoveValues = defaultMove;
 
 
@@ -87,6 +120,7 @@ public class PlCore : MonoBehaviour {
         defaultGeneral.jumpGravity = 20;
         defaultGeneral.glideGravity = 10;
         defaultGeneral.rotateSpeed = 2;
+        defaultGeneral.currentInput = playMode.KMInput;
 
         GeneralValues = defaultGeneral;
 
@@ -105,6 +139,9 @@ public class PlCore : MonoBehaviour {
 
         armadillo = GameObject.FindGameObjectWithTag("Armadillo Form");
         armadillo.SetActive(false);
+
+        dolphin = GameObject.FindGameObjectWithTag("Dolphin Form");
+        dolphin.SetActive(false);
     }
 
     

@@ -15,6 +15,8 @@ public class GameController : MonoBehaviour {
     [HideInInspector]
     public gbEvent initializer, designRunningTweaks;
 
+    public UnityEvent currentInputChange;
+
     void Awake()
     {
         DontDestroyOnLoad(this.gameObject);
@@ -36,6 +38,7 @@ public class GameController : MonoBehaviour {
         if (Input.GetKeyDown("k"))
         {
             designRunningTweaks.Invoke(player);
+            currentInputChange.Invoke();
         }
     }
 
