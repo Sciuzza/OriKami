@@ -3,15 +3,19 @@ using System.Collections;
 
 public class ButtonActivator : MonoBehaviour {
 
-    void Awake()
+    public GameObject platformBridge;
+
+    void Start()
     {
+        platformBridge.SetActive(false);
         GameObject.FindGameObjectWithTag("Player").GetComponent<PlCore>().activateSomething.AddListener(ActivatingPlatform);
+        
     }
 
    private void ActivatingPlatform()
     {
         Debug.Log("Cristiano è un coglione");
-        GameObject.Find("Cube (344)").SetActive(true);
+        platformBridge.SetActive(true);
     }
 
    
