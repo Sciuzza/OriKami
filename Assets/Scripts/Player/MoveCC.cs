@@ -8,17 +8,10 @@ using System.Collections;
 
 public class MoveCC : MonoBehaviour
 {
-
-
-
-
-
     
    
 
   
-
-
     private Vector3 jumpDirection, glideDirection;
 
     private PlCore coreLink;
@@ -40,7 +33,8 @@ public class MoveCC : MonoBehaviour
         if (!coreLink.vFissureAbilityisOn)
         {
 
-            MovingNewStyle();
+            // MovingNewStyle();
+            MovingOldStyle();
 
             SpecialMoves();
         }

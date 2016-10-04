@@ -9,6 +9,7 @@ public class PlCore : MonoBehaviour {
 
 
     public UnityEvent brokeSomething;
+    public UnityEvent activateSomething;
 
     private Movement currentMoveValues;
     public Movement CurrentMoveValues
@@ -68,7 +69,11 @@ public class PlCore : MonoBehaviour {
         if (objectHit.gameObject.GetComponentInParent<DestroyableObjects>() != null && isRolling)
         {
             brokeSomething.Invoke();
-           
+        }
+
+        if (objectHit.gameObject.GetComponent<ButtonActivator>() != null)
+        {
+            activateSomething.Invoke();
         }
 
        
