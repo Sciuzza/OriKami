@@ -51,7 +51,7 @@ public class InterCC : MonoBehaviour
 
                     Vector3 direction = (coreLink.vTriggerMidPosition - this.transform.position).normalized;
                     direction.y = 0;
-                    this.transform.position += direction * Time.deltaTime;
+                    this.transform.position += direction * Time.deltaTime * 3;
                 }
                 else
                 {
@@ -71,7 +71,7 @@ public class InterCC : MonoBehaviour
 
                             Vector3 direction = (coreLink.vGuidanceFinPosition - this.transform.position).normalized;
                             direction.y = 0;
-                            this.transform.position += direction * Time.deltaTime;
+                            this.transform.position += direction * Time.deltaTime * 3;
                         }
                         else
                         {
