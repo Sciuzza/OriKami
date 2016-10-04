@@ -51,7 +51,7 @@ public class PlCore : MonoBehaviour {
     public bool isInWater = false;
 
 
-    public bool vFissureAbilityisOn = false;
+    public bool vFissureAbilityisOn = false, secondRotationisOn = false, secondMoveIsOn = false, moveFinished = false;
     public Quaternion vTriggerRotation, vGuidanceRotation;
     public Vector3 vTriggerMidPosition, vGuidanceFinPosition;
 
@@ -71,11 +71,7 @@ public class PlCore : MonoBehaviour {
            
         }
 
-        if ( objectHit.gameObject.name == "VMove Guidance" && vFissureAbilityisOn)
-        {
-            vGuidanceRotation = objectHit.transform.rotation;
-
-        }
+       
 
       
     }
@@ -85,10 +81,18 @@ public class PlCore : MonoBehaviour {
         if (objectHit.gameObject.name == "VAbility Trigger" && Input.GetButtonDown("XButton") && currentForm == forms.standard && !vFissureAbilityisOn)
         {
             vFissureAbilityisOn = true;
+
+
             vTriggerRotation = objectHit.transform.rotation;
+            vGuidanceRotation = objectHit.GetComponentInParent<VFissure>().mGuidance.transform.rotation;
+
+
             vTriggerMidPosition = objectHit.transform.position;
             vTriggerMidPosition.y = 0.0f;
-                        
+
+            vGuidanceFinPosition = objectHit.GetComponentInParent<VFissure>().mGuidance.transform.position;
+            vGuidanceFinPosition.y = 0.0f;
+            vGuidanceFinPosition.z += objectHit.GetComponentInParent<VFissure>().mGuidance.GetComponent<BoxCollider>().size.x / 3;
         }
     }
 

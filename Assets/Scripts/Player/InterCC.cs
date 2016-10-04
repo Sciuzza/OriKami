@@ -31,26 +31,57 @@ public class InterCC : MonoBehaviour
         }
         else
         {
-            if (this.transform.localRotation != coreLink.vTriggerRotation)
+            if (this.transform.localRotation != coreLink.vTriggerRotation && !coreLink.secondRotationisOn)
 
                 this.transform.localRotation = Quaternion.Slerp(this.transform.localRotation, coreLink.vTriggerRotation, Time.deltaTime * coreLink.GeneralValues.rotateSpeed);
 
+            else if (coreLink.moveFinished)
+            {
+                coreLink.vFissureAbilityisOn = false;
+            }
             else
             {
+
+              
+
                 Vector3 distance = coreLink.vTriggerMidPosition - this.transform.position;
 
-                if (distance.sqrMagnitude >= 0.625f)
+                if (distance.sqrMagnitude >= 0.625f && !coreLink.secondMoveIsOn)
                 {
-                    
+
                     Vector3 direction = (coreLink.vTriggerMidPosition - this.transform.position).normalized;
                     direction.y = 0;
                     this.transform.position += direction * Time.deltaTime;
                 }
                 else
                 {
-                    Debug.Log("ci Siamo");
+                    coreLink.secondRotationisOn = true;
+
+                    if (this.transform.rotation != coreLink.vGuidanceRotation)
+
+                        this.transform.rotation = Quaternion.Slerp(this.transform.localRotation, coreLink.vGuidanceRotation, Time.deltaTime * coreLink.GeneralValues.rotateSpeed);
+                    else
+                    {
+                        coreLink.secondMoveIsOn = true;
+
+                        distance = coreLink.vGuidanceFinPosition - this.transform.position;
+
+                        if (distance.sqrMagnitude >= 0.625f)
+                        {
+
+                            Vector3 direction = (coreLink.vGuidanceFinPosition - this.transform.position).normalized;
+                            direction.y = 0;
+                            this.transform.position += direction * Time.deltaTime;
+                        }
+                        else
+                        {
+                            coreLink.moveFinished = true;
+                            coreLink.secondRotationisOn = false;
+                        }
+
+                    }
                 }
-                
+
 
             }
         }
