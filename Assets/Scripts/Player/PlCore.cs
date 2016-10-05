@@ -11,6 +11,7 @@ public class PlCore : MonoBehaviour {
     public UnityEvent brokeSomething;
     public UnityEvent activateSomething;
 
+   [SerializeField]
     private Movement currentMoveValues;
     public Movement CurrentMoveValues
     {
@@ -106,10 +107,25 @@ public class PlCore : MonoBehaviour {
    
     }
 
+    void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+
+        if (hit.gameObject.tag == "movable")
+        {
+           
+
+            hit.rigidbody.velocity = (hit.moveDirection * 2);
+
+        }
+       
 
 
 
-    
+
+    }
+
+
+
     private void SettingDefaultValues()
     {
         Movement defaultMove;
