@@ -12,7 +12,7 @@ public class MoveCC : MonoBehaviour
    
 
   
-    private Vector3 jumpDirection, glideDirection;
+    public  Vector3 jumpDirection, glideDirection, forward, right, moveDirection;
 
     private PlCore coreLink;
     private CharacterController ccLink;
@@ -29,12 +29,14 @@ public class MoveCC : MonoBehaviour
     void Update()
     {
 
+        
+
 
         if (!coreLink.vFissureAbilityisOn)
         {
 
-            // MovingNewStyle();
-            MovingOldStyle();
+            MovingNewStyle();
+          
 
             SpecialMoves();
         }
@@ -103,7 +105,7 @@ public class MoveCC : MonoBehaviour
 
     float curDirZ = 0.0f;
     float curDirX = 0.0f;
-    Vector3 forward, right, moveDirection;
+   
 
     private void MovingNewStyle()
     {
@@ -131,7 +133,7 @@ public class MoveCC : MonoBehaviour
                 this.transform.localRotation = Quaternion.Slerp(this.transform.localRotation, rotation, Time.deltaTime  * coreLink.GeneralValues.rotateSpeed);
             }
             ccLink.SimpleMove(moveDirection * coreLink.CurrentMoveValues.standMove.moveSpeed);
-
+            
         }
         else if (coreLink.currentForm == forms.frog && !coreLink.isJumping && !coreLink.isFlying)
         {
@@ -141,7 +143,7 @@ public class MoveCC : MonoBehaviour
                 this.transform.localRotation = Quaternion.Slerp(this.transform.localRotation, rotation, Time.deltaTime * coreLink.GeneralValues.rotateSpeed);
             }
             ccLink.SimpleMove(moveDirection * coreLink.CurrentMoveValues.frogMove.moveSpeed);
-
+            
 
 
 
@@ -152,9 +154,13 @@ public class MoveCC : MonoBehaviour
             {
                 Quaternion rotation = Quaternion.LookRotation(moveDirection, Vector3.up);
                 this.transform.localRotation = Quaternion.Slerp(this.transform.localRotation, rotation, Time.deltaTime * coreLink.GeneralValues.rotateSpeed);
+                coreLink.isArmaMoving = true;
             }
-            ccLink.SimpleMove(moveDirection * coreLink.CurrentMoveValues.armaMove.moveSpeed);
+            else
+                coreLink.isArmaMoving = false;
 
+            ccLink.SimpleMove(moveDirection * coreLink.CurrentMoveValues.armaMove.moveSpeed);
+            
 
 
 
@@ -170,7 +176,7 @@ public class MoveCC : MonoBehaviour
                 this.transform.localRotation = Quaternion.Slerp(this.transform.localRotation, rotation, Time.deltaTime * coreLink.GeneralValues.rotateSpeed);
             }
             ccLink.Move(glideDirection * coreLink.CurrentMoveValues.craneMove.glideSpeed * Time.deltaTime);
-
+            coreLink.isArmaMoving = true;
         }
     }
 

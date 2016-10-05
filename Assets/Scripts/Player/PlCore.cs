@@ -50,16 +50,19 @@ public class PlCore : MonoBehaviour {
     public bool isFlying = false;
     public float rollingTime = 0.0f;
     public bool isInWater = false;
-
+    public bool isArmaMoving = false;
 
     public bool vFissureAbilityisOn = false, secondRotationisOn = false, secondMoveIsOn = false, moveFinished = false;
     public Quaternion vTriggerRotation, vGuidanceRotation;
     public Vector3 vTriggerMidPosition, vGuidanceFinPosition;
 
+
+    MoveCC moveLink;
+
     private void Awake()
     {
         SettingDefaultValues();
-
+        moveLink = this.GetComponent<MoveCC>();
         SettingStandardForm();
     }
 
@@ -99,8 +102,35 @@ public class PlCore : MonoBehaviour {
             vGuidanceFinPosition.y = 0.0f;
             vGuidanceFinPosition.z += objectHit.GetComponentInParent<VFissure>().mGuidance.GetComponent<BoxCollider>().size.x / 3;
         }
+
+   
     }
 
+    
+    void OnCollisionStay(Collision objectHit)
+    {
+
+        if (objectHit.gameObject.name == "Movable Rock" && isArmaMoving)
+        {
+
+            Debug.Log("ciao");
+            objectHit.gameObject.GetComponentInParent<MovableBlock>().move(moveLink.moveDirection);
+        }
+
+    }
+
+
+    /*
+        void OnCollisionEnter(Collision objectHit)
+        {
+
+            if (objectHit.gameObject.tag == "movable" && isArmaMoving) {
+
+                Debug.Log("ciao");
+                objectHit.gameObject.GetComponent<MovableBlock>().move(moveLink.moveDirection);
+            }
+        }
+        */
     private void SettingDefaultValues()
     {
         Movement defaultMove;
