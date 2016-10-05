@@ -7,9 +7,10 @@ public enum forms { standard, frog, crane, armadillo, dolphin };
 
 public class PlCore : MonoBehaviour {
 
-
+    public DescendingPlatform boolstuff;
     public UnityEvent brokeSomething;
     public UnityEvent activateSomething;
+    public UnityEvent fallingSomething;
 
     private Movement currentMoveValues;
     public Movement CurrentMoveValues
@@ -76,9 +77,7 @@ public class PlCore : MonoBehaviour {
             activateSomething.Invoke();
         }
 
-       
-
-      
+                   
     }
 
     void OnTriggerStay(Collider objectHit)
