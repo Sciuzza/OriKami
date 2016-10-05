@@ -106,31 +106,10 @@ public class PlCore : MonoBehaviour {
    
     }
 
+
+
+
     
-    void OnCollisionStay(Collision objectHit)
-    {
-
-        if (objectHit.gameObject.name == "Movable Rock" && isArmaMoving)
-        {
-
-            Debug.Log("ciao");
-            objectHit.gameObject.GetComponentInParent<MovableBlock>().move(moveLink.moveDirection);
-        }
-
-    }
-
-
-    /*
-        void OnCollisionEnter(Collision objectHit)
-        {
-
-            if (objectHit.gameObject.tag == "movable" && isArmaMoving) {
-
-                Debug.Log("ciao");
-                objectHit.gameObject.GetComponent<MovableBlock>().move(moveLink.moveDirection);
-            }
-        }
-        */
     private void SettingDefaultValues()
     {
         Movement defaultMove;

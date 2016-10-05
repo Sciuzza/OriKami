@@ -21,4 +21,22 @@ public class MovableBlock : MonoBehaviour {
 
         this.GetComponent<Rigidbody>().AddForce(moveDirection*forza);
     }
+
+    public float pushPower = 2.0F;
+
+    void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+        Debug.Log("Ciao");
+
+        
+        /*
+        if (hit.moveDirection.y < -0.3F)
+            return;
+
+        Vector3 pushDir = new Vector3(hit.moveDirection.x, 0, hit.moveDirection.z);
+        
+
+        this.transform.position += hit.moveDirection * Time.deltaTime;
+        */
+    }
 }
