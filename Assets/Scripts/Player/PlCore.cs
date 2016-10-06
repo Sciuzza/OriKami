@@ -2,163 +2,184 @@
 using System.Collections;
 using UnityEngine.Events;
 
+namespace Orikami
+{
 
-public enum forms { standard, frog, crane, armadillo, dolphin };
 
-public class PlCore : MonoBehaviour {
 
-    public DescendingPlatform boolstuff;
-    public UnityEvent brokeSomething;
-    public UnityEvent activateSomething;
-    public UnityEvent fallingSomething;
+    public enum forms { standard, frog, crane, armadillo, dolphin };
 
-    private Movement currentMoveValues;
-    public Movement CurrentMoveValues
+    public class PlCore : MonoBehaviour
     {
-        get
+
+        public DescendingPlatform PlatformLinker;
+        public Test TestLinker;
+        public UnityEvent brokeSomething;
+        public UnityEvent activateSomething;
+        public UnityEvent fallingSomething;
+
+        private Movement currentMoveValues;
+        public Movement CurrentMoveValues
         {
-            return currentMoveValues;
+            get
+            {
+                return currentMoveValues;
+            }
+
+            set
+            {
+                currentMoveValues = value;
+            }
         }
 
-        set
+        private generalTweaks generalValues;
+        public generalTweaks GeneralValues
         {
-            currentMoveValues = value;
-        }
-    }
+            get
+            {
+                return generalValues;
+            }
 
-    private generalTweaks generalValues;
-    public generalTweaks GeneralValues
-    {
-        get
-        {
-            return generalValues;
-        }
-
-        set
-        {
-            generalValues = value;
-        }
-    }
-
-
-    // to be placed on static script
-    public string currentActForm = "Standard Form";
-    public GameObject frog, standard, dragon, armadillo, dolphin;
-    public forms currentForm = forms.standard;
-
-    public bool isJumping = false;
-    public bool isRolling = false;
-    public bool isFlying = false;
-    public float rollingTime = 0.0f;
-    public bool isInWater = false;
-
-
-    public bool vFissureAbilityisOn = false, secondRotationisOn = false, secondMoveIsOn = false, moveFinished = false;
-    public Quaternion vTriggerRotation, vGuidanceRotation;
-    public Vector3 vTriggerMidPosition, vGuidanceFinPosition;
-
-    private void Awake()
-    {
-        SettingDefaultValues();
-
-        SettingStandardForm();
-    }
-
-    void OnTriggerEnter(Collider objectHit)
-    {
-       
-        if (objectHit.gameObject.GetComponentInParent<DestroyableObjects>() != null && isRolling)
-        {
-            brokeSomething.Invoke();
+            set
+            {
+                generalValues = value;
+            }
         }
 
-        if (objectHit.gameObject.GetComponent<ButtonActivator>() != null)
+
+        // to be placed on static script
+        public string currentActForm = "Standard Form";
+        public GameObject frog, standard, dragon, armadillo, dolphin;
+        public forms currentForm = forms.standard;
+
+        public bool isJumping = false;
+        public bool isRolling = false;
+        public bool isFlying = false;
+        public float rollingTime = 0.0f;
+        public bool isInWater = false;
+
+
+        public bool vFissureAbilityisOn = false, secondRotationisOn = false, secondMoveIsOn = false, moveFinished = false;
+        public Quaternion vTriggerRotation, vGuidanceRotation;
+        public Vector3 vTriggerMidPosition, vGuidanceFinPosition;
+
+        private void Awake()
         {
-            activateSomething.Invoke();
+            SettingDefaultValues();
+
+            SettingStandardForm();
+
         }
 
-                   
-    }
-
-    void OnTriggerStay(Collider objectHit)
-    {
-        if (objectHit.gameObject.name == "VAbility Trigger" && Input.GetButtonDown("XButton") && currentForm == forms.standard && !vFissureAbilityisOn)
+        void Start()
         {
-            vFissureAbilityisOn = true;
-
-
-            vTriggerRotation = objectHit.transform.rotation;
-            vGuidanceRotation = objectHit.GetComponentInParent<VFissure>().mGuidance.transform.rotation;
-
-
-            vTriggerMidPosition = objectHit.transform.position;
-            vTriggerMidPosition.y = 0.0f;
-
-            vGuidanceFinPosition = objectHit.GetComponentInParent<VFissure>().mGuidance.transform.position;
-            vGuidanceFinPosition.y = 0.0f;
-            vGuidanceFinPosition.z += objectHit.GetComponentInParent<VFissure>().mGuidance.GetComponent<BoxCollider>().size.x / 3;
+            PlatformLinker = FindObjectOfType<DescendingPlatform>();
         }
-    }
 
-    private void SettingDefaultValues()
-    {
-        Movement defaultMove;
+        void OnTriggerEnter(Collider objectHit)
+        {
 
-        defaultMove.standMove.moveSpeed = 10;
-        defaultMove.standMove.jumpStrength = 10;
+            if (objectHit.gameObject.GetComponentInParent<DestroyableObjects>() != null && isRolling)
+            {
+                brokeSomething.Invoke();
+            }
 
-        defaultMove.frogMove.moveSpeed = 5;
-        defaultMove.frogMove.jumpStrength = 20;
+            if (objectHit.gameObject.GetComponent<ButtonActivator>() != null)
+            {
+                activateSomething.Invoke();
+            }
 
-        defaultMove.craneMove.glideSpeed = 15;
+          /*  if (objectHit.gameObject.name == "Cube (300)") ;
+            {
+                Debug.Log("Ciao");
+                // objectHit.transform.position += Vector3.down * Time.deltaTime;
+               // PlatformLinker.PaddleGoing();
+            }*/
+        }
 
-        defaultMove.armaMove.moveSpeed = 7.5f;
-        defaultMove.armaMove.rollingStrength = 5;
-        defaultMove.armaMove.rollingTime = 0.5f;
-
-        defaultMove.dolphinMove.swimSpeed = 10;
-        defaultMove.dolphinMove.jumpStrength = 8;
-
-        CurrentMoveValues = defaultMove;
+        void OnTriggerStay(Collider objectHit)
+        {
+            if (objectHit.gameObject.name == "VAbility Trigger" && Input.GetButtonDown("XButton") && currentForm == forms.standard && !vFissureAbilityisOn)
+            {
+                vFissureAbilityisOn = true;
 
 
-        generalTweaks defaultGeneral;
+                vTriggerRotation = objectHit.transform.rotation;
+                vGuidanceRotation = objectHit.GetComponentInParent<VFissure>().mGuidance.transform.rotation;
 
-        defaultGeneral.globalGravity = 9;
-        defaultGeneral.jumpGravity = 20;
-        defaultGeneral.glideGravity = 10;
-        defaultGeneral.rotateSpeed = 2;
-        defaultGeneral.currentInput = playMode.KMInput;
 
-        GeneralValues = defaultGeneral;
+                vTriggerMidPosition = objectHit.transform.position;
+                vTriggerMidPosition.y = 0.0f;
 
-    }
+                vGuidanceFinPosition = objectHit.GetComponentInParent<VFissure>().mGuidance.transform.position;
+                vGuidanceFinPosition.y = 0.0f;
+                vGuidanceFinPosition.z += objectHit.GetComponentInParent<VFissure>().mGuidance.GetComponent<BoxCollider>().size.x / 3;
+            }
 
-    private void SettingStandardForm()
-    {
-        frog = GameObject.FindGameObjectWithTag("Frog Form");
-        frog.SetActive(false);
+           
+        }
 
-        standard = GameObject.FindGameObjectWithTag("Standard Form");
-        standard.SetActive(true);
+        
+        private void SettingDefaultValues()
+        {
+            Movement defaultMove;
 
-        dragon = GameObject.FindGameObjectWithTag("Dragon Form");
-        dragon.SetActive(false);
+            defaultMove.standMove.moveSpeed = 10;
+            defaultMove.standMove.jumpStrength = 10;
 
-        armadillo = GameObject.FindGameObjectWithTag("Armadillo Form");
-        armadillo.SetActive(false);
+            defaultMove.frogMove.moveSpeed = 5;
+            defaultMove.frogMove.jumpStrength = 20;
 
-        dolphin = GameObject.FindGameObjectWithTag("Dolphin Form");
-        dolphin.SetActive(false);
-    }
+            defaultMove.craneMove.glideSpeed = 15;
 
-    
+            defaultMove.armaMove.moveSpeed = 7.5f;
+            defaultMove.armaMove.rollingStrength = 5;
+            defaultMove.armaMove.rollingTime = 0.5f;
 
-    public void SwitchToStandard()
-    {
-        standard.SetActive(true);
-        GameObject.FindGameObjectWithTag(currentActForm).SetActive(false);
-        currentActForm = "Standard Form";
-        currentForm = forms.standard;
+            defaultMove.dolphinMove.swimSpeed = 10;
+            defaultMove.dolphinMove.jumpStrength = 8;
+
+            CurrentMoveValues = defaultMove;
+
+
+            generalTweaks defaultGeneral;
+
+            defaultGeneral.globalGravity = 9;
+            defaultGeneral.jumpGravity = 20;
+            defaultGeneral.glideGravity = 10;
+            defaultGeneral.rotateSpeed = 2;
+            defaultGeneral.currentInput = playMode.KMInput;
+
+            GeneralValues = defaultGeneral;
+
+        }
+
+        private void SettingStandardForm()
+        {
+            frog = GameObject.FindGameObjectWithTag("Frog Form");
+            frog.SetActive(false);
+
+            standard = GameObject.FindGameObjectWithTag("Standard Form");
+            standard.SetActive(true);
+
+            dragon = GameObject.FindGameObjectWithTag("Dragon Form");
+            dragon.SetActive(false);
+
+            armadillo = GameObject.FindGameObjectWithTag("Armadillo Form");
+            armadillo.SetActive(false);
+
+            dolphin = GameObject.FindGameObjectWithTag("Dolphin Form");
+            dolphin.SetActive(false);
+        }
+
+
+
+        public void SwitchToStandard()
+        {
+            standard.SetActive(true);
+            GameObject.FindGameObjectWithTag(currentActForm).SetActive(false);
+            currentActForm = "Standard Form";
+            currentForm = forms.standard;
+        }
     }
 }

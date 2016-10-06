@@ -1,22 +1,29 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class ButtonActivator : MonoBehaviour {
+namespace Orikami
+{
 
-    public GameObject platformBridge;
 
-    void Start()
+
+    public class ButtonActivator : MonoBehaviour
     {
-        platformBridge.SetActive(false);
-        GameObject.FindGameObjectWithTag("Player").GetComponent<PlCore>().activateSomething.AddListener(ActivatingPlatform);
-        
-    }
 
-   private void ActivatingPlatform()
-    {
-        Debug.Log("Cristiano è un coglione");
-        platformBridge.SetActive(true);
-    }
+        public GameObject platformBridge;
 
-   
+        void Start()
+        {
+            platformBridge.SetActive(false);
+            GameObject.FindGameObjectWithTag("Player").GetComponent<PlCore>().activateSomething.AddListener(ActivatingPlatform);
+
+        }
+
+        private void ActivatingPlatform()
+        {
+            Debug.Log("Cristiano è un coglione");
+            platformBridge.SetActive(true);
+        }
+
+
+    }
 }
