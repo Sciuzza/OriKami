@@ -5,13 +5,14 @@ using UnityEngine.Events;
 
 public enum forms { standard, frog, crane, armadillo, dolphin };
 
-public class PlCore : MonoBehaviour {
+public class PlCore : MonoBehaviour
+{
 
 
     public UnityEvent brokeSomething;
     public UnityEvent activateSomething;
 
-   [SerializeField]
+    [SerializeField]
     private Movement currentMoveValues;
     public Movement CurrentMoveValues
     {
@@ -26,6 +27,7 @@ public class PlCore : MonoBehaviour {
         }
     }
 
+    [SerializeField]
     private generalTweaks generalValues;
     public generalTweaks GeneralValues
     {
@@ -41,7 +43,7 @@ public class PlCore : MonoBehaviour {
     }
 
 
-    // to be placed on static script
+    
     public string currentActForm = "Standard Form";
     public GameObject frog, standard, dragon, armadillo, dolphin;
     public forms currentForm = forms.standard;
@@ -69,7 +71,7 @@ public class PlCore : MonoBehaviour {
 
     void OnTriggerEnter(Collider objectHit)
     {
-       
+
         if (objectHit.gameObject.GetComponentInParent<DestroyableObjects>() != null && isRolling)
         {
             brokeSomething.Invoke();
@@ -80,9 +82,9 @@ public class PlCore : MonoBehaviour {
             activateSomething.Invoke();
         }
 
-       
 
-      
+
+
     }
 
     void OnTriggerStay(Collider objectHit)
@@ -104,25 +106,56 @@ public class PlCore : MonoBehaviour {
             vGuidanceFinPosition.z += objectHit.GetComponentInParent<VFissure>().mGuidance.GetComponent<BoxCollider>().size.x / 3;
         }
 
-   
+        /*
+        if (objectHit.gameObject.tag == "movable")
+        {
+
+            if (Input.GetKey("1"))
+            {
+                objectHit.gameObject.GetComponent<MovableBlock>().dirToMove = moveLink.moveDirection;
+                objectHit.gameObject.GetComponent<MovableBlock>().hasToMove = true;
+            }
+            else {
+                objectHit.gameObject.GetComponent<MovableBlock>().hasToMove = false;
+            }
+        }
+        */
+
     }
 
-    void OnControllerColliderHit(ControllerColliderHit hit)
-    {
-
-        if (hit.gameObject.tag == "movable")
+    
+        void OnControllerColliderHit(ControllerColliderHit hit)
         {
-           
 
-            hit.rigidbody.velocity = (hit.moveDirection * 2);
+            if (hit.gameObject.tag == "movable")
+            {
+
+
+
+             hit.gameObject.GetComponent<Rigidbody>().velocity = (hit.moveDirection * 2);
+            /*
+            if (hit.gameObject.GetComponent<MovableBlock>().hasToMove)
+            {
+                Vector3 currentPos = hit.gameObject.transform.position;
+                hit.gameObject.GetComponent<Rigidbody>().MovePosition(currentPos + hit.moveDirection * Time.deltaTime * 3);
+            }
+            */
+            }
+
+
+
+
 
         }
-       
+    
+    void OnCollisionEnter(Collision objectHit)
+    {
+        if (objectHit.gameObject.tag == "movable")
+            Debug.Log("Collisione Funziona");
+    } 
 
 
-
-
-    }
+    
 
 
 
@@ -178,7 +211,7 @@ public class PlCore : MonoBehaviour {
         dolphin.SetActive(false);
     }
 
-    
+
 
     public void SwitchToStandard()
     {

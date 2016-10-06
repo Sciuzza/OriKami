@@ -35,8 +35,8 @@ public class MoveCC : MonoBehaviour
         if (!coreLink.vFissureAbilityisOn)
         {
 
-            MovingNewStyle();
-          
+            //MovingNewStyle();
+            MovingOldStyle();
 
             SpecialMoves();
         }
