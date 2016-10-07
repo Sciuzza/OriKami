@@ -13,7 +13,6 @@ namespace Orikami
     {
 
         public DescendingPlatform PlatformLinker;
-        public Test TestLinker;
         public UnityEvent brokeSomething;
         public UnityEvent activateSomething;
         public UnityEvent fallingSomething;
@@ -89,12 +88,6 @@ namespace Orikami
                 activateSomething.Invoke();
             }
 
-          /*  if (objectHit.gameObject.name == "Cube (300)") ;
-            {
-                Debug.Log("Ciao");
-                // objectHit.transform.position += Vector3.down * Time.deltaTime;
-               // PlatformLinker.PaddleGoing();
-            }*/
         }
 
         void OnTriggerStay(Collider objectHit)

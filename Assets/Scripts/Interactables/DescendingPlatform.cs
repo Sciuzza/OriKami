@@ -8,50 +8,36 @@ namespace Orikami
     public class DescendingPlatform : MonoBehaviour
     {
 
-        float platformSpeed = 1.5f;
-        Transform targetTr;
-        public Transform A;
-        public Transform B;
-        bool isGoingDown = true;
-        public Vector3 distance, direction;
-        bool movimento = false;
-        
-        void Start()
-        {
-            targetTr = B;
-        }
-
-        public void PaddleGoing()
-        {
-
-            if (targetTr == B)
-                targetTr = A;
-            else
-                targetTr = B;
-
-            movimento = true;
-        }
+        public Transform TargetA, TargetB;
+        public bool resetPosition = false;
 
         void Update()
         {
-
-            if (movimento == true)
+            if (resetPosition)
             {
+                transform.position = Vector3.Slerp(transform.position, TargetB.position, 0.01f);
+            }
+        }
+        void Start()
+        {
 
-                distance = targetTr.position - this.transform.position;
-                direction = (targetTr.position - this.transform.position).normalized;
-                transform.position = transform.position + direction * platformSpeed * Time.deltaTime;
+        }
+        void OnTriggerStay(Collider objectHit)
+        {
+            resetPosition = false;
+            if (objectHit.tag == "Player")
+            {
+                transform.position = Vector3.Slerp(transform.position, TargetA.position, 0.01f);
             }
 
-            if (distance.magnitude < 0.1f)
+        }
+
+        void OnTriggerExit(Collider objectHit)
+        {
+
+            if (objectHit.tag == "Player")
             {
-                movimento = false;
-            }
-            
-            if (Input.GetKeyDown(KeyCode.O))
-            {
-                PaddleGoing();
-                Debug.Log("ciao");
+                resetPosition = true;
             }
         }
 
