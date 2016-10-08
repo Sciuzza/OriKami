@@ -3,6 +3,7 @@ using System.Collections;
 using UnityEngine.Events;
 
 
+
 public enum forms { standard, frog, crane, armadillo, dolphin };
 
 public class PlCore : MonoBehaviour
@@ -42,7 +43,7 @@ public class PlCore : MonoBehaviour
         }
     }
 
-
+    
     
     public string currentActForm = "Standard Form";
     public GameObject frog, standard, dragon, armadillo, dolphin;

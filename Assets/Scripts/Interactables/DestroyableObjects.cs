@@ -1,18 +1,20 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class DestroyableObjects : MonoBehaviour {
-
-    
-    void Awake()
+    public class DestroyableObjects : MonoBehaviour
     {
-        GameObject.FindGameObjectWithTag("Player").GetComponent<PlCore>().brokeSomething.AddListener(DestroyingMySelf);
+
+
+        void Awake()
+        {
+            GameObject.FindGameObjectWithTag("Player").GetComponent<PlCore>().brokeSomething.AddListener(DestroyingMySelf);
+        }
+
+
+
+        private void DestroyingMySelf()
+        {
+            Destroy(this.gameObject);
+        }
     }
 
-
-
-  private void DestroyingMySelf()
-    {
-        Destroy(this.gameObject);
-    }
-}
