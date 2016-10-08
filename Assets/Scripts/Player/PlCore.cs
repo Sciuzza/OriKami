@@ -43,8 +43,8 @@ public class PlCore : MonoBehaviour
         }
     }
 
-    
-    
+
+
     public string currentActForm = "Standard Form";
     public GameObject frog, standard, dragon, armadillo, dolphin;
     public forms currentForm = forms.standard;
@@ -55,11 +55,17 @@ public class PlCore : MonoBehaviour
     public float rollingTime = 0.0f;
     public bool isInWater = false;
     public bool isArmaMoving = false;
+    public bool dolphinInAbility = false;
+    public bool dolphinOutAbility = false;
+    public bool stMoveEnabled = true;
 
     public bool vFissureAbilityisOn = false, secondRotationisOn = false, secondMoveIsOn = false, moveFinished = false;
     public Quaternion vTriggerRotation, vGuidanceRotation;
     public Vector3 vTriggerMidPosition, vGuidanceFinPosition;
 
+
+    public Vector3 jumpOutFw, jumpOutUp, jumpInFw, jumpInUp;
+    public Quaternion jumpInRot, jumpOutRot;
 
     MoveCC moveLink;
 
@@ -68,6 +74,7 @@ public class PlCore : MonoBehaviour
         SettingDefaultValues();
         moveLink = this.GetComponent<MoveCC>();
         SettingStandardForm();
+
     }
 
     void OnTriggerEnter(Collider objectHit)
@@ -83,80 +90,46 @@ public class PlCore : MonoBehaviour
             activateSomething.Invoke();
         }
 
-
+        DolphinTriggersActivation(objectHit);
 
 
     }
 
     void OnTriggerStay(Collider objectHit)
     {
-        if (objectHit.gameObject.name == "VAbility Trigger" && Input.GetButtonDown("XButton") && currentForm == forms.standard && !vFissureAbilityisOn)
-        {
-            vFissureAbilityisOn = true;
 
+        vAbilityTriggers(objectHit);
 
-            vTriggerRotation = objectHit.transform.rotation;
-            vGuidanceRotation = objectHit.GetComponentInParent<VFissure>().mGuidance.transform.rotation;
-
-
-            vTriggerMidPosition = objectHit.transform.position;
-            vTriggerMidPosition.y = 0.0f;
-
-            vGuidanceFinPosition = objectHit.GetComponentInParent<VFissure>().mGuidance.transform.position;
-            vGuidanceFinPosition.y = 0.0f;
-            vGuidanceFinPosition.z += objectHit.GetComponentInParent<VFissure>().mGuidance.GetComponent<BoxCollider>().size.x / 3;
-        }
-
-        /*
-        if (objectHit.gameObject.tag == "movable")
-        {
-
-            if (Input.GetKey("1"))
-            {
-                objectHit.gameObject.GetComponent<MovableBlock>().dirToMove = moveLink.moveDirection;
-                objectHit.gameObject.GetComponent<MovableBlock>().hasToMove = true;
-            }
-            else {
-                objectHit.gameObject.GetComponent<MovableBlock>().hasToMove = false;
-            }
-        }
-        */
+        
 
     }
 
-    
-        void OnControllerColliderHit(ControllerColliderHit hit)
-        {
-
-            if (hit.gameObject.tag == "movable")
-            {
-
-
-
-             hit.gameObject.GetComponent<Rigidbody>().velocity = (hit.moveDirection * 2);
-            /*
-            if (hit.gameObject.GetComponent<MovableBlock>().hasToMove)
-            {
-                Vector3 currentPos = hit.gameObject.transform.position;
-                hit.gameObject.GetComponent<Rigidbody>().MovePosition(currentPos + hit.moveDirection * Time.deltaTime * 3);
-            }
-            */
-            }
-
-
-
-
-
-        }
-    
-    void OnCollisionEnter(Collision objectHit)
+    void OnTriggerExit(Collider objectHit)
     {
-        if (objectHit.gameObject.tag == "movable")
-            Debug.Log("Collisione Funziona");
-    } 
+        DolphinTriggersDeactivation(objectHit);
+    }
 
 
-    
+    void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+
+        if (hit.gameObject.tag == "movable")
+        {
+            hit.gameObject.GetComponent<Rigidbody>().velocity = (hit.moveDirection * 2);  
+        }
+
+        /*
+        if (hit.gameObject.tag == "Water")
+            dolphinInAbility = false;
+
+    */
+
+    }
+
+   
+
+
+
 
 
 
@@ -220,5 +193,78 @@ public class PlCore : MonoBehaviour
         GameObject.FindGameObjectWithTag(currentActForm).SetActive(false);
         currentActForm = "Standard Form";
         currentForm = forms.standard;
+    }
+
+    private void vAbilityTriggers(Collider objectHit)
+    {
+        if (objectHit.gameObject.tag == "vAbilityta" && Input.GetButtonDown("XButton") && currentForm == forms.standard && !vFissureAbilityisOn)
+        {
+            vFissureAbilityisOn = true;
+
+
+            vTriggerRotation = objectHit.transform.rotation;
+            vGuidanceRotation = objectHit.GetComponentInParent<VFissure>().mGuidance.transform.rotation;
+
+
+            vTriggerMidPosition = objectHit.transform.position;
+            vTriggerMidPosition.y = 0.0f;
+
+            vGuidanceFinPosition = objectHit.GetComponentInParent<VFissure>().mGuidance.transform.position;
+            vGuidanceFinPosition.y = 0.0f;
+            vGuidanceFinPosition.z += objectHit.GetComponentInParent<VFissure>().mGuidance.GetComponent<BoxCollider>().size.x / 3;
+
+        }
+
+        if (objectHit.gameObject.tag == "vAbilitytb" && Input.GetButtonDown("XButton") && currentForm == forms.standard && !vFissureAbilityisOn)
+        {
+            vFissureAbilityisOn = true;
+
+
+            vTriggerRotation = objectHit.transform.rotation;
+            vGuidanceRotation = objectHit.GetComponentInParent<VFissure>().mGuidance.transform.rotation;
+
+
+            vTriggerMidPosition = objectHit.transform.position;
+            vTriggerMidPosition.y = 0.0f;
+
+            vGuidanceFinPosition = objectHit.GetComponentInParent<VFissure>().mGuidance.transform.position;
+            vGuidanceFinPosition.y = 0.0f;
+            vGuidanceFinPosition.z -= objectHit.GetComponentInParent<VFissure>().mGuidance.GetComponent<BoxCollider>().size.x / 3;
+
+        }
+    }
+
+    private void DolphinTriggersActivation(Collider objectHit)
+    {
+        if (objectHit.gameObject.tag == "EnterTrigger")
+        {
+            dolphinInAbility = true;
+            jumpInUp = objectHit.gameObject.transform.up;
+            jumpInFw = objectHit.gameObject.transform.forward;
+            jumpInRot = objectHit.gameObject.transform.rotation;
+        }
+
+        if (objectHit.gameObject.tag == "ExitTrigger")
+        {
+            dolphinOutAbility = true;
+            jumpOutUp = objectHit.gameObject.transform.up;
+            jumpOutFw = objectHit.gameObject.transform.forward;
+            jumpOutRot = objectHit.gameObject.transform.rotation;
+        }
+
+    }
+
+    private void DolphinTriggersDeactivation(Collider objectHit)
+    {
+        if (objectHit.gameObject.tag == "EnterTrigger")
+        {
+            dolphinInAbility = false;
+            stMoveEnabled = true;
+        }
+        if (objectHit.gameObject.tag == "ExitTrigger")
+        {
+            dolphinOutAbility = false;
+            stMoveEnabled = true;
+        }
     }
 }

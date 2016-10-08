@@ -8,11 +8,11 @@ using System.Collections;
 
 public class MoveCC : MonoBehaviour
 {
-    
-   
 
-  
-    public  Vector3 jumpDirection, glideDirection, forward, right, moveDirection;
+
+
+
+    public Vector3 jumpDirection, glideDirection, forward, right, moveDirection;
 
     private PlCore coreLink;
     private CharacterController ccLink;
@@ -29,19 +29,19 @@ public class MoveCC : MonoBehaviour
     void Update()
     {
 
-        
+
 
 
         if (!coreLink.vFissureAbilityisOn)
         {
 
-            //MovingNewStyle();
-            MovingOldStyle();
+            MovingNewStyle();
+            //MovingOldStyle();
 
             SpecialMoves();
         }
 
-       
+
 
     }
 
@@ -105,7 +105,7 @@ public class MoveCC : MonoBehaviour
 
     float curDirZ = 0.0f;
     float curDirX = 0.0f;
-   
+
 
     private void MovingNewStyle()
     {
@@ -113,7 +113,7 @@ public class MoveCC : MonoBehaviour
 
         curDirZ = -Input.GetAxis("LJVer");
         curDirX = Input.GetAxis("LJHor");
-        
+
 
         forward = Camera.main.transform.TransformDirection(Vector3.forward);
         forward.y = 0;
@@ -122,7 +122,7 @@ public class MoveCC : MonoBehaviour
 
         moveDirection = (curDirX * right + curDirZ * forward).normalized;
 
-        
+
 
 
         if (coreLink.currentForm == forms.standard && !coreLink.isJumping && !coreLink.isFlying)
@@ -130,10 +130,10 @@ public class MoveCC : MonoBehaviour
             if (moveDirection.sqrMagnitude >= 0.1)
             {
                 Quaternion rotation = Quaternion.LookRotation(moveDirection, Vector3.up);
-                this.transform.localRotation = Quaternion.Slerp(this.transform.localRotation, rotation, Time.deltaTime  * coreLink.GeneralValues.rotateSpeed);
+                this.transform.localRotation = Quaternion.Slerp(this.transform.localRotation, rotation, Time.deltaTime * coreLink.GeneralValues.rotateSpeed);
             }
             ccLink.SimpleMove(moveDirection * coreLink.CurrentMoveValues.standMove.moveSpeed);
-            
+
         }
         else if (coreLink.currentForm == forms.frog && !coreLink.isJumping && !coreLink.isFlying)
         {
@@ -143,7 +143,7 @@ public class MoveCC : MonoBehaviour
                 this.transform.localRotation = Quaternion.Slerp(this.transform.localRotation, rotation, Time.deltaTime * coreLink.GeneralValues.rotateSpeed);
             }
             ccLink.SimpleMove(moveDirection * coreLink.CurrentMoveValues.frogMove.moveSpeed);
-            
+
 
 
 
@@ -160,9 +160,6 @@ public class MoveCC : MonoBehaviour
                 coreLink.isArmaMoving = false;
 
             ccLink.SimpleMove(moveDirection * coreLink.CurrentMoveValues.armaMove.moveSpeed);
-            
-
-
 
         }
         else if (coreLink.currentForm == forms.crane)
@@ -177,6 +174,18 @@ public class MoveCC : MonoBehaviour
             }
             ccLink.Move(glideDirection * coreLink.CurrentMoveValues.craneMove.glideSpeed * Time.deltaTime);
             coreLink.isArmaMoving = true;
+        }
+        else if (coreLink.currentForm == forms.dolphin)
+        {
+            if (moveDirection.sqrMagnitude >= 0.1)
+            {
+                Quaternion rotation = Quaternion.LookRotation(moveDirection, Vector3.up);
+                this.transform.localRotation = Quaternion.Slerp(this.transform.localRotation, rotation, Time.deltaTime * coreLink.GeneralValues.rotateSpeed);
+
+            }
+
+
+            ccLink.SimpleMove(moveDirection * coreLink.CurrentMoveValues.dolphinMove.swimSpeed);
         }
     }
 
@@ -202,6 +211,7 @@ public class MoveCC : MonoBehaviour
                 coreLink.isRolling = true;
             }
 
+
         }
 
         if (coreLink.isJumping)
@@ -210,7 +220,9 @@ public class MoveCC : MonoBehaviour
             ccLink.Move(jumpDirection * Time.deltaTime);
 
             if (ccLink.isGrounded)
+            {
                 coreLink.isJumping = false;
+            }
         }
 
         if (coreLink.isRolling)
@@ -246,6 +258,27 @@ public class MoveCC : MonoBehaviour
         {
             coreLink.isFlying = false;
             coreLink.SwitchToStandard();
+        }
+
+        if (coreLink.currentForm == forms.dolphin && coreLink.dolphinInAbility)
+        {
+
+            this.transform.rotation = coreLink.jumpInRot;
+            jumpDirection = (coreLink.jumpInUp / 2 + coreLink.jumpInFw) * coreLink.CurrentMoveValues.dolphinMove.jumpStrength;
+
+
+
+
+            coreLink.isJumping = true;
+
+        }
+
+        if (coreLink.dolphinOutAbility && coreLink.currentForm != forms.dolphin && coreLink.currentForm != forms.crane)
+        {
+            this.transform.rotation = coreLink.jumpOutRot;
+            jumpDirection = (coreLink.jumpOutUp + coreLink.jumpOutFw) * coreLink.CurrentMoveValues.dolphinMove.jumpStrength;
+
+            coreLink.isJumping = true;
         }
     }
 
