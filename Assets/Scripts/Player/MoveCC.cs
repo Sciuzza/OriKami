@@ -54,7 +54,7 @@ public class MoveCC : MonoBehaviour
         transform.Rotate(0, Input.GetAxis("LJHor") * coreLink.GeneralValues.rotateSpeed, 0);
         Vector3 forward = transform.TransformDirection(Vector3.forward);
 
-        if (coreLink.currentForm == forms.standard && !coreLink.isJumping && !coreLink.isFlying)
+        if (coreLink.currentForm == forms.standard && !coreLink.isInAir && !coreLink.isFlying)
         {
             float curSpeed;
 
@@ -66,7 +66,7 @@ public class MoveCC : MonoBehaviour
             ccLink.SimpleMove(forward * curSpeed);
 
         }
-        else if (coreLink.currentForm == forms.frog && !coreLink.isJumping && !coreLink.isFlying)
+        else if (coreLink.currentForm == forms.frog && !coreLink.isInAir && !coreLink.isFlying)
         {
 
             float curSpeed;
@@ -80,7 +80,7 @@ public class MoveCC : MonoBehaviour
 
 
         }
-        else if (coreLink.currentForm == forms.armadillo && !coreLink.isJumping && !coreLink.isFlying && !coreLink.isRolling)
+        else if (coreLink.currentForm == forms.armadillo && !coreLink.isInAir && !coreLink.isFlying && !coreLink.isRolling)
         {
             float curSpeed;
 
@@ -125,7 +125,7 @@ public class MoveCC : MonoBehaviour
 
 
 
-        if (coreLink.currentForm == forms.standard && !coreLink.isJumping && !coreLink.isFlying)
+        if (coreLink.currentForm == forms.standard && !coreLink.isInAir && !coreLink.isFlying)
         {
             if (moveDirection.sqrMagnitude >= 0.1)
             {
@@ -135,7 +135,7 @@ public class MoveCC : MonoBehaviour
             ccLink.SimpleMove(moveDirection * coreLink.CurrentMoveValues.standMove.moveSpeed);
 
         }
-        else if (coreLink.currentForm == forms.frog && !coreLink.isJumping && !coreLink.isFlying)
+        else if (coreLink.currentForm == forms.frog && !coreLink.isInAir && !coreLink.isFlying)
         {
             if (moveDirection.sqrMagnitude >= 0.1)
             {
@@ -148,7 +148,7 @@ public class MoveCC : MonoBehaviour
 
 
         }
-        else if (coreLink.currentForm == forms.armadillo && !coreLink.isJumping && !coreLink.isFlying && !coreLink.isRolling)
+        else if (coreLink.currentForm == forms.armadillo && !coreLink.isInAir && !coreLink.isFlying && !coreLink.isRolling)
         {
             if (moveDirection.sqrMagnitude >= 0.1)
             {
@@ -199,12 +199,12 @@ public class MoveCC : MonoBehaviour
             if (coreLink.currentForm == forms.frog)
             {
                 jumpDirection = (this.transform.up + this.transform.forward) * coreLink.CurrentMoveValues.frogMove.jumpStrength;
-                coreLink.isJumping = true;
+                coreLink.isInAir = true;
             }
             else if (coreLink.currentForm == forms.standard)
             {
                 jumpDirection = (this.transform.up + this.transform.forward) * coreLink.CurrentMoveValues.standMove.jumpStrength;
-                coreLink.isJumping = true;
+                coreLink.isInAir = true;
             }
             else if (coreLink.currentForm == forms.armadillo)
             {
@@ -214,14 +214,14 @@ public class MoveCC : MonoBehaviour
 
         }
 
-        if (coreLink.isJumping)
+        if (coreLink.isInAir)
         {
             jumpDirection.y -= coreLink.GeneralValues.jumpGravity * Time.deltaTime;
             ccLink.Move(jumpDirection * Time.deltaTime);
 
             if (ccLink.isGrounded)
             {
-                coreLink.isJumping = false;
+                coreLink.isInAir = false;
             }
         }
 
@@ -242,14 +242,14 @@ public class MoveCC : MonoBehaviour
         {
             if (coreLink.currentForm == forms.crane)
             {
-                if (coreLink.isJumping)
-                    coreLink.isJumping = false;
+                if (coreLink.isInAir)
+                    coreLink.isInAir = false;
                 if (!coreLink.isFlying)
                     coreLink.isFlying = true;
             }
             else
             {
-                coreLink.isJumping = true;
+                coreLink.isInAir = true;
             }
 
         }
@@ -266,19 +266,17 @@ public class MoveCC : MonoBehaviour
             this.transform.rotation = coreLink.jumpInRot;
             jumpDirection = (coreLink.jumpInUp / 2 + coreLink.jumpInFw) * coreLink.CurrentMoveValues.dolphinMove.jumpStrength;
 
-
-
-
-            coreLink.isJumping = true;
+            coreLink.isInAir = true;
 
         }
 
-        if (coreLink.dolphinOutAbility && coreLink.currentForm != forms.dolphin && coreLink.currentForm != forms.crane)
+        if (coreLink.dolphinOutAbility && coreLink.currentForm != forms.dolphin && coreLink.currentForm != forms.crane && coreLink.isInWater && coreLink.previousForm == forms.dolphin)
         {
             this.transform.rotation = coreLink.jumpOutRot;
             jumpDirection = (coreLink.jumpOutUp + coreLink.jumpOutFw) * coreLink.CurrentMoveValues.dolphinMove.jumpStrength;
 
-            coreLink.isJumping = true;
+            coreLink.isInAir = true;
+            coreLink.isInWater = false;
         }
     }
 

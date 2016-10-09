@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
-
+using UnityEngine.Events;
 
 
 
@@ -8,16 +8,21 @@ using System.Collections;
 public class InterCC : MonoBehaviour
 {
 
+    public keybindings currentInputs;
 
-
+     
 
     private PlCore coreLink;
     private CharacterController ccLink;
+
+    public UnityEvent standardForm, frogForm, craneForm, armaForm, dolphinForm;
 
     private void Awake()
     {
         coreLink = this.GetComponent<PlCore>();
         ccLink = this.GetComponent<CharacterController>();
+
+      
     }
    
     private void Update()
@@ -32,8 +37,6 @@ public class InterCC : MonoBehaviour
         {
             VFissureAbility();
         }
-
-
 
 
     }
@@ -77,10 +80,11 @@ public class InterCC : MonoBehaviour
 
     private void JoyInputManager()
     {
-        if (StandardFormJoy())
+        if (StandardFormJoyRequirements())
         {
             coreLink.standard.SetActive(true);
             GameObject.FindGameObjectWithTag(coreLink.currentActForm).SetActive(false);
+            coreLink.previousForm = coreLink.currentForm;
             coreLink.currentActForm = "Standard Form";
             coreLink.currentForm = forms.standard;
 
@@ -89,6 +93,7 @@ public class InterCC : MonoBehaviour
         {
             coreLink.frog.SetActive(true);
             GameObject.FindGameObjectWithTag(coreLink.currentActForm).SetActive(false);
+            coreLink.previousForm = coreLink.currentForm;
             coreLink.currentActForm = "Frog Form";
             coreLink.currentForm = forms.frog;
 
@@ -97,6 +102,7 @@ public class InterCC : MonoBehaviour
         {
             coreLink.dragon.SetActive(true);
             GameObject.FindGameObjectWithTag(coreLink.currentActForm).SetActive(false);
+            coreLink.previousForm = coreLink.currentForm;
             coreLink.currentActForm = "Dragon Form";
             coreLink.currentForm = forms.crane;
 
@@ -105,6 +111,7 @@ public class InterCC : MonoBehaviour
         {
             coreLink.armadillo.SetActive(true);
             GameObject.FindGameObjectWithTag(coreLink.currentActForm).SetActive(false);
+            coreLink.previousForm = coreLink.currentForm;
             coreLink.currentActForm = "Armadillo Form";
             coreLink.currentForm = forms.armadillo;
 
@@ -113,6 +120,7 @@ public class InterCC : MonoBehaviour
         {
             coreLink.dolphin.SetActive(true);
             GameObject.FindGameObjectWithTag(coreLink.currentActForm).SetActive(false);
+            coreLink.previousForm = coreLink.currentForm;
             coreLink.currentActForm = "Dolphin Form";
             coreLink.currentForm = forms.dolphin;
             coreLink.stMoveEnabled = false;
@@ -124,10 +132,10 @@ public class InterCC : MonoBehaviour
 
     }
 
-    private bool StandardFormJoy()
+    private bool StandardFormJoyRequirements()
     {
         if ((Input.GetAxis("LRTButton") > 0 && coreLink.currentForm == forms.frog) || (Input.GetAxis("LRTButton") < 0 && coreLink.currentForm == forms.crane && !ccLink.isGrounded)
-            || (Input.GetButtonDown("LBButton") && coreLink.currentForm == forms.armadillo))
+            || (Input.GetButtonDown("LBButton") && coreLink.currentForm == forms.armadillo) || (Input.GetButtonDown("RBButton") && coreLink.currentForm == forms.dolphin))
             return true;
         else
             return false;
@@ -181,10 +189,11 @@ public class InterCC : MonoBehaviour
 
                         distance = coreLink.vGuidanceFinPosition - this.transform.position;
 
-                        if (distance.sqrMagnitude >= 0.625f)
+                        if (distance.sqrMagnitude >= 0.8f)
                         {
 
-                            Vector3 direction = (coreLink.vGuidanceFinPosition - this.transform.position).normalized;
+                            // Vector3 direction = (coreLink.vGuidanceFinPosition - this.transform.position).normalized;
+                            Vector3 direction = coreLink.vGuidanceDir.normalized;
                             direction.y = 0;
                             this.transform.position += direction * Time.deltaTime * 3;
                         }
@@ -204,4 +213,23 @@ public class InterCC : MonoBehaviour
     }
 
   
+    private void NewInputManager()
+    {
+        if (currentInputs.Joypad.frogForm == "LRTButton")
+
+
+        if (Input.GetAxis(currentInputs.Joypad.frogForm) > 0)
+        {
+
+        }
+       
+       
+    }
+
+    private void InitializingInput()
+    {
+
+    }
+    
+
 }

@@ -6,6 +6,32 @@ using UnityEngine.Events;
 
 public enum forms { standard, frog, crane, armadillo, dolphin };
 
+public enum physicStates { onAir, onGround, onWater}
+
+public enum primaryAbilityStates { roll, dolJumpAbove, dolJumpBelow, Jump, fly, noAbility}
+
+public enum secondaryAbilityStates { vFissure, hFissure, movingBlock, noAbility}
+
+public enum tertiaryAbilityStates { switchToDolphin, switchByDolphin, noAbility}
+
+public enum quaternaryAbilityStates { noAbility};
+
+public enum states { standingStill, walking, falling, noState};
+
+public enum control { totalControl, noMoveControl, noCameraControl, noSpecialInputsControl, noMoveAndCamera, noCameraAndSpecial, noMoveAndSpecial, noControl };
+
+public struct playerState
+{
+    public forms currentForm;
+    public physicStates currentPState;
+    public primaryAbilityStates currentPAState;
+    public secondaryAbilityStates currentSAState;
+    public tertiaryAbilityStates currentTAState;
+    public quaternaryAbilityStates currentQAState;
+    public states currentState;
+    public control currentControl;
+}
+
 public class PlCore : MonoBehaviour
 {
 
@@ -47,27 +73,38 @@ public class PlCore : MonoBehaviour
 
     public string currentActForm = "Standard Form";
     public GameObject frog, standard, dragon, armadillo, dolphin;
-    public forms currentForm = forms.standard;
+   
 
-    public bool isJumping = false;
-    public bool isRolling = false;
-    public bool isFlying = false;
-    public float rollingTime = 0.0f;
+
+
+    playerState cPlayerState;
+
+    // to be removed
+    public forms currentForm = forms.standard;
+    public forms previousForm = forms.standard;
+    public bool isInAir = false;  // false if it is on ground or in water, true if it is on air, could be replaced by isOnGround Character Controller
     public bool isInWater = false;
+    public bool stMoveEnabled = true; // to be disabled on Special Abilities that will provide script controlled movement
+    public bool isRolling = false;    // only when current form is Armadillo and 
+    public bool isFlying = false;     // only true when isInAir is true and current form is crane
     public bool isArmaMoving = false;
     public bool dolphinInAbility = false;
     public bool dolphinOutAbility = false;
-    public bool stMoveEnabled = true;
+    
 
     public bool vFissureAbilityisOn = false, secondRotationisOn = false, secondMoveIsOn = false, moveFinished = false;
     public Quaternion vTriggerRotation, vGuidanceRotation;
     public Vector3 vTriggerMidPosition, vGuidanceFinPosition;
+    public Vector3 vGuidanceDir;
 
+    public float rollingTime = 0.0f;
 
     public Vector3 jumpOutFw, jumpOutUp, jumpInFw, jumpInUp;
     public Quaternion jumpInRot, jumpOutRot;
 
     MoveCC moveLink;
+
+   
 
     private void Awake()
     {
@@ -75,6 +112,10 @@ public class PlCore : MonoBehaviour
         moveLink = this.GetComponent<MoveCC>();
         SettingStandardForm();
 
+        SettingCPState();
+
+        InterCC interactionLink = this.gameObject.GetComponent<InterCC>();
+        interactionLink.standardForm.AddListener(SwitchToStandardForm);
     }
 
     void OnTriggerEnter(Collider objectHit)
@@ -109,7 +150,6 @@ public class PlCore : MonoBehaviour
         DolphinTriggersDeactivation(objectHit);
     }
 
-
     void OnControllerColliderHit(ControllerColliderHit hit)
     {
 
@@ -118,11 +158,8 @@ public class PlCore : MonoBehaviour
             hit.gameObject.GetComponent<Rigidbody>().velocity = (hit.moveDirection * 2);  
         }
 
-        /*
         if (hit.gameObject.tag == "Water")
-            dolphinInAbility = false;
-
-    */
+            isInWater = true;
 
     }
 
@@ -209,10 +246,12 @@ public class PlCore : MonoBehaviour
             vTriggerMidPosition = objectHit.transform.position;
             vTriggerMidPosition.y = 0.0f;
 
-            vGuidanceFinPosition = objectHit.GetComponentInParent<VFissure>().mGuidance.transform.position;
+            vGuidanceFinPosition = objectHit.GetComponentInParent<VFissure>().exitA.transform.position;
             vGuidanceFinPosition.y = 0.0f;
-            vGuidanceFinPosition.z += objectHit.GetComponentInParent<VFissure>().mGuidance.GetComponent<BoxCollider>().size.x / 3;
+            
 
+            vGuidanceDir = objectHit.GetComponentInParent<VFissure>().mGuidance.transform.right;
+           
         }
 
         if (objectHit.gameObject.tag == "vAbilitytb" && Input.GetButtonDown("XButton") && currentForm == forms.standard && !vFissureAbilityisOn)
@@ -227,9 +266,11 @@ public class PlCore : MonoBehaviour
             vTriggerMidPosition = objectHit.transform.position;
             vTriggerMidPosition.y = 0.0f;
 
-            vGuidanceFinPosition = objectHit.GetComponentInParent<VFissure>().mGuidance.transform.position;
+            vGuidanceFinPosition = objectHit.GetComponentInParent<VFissure>().exitB.transform.position;
             vGuidanceFinPosition.y = 0.0f;
-            vGuidanceFinPosition.z -= objectHit.GetComponentInParent<VFissure>().mGuidance.GetComponent<BoxCollider>().size.x / 3;
+           
+
+            vGuidanceDir = -objectHit.GetComponentInParent<VFissure>().mGuidance.transform.right;
 
         }
     }
@@ -267,4 +308,22 @@ public class PlCore : MonoBehaviour
             stMoveEnabled = true;
         }
     }
+
+
+    private void SwitchToStandardForm()
+    {
+
+    }
+
+    private void SettingCPState()
+    {
+        cPlayerState.currentForm = forms.standard;
+        cPlayerState.currentPState = physicStates.onGround;
+        cPlayerState.currentPAState = primaryAbilityStates.Jump;
+        cPlayerState.currentSAState = secondaryAbilityStates.noAbility;
+        cPlayerState.currentTAState = tertiaryAbilityStates.noAbility;
+        cPlayerState.currentQAState = quaternaryAbilityStates.noAbility;
+        cPlayerState.currentControl = control.totalControl;
+    }
+
 }
