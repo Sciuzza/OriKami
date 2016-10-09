@@ -142,6 +142,8 @@ public class DesignerT : MonoBehaviour
 
         gcLink.initializer.AddListener(ApplyingDesignTweaks);
         gcLink.designRunningTweaks.AddListener(ApplyingDesignTweaks);
+
+        Physics.gravity = GeneralTweaks.globalGravity * Vector3.down;
     }
 
 
@@ -156,6 +158,8 @@ public class DesignerT : MonoBehaviour
 
         InterCC interCCTempLink = player.GetComponent<InterCC>();
         interCCTempLink.currentInputs = GestioneInputs;
+
+        Physics.gravity = GeneralTweaks.globalGravity * Vector3.down;
     }
 
    

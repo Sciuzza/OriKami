@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.Events;
 
 
 
@@ -17,6 +18,21 @@ public class MoveCC : MonoBehaviour
     private PlCore coreLink;
     private CharacterController ccLink;
 
+
+    [System.Serializable]
+    public class moveEvent : UnityEvent<Vector3>
+    {
+    }
+
+
+
+    [HideInInspector]
+    public moveEvent Moving;
+
+    public UnityEvent priAbilityInput, secAbilityInput, terAbilityInput, quaAbilityInput; 
+
+    
+
     void Awake()
     {
         coreLink = this.GetComponent<PlCore>();
@@ -29,19 +45,14 @@ public class MoveCC : MonoBehaviour
     void Update()
     {
 
-
-
-
         if (!coreLink.vFissureAbilityisOn)
         {
 
-            MovingNewStyle();
+            MovingInputHandler();
             //MovingOldStyle();
 
             SpecialMoves();
         }
-
-
 
     }
 
@@ -107,9 +118,9 @@ public class MoveCC : MonoBehaviour
     float curDirX = 0.0f;
 
 
-    private void MovingNewStyle()
+    private void MovingInputHandler()
     {
-        Physics.gravity = coreLink.GeneralValues.globalGravity * Vector3.down;
+        
 
         curDirZ = -Input.GetAxis("LJVer");
         curDirX = Input.GetAxis("LJHor");
@@ -122,71 +133,9 @@ public class MoveCC : MonoBehaviour
 
         moveDirection = (curDirX * right + curDirZ * forward).normalized;
 
-
-
-
-        if (coreLink.currentForm == forms.standard && !coreLink.isInAir && !coreLink.isFlying)
-        {
-            if (moveDirection.sqrMagnitude >= 0.1)
-            {
-                Quaternion rotation = Quaternion.LookRotation(moveDirection, Vector3.up);
-                this.transform.localRotation = Quaternion.Slerp(this.transform.localRotation, rotation, Time.deltaTime * coreLink.GeneralValues.rotateSpeed);
-            }
-            ccLink.SimpleMove(moveDirection * coreLink.CurrentMoveValues.standMove.moveSpeed);
-
-        }
-        else if (coreLink.currentForm == forms.frog && !coreLink.isInAir && !coreLink.isFlying)
-        {
-            if (moveDirection.sqrMagnitude >= 0.1)
-            {
-                Quaternion rotation = Quaternion.LookRotation(moveDirection, Vector3.up);
-                this.transform.localRotation = Quaternion.Slerp(this.transform.localRotation, rotation, Time.deltaTime * coreLink.GeneralValues.rotateSpeed);
-            }
-            ccLink.SimpleMove(moveDirection * coreLink.CurrentMoveValues.frogMove.moveSpeed);
-
-
-
-
-        }
-        else if (coreLink.currentForm == forms.armadillo && !coreLink.isInAir && !coreLink.isFlying && !coreLink.isRolling)
-        {
-            if (moveDirection.sqrMagnitude >= 0.1)
-            {
-                Quaternion rotation = Quaternion.LookRotation(moveDirection, Vector3.up);
-                this.transform.localRotation = Quaternion.Slerp(this.transform.localRotation, rotation, Time.deltaTime * coreLink.GeneralValues.rotateSpeed);
-                coreLink.isArmaMoving = true;
-            }
-            else
-                coreLink.isArmaMoving = false;
-
-            ccLink.SimpleMove(moveDirection * coreLink.CurrentMoveValues.armaMove.moveSpeed);
-
-        }
-        else if (coreLink.currentForm == forms.crane)
-        {
-            glideDirection = moveDirection;
-            glideDirection.y -= coreLink.GeneralValues.glideGravity * Time.deltaTime;
-
-            if (moveDirection.sqrMagnitude >= 0.1)
-            {
-                Quaternion rotation = Quaternion.LookRotation(glideDirection, Vector3.up);
-                this.transform.localRotation = Quaternion.Slerp(this.transform.localRotation, rotation, Time.deltaTime * coreLink.GeneralValues.rotateSpeed);
-            }
-            ccLink.Move(glideDirection * coreLink.CurrentMoveValues.craneMove.glideSpeed * Time.deltaTime);
-            coreLink.isArmaMoving = true;
-        }
-        else if (coreLink.currentForm == forms.dolphin)
-        {
-            if (moveDirection.sqrMagnitude >= 0.1)
-            {
-                Quaternion rotation = Quaternion.LookRotation(moveDirection, Vector3.up);
-                this.transform.localRotation = Quaternion.Slerp(this.transform.localRotation, rotation, Time.deltaTime * coreLink.GeneralValues.rotateSpeed);
-
-            }
-
-
-            ccLink.SimpleMove(moveDirection * coreLink.CurrentMoveValues.dolphinMove.swimSpeed);
-        }
+        if (moveDirection.sqrMagnitude >= 0.1)
+            Moving.Invoke(moveDirection);
+  
     }
 
     private void SpecialMoves()

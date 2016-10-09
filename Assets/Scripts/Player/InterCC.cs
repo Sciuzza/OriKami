@@ -14,6 +14,8 @@ public class InterCC : MonoBehaviour
 
     private PlCore coreLink;
     private CharacterController ccLink;
+    private bool switchCooldown = false;
+
 
     public UnityEvent standardForm, frogForm, craneForm, armaForm, dolphinForm;
 
@@ -30,8 +32,8 @@ public class InterCC : MonoBehaviour
 
         if (!coreLink.vFissureAbilityisOn)
         {
-            KMInputsManager();
-            JoyInputManager();
+          
+            InputManager();
         }
         else if (coreLink.vFissureAbilityisOn)
         {
@@ -42,111 +44,49 @@ public class InterCC : MonoBehaviour
     }
 
 
-    private void KMInputsManager()
+   
+
+    private void InputManager()
     {
-        if (Input.GetKeyDown("1") && coreLink.currentForm != forms.standard)
+
+        if ((Input.GetAxis("LRTButton") > 0 || Input.GetKeyDown("1")) && !switchCooldown)
         {
-            coreLink.standard.SetActive(true);
-            GameObject.FindGameObjectWithTag(coreLink.currentActForm).SetActive(false);
-            coreLink.currentActForm = "Standard Form";
-            coreLink.currentForm = forms.standard;
-
-        }
-        else if (Input.GetKeyDown("2") && coreLink.currentForm != forms.frog)
-        {
-            coreLink.frog.SetActive(true);
-            GameObject.FindGameObjectWithTag(coreLink.currentActForm).SetActive(false);
-            coreLink.currentActForm = "Frog Form";
-            coreLink.currentForm = forms.frog;
-
-        }
-        else if (Input.GetKeyDown("3") && coreLink.currentForm != forms.crane && !ccLink.isGrounded)
-        {
-            coreLink.dragon.SetActive(true);
-            GameObject.FindGameObjectWithTag(coreLink.currentActForm).SetActive(false);
-            coreLink.currentActForm = "Dragon Form";
-            coreLink.currentForm = forms.crane;
-
-        }
-        else if (Input.GetKeyDown("4") && coreLink.currentForm != forms.armadillo)
-        {
-            coreLink.armadillo.SetActive(true);
-            GameObject.FindGameObjectWithTag(coreLink.currentActForm).SetActive(false);
-            coreLink.currentActForm = "Armadillo Form";
-            coreLink.currentForm = forms.armadillo;
-
-        }
-    }
-
-    private void JoyInputManager()
-    {
-        if (StandardFormJoyRequirements())
-        {
-            coreLink.standard.SetActive(true);
-            GameObject.FindGameObjectWithTag(coreLink.currentActForm).SetActive(false);
-            coreLink.previousForm = coreLink.currentForm;
-            coreLink.currentActForm = "Standard Form";
-            coreLink.currentForm = forms.standard;
-
-        }
-        else if (Input.GetAxis("LRTButton") > 0 && coreLink.currentForm != forms.frog)
-        {
-            coreLink.frog.SetActive(true);
-            GameObject.FindGameObjectWithTag(coreLink.currentActForm).SetActive(false);
-            coreLink.previousForm = coreLink.currentForm;
-            coreLink.currentActForm = "Frog Form";
-            coreLink.currentForm = forms.frog;
-
-        }
-        else if (Input.GetAxis("LRTButton") < 0 && coreLink.currentForm != forms.crane && !ccLink.isGrounded)
-        {
-            coreLink.dragon.SetActive(true);
-            GameObject.FindGameObjectWithTag(coreLink.currentActForm).SetActive(false);
-            coreLink.previousForm = coreLink.currentForm;
-            coreLink.currentActForm = "Dragon Form";
-            coreLink.currentForm = forms.crane;
-
-        }
-        else if (Input.GetButtonDown("LBButton") && coreLink.currentForm != forms.armadillo)
-        {
-            coreLink.armadillo.SetActive(true);
-            GameObject.FindGameObjectWithTag(coreLink.currentActForm).SetActive(false);
-            coreLink.previousForm = coreLink.currentForm;
-            coreLink.currentActForm = "Armadillo Form";
-            coreLink.currentForm = forms.armadillo;
-
-        }
-        else if (Input.GetButtonDown("RBButton") && coreLink.currentForm != forms.dolphin && coreLink.dolphinInAbility)
-        {
-            coreLink.dolphin.SetActive(true);
-            GameObject.FindGameObjectWithTag(coreLink.currentActForm).SetActive(false);
-            coreLink.previousForm = coreLink.currentForm;
-            coreLink.currentActForm = "Dolphin Form";
-            coreLink.currentForm = forms.dolphin;
-            coreLink.stMoveEnabled = false;
-           
-
+            switchCooldown = true;
+            frogForm.Invoke();
+            StartCoroutine(SwitchingCooldown());
         }
 
+        else if ((Input.GetAxis("LRTButton") < 0 || Input.GetKeyDown("2")) && !switchCooldown) 
+        {
+            switchCooldown = true;
+            craneForm.Invoke();
+            StartCoroutine(SwitchingCooldown());
+        }
 
+        else if ((Input.GetButtonDown("LBButton") || Input.GetKeyDown("3")) && !switchCooldown)
+        {
+            switchCooldown = true;
+            armaForm.Invoke();
+            StartCoroutine(SwitchingCooldown());
+        }
+
+        else if ((Input.GetButtonDown("RBButton") || Input.GetKeyDown("4")) && !switchCooldown)
+        {
+            switchCooldown = true;
+            dolphinForm.Invoke();
+            StartCoroutine(SwitchingCooldown());
+        }
 
     }
 
-    private bool StandardFormJoyRequirements()
-    {
-        if ((Input.GetAxis("LRTButton") > 0 && coreLink.currentForm == forms.frog) || (Input.GetAxis("LRTButton") < 0 && coreLink.currentForm == forms.crane && !ccLink.isGrounded)
-            || (Input.GetButtonDown("LBButton") && coreLink.currentForm == forms.armadillo) || (Input.GetButtonDown("RBButton") && coreLink.currentForm == forms.dolphin))
-            return true;
-        else
-            return false;
-    }
+ 
 
     private void VFissureAbility()
     {
         if (!coreLink.vFissureAbilityisOn)
         {
-            KMInputsManager();
-            JoyInputManager();
+            
+            InputManager();
         }
         else if (coreLink.vFissureAbilityisOn)
         {
@@ -213,23 +153,13 @@ public class InterCC : MonoBehaviour
     }
 
   
-    private void NewInputManager()
+    private IEnumerator SwitchingCooldown()
     {
-        if (currentInputs.Joypad.frogForm == "LRTButton")
-
-
-        if (Input.GetAxis(currentInputs.Joypad.frogForm) > 0)
-        {
-
-        }
-       
-       
+        yield return new WaitForSeconds(1f);
+        switchCooldown = false;
     }
 
-    private void InitializingInput()
-    {
-
-    }
+   
     
 
 }
