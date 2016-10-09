@@ -541,7 +541,7 @@ public class PlCore : MonoBehaviour
         RotationHandler(moveDir);
 
         if (CheckMoveStandardRequirements())
-        ccLink.SimpleMove(moveDir * CurrentMoveValues.standMove.moveSpeed * Time.deltaTime);
+        ccLink.SimpleMove(moveDir * CurrentMoveValues.standMove.moveSpeed);
     }
 
     private bool CheckMoveStandardRequirements()
@@ -556,7 +556,7 @@ public class PlCore : MonoBehaviour
         RotationHandler(moveDir);
 
         if (CheckMoveFrogRequirements())
-            ccLink.SimpleMove(moveDir * CurrentMoveValues.frogMove.moveSpeed * Time.deltaTime);
+            ccLink.SimpleMove(moveDir * CurrentMoveValues.frogMove.moveSpeed);
     }
 
     private bool CheckMoveFrogRequirements()
@@ -571,7 +571,7 @@ public class PlCore : MonoBehaviour
         RotationHandler(moveDir);
 
         if (CheckMoveArmaRequirements())
-            ccLink.SimpleMove(moveDir * CurrentMoveValues.armaMove.moveSpeed * Time.deltaTime);
+            ccLink.SimpleMove(moveDir * CurrentMoveValues.armaMove.moveSpeed);
     }
 
     private bool CheckMoveArmaRequirements()
