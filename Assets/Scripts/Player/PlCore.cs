@@ -45,7 +45,11 @@ public class PlCore : MonoBehaviour
 
 
     public UnityEvent brokeSomething;
-    public UnityEvent activateSomething;
+    public UnityEvent activateBridge;
+    public UnityEvent activateStairs;
+    public UnityEvent activateWaterStairs;
+    public UnityEvent activateRamp;
+
 
     [SerializeField]
     private Movement currentMoveValues;
@@ -163,15 +167,30 @@ public class PlCore : MonoBehaviour
     void OnTriggerEnter(Collider objectHit)
     {
 
-        if (objectHit.gameObject.GetComponentInParent<DestroyableObjects>() != null && isRolling)
+        if (objectHit.gameObject.GetComponentInParent<DestroyableObjects>() )// && isRolling)
         {
-            brokeSomething.Invoke();
+            objectHit.gameObject.GetComponentInParent<DestroyableObjects>().DestroyingMySelf();
         }
 
         if (objectHit.gameObject.GetComponent<ButtonActivator>() != null)
         {
-            activateSomething.Invoke();
+            activateBridge.Invoke();
         }
+
+        if (objectHit.gameObject.GetComponent<ButtonStairs>() != null)
+        {
+           activateStairs.Invoke();
+        }
+        if (objectHit.gameObject.GetComponent<ButtonStairsWater>() != null)
+        {
+            activateWaterStairs.Invoke();
+        }
+        if (objectHit.gameObject.GetComponent<ButtonRamp>() != null)
+        {
+            activateWaterStairs.Invoke();
+        }
+
+
 
         DolphinTriggersActivation(objectHit);
 
