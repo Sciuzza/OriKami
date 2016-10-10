@@ -29,7 +29,7 @@ public class MoveCC : MonoBehaviour
     [HideInInspector]
     public moveEvent Moving;
 
-    public UnityEvent priAbilityInput, secAbilityInput, terAbilityInput, quaAbilityInput; 
+    public UnityEvent priAbilityInput, secAbilityInput, terAbilityInput, quaAbilityInput, isNotMoving; 
 
     
 
@@ -133,13 +133,20 @@ public class MoveCC : MonoBehaviour
 
         moveDirection = (curDirX * right + curDirZ * forward).normalized;
 
-        if (moveDirection.sqrMagnitude >= 0.1)
+        
             Moving.Invoke(moveDirection);
+     
   
     }
 
     private void SpecialMoves()
     {
+
+
+        if (Input.GetButtonDown("Jump") || Input.GetButtonDown("AButton"))
+            priAbilityInput.Invoke();
+
+        /*
         if (ccLink.isGrounded && (Input.GetButtonDown("Jump") || Input.GetButtonDown("AButton")))
         {
 
@@ -173,7 +180,7 @@ public class MoveCC : MonoBehaviour
                 coreLink.isInAir = false;
             }
         }
-
+        
         if (coreLink.isRolling)
         {
             coreLink.rollingTime += Time.deltaTime;
@@ -227,6 +234,7 @@ public class MoveCC : MonoBehaviour
             coreLink.isInAir = true;
             coreLink.isInWater = false;
         }
+        */
     }
 
 }
