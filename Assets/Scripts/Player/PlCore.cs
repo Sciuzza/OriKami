@@ -20,7 +20,7 @@ public enum quaternaryAbilityStates { noAbility };
 
 public enum states { standingStill, walking, falling, abilityAnimation };
 
-public enum control { totalControl, noMoveControl, noCameraControl, noSpecialInputsControl, noMoveAndCamera, noCameraAndSpecial, noMoveAndSpecial, noControl };
+public enum control { totalControl, noMoveControl, noCameraControl, noSpecialInputsControl, noMoveAndCamera, noCameraAndSpecial, noMoveAndSpecial, noControl }; 
 
 
 [System.Serializable]
@@ -110,8 +110,8 @@ public class PlCore : MonoBehaviour
     public Vector3 jumpOutFw, jumpOutUp, jumpInFw, jumpInUp;
     public Quaternion jumpInRot, jumpOutRot;
 
+    
 
-    private Vector3 jumpDirection, fallDirection;
 
     private void Awake()
     {
@@ -120,7 +120,7 @@ public class PlCore : MonoBehaviour
 
         SettingStandardForm();
 
-        SettingCPState();
+        SettingCPState(); 
         #endregion
 
         #region Check for Missing Components and Initializing them if present
@@ -149,8 +149,6 @@ public class PlCore : MonoBehaviour
             moveLink.secAbilityInput.AddListener(SecondaryAbilityHandler);
             moveLink.terAbilityInput.AddListener(TertiaryAbilityHandler);
             moveLink.quaAbilityInput.AddListener(QuaternaryAbilityHandler);
-
-            moveLink.isNotMoving.AddListener(ChangingStateToStandingStill);
         }
         else
             Debug.LogWarning("Missing MoveCC");
@@ -159,7 +157,7 @@ public class PlCore : MonoBehaviour
         ccLink = this.gameObject.GetComponent<CharacterController>();
 
         if (ccLink == null)
-            Debug.LogWarning("Missing Character Controller");
+            Debug.LogWarning("Missing Character Controller"); 
         #endregion
     }
 
@@ -384,8 +382,7 @@ public class PlCore : MonoBehaviour
             cPlayerState.forms[0].SetActive(true);
             cPlayerState.previousForm = cPlayerState.currentForm;
             cPlayerState.currentForm = forms.standard;
-            if (cPlayerState.previousForm == forms.crane)
-                StartCoroutine(Falling(fallDirection));
+
         }
         else
             Debug.Log("Conditions not met");
@@ -400,8 +397,7 @@ public class PlCore : MonoBehaviour
             cPlayerState.forms[1].SetActive(true);
             cPlayerState.previousForm = cPlayerState.currentForm;
             cPlayerState.currentForm = forms.frog;
-            if (cPlayerState.previousForm == forms.crane)
-                StartCoroutine(Falling(fallDirection));
+
         }
         else
             SwitchToStandard();
@@ -432,8 +428,7 @@ public class PlCore : MonoBehaviour
             cPlayerState.forms[3].SetActive(true);
             cPlayerState.previousForm = cPlayerState.currentForm;
             cPlayerState.currentForm = forms.armadillo;
-            if (cPlayerState.previousForm == forms.crane)
-                StartCoroutine(Falling(fallDirection));
+
         }
         else
             SwitchToStandard();
@@ -448,8 +443,7 @@ public class PlCore : MonoBehaviour
             cPlayerState.forms[4].SetActive(true);
             cPlayerState.previousForm = cPlayerState.currentForm;
             cPlayerState.currentForm = forms.dolphin;
-            if (cPlayerState.previousForm == forms.crane)
-                StartCoroutine(Falling(fallDirection));
+
         }
         else
             SwitchToStandard();
@@ -522,8 +516,6 @@ public class PlCore : MonoBehaviour
 
     private void MoveHandler(Vector3 moveDir)
     {
-        fallDirection = moveDir;
-
         switch (cPlayerState.currentForm)
         {
             case forms.standard:
@@ -565,16 +557,10 @@ public class PlCore : MonoBehaviour
 
     private void StandardMoving(Vector3 moveDir)
     {
-        if (moveDir.sqrMagnitude >= 0.1f)
-        {
-            RotationHandler(moveDir);
+        RotationHandler(moveDir);
 
-            if (CheckMoveStandardRequirements())
-            {
-                cPlayerState.currentState = states.walking;
-                ccLink.SimpleMove(moveDir * CurrentMoveValues.standMove.moveSpeed);
-            }
-        }
+        if (CheckMoveStandardRequirements())
+        ccLink.SimpleMove(moveDir * CurrentMoveValues.standMove.moveSpeed);
     }
 
     private bool CheckMoveStandardRequirements()
@@ -586,16 +572,10 @@ public class PlCore : MonoBehaviour
 
     private void FrogMoving(Vector3 moveDir)
     {
-        if (moveDir.sqrMagnitude >= 0.1f)
-        {
-            RotationHandler(moveDir);
+        RotationHandler(moveDir);
 
-            if (CheckMoveFrogRequirements())
-            {
-                cPlayerState.currentState = states.walking;
-                ccLink.SimpleMove(moveDir * CurrentMoveValues.frogMove.moveSpeed);
-            }
-        }
+        if (CheckMoveFrogRequirements())
+            ccLink.SimpleMove(moveDir * CurrentMoveValues.frogMove.moveSpeed);
     }
 
     private bool CheckMoveFrogRequirements()
@@ -607,54 +587,37 @@ public class PlCore : MonoBehaviour
 
     private void ArmaMoving(Vector3 moveDir)
     {
-        if (moveDir.sqrMagnitude >= 0.1f)
-        {
-            RotationHandler(moveDir);
+        RotationHandler(moveDir);
 
-            if (CheckMoveArmaRequirements())
-            {
-                cPlayerState.currentState = states.walking;
-                ccLink.SimpleMove(moveDir * CurrentMoveValues.armaMove.moveSpeed);
-            }
-        }
+        if (CheckMoveArmaRequirements())
+            ccLink.SimpleMove(moveDir * CurrentMoveValues.armaMove.moveSpeed);
     }
 
     private bool CheckMoveArmaRequirements()
     {
         if (cPlayerState.currentPState != physicStates.onGround)
             return false;
-        if (cPlayerState.currentState == states.abilityAnimation)
-            return false;
         return true;
     }
 
     private void CraneMoving(Vector3 moveDir)
     {
-        if (moveDir.sqrMagnitude >= 0.1f)
-            RotationHandler(moveDir);
+        RotationHandler(moveDir);
         Vector3 glideDirection = moveDir;
         glideDirection.y -= GeneralValues.glideGravity * Time.deltaTime;
-        cPlayerState.currentState = states.walking;
-        ccLink.Move(glideDirection * CurrentMoveValues.craneMove.glideSpeed * Time.deltaTime);
+        ccLink.Move(glideDirection * CurrentMoveValues.craneMove.glideSpeed);
     }
 
     private void DolphinMoving(Vector3 moveDir)
     {
-        if (moveDir.sqrMagnitude >= 0.1f)
-        {
-            RotationHandler(moveDir);
-            cPlayerState.currentState = states.walking;
-            ccLink.SimpleMove(moveDir * CurrentMoveValues.dolphinMove.swimSpeed * Time.deltaTime);
-        }
+        RotationHandler(moveDir);
+        ccLink.SimpleMove(moveDir * CurrentMoveValues.dolphinMove.swimSpeed * Time.deltaTime);
     }
 
     private void RotationHandler(Vector3 moveDir)
     {
         Quaternion rotation = Quaternion.LookRotation(moveDir, Vector3.up);
-        if (cPlayerState.currentForm == forms.crane || (cPlayerState.currentForm == forms.armadillo && cPlayerState.currentState == states.abilityAnimation))
-            this.transform.rotation = Quaternion.Slerp(this.transform.rotation, rotation, Time.deltaTime * GeneralValues.rotateSpeed / 3);
-        else
-            this.transform.rotation = Quaternion.Slerp(this.transform.rotation, rotation, Time.deltaTime * GeneralValues.rotateSpeed);
+        this.transform.rotation = Quaternion.Slerp(this.transform.rotation, rotation, Time.deltaTime * GeneralValues.rotateSpeed);
     }
 
     private bool GeneralMoveControlRequirements()
@@ -675,82 +638,7 @@ public class PlCore : MonoBehaviour
     #region Abilities Handler Methods
     private void PrimaryAbilityHandler()
     {
-        switch (cPlayerState.currentForm)
-        {
-            case forms.standard:
-                if (CheckPrimaryAbiStandardRequirements())
-                {
-                    StandardJumping();
-                }
-                else
-                    Debug.Log("Cannot Jump");
-                break;
 
-            case forms.frog:
-                if (CheckPrimaryAbiStandardRequirements())
-                {
-                    FrogJumping();
-                }
-                else
-                    Debug.Log("Cannot Jump");
-                break;
-
-            case forms.crane:
-
-                break;
-
-            case forms.armadillo:
-                if (CheckPrimaryAbiStandardRequirements())
-                {
-                    ArmaRolling();
-                }
-                else
-                    Debug.Log("Cannot Roll");
-                break;
-
-            case forms.dolphin:
-
-                break;
-        }
-    }
-
-    private void StandardJumping()
-    {
-
-
-        if (cPlayerState.currentState == states.walking)
-            jumpDirection = (this.transform.up + this.transform.forward) * CurrentMoveValues.standMove.jumpStrength;
-        else if (cPlayerState.currentState == states.standingStill)
-            jumpDirection = (this.transform.up) * CurrentMoveValues.standMove.jumpStrength;
-
-        cPlayerState.currentPState = physicStates.onAir;
-        StartCoroutine(Falling(jumpDirection));
-    }
-
-    private void FrogJumping()
-    {
-        if (cPlayerState.currentState == states.walking)
-            jumpDirection = (this.transform.up + this.transform.forward) * CurrentMoveValues.frogMove.jumpStrength;
-        else if (cPlayerState.currentState == states.standingStill)
-            jumpDirection = (this.transform.up) * CurrentMoveValues.frogMove.jumpStrength;
-
-        cPlayerState.currentPState = physicStates.onAir;
-        StartCoroutine(Falling(jumpDirection));
-    }
-
-    private void ArmaRolling()
-    {
-        StartCoroutine(Rolling());
-        cPlayerState.currentState = states.abilityAnimation;
-    }
-
-    private bool CheckPrimaryAbiStandardRequirements()
-    {
-        if (!GeneralSpecialInputsControlRequirements())
-            return false;
-        if (cPlayerState.currentPState == physicStates.onAir)
-            return false;
-        return true;
     }
 
     private void SecondaryAbilityHandler()
@@ -767,76 +655,11 @@ public class PlCore : MonoBehaviour
     {
 
     }
-
-    private bool GeneralSpecialInputsControlRequirements()
-    {
-        if (cPlayerState.currentControl == control.noCameraAndSpecial)
-            return false;
-        if (cPlayerState.currentControl == control.noSpecialInputsControl)
-            return false;
-        if (cPlayerState.currentControl == control.noMoveAndSpecial)
-            return false;
-        if (cPlayerState.currentControl == control.noControl)
-            return false;
-        return true;
-    }
     #endregion
 
-    #region Generale State Changing Methods
-
-    private void ChangingStateToStandingStill()
-    {
-        if (cPlayerState.currentState == states.walking)
-            cPlayerState.currentState = states.standingStill;
-    }
-
-    void Update()
-    {
-        if (cPlayerState.currentPState == physicStates.onAir && ccLink.isGrounded)
-        {
-            cPlayerState.currentPState = physicStates.onGround;
-
-            if (cPlayerState.currentForm == forms.crane)
-                SwitchToStandard();
-        }
-
-        if (cPlayerState.currentPState == physicStates.onGround && !ccLink.isGrounded)
-        {
-            cPlayerState.currentPState = physicStates.onAir;
-
-            if (cPlayerState.currentForm != forms.crane)
-                StartCoroutine(Falling(fallDirection));
 
 
-        }
 
-        if (fallDirection.sqrMagnitude < 0.1f && cPlayerState.currentState == states.walking)
-            cPlayerState.currentState = states.standingStill;
-    }
-
-    #endregion
-
-    private IEnumerator Falling(Vector3 jumpDir)
-    {
-        while (cPlayerState.currentPState != physicStates.onGround && cPlayerState.currentForm != forms.crane)
-        {
-            jumpDir.y -= GeneralValues.jumpGravity * Time.deltaTime;
-            ccLink.Move(jumpDir * Time.deltaTime);
-            yield return new WaitForSeconds(Time.deltaTime);
-        }
-    }
-
-    private IEnumerator Rolling()
-    {
-        while (rollingTime <= CurrentMoveValues.armaMove.rollingTime)
-        {
-            rollingTime += Time.deltaTime;
-            ccLink.SimpleMove(this.transform.forward * CurrentMoveValues.armaMove.rollingStrength);
-            yield return new WaitForSeconds(Time.deltaTime);
-        }
-        rollingTime = 0;
-        cPlayerState.currentState = states.standingStill;
-    }
 
 
 

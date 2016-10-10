@@ -109,9 +109,9 @@ public class InterCC : MonoBehaviour
 
                 Vector3 distance = coreLink.vTriggerMidPosition - this.transform.position;
 
-                if (distance.sqrMagnitude >= 0.71f && !coreLink.secondMoveIsOn)
+                if (distance.sqrMagnitude >= 0.625f && !coreLink.secondMoveIsOn)
                 {
-                    //Debug.Log(distance.sqrMagnitude);
+
                     Vector3 direction = (coreLink.vTriggerMidPosition - this.transform.position).normalized;
                     direction.y = 0;
                     this.transform.position += direction * Time.deltaTime * 3;
