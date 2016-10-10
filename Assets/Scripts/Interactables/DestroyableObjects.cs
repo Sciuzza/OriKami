@@ -10,9 +10,8 @@ using System.Collections;
             GameObject.FindGameObjectWithTag("Player").GetComponent<PlCore>().brokeSomething.AddListener(DestroyingMySelf);
         }
 
-
-
-        private void DestroyingMySelf()
+    
+        public void DestroyingMySelf()
         {
             Destroy(this.gameObject);
         }
