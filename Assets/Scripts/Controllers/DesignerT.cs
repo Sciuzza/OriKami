@@ -2,7 +2,10 @@
 using System.Collections;
 
 
+
+
 public enum playMode { KMInput, JoyInput };
+
 
 #region Structs
 [System.Serializable]
@@ -46,6 +49,32 @@ public struct dolphin
 }
 
 [System.Serializable]
+public struct keyMouseInputs
+{
+    public string frogForm;
+    public string craneForm;
+    public string armaForm;
+    public string dolphinForm;
+    public string primaryAbility;
+    public string secondaryAbility;
+    public string tertiaryAbility;
+    public string quaternaryAbility;
+}
+
+[System.Serializable]
+public struct joyInputs
+{
+    public string frogForm;
+    public string craneForm;
+    public string armaForm;
+    public string dolphinForm;
+    public string primaryAbility;
+    public string secondaryAbility;
+    public string tertiaryAbility;
+    public string quaternaryAbility;
+}
+
+[System.Serializable]
 public struct generalTweaks
 {
     public float globalGravity;
@@ -55,6 +84,13 @@ public struct generalTweaks
     public float rotateSpeed;
     public playMode currentInput;
 
+}
+
+[System.Serializable]
+public struct keybindings
+{
+    public keyMouseInputs TastieraMouse;
+    public joyInputs Joypad;
 }
 
 [System.Serializable]
@@ -76,7 +112,7 @@ public struct CameraPlayer
     [Range(10, 150)]
     public float distanceMax;
     [Range(5, 20)]
-    public float currentDistance; 
+    public float currentDistance;
     [Range(0.5f, 10)]
     public float sensitivityX;
     [Range(0.5f, 10)]
@@ -96,6 +132,7 @@ public struct CameraPlayer
 public class DesignerT : MonoBehaviour
 {
     public generalTweaks GeneralTweaks;
+    public keybindings GestioneInputs;
     public Movement GestioneMovimento;
     public CameraPlayer GestioneCamera;
 
@@ -105,18 +142,29 @@ public class DesignerT : MonoBehaviour
 
         gcLink.initializer.AddListener(ApplyingDesignTweaks);
         gcLink.designRunningTweaks.AddListener(ApplyingDesignTweaks);
+
+        Physics.gravity = GeneralTweaks.globalGravity * Vector3.down;
     }
 
 
     public void ApplyingDesignTweaks(GameObject player)
     {
         PlCore plCoreTempLink = player.GetComponent<PlCore>();
-       
+
         plCoreTempLink.CurrentMoveValues = GestioneMovimento;
         plCoreTempLink.GeneralValues = GeneralTweaks;
 
         this.GetComponent<CameraManager>().currentPlCameraSettings = GestioneCamera;
+
+        InterCC interCCTempLink = player.GetComponent<InterCC>();
+        interCCTempLink.currentInputs = GestioneInputs;
+
+        Physics.gravity = GeneralTweaks.globalGravity * Vector3.down;
     }
 
+   
+
 }
+
+
 

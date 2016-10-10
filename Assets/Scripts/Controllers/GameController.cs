@@ -12,6 +12,8 @@ public class GameController : MonoBehaviour {
     {
     }
 
+    
+
     [HideInInspector]
     public gbEvent initializer, designRunningTweaks;
 
@@ -28,6 +30,7 @@ public class GameController : MonoBehaviour {
         if (FindingPlayer())
         {
             initializer.Invoke(player);
+            
         }
 
       
@@ -54,4 +57,6 @@ public class GameController : MonoBehaviour {
             return true;
     }
 
+
+    
 }

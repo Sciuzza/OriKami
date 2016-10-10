@@ -3,22 +3,18 @@ using System.Collections;
 
 public class MovableBlock : MonoBehaviour {
 
-    public float forza = 5.0f;
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+ 
 
+   
 
-    public void move(Vector3 moveDirection)
+ 
+    void OnTriggerExit(Collider player)
     {
-       // this.transform.position += moveDirection * Time.deltaTime;
-
-        this.GetComponent<Rigidbody>().AddForce(moveDirection*forza);
+        if (player.gameObject.tag == "Player")
+        {
+            Debug.Log("Collision detected");
+            this.gameObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
+                    }
     }
+ 
 }

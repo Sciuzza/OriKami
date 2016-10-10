@@ -1,54 +1,117 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.Events;
+
 
 
 
 public class InterCC : MonoBehaviour
 {
 
+    public keybindings currentInputs;
 
-
+     
 
     private PlCore coreLink;
     private CharacterController ccLink;
+    private bool switchCooldown = false;
 
-    void Awake()
+
+    public UnityEvent standardForm, frogForm, craneForm, armaForm, dolphinForm;
+
+    private void Awake()
     {
         coreLink = this.GetComponent<PlCore>();
         ccLink = this.GetComponent<CharacterController>();
+
+      
     }
-
-
-
-    // Update is called once per frame
-    void Update()
+   
+    private void Update()
     {
 
         if (!coreLink.vFissureAbilityisOn)
         {
-            KMInputsManager();
-            JoyInputManager();
+          
+            InputManager();
         }
-        else
+        else if (coreLink.vFissureAbilityisOn)
         {
-            if (this.transform.localRotation != coreLink.vTriggerRotation && !coreLink.secondRotationisOn)
+            VFissureAbility();
+        }
 
-                this.transform.localRotation = Quaternion.Slerp(this.transform.localRotation, coreLink.vTriggerRotation, Time.deltaTime * coreLink.GeneralValues.rotateSpeed);
 
+    }
+
+
+   
+
+    private void InputManager()
+    {
+
+        if ((Input.GetAxis("LRTButton") > 0 || Input.GetKeyDown("1")) && !switchCooldown)
+        {
+            switchCooldown = true;
+            frogForm.Invoke();
+            StartCoroutine(SwitchingCooldown());
+        }
+
+        else if ((Input.GetAxis("LRTButton") < 0 || Input.GetKeyDown("2")) && !switchCooldown) 
+        {
+            switchCooldown = true;
+            craneForm.Invoke();
+            StartCoroutine(SwitchingCooldown());
+        }
+
+        else if ((Input.GetButtonDown("LBButton") || Input.GetKeyDown("3")) && !switchCooldown)
+        {
+            switchCooldown = true;
+            armaForm.Invoke();
+            StartCoroutine(SwitchingCooldown());
+        }
+
+        else if ((Input.GetButtonDown("RBButton") || Input.GetKeyDown("4")) && !switchCooldown)
+        {
+            switchCooldown = true;
+            dolphinForm.Invoke();
+            StartCoroutine(SwitchingCooldown());
+        }
+
+    }
+
+ 
+
+    private void VFissureAbility()
+    {
+        if (!coreLink.vFissureAbilityisOn)
+        {
+            
+            InputManager();
+        }
+        else if (coreLink.vFissureAbilityisOn)
+        {
+            if (Quaternion.Angle(this.transform.rotation, coreLink.vTriggerRotation) > 0.1f && !coreLink.secondRotationisOn)
+            {
+
+                this.transform.localRotation = Quaternion.Slerp(this.transform.rotation, coreLink.vTriggerRotation, Time.deltaTime * coreLink.GeneralValues.rotateSpeed);
+                //Debug.Log(Quaternion.Angle(this.transform.rotation, coreLink.vTriggerRotation));
+            }
             else if (coreLink.moveFinished)
             {
                 coreLink.vFissureAbilityisOn = false;
+                coreLink.moveFinished = false;
+                coreLink.secondMoveIsOn = false;
             }
             else
             {
 
-              
+
 
                 Vector3 distance = coreLink.vTriggerMidPosition - this.transform.position;
 
-                if (distance.sqrMagnitude >= 0.625f && !coreLink.secondMoveIsOn)
+                if (distance.sqrMagnitude >= 0.71f && !coreLink.secondMoveIsOn)
                 {
-
+                    //Debug.Log(distance.sqrMagnitude);
                     Vector3 direction = (coreLink.vTriggerMidPosition - this.transform.position).normalized;
                     direction.y = 0;
                     this.transform.position += direction * Time.deltaTime * 3;
@@ -57,7 +120,7 @@ public class InterCC : MonoBehaviour
                 {
                     coreLink.secondRotationisOn = true;
 
-                    if (this.transform.rotation != coreLink.vGuidanceRotation)
+                    if (Quaternion.Angle(this.transform.rotation, coreLink.vGuidanceRotation) > 0.1f)
 
                         this.transform.rotation = Quaternion.Slerp(this.transform.localRotation, coreLink.vGuidanceRotation, Time.deltaTime * coreLink.GeneralValues.rotateSpeed);
                     else
@@ -66,10 +129,11 @@ public class InterCC : MonoBehaviour
 
                         distance = coreLink.vGuidanceFinPosition - this.transform.position;
 
-                        if (distance.sqrMagnitude >= 0.625f)
+                        if (distance.sqrMagnitude >= 0.8f)
                         {
 
-                            Vector3 direction = (coreLink.vGuidanceFinPosition - this.transform.position).normalized;
+                            // Vector3 direction = (coreLink.vGuidanceFinPosition - this.transform.position).normalized;
+                            Vector3 direction = coreLink.vGuidanceDir.normalized;
                             direction.y = 0;
                             this.transform.position += direction * Time.deltaTime * 3;
                         }
@@ -86,104 +150,16 @@ public class InterCC : MonoBehaviour
             }
         }
 
-
-
-
     }
 
-
-
-    private void KMInputsManager()
+  
+    private IEnumerator SwitchingCooldown()
     {
-        if (Input.GetKeyDown("1") && coreLink.currentForm != forms.standard)
-        {
-            coreLink.standard.SetActive(true);
-            GameObject.FindGameObjectWithTag(coreLink.currentActForm).SetActive(false);
-            coreLink.currentActForm = "Standard Form";
-            coreLink.currentForm = forms.standard;
-
-        }
-        else if (Input.GetKeyDown("2") && coreLink.currentForm != forms.frog)
-        {
-            coreLink.frog.SetActive(true);
-            GameObject.FindGameObjectWithTag(coreLink.currentActForm).SetActive(false);
-            coreLink.currentActForm = "Frog Form";
-            coreLink.currentForm = forms.frog;
-
-        }
-        else if (Input.GetKeyDown("3") && coreLink.currentForm != forms.crane && !ccLink.isGrounded)
-        {
-            coreLink.dragon.SetActive(true);
-            GameObject.FindGameObjectWithTag(coreLink.currentActForm).SetActive(false);
-            coreLink.currentActForm = "Dragon Form";
-            coreLink.currentForm = forms.crane;
-
-        }
-        else if (Input.GetKeyDown("4") && coreLink.currentForm != forms.armadillo)
-        {
-            coreLink.armadillo.SetActive(true);
-            GameObject.FindGameObjectWithTag(coreLink.currentActForm).SetActive(false);
-            coreLink.currentActForm = "Armadillo Form";
-            coreLink.currentForm = forms.armadillo;
-
-        }
+        yield return new WaitForSeconds(1f);
+        switchCooldown = false;
     }
 
-
-    private void JoyInputManager()
-    {
-        if (StandardFormJoy())
-        {
-            coreLink.standard.SetActive(true);
-            GameObject.FindGameObjectWithTag(coreLink.currentActForm).SetActive(false);
-            coreLink.currentActForm = "Standard Form";
-            coreLink.currentForm = forms.standard;
-
-        }
-        else if (Input.GetAxis("LRTButton") > 0 && coreLink.currentForm != forms.frog)
-        {
-            coreLink.frog.SetActive(true);
-            GameObject.FindGameObjectWithTag(coreLink.currentActForm).SetActive(false);
-            coreLink.currentActForm = "Frog Form";
-            coreLink.currentForm = forms.frog;
-
-        }
-        else if (Input.GetAxis("LRTButton") < 0 && coreLink.currentForm != forms.crane && !ccLink.isGrounded)
-        {
-            coreLink.dragon.SetActive(true);
-            GameObject.FindGameObjectWithTag(coreLink.currentActForm).SetActive(false);
-            coreLink.currentActForm = "Dragon Form";
-            coreLink.currentForm = forms.crane;
-
-        }
-        else if (Input.GetButtonDown("LBButton") && coreLink.currentForm != forms.armadillo)
-        {
-            coreLink.armadillo.SetActive(true);
-            GameObject.FindGameObjectWithTag(coreLink.currentActForm).SetActive(false);
-            coreLink.currentActForm = "Armadillo Form";
-            coreLink.currentForm = forms.armadillo;
-
-        }
-        else if (Input.GetButtonDown("RBButton") && coreLink.currentForm != forms.dolphin && coreLink.isInWater)
-        {
-            coreLink.dolphin.SetActive(true);
-            GameObject.FindGameObjectWithTag(coreLink.currentActForm).SetActive(false);
-            coreLink.currentActForm = "Dolphin Form";
-            coreLink.currentForm = forms.dolphin;
-
-        }
-
-
-
-    }
-
-    private bool StandardFormJoy()
-    {
-        if ((Input.GetAxis("LRTButton") > 0 && coreLink.currentForm == forms.frog) || (Input.GetAxis("LRTButton") < 0 && coreLink.currentForm == forms.crane && !ccLink.isGrounded)
-            || (Input.GetButtonDown("LBButton") && coreLink.currentForm == forms.armadillo))
-            return true;
-        else
-            return false;
-    }
+   
+    
 
 }
