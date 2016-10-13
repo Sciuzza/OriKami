@@ -305,9 +305,6 @@ public class PlCore : MonoBehaviour
 
 
 
-
-
-
     #region Player Initialization
     private void SettingDefaultValues()
     {
