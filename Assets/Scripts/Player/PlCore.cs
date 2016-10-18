@@ -189,7 +189,7 @@ public class PlCore : MonoBehaviour
         }
         if (objectHit.gameObject.GetComponent<ButtonRamp>() != null)
         {
-            activateWaterStairs.Invoke();
+            activateRamp.Invoke();
         }
 
 
