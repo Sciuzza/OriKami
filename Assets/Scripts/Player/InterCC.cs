@@ -8,7 +8,7 @@ using UnityEngine.Events;
 public class InterCC : MonoBehaviour
 {
 
-    public keybindings currentInputs;
+    
 
      
 

@@ -11,7 +11,7 @@ public class MoveCC : MonoBehaviour
 {
 
 
-
+    public inputSettings currentInputs;
 
     public Vector3 jumpDirection, glideDirection, forward, right, moveDirection;
 
@@ -29,9 +29,9 @@ public class MoveCC : MonoBehaviour
     [HideInInspector]
     public moveEvent Moving;
 
-    public UnityEvent priAbilityInput, secAbilityInput, terAbilityInput, quaAbilityInput, isNotMoving; 
+    public UnityEvent priAbilityInput, secAbilityInput, terAbilityInput, quaAbilityInput, isNotMoving;
 
-    
+
 
     void Awake()
     {
@@ -52,7 +52,11 @@ public class MoveCC : MonoBehaviour
             //MovingOldStyle();
 
             SpecialMoves();
-        }
+
+
+       
+
+            }
 
     }
 
@@ -120,7 +124,7 @@ public class MoveCC : MonoBehaviour
 
     private void MovingInputHandler()
     {
-        
+
 
         curDirZ = -Input.GetAxis("LJVer");
         curDirX = Input.GetAxis("LJHor");
@@ -133,19 +137,23 @@ public class MoveCC : MonoBehaviour
 
         moveDirection = (curDirX * right + curDirZ * forward).normalized;
 
-        
-            Moving.Invoke(moveDirection);
-     
-  
+
+        Moving.Invoke(moveDirection);
+
+
     }
 
     private void SpecialMoves()
     {
 
-
+        /*
         if (Input.GetButtonDown("Jump") || Input.GetButtonDown("AButton"))
             priAbilityInput.Invoke();
-
+*/
+        
+        if (jumpPressed())
+            priAbilityInput.Invoke();
+            
         /*
         if (ccLink.isGrounded && (Input.GetButtonDown("Jump") || Input.GetButtonDown("AButton")))
         {
@@ -235,6 +243,23 @@ public class MoveCC : MonoBehaviour
             coreLink.isInWater = false;
         }
         */
+    }
+
+
+    private bool jumpPressed()
+    {
+        if (
+               Input.GetButtonDown(currentInputs.standardInputs.joyInputs.Jump)
+            || Input.GetButtonDown(currentInputs.frogInputs.joyInputs.Jump)
+            || Input.GetButtonDown(currentInputs.standardInputs.keyInputs.Jump)
+            || Input.GetButtonDown(currentInputs.frogInputs.keyInputs.Jump)
+            )
+        {
+            Debug.Log("Jump Pressed");
+            return true;
+        }
+        else
+            return false;
     }
 
 }

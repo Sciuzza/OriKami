@@ -4,10 +4,19 @@ using System.Collections;
 
 
 
-public enum playMode { KMInput, JoyInput };
+
 
 
 #region Structs
+
+[System.Serializable]
+public struct standardInputs
+{
+    public string Jump;
+    public string VerticalFissure;
+
+}
+
 [System.Serializable]
 public struct standardM
 {
@@ -17,10 +26,42 @@ public struct standardM
 }
 
 [System.Serializable]
+public struct standardI
+{
+    public standardInputs joyInputs;
+    public standardInputs keyInputs;
+}
+
+[System.Serializable]
+public struct frogInputs
+{
+    public string Jump;
+    public string HorizontalFissure;
+
+}
+
+[System.Serializable]
 public struct frogM
 {
     public float moveSpeed;
     public float jumpStrength;
+
+}
+
+[System.Serializable]
+public struct frogI
+{
+
+    public frogInputs joyInputs;
+    public frogInputs keyInputs;
+
+}
+
+[System.Serializable]
+public struct armaInputs
+{
+    public string roll;
+    public string rockMoving;
 
 }
 
@@ -34,6 +75,23 @@ public struct armaM
 }
 
 [System.Serializable]
+public struct armaI
+{
+    
+    public armaInputs joyInputs;
+    public armaInputs keyInputs;
+
+}
+
+[System.Serializable]
+public struct craneInputs
+{
+    public string abi1;
+    public string abi2;
+
+}
+
+[System.Serializable]
 public struct craneM
 {
     public float glideSpeed;
@@ -41,7 +99,23 @@ public struct craneM
 }
 
 [System.Serializable]
-public struct dolphin
+public struct craneI
+{
+    public craneInputs joyInputs;
+    public craneInputs keyInputs;
+
+}
+
+[System.Serializable]
+public struct dolphinInputs
+{
+    public string abi1;
+    public string abi2;
+
+}
+
+[System.Serializable]
+public struct dolphinM
 {
     public float swimSpeed;
     public float jumpStrength;
@@ -49,29 +123,11 @@ public struct dolphin
 }
 
 [System.Serializable]
-public struct keyMouseInputs
+public struct dolphinI
 {
-    public string frogForm;
-    public string craneForm;
-    public string armaForm;
-    public string dolphinForm;
-    public string primaryAbility;
-    public string secondaryAbility;
-    public string tertiaryAbility;
-    public string quaternaryAbility;
-}
+    public dolphinInputs joyInputs;
+    public dolphinInputs keyInputs;
 
-[System.Serializable]
-public struct joyInputs
-{
-    public string frogForm;
-    public string craneForm;
-    public string armaForm;
-    public string dolphinForm;
-    public string primaryAbility;
-    public string secondaryAbility;
-    public string tertiaryAbility;
-    public string quaternaryAbility;
 }
 
 [System.Serializable]
@@ -82,26 +138,30 @@ public struct generalTweaks
     public float glideGravity;
     [Range(0.5f, 5)]
     public float rotateSpeed;
-    public playMode currentInput;
+   
 
 }
 
 [System.Serializable]
-public struct keybindings
+public struct inputSettings
 {
-    public keyMouseInputs TastieraMouse;
-    public joyInputs Joypad;
+    public standardI standardInputs;
+    public frogI frogInputs;
+    public armaI armaInputs;
+    public craneI craneInputs;
+    public dolphinI dolphinInputs;
+
 }
 
 [System.Serializable]
-public struct Movement
+public struct moveValues
 {
 
     public standardM standMove;
     public frogM frogMove;
     public craneM craneMove;
     public armaM armaMove;
-    public dolphin dolphinMove;
+    public dolphinM dolphinMove;
 }
 
 [System.Serializable]
@@ -132,8 +192,9 @@ public struct CameraPlayer
 public class DesignerT : MonoBehaviour
 {
     public generalTweaks GeneralTweaks;
-    public keybindings GestioneInputs;
-    public Movement GestioneMovimento;
+   
+    public moveValues GestioneMovimento;
+    public inputSettings GestioneInputs;
     public CameraPlayer GestioneCamera;
 
     void Awake()
@@ -157,7 +218,11 @@ public class DesignerT : MonoBehaviour
         this.GetComponent<CameraManager>().currentPlCameraSettings = GestioneCamera;
 
         InterCC interCCTempLink = player.GetComponent<InterCC>();
-        interCCTempLink.currentInputs = GestioneInputs;
+
+
+        MoveCC moveCCTempLink = player.GetComponent<MoveCC>();
+
+        moveCCTempLink.currentInputs = GestioneInputs;
 
         Physics.gravity = GeneralTweaks.globalGravity * Vector3.down;
     }

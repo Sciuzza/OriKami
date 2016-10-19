@@ -19,7 +19,7 @@ using UnityEngine.Events;
 
         public CameraPlayer currentPlCameraSettings;
 
-        private playMode currentMode = playMode.KMInput;
+        
 
         #endregion
 
@@ -28,7 +28,7 @@ using UnityEngine.Events;
         void Awake()
         {
             this.GetComponent<GameController>().initializer.AddListener(SettingPlayerCamera);
-            this.GetComponent<GameController>().currentInputChange.AddListener(SettingInputMode);
+           
 
             SettingDefaultCameraPlValues();
         }
@@ -38,8 +38,7 @@ using UnityEngine.Events;
         void Update()
         {
 
-            if (currentMode == playMode.KMInput)
-            {
+          
                 #region Camera Player Zoom
                 if (Input.GetMouseButton(0))
                 {
@@ -61,9 +60,7 @@ using UnityEngine.Events;
                 #endregion
 
 
-            }
-            else
-            {
+           
                 currentx += Input.GetAxis("RJHor") * currentPlCameraSettings.sensitivityX;
                 currenty += Input.GetAxis("RJVer") * currentPlCameraSettings.sensitivityY;
 
@@ -72,7 +69,7 @@ using UnityEngine.Events;
 
                 currentPlCameraSettings.currentDistance = Mathf.Clamp(currentPlCameraSettings.currentDistance, currentPlCameraSettings.distanceMin, currentPlCameraSettings.distanceMax);
                 currenty = Mathf.Clamp(currenty, currentPlCameraSettings.yAngleMin, currentPlCameraSettings.yAngleMax);
-            }
+            
         }
 
         void LateUpdate()
@@ -120,8 +117,5 @@ using UnityEngine.Events;
             currentPlCameraSettings = defaultValues;
         }
 
-        private void SettingInputMode()
-        {
-            currentMode = this.GetComponent<DesignerT>().GeneralTweaks.currentInput;
-        }
+       
     }
