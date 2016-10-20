@@ -809,6 +809,8 @@ public class PlCore : MonoBehaviour
 
         if (fallDirection.sqrMagnitude < 0.1f && cPlayerState.currentState == states.walking)
             cPlayerState.currentState = states.standingStill;
+        else if (fallDirection.sqrMagnitude > 0.5f && cPlayerState.currentForm != forms.crane)
+            cPlayerState.currentState = states.walking;
     }
 
     #endregion
@@ -817,8 +819,24 @@ public class PlCore : MonoBehaviour
     {
         while (cPlayerState.currentPState != physicStates.onGround && cPlayerState.currentForm != forms.crane)
         {
-            jumpDir.y -= GeneralValues.jumpGravity * Time.deltaTime;
-            ccLink.Move(jumpDir * Time.deltaTime);
+            
+            fallDirection.y = jumpDir.y;
+
+            if (fallDirection.sqrMagnitude == 0)
+            {
+                jumpDir.y -= GeneralValues.jumpGravity * Time.deltaTime;
+                ccLink.Move(jumpDir * Time.deltaTime);
+            }
+            else
+            {
+                
+
+                jumpDir.x = fallDirection.x * currentMoveValues.standMove.moveSpeed;
+                jumpDir.z = fallDirection.z * currentMoveValues.standMove.moveSpeed;
+
+                jumpDir.y -= GeneralValues.jumpGravity * Time.deltaTime;
+                ccLink.Move(jumpDir * Time.deltaTime);
+            }
             yield return new WaitForSeconds(Time.deltaTime);
         }
     }
