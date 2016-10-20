@@ -10,6 +10,7 @@ namespace Orikami
         public BoxCollider platformCollider;
         public MeshRenderer PlatformMesh;
         public float smoothing = 1f;
+        public GameObject provacazzo;
 
         IEnumerator MyCoroutine()
         {
@@ -19,6 +20,7 @@ namespace Orikami
             yield return new WaitForSeconds(2f);
             PlatformMesh.enabled = false;
             platformCollider.isTrigger = true;
+            provacazzo.SetActive(false);
 
 
         }

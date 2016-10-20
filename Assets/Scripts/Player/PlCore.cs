@@ -169,7 +169,7 @@ public class PlCore : MonoBehaviour
     void OnTriggerEnter(Collider objectHit)
     {
 
-        if (objectHit.gameObject.GetComponentInParent<DestroyableObjects>() )// && isRolling)
+        if (objectHit.gameObject.GetComponentInParent<DestroyableObjects>()) // && isRolling)
         {
             objectHit.gameObject.GetComponentInParent<DestroyableObjects>().DestroyingMySelf();
         }
@@ -353,6 +353,7 @@ public class PlCore : MonoBehaviour
 
         armadillo = GameObject.FindGameObjectWithTag("Armadillo Form");
         armadillo.SetActive(false);
+        
 
         dolphin = GameObject.FindGameObjectWithTag("Dolphin Form");
         dolphin.SetActive(false);
