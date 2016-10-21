@@ -10,24 +10,24 @@ namespace Orikami
         public BoxCollider platformCollider;
         public MeshRenderer PlatformMesh;
         public float smoothing = 1f;
-        public GameObject provacazzo;
+        
 
         IEnumerator MyCoroutine()
         {
 
 
             print("On platform");
-            yield return new WaitForSeconds(2f);
+            yield return new WaitForSeconds(1f);
             PlatformMesh.enabled = false;
             platformCollider.isTrigger = true;
-            provacazzo.SetActive(false);
+            
 
 
         }
 
         IEnumerator MyCoroutineExit()
         {
-            yield return new WaitForSeconds(2f);
+            yield return new WaitForSeconds(1.5f);
             PlatformMesh.enabled = true;
             platformCollider.isTrigger = false;
 
@@ -35,11 +35,20 @@ namespace Orikami
 
         void OnTriggerEnter(Collider other)
         {
-            StartCoroutine(MyCoroutine());
+            if (other.gameObject.tag == "Player")
+            {
+                StartCoroutine(MyCoroutine());
+            }
+
         }
         void OnTriggerExit(Collider other)
         {
-            StartCoroutine(MyCoroutineExit());
+
+            if (other.gameObject.tag == "Player")
+            {
+                StartCoroutine(MyCoroutineExit());
+            }
+
         }
 
     }

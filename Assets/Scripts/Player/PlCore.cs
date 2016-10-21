@@ -50,6 +50,10 @@ public class PlCore : MonoBehaviour
     public UnityEvent activateWaterStairs;
     public UnityEvent activateRamp;
 
+    public float weight = 10.0f;
+
+
+
 
     [SerializeField]
     private Movement currentMoveValues;
@@ -219,6 +223,12 @@ public class PlCore : MonoBehaviour
         if (hit.gameObject.tag == "movable")
         {
             hit.gameObject.GetComponent<Rigidbody>().velocity = (hit.moveDirection * 2);
+        }
+
+        if ((hit.gameObject.tag == "Platform"))
+        {
+              
+            hit.gameObject.GetComponent<Rigidbody>().AddForce(-hit.normal * weight);
         }
 
         if (hit.gameObject.tag == "Water")
