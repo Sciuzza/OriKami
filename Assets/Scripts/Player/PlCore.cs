@@ -195,6 +195,10 @@ public class PlCore : MonoBehaviour
         {
             activateWaterStairs.Invoke();
         }
+        if (objectHit.gameObject.name == "DeathTrigger")
+        {
+            Application.LoadLevel(Application.loadedLevel);
+        }
 
 
 
