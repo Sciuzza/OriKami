@@ -4,7 +4,7 @@ using UnityEngine.Events;
 using System.Collections.Generic;
 
 
-
+/*
 #region Finite State Machine Structure
 public enum forms { standard, frog, crane, armadillo, dolphin };
 
@@ -38,7 +38,7 @@ public struct playerState
     public control currentControl;
 }
 #endregion
-
+*/
 
 public class PlCore : MonoBehaviour
 {

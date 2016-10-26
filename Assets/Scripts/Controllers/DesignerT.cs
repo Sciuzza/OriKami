@@ -210,19 +210,19 @@ public class DesignerT : MonoBehaviour
 
     public void ApplyingDesignTweaks(GameObject player)
     {
-        PlCore plCoreTempLink = player.GetComponent<PlCore>();
+        FSMExecutor fsmExecutorTempLink = player.GetComponent<FSMExecutor>();
 
-        plCoreTempLink.CurrentMoveValues = GestioneMovimento;
-        plCoreTempLink.GeneralValues = GeneralTweaks;
+        fsmExecutorTempLink.currentMoveValues = GestioneMovimento;
+        fsmExecutorTempLink.generalValues = GeneralTweaks;
 
         this.GetComponent<CameraManager>().currentPlCameraSettings = GestioneCamera;
 
-        InterCC interCCTempLink = player.GetComponent<InterCC>();
+       
 
 
-        MoveCC moveCCTempLink = player.GetComponent<MoveCC>();
+        PlayerInputs playerInputsTempLink = player.GetComponent<PlayerInputs>();
 
-        moveCCTempLink.currentInputs = GestioneInputs;
+        playerInputsTempLink.currentInputs = GestioneInputs;
 
         Physics.gravity = GeneralTweaks.globalGravity * Vector3.down;
     }
