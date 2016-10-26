@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class WheelActivator : MonoBehaviour {
+public class WheelActivator : MonoBehaviour
+{
 
     public bool isRotating = false, isOnButton = false;
     public LookAtTest[] wheelLinker = new LookAtTest[2];
@@ -10,7 +11,7 @@ public class WheelActivator : MonoBehaviour {
     {
         if (other.tag == "Player" && isRotating == false && isOnButton == false)
         {
-           
+
             wheelLinker[0].IndexController();
             wheelLinker[1].IndexController();
 
@@ -24,8 +25,8 @@ public class WheelActivator : MonoBehaviour {
         if (other.tag == "Player")
         {
             isOnButton = false;
-           wheelLinker[0].OnTriggerController();
-           wheelLinker[1].OnTriggerController();
+            wheelLinker[0].OnTriggerController();
+            wheelLinker[1].OnTriggerController();
 
         }
     }
