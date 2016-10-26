@@ -6,13 +6,17 @@ using System.Collections.Generic;
 #region Finite State Machine enum Structure
 
 
-public enum abilties { roll, jump, moveBlock, switchToDolp, switchByDolp, VFissure, HFissure, dolpJumpAb, dolpSwimBel, npcInter, menu };
+public enum abilties { move, cameraMove, jump,
+                       roll, moveBlock,
+                       toStd, toFrog, toArma, toCrane, toDolp, 
+                       VFissure, HFissure, dolpJumpAb, dolpSwimBel,
+                       npcInter, menu };
 
 public enum physicStates { onAir, onGround, onWater }
 
-public enum playerStates { standingStill, moving, flying };
+public enum playerStates { standingStill, moving, flying,
+                           rolling, movingBlock};
 
-public enum control { totalControl, noMoveControl, noCameraControl, noSpecialInputsControl, noMoveAndCamera, noCameraAndSpecial, noMoveAndSpecial, noControl };
 
 
 
@@ -32,7 +36,7 @@ public class FSMChecker : MonoBehaviour
         public List<abilties> currentAbilities;
         public physicStates currentPhState;
         public playerStates currentPlState;
-        public control currentControl;
+        
     }
 
     [SerializeField]
@@ -68,12 +72,7 @@ public class FSMChecker : MonoBehaviour
 
     public playerStateEffectsRequest plStateChanged;
 
-    [System.Serializable]
-    public class controlEffectsRequest : UnityEvent<control>
-    {
-    }
-
-    public controlEffectsRequest controlChanged;
+ 
     #endregion
 
     void Awake()
@@ -100,7 +99,7 @@ public class FSMChecker : MonoBehaviour
 
         cPlayerState.currentPlState = playerStates.standingStill;
 
-        cPlayerState.currentControl = control.totalControl;
+       
     }
 
     private void CheckingJumpRequirements()
@@ -114,7 +113,7 @@ public class FSMChecker : MonoBehaviour
         possiblePhStates.Add(physicStates.onGround);
 
         List<playerStates> possiblePlStates = new List<playerStates>();
-        possiblePlStates.Add(playerStates.moving);
+        possiblePlStates.Add(playerStates.movingOnGround);
         possiblePlStates.Add(playerStates.standingStill);
 
         List<control> possibleControlStates = new List<control>();
@@ -132,7 +131,7 @@ public class FSMChecker : MonoBehaviour
 
 
     private bool RequirementsCheckHandler(List<string> availableForms, abilties abilityToSearch, List<physicStates> possiblePhStates,
-        List<playerStates> possiblePlStates, List<control> possibleControlStates)
+        List<playerStates> possiblePlStates)
     {
         if (!GeneralFormRequirementCheck(availableForms))
             return false;
@@ -141,8 +140,6 @@ public class FSMChecker : MonoBehaviour
         else if (!GeneralPhysicStateRequirement(possiblePhStates))
             return false;
         else if (!GeneralPlayerStateRequirement(possiblePlStates))
-            return false;
-        else if (!GeneralControlRequirement(possibleControlStates))
             return false;
         else
             return true;
@@ -181,13 +178,7 @@ public class FSMChecker : MonoBehaviour
             return false;
     }
 
-    private bool GeneralControlRequirement(List<control> possibleControlStates)
-    {
-        if (possibleControlStates.Contains(cPlayerState.currentControl))
-            return true;
-        else
-            return false;
-    }
+   
 
 
     

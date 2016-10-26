@@ -20,7 +20,7 @@ public class FSMExecutor : MonoBehaviour {
         fsmCheckerTempLink.abilityUsed.AddListener(ApplyingAbilityEffect);
         fsmCheckerTempLink.phStateChanged.AddListener(ApplyingPhStateEffect);
         fsmCheckerTempLink.plStateChanged.AddListener(ApplyingPlStateEffect);
-        fsmCheckerTempLink.controlChanged.AddListener(ApplyingControlEffect);
+      
 
         ccLink = this.gameObject.GetComponent<CharacterController>();
     }
@@ -89,33 +89,12 @@ public class FSMExecutor : MonoBehaviour {
         {
             case playerStates.standingStill:
                 break;
-            case playerStates.moving:
+            case playerStates.movingOnGround:
                 break;
             case playerStates.flying:
                 break;
         }
     }
 
-    private void ApplyingControlEffect(control currentControl)
-    {
-        switch (currentControl)
-        {
-            case control.totalControl:
-                break;
-            case control.noMoveControl:
-                break;
-            case control.noCameraControl:
-                break;
-            case control.noSpecialInputsControl:
-                break;
-            case control.noMoveAndSpecial:
-                break;
-            case control.noMoveAndCamera:
-                break;
-            case control.noCameraAndSpecial:
-                break;
-            case control.noControl:
-                break;
-        }
-    }
+  
 }
