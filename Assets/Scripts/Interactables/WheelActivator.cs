@@ -6,6 +6,7 @@ public class WheelActivator : MonoBehaviour
 
     public bool isRotating = false, isOnButton = false;
     public LookAtTest[] wheelLinker = new LookAtTest[2];
+    public 
 
     void OnTriggerEnter(Collider other)
     {
@@ -16,7 +17,7 @@ public class WheelActivator : MonoBehaviour
             wheelLinker[1].IndexController();
 
         }
-
+        
     }
 
 
