@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.Events;
 
 public class FSMExecutor : MonoBehaviour {
 
@@ -11,6 +12,14 @@ public class FSMExecutor : MonoBehaviour {
     public generalTweaks generalValues;
 
     CharacterController ccLink;
+
+
+	[System.Serializable]
+	public class moveHandling : UnityEvent<Vector3>
+	{
+	}
+
+	public moveHandling moveSelected;
 
     void Awake()
     {
@@ -43,10 +52,15 @@ public class FSMExecutor : MonoBehaviour {
         
     }
 
-    private void ApplyingAbilityEffect(abilties abiUsed)
+	private void ApplyingAbilityEffect(abilties abiUsed, Vector3 moveDirInput)
     {
         switch (abiUsed)
         {
+		case abilties.move:
+			moveSelected.Invoke (moveDirInput);
+			    break;
+		    case abilties.cameraMove:
+			    break;
             case abilties.jump:
                 break;
             case abilties.roll:
@@ -55,16 +69,22 @@ public class FSMExecutor : MonoBehaviour {
                 break;
             case abilties.VFissure:
                 break;
-            case abilties.HFissure:
-                break;
-            case abilties.switchToDolp:
-                break;
-            case abilties.switchByDolp:
-                break;
-            case abilties.dolpJumpAb:
-                break;
+		    case abilties.HFissure:
+			    break;
             case abilties.dolpSwimBel:
                 break;
+		    case abilties.toStd:
+			    break;
+		    case abilties.toFrog:
+			    break;
+		    case abilties.toCrane:
+			    break;
+		    case abilties.toArma:
+			    break;
+		    case abilties.toDolp:
+			    break;
+		    case abilties.npcInter:
+			    break;
             case abilties.menu:
                 break;
         }
@@ -89,10 +109,14 @@ public class FSMExecutor : MonoBehaviour {
         {
             case playerStates.standingStill:
                 break;
-            case playerStates.movingOnGround:
+            case playerStates.moving:
                 break;
             case playerStates.flying:
                 break;
+		    case playerStates.movingBlock:
+			    break;
+		    case playerStates.rolling:
+			    break;
         }
     }
 

@@ -9,7 +9,7 @@ using System.Collections.Generic;
 public enum abilties { move, cameraMove, jump,
                        roll, moveBlock,
                        toStd, toFrog, toArma, toCrane, toDolp, 
-                       VFissure, HFissure, dolpJumpAb, dolpSwimBel,
+                       VFissure, HFissure, dolpSwimBel,
                        npcInter, menu };
 
 public enum physicStates { onAir, onGround, onWater }
@@ -72,6 +72,7 @@ public class FSMChecker : MonoBehaviour
 
     public playerStateEffectsRequest plStateChanged;
 
+
  
     #endregion
 
@@ -83,51 +84,45 @@ public class FSMChecker : MonoBehaviour
 
         PlayerInputs plInputsTempLink = this.gameObject.GetComponent<PlayerInputs>();
 
-        plInputsTempLink.jumpRequest.AddListener(CheckingJumpRequirements);
+        
+		plInputsTempLink.abiRequest.AddListener(CheckingAbiRequirements);
 
     }
 
-    private void SettingPlayerInitialState()
+	    private void SettingPlayerInitialState()
+	    {
+	        cPlayerState.currentForm = "Standard Form";
+	        cPlayerState.previousForm = "Standard Form";
+
+	        cPlayerState.currentAbilities.Add(abilties.jump);
+	        cPlayerState.currentAbilities.Add(abilties.menu);
+			cPlayerState.currentAbilities.Add (abilties.cameraMove);
+			cPlayerState.currentAbilities.Add (abilties.move);
+			cPlayerState.currentAbilities.Add (abilties.npcInter);
+			cPlayerState.currentAbilities.Add (abilties.toArma);
+			cPlayerState.currentAbilities.Add (abilties.toCrane);
+			cPlayerState.currentAbilities.Add (abilties.toDolp);
+			cPlayerState.currentAbilities.Add (abilties.toFrog);
+			cPlayerState.currentAbilities.Add (abilties.VFissure);
+
+
+	        cPlayerState.currentPhState = physicStates.onGround;
+
+	        cPlayerState.currentPlState = playerStates.standingStill;
+
+	       
+	    }
+
+	private void CheckingAbiRequirements(abilties abiReceived)
     {
-        cPlayerState.currentForm = "Standard Form";
-        cPlayerState.previousForm = "Standard Form";
 
-        cPlayerState.currentAbilities.Add(abilties.jump);
-        cPlayerState.currentAbilities.Add(abilties.menu);
-
-        cPlayerState.currentPhState = physicStates.onGround;
-
-        cPlayerState.currentPlState = playerStates.standingStill;
-
-       
+		if (cPlayerState.currentAbilities.Find (x => x == abiReceived) != null) {
+			abilityUsed.Invoke(abiReceived);
+		}
+		else
+			Debug.Log("Requirements not met");
     }
 
-    private void CheckingJumpRequirements()
-    {
-
-        List<string> availableForms = new List<string>();
-        availableForms.Add("Standard Form");
-        availableForms.Add("Frog Form");
-
-        List<physicStates> possiblePhStates = new List<physicStates>();
-        possiblePhStates.Add(physicStates.onGround);
-
-        List<playerStates> possiblePlStates = new List<playerStates>();
-        possiblePlStates.Add(playerStates.movingOnGround);
-        possiblePlStates.Add(playerStates.standingStill);
-
-        List<control> possibleControlStates = new List<control>();
-        possibleControlStates.Add(control.noCameraControl);
-        possibleControlStates.Add(control.noMoveAndCamera);
-        possibleControlStates.Add(control.noMoveControl);
-        possibleControlStates.Add(control.totalControl);
-
-        if (RequirementsCheckHandler(availableForms, abilties.jump, possiblePhStates, possiblePlStates, possibleControlStates))
-            abilityUsed.Invoke(abilties.jump);
-        else
-            Debug.Log("Requirements not met");
-
-    }
 
 
     private bool RequirementsCheckHandler(List<string> availableForms, abilties abilityToSearch, List<physicStates> possiblePhStates,

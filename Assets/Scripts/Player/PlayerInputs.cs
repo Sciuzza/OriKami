@@ -13,16 +13,28 @@ public class PlayerInputs : MonoBehaviour
 
 
     [System.Serializable]
-    public class moveEvent : UnityEvent<Vector3>
+	public class moveEvent : UnityEvent<Vector3>
     {
     }
 
-    [HideInInspector]
+    
     public moveEvent movingRequest;
 
+    
+	[System.Serializable]
+	public class abiInput : UnityEvent<abilties>
+	{
+	}
 
-    public UnityEvent jumpRequest;
+	public abiInput abiRequest;
 
+
+
+    private void Update(){
+        
+        MovingInputHandler();
+        SpecialMoves();
+    }
 
     private void MovingInputHandler()
     {
@@ -49,7 +61,7 @@ public class PlayerInputs : MonoBehaviour
     {
 
         if (jumpPressed())
-           jumpRequest.Invoke();
+			abiRequest.Invoke(abilties.jump);
     }
 
     private bool jumpPressed()
