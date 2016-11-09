@@ -10,19 +10,9 @@ public class PlayerInputs : MonoBehaviour
     private float curDirZ = 0.0f, curDirX = 0.0f;
     private Vector3 forward, right, moveDirection;
 
-
-
-    [System.Serializable]
-	public class moveEvent : UnityEvent<Vector3>
-    {
-    }
-
-    
-    public moveEvent movingRequest;
-
     
 	[System.Serializable]
-	public class abiInput : UnityEvent<abilties>
+	public class abiInput : UnityEvent<abilties, Vector3>
 	{
 	}
 
@@ -52,7 +42,7 @@ public class PlayerInputs : MonoBehaviour
         moveDirection = (curDirX * right + curDirZ * forward).normalized;
 
 
-        movingRequest.Invoke(moveDirection);
+		abiRequest.Invoke(abilties.move,moveDirection);
 
 
     }
@@ -61,7 +51,7 @@ public class PlayerInputs : MonoBehaviour
     {
 
         if (jumpPressed())
-			abiRequest.Invoke(abilties.jump);
+			abiRequest.Invoke(abilties.jump, moveDirection);
     }
 
     private bool jumpPressed()
