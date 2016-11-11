@@ -29,7 +29,6 @@ public class PlayerInputs : MonoBehaviour
     private void MovingInputHandler()
     {
 
-
         curDirZ = -Input.GetAxis("LJVer");
         curDirX = Input.GetAxis("LJHor");
 
@@ -43,7 +42,7 @@ public class PlayerInputs : MonoBehaviour
 
 
 		abiRequest.Invoke(abilties.move,moveDirection);
-
+        abiRequest.Invoke(abilties.rotate, moveDirection);
 
     }
 

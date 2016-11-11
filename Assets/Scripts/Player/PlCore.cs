@@ -39,7 +39,7 @@ public struct playerState
 }
 #endregion
 */
-
+/*
 public class PlCore : MonoBehaviour
 {
 
@@ -877,3 +877,4 @@ public class PlCore : MonoBehaviour
 
 
 }
+*/

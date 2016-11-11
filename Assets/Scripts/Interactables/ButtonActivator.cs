@@ -13,7 +13,7 @@ public class ButtonActivator : MonoBehaviour
     {
         platformBridge.SetActive(false);
        
-        GameObject.FindGameObjectWithTag("Player").GetComponent<PlCore>().activateBridge.AddListener(ActivatingPlatform);
+        //GameObject.FindGameObjectWithTag("Player").GetComponent<FSMChecker>().activateBridge.AddListener(ActivatingPlatform);
         
     }
 

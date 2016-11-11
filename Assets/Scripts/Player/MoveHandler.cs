@@ -21,21 +21,24 @@ public class MoveHandler : MonoBehaviour {
 
 	void Start(){
 
-		StartCoroutine ();
-	}
+        StartCoroutine(Moving());
+    }
 	
-	private void HandlingMove(Vector3 inputDir){
+	private void HandlingMove(Vector3 inputDir, float moveSpeed){
 
-	  currentDir = inputDir;
+	    currentDir = inputDir;
+        currentDir *= moveSpeed;
+     
+    }
 
-	}
 
-	IEnumerator Moving(){
 
-		while (currentDir.sqrMagnitude != 0) {
+    IEnumerator Moving(){
+
+		while (true) {
 
 			ccLink.Move (currentDir * Time.deltaTime);
-			yield return WaitForSeconds (Time.deltaTime);
+            yield return new WaitForSeconds(Time.deltaTime);
 		}
 
 	}

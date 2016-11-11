@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿/*
+using UnityEngine;
 using System.Collections;
 using UnityEngine.Events;
 
@@ -150,10 +151,10 @@ public class MoveCC : MonoBehaviour
         if (Input.GetButtonDown("Jump") || Input.GetButtonDown("AButton"))
             priAbilityInput.Invoke();
 */
-        
+        /*
         if (jumpPressed())
             priAbilityInput.Invoke();
-            
+         */   
         /*
         if (ccLink.isGrounded && (Input.GetButtonDown("Jump") || Input.GetButtonDown("AButton")))
         {
@@ -243,6 +244,7 @@ public class MoveCC : MonoBehaviour
             coreLink.isInWater = false;
         }
         */
+        /*
     }
 
 
@@ -267,3 +269,4 @@ public class MoveCC : MonoBehaviour
 
 
 
+*/

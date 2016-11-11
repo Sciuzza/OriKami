@@ -10,7 +10,7 @@ public class ButtonStairsWater : MonoBehaviour {
     {
         stairsWaterLinker.SetActive(false);
 
-        GameObject.FindGameObjectWithTag("Player").GetComponent<PlCore>().activateWaterStairs.AddListener(ActivatingWaterStairs);
+    //    GameObject.FindGameObjectWithTag("Player").GetComponent<PlCore>().activateWaterStairs.AddListener(ActivatingWaterStairs);
 
     }
 

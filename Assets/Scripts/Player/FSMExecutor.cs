@@ -3,7 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.Events;
 
-public class FSMExecutor : MonoBehaviour {
+public class FSMExecutor : MonoBehaviour
+{
 
     [HideInInspector]
     public moveValues currentMoveValues;
@@ -14,12 +15,12 @@ public class FSMExecutor : MonoBehaviour {
     CharacterController ccLink;
 
 
-	[System.Serializable]
-	public class moveHandling : UnityEvent<Vector3>
-	{
-	}
+    [System.Serializable]
+    public class moveHandling : UnityEvent<Vector3, float>
+    {
+    }
 
-	public moveHandling moveSelected;
+    public moveHandling moveSelected;
 
     void Awake()
     {
@@ -29,7 +30,7 @@ public class FSMExecutor : MonoBehaviour {
         fsmCheckerTempLink.abilityUsed.AddListener(ApplyingAbilityEffect);
         fsmCheckerTempLink.phStateChanged.AddListener(ApplyingPhStateEffect);
         fsmCheckerTempLink.plStateChanged.AddListener(ApplyingPlStateEffect);
-      
+
 
         ccLink = this.gameObject.GetComponent<CharacterController>();
     }
@@ -49,18 +50,40 @@ public class FSMExecutor : MonoBehaviour {
         }
 
         formReferences.Find(x => x.tag == newForm).SetActive(true);
-        
+
     }
 
-	private void ApplyingAbilityEffect(abilties abiUsed, Vector3 moveDirInput)
+    private void ApplyingAbilityEffect(abilties abiUsed, Vector3 moveDirInput, string currentForm)
     {
         switch (abiUsed)
         {
-		case abilties.move:
-			moveSelected.Invoke (moveDirInput);
-			    break;
-		    case abilties.cameraMove:
-			    break;
+            case abilties.move:
+                 switch (currentForm)
+                {
+                    case ("Standard Form"):
+                        moveSelected.Invoke(moveDirInput, currentMoveValues.standMove.moveSpeed);
+                        break;
+                    case ("Frog Form"):
+                        moveSelected.Invoke(moveDirInput, currentMoveValues.frogMove.moveSpeed);
+                        break;
+                    case ("Crane Form"):
+                        moveSelected.Invoke(moveDirInput, currentMoveValues.craneMove.glideSpeed);
+                        break;
+                    case ("Arma Form"):
+                        moveSelected.Invoke(moveDirInput, currentMoveValues.armaMove.moveSpeed);
+                        break;
+                    case ("Dolphin Form"):
+                        moveSelected.Invoke(moveDirInput, currentMoveValues.dolphinMove.swimSpeed);
+                        break;
+                }
+
+                               
+                break;
+
+            case abilties.rotate:
+                break;
+            case abilties.cameraMove:
+                break;
             case abilties.jump:
                 break;
             case abilties.roll:
@@ -69,22 +92,22 @@ public class FSMExecutor : MonoBehaviour {
                 break;
             case abilties.VFissure:
                 break;
-		    case abilties.HFissure:
-			    break;
+            case abilties.HFissure:
+                break;
             case abilties.dolpSwimBel:
                 break;
-		    case abilties.toStd:
-			    break;
-		    case abilties.toFrog:
-			    break;
-		    case abilties.toCrane:
-			    break;
-		    case abilties.toArma:
-			    break;
-		    case abilties.toDolp:
-			    break;
-		    case abilties.npcInter:
-			    break;
+            case abilties.toStd:
+                break;
+            case abilties.toFrog:
+                break;
+            case abilties.toCrane:
+                break;
+            case abilties.toArma:
+                break;
+            case abilties.toDolp:
+                break;
+            case abilties.npcInter:
+                break;
             case abilties.menu:
                 break;
         }
@@ -113,12 +136,19 @@ public class FSMExecutor : MonoBehaviour {
                 break;
             case playerStates.flying:
                 break;
-		    case playerStates.movingBlock:
-			    break;
-		    case playerStates.rolling:
-			    break;
+            case playerStates.movingBlock:
+                break;
+            case playerStates.rolling:
+                break;
         }
     }
 
-  
+    private void RotationHandler(Vector3 moveDir)
+    {
+        Quaternion rotation = Quaternion.LookRotation(moveDir, Vector3.up);
+        if (cPlayerState.currentForm == forms.crane || (cPlayerState.currentForm == forms.armadillo && cPlayerState.currentState == states.abilityAnimation))
+            this.transform.rotation = Quaternion.Slerp(this.transform.rotation, rotation, Time.deltaTime * generalValues.rotateSpeed / 3);
+        else
+            this.transform.rotation = Quaternion.Slerp(this.transform.rotation, rotation, Time.deltaTime * generalValues.rotateSpeed);
+    }
 }

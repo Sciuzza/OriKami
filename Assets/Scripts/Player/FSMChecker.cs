@@ -6,16 +6,22 @@ using System.Collections.Generic;
 #region Finite State Machine enum Structure
 
 
-public enum abilties { move, cameraMove, jump,
-                       roll, moveBlock,
-                       toStd, toFrog, toArma, toCrane, toDolp, 
-                       VFissure, HFissure, dolpSwimBel,
-                       npcInter, menu };
+public enum abilties
+{
+    move, rotate, cameraMove, jump,
+    roll, moveBlock,
+    toStd, toFrog, toArma, toCrane, toDolp,
+    VFissure, HFissure, dolpSwimBel,
+    npcInter, menu
+};
 
 public enum physicStates { onAir, onGround, onWater }
 
-public enum playerStates { standingStill, moving, flying,
-                           rolling, movingBlock};
+public enum playerStates
+{
+    standingStill, moving, flying,
+    rolling, movingBlock
+};
 
 
 
@@ -36,7 +42,7 @@ public class FSMChecker : MonoBehaviour
         public List<abilties> currentAbilities;
         public physicStates currentPhState;
         public playerStates currentPlState;
-        
+
     }
 
     [SerializeField]
@@ -52,7 +58,7 @@ public class FSMChecker : MonoBehaviour
 
 
     [System.Serializable]
-    public class abilityEffectsRequest : UnityEvent<abilties>
+    public class abilityEffectsRequest : UnityEvent<abilties, Vector3, string>
     {
     }
 
@@ -73,7 +79,7 @@ public class FSMChecker : MonoBehaviour
     public playerStateEffectsRequest plStateChanged;
 
 
- 
+
     #endregion
 
     void Awake()
@@ -84,43 +90,45 @@ public class FSMChecker : MonoBehaviour
 
         PlayerInputs plInputsTempLink = this.gameObject.GetComponent<PlayerInputs>();
 
-        
-		plInputsTempLink.abiRequest.AddListener(CheckingAbiRequirements);
+
+        plInputsTempLink.abiRequest.AddListener(CheckingAbiRequirements);
 
     }
 
-	    private void SettingPlayerInitialState()
-	    {
-	        cPlayerState.currentForm = "Standard Form";
-	        cPlayerState.previousForm = "Standard Form";
+    private void SettingPlayerInitialState()
+    {
+        cPlayerState.currentForm = "Standard Form";
+        cPlayerState.previousForm = "Standard Form";
 
-	        cPlayerState.currentAbilities.Add(abilties.jump);
-	        cPlayerState.currentAbilities.Add(abilties.menu);
-			cPlayerState.currentAbilities.Add (abilties.cameraMove);
-			cPlayerState.currentAbilities.Add (abilties.move);
-			cPlayerState.currentAbilities.Add (abilties.npcInter);
-			cPlayerState.currentAbilities.Add (abilties.toArma);
-			cPlayerState.currentAbilities.Add (abilties.toCrane);
-			cPlayerState.currentAbilities.Add (abilties.toDolp);
-			cPlayerState.currentAbilities.Add (abilties.toFrog);
-			cPlayerState.currentAbilities.Add (abilties.VFissure);
+        cPlayerState.currentAbilities.Add(abilties.jump);
+        cPlayerState.currentAbilities.Add(abilties.menu);
+        cPlayerState.currentAbilities.Add(abilties.cameraMove);
+        cPlayerState.currentAbilities.Add(abilties.move);
+        cPlayerState.currentAbilities.Add(abilties.npcInter);
+        cPlayerState.currentAbilities.Add(abilties.toArma);
+        cPlayerState.currentAbilities.Add(abilties.toCrane);
+        cPlayerState.currentAbilities.Add(abilties.toDolp);
+        cPlayerState.currentAbilities.Add(abilties.toFrog);
+        cPlayerState.currentAbilities.Add(abilties.VFissure);
+        cPlayerState.currentAbilities.Add(abilties.rotate);
 
 
-	        cPlayerState.currentPhState = physicStates.onGround;
+        cPlayerState.currentPhState = physicStates.onGround;
 
-	        cPlayerState.currentPlState = playerStates.standingStill;
+        cPlayerState.currentPlState = playerStates.standingStill;
 
-	       
-	    }
 
-	private void CheckingAbiRequirements(abilties abiReceived)
+    }
+
+    private void CheckingAbiRequirements(abilties abiReceived, Vector3 abiDir)
     {
 
-		if (cPlayerState.currentAbilities.Find (x => x == abiReceived) != null) {
-			abilityUsed.Invoke(abiReceived);
-		}
-		else
-			Debug.Log("Requirements not met");
+        if (cPlayerState.currentAbilities.Contains(abiReceived))
+        {
+            abilityUsed.Invoke(abiReceived, abiDir, cPlayerState.currentForm);
+        }
+        else
+            Debug.Log("Requirements not met");
     }
 
 
@@ -173,9 +181,9 @@ public class FSMChecker : MonoBehaviour
             return false;
     }
 
-   
 
 
-    
+
+
 }
 
