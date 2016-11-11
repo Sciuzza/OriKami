@@ -2,12 +2,15 @@
 using System.Collections;
 using UnityEngine.UI;
 
-public class TextBoxManager : MonoBehaviour
+public class BubbleDialogue : MonoBehaviour
 {
 
     public GameObject textBox;
 
     public Text theText;
+    public Canvas npcCanvas;
+   
+    
 
     public TextAsset textFile;
     public string[] textLines;
@@ -66,23 +69,25 @@ public class TextBoxManager : MonoBehaviour
 
     public void EnableTextBox()
     {
+        npcCanvas.enabled = true;
+       
         textBox.SetActive(true);
         isActive = true;
     }
 
     public void DisableTextBox()
     {
+        npcCanvas.enabled = false;
         textBox.SetActive(false);
         isActive = false;
     }
 
     public void ReloadScript(TextAsset theText)
     {
-        if (theText !=null)
+        if (theText != null)
         {
             textLines = new string[1];
             textLines = (theText.text.Split('\n'));
         }
     }
-
 }

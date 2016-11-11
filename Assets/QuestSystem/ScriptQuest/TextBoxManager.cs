@@ -2,14 +2,12 @@
 using System.Collections;
 using UnityEngine.UI;
 
-public class BubbleDialogue : MonoBehaviour
+public class TextBoxManager : MonoBehaviour
 {
 
     public GameObject textBox;
 
     public Text theText;
-    public Canvas npcCanvas;
-    
 
     public TextAsset textFile;
     public string[] textLines;
@@ -20,11 +18,11 @@ public class BubbleDialogue : MonoBehaviour
     public MoveCC player;
 
     public bool isActive;
-    public bool stopPlayerMovement;
+   // public bool stopPlayerMovement;       LO DEVE IMPLEMENTARE CRISTIANO  
 
     void Start()
     {
-        player = FindObjectOfType<MoveCC>();
+        
 
         if (textFile != null)
         {
@@ -68,26 +66,23 @@ public class BubbleDialogue : MonoBehaviour
 
     public void EnableTextBox()
     {
-        npcCanvas.enabled = true;
-       
         textBox.SetActive(true);
         isActive = true;
     }
 
     public void DisableTextBox()
     {
-        npcCanvas.enabled = false;
-        
         textBox.SetActive(false);
         isActive = false;
     }
 
     public void ReloadScript(TextAsset theText)
     {
-        if (theText != null)
+        if (theText !=null)
         {
             textLines = new string[1];
             textLines = (theText.text.Split('\n'));
         }
     }
+
 }

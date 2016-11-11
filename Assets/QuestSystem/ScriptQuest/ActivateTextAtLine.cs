@@ -10,8 +10,8 @@ public class ActivateTextAtLine : MonoBehaviour
     public int endLine;
 
     public TextBoxManager theTextBox;
-    public BubbleDialogue theBubbleDialogue;
-    public BubblePlayerDialogue playerBubbleDialogue;
+    //public BubbleDialogue theBubbleDialogue;
+    //public BubblePlayerDialogue playerBubbleDialogue;
 
     public bool requireButtonPress;
     private bool waitForPress;
@@ -24,7 +24,7 @@ public class ActivateTextAtLine : MonoBehaviour
     {
         if (isBubble)
         {
-            theBubbleDialogue = FindObjectOfType<BubbleDialogue>();
+          //  theBubbleDialogue = FindObjectOfType<BubbleDialogue>();
 
         }
         else if (!isBubble)
@@ -33,7 +33,7 @@ public class ActivateTextAtLine : MonoBehaviour
         }
         if (isPlayerBubble)
         {
-            playerBubbleDialogue = FindObjectOfType<BubblePlayerDialogue>();
+          //  playerBubbleDialogue = FindObjectOfType<BubblePlayerDialogue>();
         }
 
     }
@@ -52,18 +52,18 @@ public class ActivateTextAtLine : MonoBehaviour
                 Destroy(gameObject);
             }
         }
-        if(waitForPress && Input.GetKeyDown(KeyCode.J) && isBubble)
-        {
-            theBubbleDialogue.ReloadScript(theText);
-            theBubbleDialogue.currentLine = startLine;
-            theBubbleDialogue.endAtLine = endLine;
-            theBubbleDialogue.EnableTextBox();
+        //if(waitForPress && Input.GetKeyDown(KeyCode.J) && isBubble)
+        //{
+        //    theBubbleDialogue.ReloadScript(theText);
+        //    theBubbleDialogue.currentLine = startLine;
+        //    theBubbleDialogue.endAtLine = endLine;
+        //    theBubbleDialogue.EnableTextBox();
 
-            if (destroyWhenActivated)
-            {
-                Destroy(gameObject);
-            }
-        }
+        //    if (destroyWhenActivated)
+        //    {
+        //        Destroy(gameObject);
+        //    }
+        //}
     }
 
     void OnTriggerEnter(Collider other)
@@ -86,24 +86,24 @@ public class ActivateTextAtLine : MonoBehaviour
                 Destroy(gameObject);
             }
         }
-        else if (other.tag == "Player" && isPlayerBubble && !isBubble)
-        {
-            if (requireButtonPress)
-            {
-                waitForPress = true;
-                return;
-            }
+        //else if (other.tag == "Player" && isPlayerBubble && !isBubble)
+        //{
+        //    if (requireButtonPress)
+        //    {
+        //        waitForPress = true;
+        //        return;
+        //    }
 
-            playerBubbleDialogue.ReloadScript(theText);
-            playerBubbleDialogue.currentLine = startLine;
-            playerBubbleDialogue.endAtLine = endLine;
-            playerBubbleDialogue.EnableTextBox();
+        //    playerBubbleDialogue.ReloadScript(theText);
+        //    playerBubbleDialogue.currentLine = startLine;
+        //    playerBubbleDialogue.endAtLine = endLine;
+        //    playerBubbleDialogue.EnableTextBox();
 
-            if (destroyWhenActivated)
-            {
-                Destroy(gameObject);
-            }
-        }
+        //    if (destroyWhenActivated)
+        //    {
+        //        Destroy(gameObject);
+        //    }
+        //}
     }
 
     void OnTriggerExit(Collider other)
