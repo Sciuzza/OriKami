@@ -64,6 +64,15 @@ public class FSMChecker : MonoBehaviour
 
     public abilityEffectsRequest abilityUsed;
 
+	[System.Serializable]
+	public class rotEffectsRequest : UnityEvent<Vector3, playerStates>
+	{
+	}
+
+	public abilityEffectsRequest rotationUsed;
+
+
+
     [System.Serializable]
     public class physicStateEffectsRequest : UnityEvent<physicStates>
     {
@@ -125,7 +134,45 @@ public class FSMChecker : MonoBehaviour
 
         if (cPlayerState.currentAbilities.Contains(abiReceived))
         {
-            abilityUsed.Invoke(abiReceived, abiDir, cPlayerState.currentForm);
+			switch (abiReceived) {
+
+			case abilties.move:
+			case abilties.jump: abilityUsed.Invoke(abiReceived, abiDir, cPlayerState.currentForm);
+				break;
+			case abilties.rotate: rotationUsed.Invoke(abiDir, cPlayerState.currentPlState);
+				break;
+			case abilties.cameraMove:
+				break;
+			
+			case abilties.roll:
+				break;
+			case abilties.moveBlock:
+				break;
+			case abilties.VFissure:
+				break;
+			case abilties.HFissure:
+				break;
+			case abilties.dolpSwimBel:
+				break;
+			case abilties.toStd:
+				break;
+			case abilties.toFrog:
+				break;
+			case abilties.toCrane:
+				break;
+			case abilties.toArma:
+				break;
+			case abilties.toDolp:
+				break;
+			case abilties.npcInter:
+				break;
+			case abilties.menu:
+				break;
+
+
+			}
+
+            
         }
         else
             Debug.Log("Requirements not met");

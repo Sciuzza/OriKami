@@ -20,7 +20,14 @@ public class FSMExecutor : MonoBehaviour
     {
     }
 
-    public moveHandling moveSelected;
+    public moveHandling moveSelected, jumpSelected;
+
+	[System.Serializable]
+	public class rotHandling : UnityEvent<Vector3, float>
+	{
+	}
+
+	public rotHandling rotSelected;
 
     void Awake()
     {
@@ -28,6 +35,7 @@ public class FSMExecutor : MonoBehaviour
 
         fsmCheckerTempLink.formChanged.AddListener(ApplyingFormEffect);
         fsmCheckerTempLink.abilityUsed.AddListener(ApplyingAbilityEffect);
+		fsmCheckerTempLink.rotationUsed.AddListener (ApplyingRotationEffect);
         fsmCheckerTempLink.phStateChanged.AddListener(ApplyingPhStateEffect);
         fsmCheckerTempLink.plStateChanged.AddListener(ApplyingPlStateEffect);
 
@@ -80,11 +88,21 @@ public class FSMExecutor : MonoBehaviour
                                
                 break;
 
-            case abilties.rotate:
-                break;
             case abilties.cameraMove:
                 break;
             case abilties.jump:
+			switch (currentForm)
+			{
+			case ("Standard Form"):
+				jumpSelected.Invoke(moveDirInput, currentMoveValues.standMove.jumpStrength);
+				break;
+			case ("Frog Form"):
+				jumpSelected.Invoke(moveDirInput, currentMoveValues.frogMove.jumpStrength);
+				break;
+			case ("Dolphin Form"):
+				jumpSelected.Invoke(moveDirInput, currentMoveValues.dolphinMove.jumpStrength);
+				break;
+			}
                 break;
             case abilties.roll:
                 break;
@@ -112,6 +130,24 @@ public class FSMExecutor : MonoBehaviour
                 break;
         }
     }
+
+	private void ApplyingRotationEffect(Vector3 abiDirInput, playerStates currentPl){
+
+		switch (currentPl) {
+
+		case playerStates.flying:
+		case playerStates.movingBlock:
+		case playerStates.rolling:
+			rotSelected.Invoke (abiDirInput, generalValues.rotateSpeed / 3);
+			break;
+		default:  
+			rotSelected.Invoke (abiDirInput, generalValues.rotateSpeed);
+			break;
+
+
+		}
+
+	}
 
     private void ApplyingPhStateEffect(physicStates currentPhState)
     {
@@ -143,12 +179,5 @@ public class FSMExecutor : MonoBehaviour
         }
     }
 
-    private void RotationHandler(Vector3 moveDir)
-    {
-        Quaternion rotation = Quaternion.LookRotation(moveDir, Vector3.up);
-        if (cPlayerState.currentForm == forms.crane || (cPlayerState.currentForm == forms.armadillo && cPlayerState.currentState == states.abilityAnimation))
-            this.transform.rotation = Quaternion.Slerp(this.transform.rotation, rotation, Time.deltaTime * generalValues.rotateSpeed / 3);
-        else
-            this.transform.rotation = Quaternion.Slerp(this.transform.rotation, rotation, Time.deltaTime * generalValues.rotateSpeed);
-    }
+  
 }
