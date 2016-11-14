@@ -8,12 +8,10 @@ public class BubbleDialogue : MonoBehaviour
     public GameObject textBox;
 
     public Text theText;
-    public Canvas npcCanvas;
-   
-    
 
     public TextAsset textFile;
     public string[] textLines;
+    public bool isCoroutine = true;
 
     public int currentLine;
     public int endAtLine;
@@ -21,12 +19,11 @@ public class BubbleDialogue : MonoBehaviour
     public MoveCC player;
 
     public bool isActive;
-    public bool stopPlayerMovement;
+    // public bool stopPlayerMovement;       LO DEVE IMPLEMENTARE CRISTIANO  
 
     void Start()
     {
-        player = FindObjectOfType<MoveCC>();
-
+        
         if (textFile != null)
         {
             textLines = (textFile.text.Split('\n'));
@@ -54,30 +51,39 @@ public class BubbleDialogue : MonoBehaviour
             return;
         }
 
-        theText.text = textLines[currentLine];
-
-        if (Input.GetKeyDown(KeyCode.Return))
+        if (isCoroutine)
         {
-            currentLine += 1;
+            isCoroutine = false;
+            StartCoroutine(TextCO());
         }
 
+        
+    }
+    IEnumerator TextCO()
+    {
+
+        theText.text = textLines[currentLine];
+                
+        currentLine += 1;
+        
+        yield return new WaitForSeconds(1.5f);
         if (currentLine > endAtLine)
         {
             DisableTextBox();
         }
+        else
+            StartCoroutine(TextCO());
+
     }
 
     public void EnableTextBox()
     {
-        npcCanvas.enabled = true;
-       
         textBox.SetActive(true);
         isActive = true;
     }
 
     public void DisableTextBox()
     {
-        npcCanvas.enabled = false;
         textBox.SetActive(false);
         isActive = false;
     }
