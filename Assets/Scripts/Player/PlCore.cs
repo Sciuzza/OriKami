@@ -189,7 +189,7 @@ public class PlCore : MonoBehaviour
         }
         if (objectHit.gameObject.GetComponent<ButtonRamp>() != null)
         {
-            activateRamp.Invoke();
+            activateWaterStairs.Invoke();
         }
 
 
@@ -563,30 +563,20 @@ public class PlCore : MonoBehaviour
     private void StandardMoving(Vector3 moveDir)
     {
         if (moveDir.sqrMagnitude >= 0.1f)
-        { 
+        {
             RotationHandler(moveDir);
 
             if (CheckMoveStandardRequirements())
             {
                 cPlayerState.currentState = states.walking;
-
-                if (cPlayerState.currentPState == physicStates.onAir)
-                {
-                    moveDir.y -= generalValues.jumpGravity * Time.deltaTime;
-                    ccLink.Move(moveDir * CurrentMoveValues.standMove.moveSpeed * Time.deltaTime);
-                }
-                else
-                {
-                    
-                    ccLink.SimpleMove(moveDir * CurrentMoveValues.standMove.moveSpeed);
-                }
+                ccLink.SimpleMove(moveDir * CurrentMoveValues.standMove.moveSpeed);
             }
         }
     }
 
     private bool CheckMoveStandardRequirements()
     {
-        if (cPlayerState.currentPState == physicStates.onWater)
+        if (cPlayerState.currentPState != physicStates.onGround)
             return false;
         return true;
     }
@@ -600,24 +590,14 @@ public class PlCore : MonoBehaviour
             if (CheckMoveFrogRequirements())
             {
                 cPlayerState.currentState = states.walking;
-
-                if (cPlayerState.currentPState == physicStates.onAir)
-                {
-                    moveDir.y -= generalValues.jumpGravity * Time.deltaTime;
-                    ccLink.Move(moveDir * CurrentMoveValues.frogMove.moveSpeed * Time.deltaTime);
-                }
-                else
-                {
-
-                    ccLink.SimpleMove(moveDir * CurrentMoveValues.frogMove.moveSpeed);
-                }
+                ccLink.SimpleMove(moveDir * CurrentMoveValues.frogMove.moveSpeed);
             }
         }
     }
 
     private bool CheckMoveFrogRequirements()
     {
-        if (cPlayerState.currentPState == physicStates.onWater)
+        if (cPlayerState.currentPState != physicStates.onGround)
             return false;
         return true;
     }
@@ -631,17 +611,7 @@ public class PlCore : MonoBehaviour
             if (CheckMoveArmaRequirements())
             {
                 cPlayerState.currentState = states.walking;
-
-                if (cPlayerState.currentPState == physicStates.onAir)
-                {
-                    moveDir.y -= generalValues.jumpGravity * Time.deltaTime;
-                    ccLink.Move(moveDir * CurrentMoveValues.armaMove.moveSpeed * Time.deltaTime);
-                }
-                else
-                {
-
-                    ccLink.SimpleMove(moveDir * CurrentMoveValues.armaMove.moveSpeed);
-                }
+                ccLink.SimpleMove(moveDir * CurrentMoveValues.armaMove.moveSpeed);
             }
         }
     }
@@ -659,7 +629,6 @@ public class PlCore : MonoBehaviour
     {
         if (moveDir.sqrMagnitude >= 0.1f)
             RotationHandler(moveDir);
-
         Vector3 glideDirection = moveDir;
         glideDirection.y -= GeneralValues.glideGravity * Time.deltaTime;
         cPlayerState.currentState = states.walking;
@@ -832,19 +801,16 @@ public class PlCore : MonoBehaviour
         {
             cPlayerState.currentPState = physicStates.onAir;
 
-            if (cPlayerState.currentForm != forms.crane && fallDirection.sqrMagnitude == 0)
+            if (cPlayerState.currentForm != forms.crane)
                 StartCoroutine(Falling(fallDirection));
 
 
         }
 
-        if (fallDirection.sqrMagnitude < 0.1f)
-        {
-            if (cPlayerState.currentPState != physicStates.onAir)
-                cPlayerState.currentState = states.standingStill;
-            else
-                cPlayerState.currentState = states.falling;
-        }
+        if (fallDirection.sqrMagnitude < 0.1f && cPlayerState.currentState == states.walking)
+            cPlayerState.currentState = states.standingStill;
+        else if (fallDirection.sqrMagnitude > 0.5f && cPlayerState.currentForm != forms.crane)
+            cPlayerState.currentState = states.walking;
     }
 
     #endregion
@@ -853,8 +819,24 @@ public class PlCore : MonoBehaviour
     {
         while (cPlayerState.currentPState != physicStates.onGround && cPlayerState.currentForm != forms.crane)
         {
-            jumpDir.y -= GeneralValues.jumpGravity * Time.deltaTime;
-            ccLink.Move(jumpDir * Time.deltaTime);
+            
+            fallDirection.y = jumpDir.y;
+
+            if (fallDirection.sqrMagnitude == 0)
+            {
+                jumpDir.y -= GeneralValues.jumpGravity * Time.deltaTime;
+                ccLink.Move(jumpDir * Time.deltaTime);
+            }
+            else
+            {
+                
+
+                jumpDir.x = fallDirection.x * currentMoveValues.standMove.moveSpeed;
+                jumpDir.z = fallDirection.z * currentMoveValues.standMove.moveSpeed;
+
+                jumpDir.y -= GeneralValues.jumpGravity * Time.deltaTime;
+                ccLink.Move(jumpDir * Time.deltaTime);
+            }
             yield return new WaitForSeconds(Time.deltaTime);
         }
     }

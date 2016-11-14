@@ -129,7 +129,7 @@ public class MoveCC : MonoBehaviour
 
         curDirZ = -Input.GetAxis("LJVer");
         curDirX = Input.GetAxis("LJHor");
-
+       
 
         forward = Camera.main.transform.TransformDirection(Vector3.forward);
         forward.y = 0;
