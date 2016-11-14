@@ -20,21 +20,39 @@ public class EnvInputs : MonoBehaviour {
 	void Awake(){
 
 		ccLink = this.GetComponent<CharacterController> ();
-	}
+        //StartCoroutine(DebugGrounded());
+    }
 
 
 	void Update(){
 
-		if (ccLink.isGrounded)
-			psChanged.Invoke (physicStates.onGround);
-		else
-			psChanged.Invoke (physicStates.onAir);
+        
+     if ((ccLink.collisionFlags & CollisionFlags.Below) != 0)
+        {
+            if (!onWater)
+                psChanged.Invoke(physicStates.onGround);
+            else
+                psChanged.Invoke(physicStates.onWater);
+        }
+     else
+            psChanged.Invoke(physicStates.onAir);
 
 
-	}
 
 
+    }
 
+
+    IEnumerator DebugGrounded()
+    {
+        while (true)
+        {
+            Debug.Log(ccLink.collisionFlags == CollisionFlags.None);
+            yield return new WaitForSeconds(2);
+        }
+    }
+
+    /*
 	void OnTriggerEnter (Collider envTrigger){
 
 		switch (envTrigger.gameObject.tag) {
@@ -43,17 +61,17 @@ public class EnvInputs : MonoBehaviour {
 			break;
 		case "Camera Constraint":
 			break;
-		case "": 
+		case "a": 
 			break;
-		case "": 
+		case "b": 
 			break;
-		case "": 
+		case "c": 
 			break;
-		case "": 
+		case "d": 
 			break;
-		case "": 
+		case "e": 
 			break;
-		case "": 
+		case "f": 
 			break;
 
 
@@ -65,27 +83,27 @@ public class EnvInputs : MonoBehaviour {
 	void OnTriggerExit (Collider envTrigger){
 
 
-		switch (envTrigger) {
+		switch (envTrigger.gameObject.tag) {
 
 		case "Water":
 			break;
 		case "Camera Constraint":
 			break;
-		case "": 
+		case "a": 
 			break;
-		case "": 
+		case "b": 
 			break;
-		case "": 
+		case "c": 
 			break;
-		case "": 
+		case "d": 
 			break;
-		case "": 
+		case "e": 
 			break;
-		case "": 
+		case "f": 
 			break;
 
 
 		}
 	}
-
+    */
 }

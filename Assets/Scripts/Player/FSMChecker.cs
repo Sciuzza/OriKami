@@ -58,18 +58,25 @@ public class FSMChecker : MonoBehaviour
 
 
     [System.Serializable]
-    public class abilityEffectsRequest : UnityEvent<abilties, Vector3, string>
+    public class dirAbilityUsed : UnityEvent<abilties, Vector3, string>
     {
     }
 
-    public abilityEffectsRequest abilityUsed;
+    public dirAbilityUsed dirAbiUsed;
 
-	[System.Serializable]
-	public class rotEffectsRequest : UnityEvent<Vector3, playerStates>
-	{
-	}
+    [System.Serializable]
+    public class rotEffectsRequest : UnityEvent<Vector3, playerStates>
+    {
+    }
 
-	public abilityEffectsRequest rotationUsed;
+    public rotEffectsRequest rotationUsed;
+
+    [System.Serializable]
+    public class generalAbiUsed : UnityEvent<abilties, string>
+    {
+    }
+
+    public generalAbiUsed genAbiUsed;
 
 
 
@@ -94,15 +101,28 @@ public class FSMChecker : MonoBehaviour
     void Awake()
     {
         SettingPlayerInitialState();
-        formChanged.Invoke(cPlayerState.currentForm, cPlayerState.previousForm, cPlayerState.forms);
+
 
 
         PlayerInputs plInputsTempLink = this.gameObject.GetComponent<PlayerInputs>();
 
 
-        plInputsTempLink.abiRequest.AddListener(CheckingAbiRequirements);
+        plInputsTempLink.dirAbiRequest.AddListener(CheckingAbiRequirements);
+        plInputsTempLink.genAbiRequest.AddListener(CheckingAbiRequirements);
+
+        EnvInputs enInputsTempLink = this.gameObject.GetComponent<EnvInputs>();
+
+        enInputsTempLink.psChanged.AddListener(ChangingPHStates);
+
 
     }
+
+    void Start()
+    {
+
+        formChanged.Invoke(cPlayerState.currentForm, cPlayerState.previousForm, cPlayerState.forms);
+    }
+
 
     private void SettingPlayerInitialState()
     {
@@ -134,52 +154,82 @@ public class FSMChecker : MonoBehaviour
 
         if (cPlayerState.currentAbilities.Contains(abiReceived))
         {
-			switch (abiReceived) {
+            switch (abiReceived)
+            {
 
-			case abilties.move:
-			case abilties.jump: abilityUsed.Invoke(abiReceived, abiDir, cPlayerState.currentForm);
-				break;
-			case abilties.rotate: rotationUsed.Invoke(abiDir, cPlayerState.currentPlState);
-				break;
-			case abilties.cameraMove:
-				break;
-			
-			case abilties.roll:
-				break;
-			case abilties.moveBlock:
-				break;
-			case abilties.VFissure:
-				break;
-			case abilties.HFissure:
-				break;
-			case abilties.dolpSwimBel:
-				break;
-			case abilties.toStd:
-				break;
-			case abilties.toFrog:
-				break;
-			case abilties.toCrane:
-				break;
-			case abilties.toArma:
-				break;
-			case abilties.toDolp:
-				break;
-			case abilties.npcInter:
-				break;
-			case abilties.menu:
-				break;
+                case abilties.move:
+                    dirAbiUsed.Invoke(abiReceived, abiDir, cPlayerState.currentForm);
+                    break;
+                case abilties.rotate:
+                    rotationUsed.Invoke(abiDir, cPlayerState.currentPlState);
+                    break;
+               
+            }
 
 
-			}
-
-            
         }
         else
             Debug.Log("Requirements not met");
     }
 
+    private void CheckingAbiRequirements(abilties abiReceived)
+    {
+
+        if (cPlayerState.currentAbilities.Contains(abiReceived))
+        {
+            switch (abiReceived)
+            {
+        
+                case abilties.jump:
+                     genAbiUsed.Invoke(abiReceived, cPlayerState.currentForm);
+                    break;
+                case abilties.cameraMove:
+                    break;
+
+                case abilties.roll:
+                    break;
+                case abilties.moveBlock:
+                    break;
+                case abilties.VFissure:
+                    break;
+                case abilties.HFissure:
+                    break;
+                case abilties.dolpSwimBel:
+                    break;
+                case abilties.toStd:
+                    break;
+                case abilties.toFrog:
+                    break;
+                case abilties.toCrane:
+                    break;
+                case abilties.toArma:
+                    break;
+                case abilties.toDolp:
+                    break;
+                case abilties.npcInter:
+                    break;
+                case abilties.menu:
+                    break;
 
 
+            }
+
+
+        }
+        else
+            Debug.Log("Requirements not met");
+    }
+
+    private void ChangingPHStates(physicStates stateToGo)
+    {
+
+        cPlayerState.currentPhState = stateToGo;
+        phStateChanged.Invoke(stateToGo);
+
+    }
+
+
+    /*
     private bool RequirementsCheckHandler(List<string> availableForms, abilties abilityToSearch, List<physicStates> possiblePhStates,
         List<playerStates> possiblePlStates)
     {
@@ -229,7 +279,7 @@ public class FSMChecker : MonoBehaviour
     }
 
 
-
+    */
 
 
 }

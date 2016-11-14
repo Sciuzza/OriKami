@@ -7,65 +7,239 @@ public class PlayerInputs : MonoBehaviour
 
     public inputSettings currentInputs;
 
-    private float curDirZ = 0.0f, curDirX = 0.0f;
-    private Vector3 forward, right, moveDirection;
 
-    
-	[System.Serializable]
-	public class abiInput : UnityEvent<abilties, Vector3>
-	{
-	}
+    #region Private Use Variables
+    private Vector3 moveDirection;
 
-	public abiInput abiRequest;
+    private bool switchCooldown = false;
 
+    private enum currentForm { std, frog, crane, arma, dolphin };
 
+    private currentForm cForm = currentForm.std; 
+    #endregion
 
-    private void Update(){
-        
-        MovingInputHandler();
-        SpecialMoves();
+    #region Events Invoked
+    [System.Serializable]
+    public class moveInp : UnityEvent<abilties, Vector3>
+    {
     }
 
+    public moveInp dirAbiRequest;
+
+    [System.Serializable]
+    public class generalAbiInput : UnityEvent<abilties>
+    {
+    }
+
+    public generalAbiInput genAbiRequest; 
+    #endregion
+
+    private void Update()
+    {
+
+        MovingInputHandler();
+        genAbiInputs();
+
+    }
+
+    #region Move Input
     private void MovingInputHandler()
     {
 
-        curDirZ = -Input.GetAxis("LJVer");
-        curDirX = Input.GetAxis("LJHor");
 
+        MoveInput();
 
-        forward = Camera.main.transform.TransformDirection(Vector3.forward);
-        forward.y = 0;
-        forward = forward.normalized;
-        right = new Vector3(forward.z, 0, -forward.x);
-
-        moveDirection = (curDirX * right + curDirZ * forward).normalized;
-
-
-		abiRequest.Invoke(abilties.move,moveDirection);
-        abiRequest.Invoke(abilties.rotate, moveDirection);
+        dirAbiRequest.Invoke(abilties.move, moveDirection);
+        dirAbiRequest.Invoke(abilties.rotate, moveDirection);
 
     }
 
-    private void SpecialMoves()
+    private void MoveInput()
+    {
+
+        moveDirection.x = Input.GetAxis("LJHor");
+        moveDirection.z = -Input.GetAxis("LJVer");
+
+        if (moveDirection.x < 0)
+            moveDirection.x = -1f;
+        else if (moveDirection.x > 0)
+            moveDirection.x = 1f;
+
+        if (moveDirection.z < 0)
+            moveDirection.z = -1f;
+        else if (moveDirection.z > 0)
+            moveDirection.z = 1f;
+
+        moveDirection = Vector3.ClampMagnitude(moveDirection, 1f);
+
+
+        Quaternion inputRotation = Quaternion.LookRotation(Vector3.ProjectOnPlane(Camera.main.transform.forward, Vector3.up), Vector3.up);
+        moveDirection = inputRotation * moveDirection;
+
+    }
+    #endregion
+
+    #region General Abi Input
+    private void genAbiInputs()
     {
 
         if (jumpPressed())
-			abiRequest.Invoke(abilties.jump, moveDirection);
+            genAbiRequest.Invoke(abilties.jump);
     }
 
+    #region Jump Input
     private bool jumpPressed()
     {
-        if (
-               Input.GetButtonDown(currentInputs.standardInputs.joyInputs.Jump)
-            || Input.GetButtonDown(currentInputs.frogInputs.joyInputs.Jump)
-            || Input.GetButtonDown(currentInputs.standardInputs.keyInputs.Jump)
-            || Input.GetButtonDown(currentInputs.frogInputs.keyInputs.Jump)
-            )
+
+        switch (cForm)
         {
-            Debug.Log("Jump Pressed");
-            return true;
+            case currentForm.std: return stdJumpInput();
+
+            case currentForm.frog: return frogJumpInput();
+
+            case currentForm.dolphin: return dolphJumpInput();
+
+        }
+
+        Debug.LogWarning("Something Strange with Jump Input");
+        return false;
+
+
+    }
+
+    private bool stdJumpInput()
+    {
+        if (currentInputs.standardInputs.joyInputs.Jump.ToString() != "LT" &&
+         currentInputs.standardInputs.joyInputs.Jump.ToString() != "RT")
+        {
+
+            if (Input.GetButtonDown(currentInputs.standardInputs.joyInputs.Jump.ToString()))
+                return true;
+            else
+                return false;
         }
         else
-            return false;
+        {
+            if (currentInputs.standardInputs.joyInputs.Jump.ToString() == "LT")
+            {
+                if (Input.GetAxis("LRT") > 0 && !switchCooldown)
+                {
+                    switchCooldown = true;
+                    StartCoroutine(SwitchingCooldown());
+                    return true;
+                }
+                else
+                    return false;
+            }
+            else
+            {
+                if (Input.GetAxis("LRT") < 0 && !switchCooldown)
+                {
+                    switchCooldown = true;
+                    StartCoroutine(SwitchingCooldown());
+                    return true;
+                }
+                else
+                    return false;
+            }
+        }
     }
+
+    private bool frogJumpInput()
+    {
+        if (currentInputs.frogInputs.joyInputs.Jump.ToString() != "LT" &&
+         currentInputs.frogInputs.joyInputs.Jump.ToString() != "RT")
+        {
+
+            if (Input.GetButtonDown(currentInputs.frogInputs.joyInputs.Jump.ToString()))
+                return true;
+            else
+                return false;
+        }
+        else
+        {
+            if (currentInputs.frogInputs.joyInputs.Jump.ToString() == "LT")
+            {
+                if (Input.GetAxis("LRT") > 0 && !switchCooldown)
+                {
+                    switchCooldown = true;
+                    StartCoroutine(SwitchingCooldown());
+                    return true;
+                }
+                else
+                    return false;
+            }
+            else
+            {
+                if (Input.GetAxis("LRT") < 0 && !switchCooldown)
+                {
+                    switchCooldown = true;
+                    StartCoroutine(SwitchingCooldown());
+                    return true;
+                }
+                else
+                    return false;
+            }
+        }
+    }
+
+    private bool dolphJumpInput()
+    {
+        if (currentInputs.dolphinInputs.joyInputs.jump.ToString() != "LT" &&
+         currentInputs.dolphinInputs.joyInputs.jump.ToString() != "RT")
+        {
+
+            if (Input.GetButtonDown(currentInputs.dolphinInputs.joyInputs.jump.ToString()))
+                return true;
+            else
+                return false;
+        }
+        else
+        {
+            if (currentInputs.dolphinInputs.joyInputs.jump.ToString() == "LT")
+            {
+                if (Input.GetAxis("LRT") > 0 && !switchCooldown)
+                {
+                    switchCooldown = true;
+                    StartCoroutine(SwitchingCooldown());
+                    return true;
+                }
+                else
+                    return false;
+            }
+            else
+            {
+                if (Input.GetAxis("LRT") < 0 && !switchCooldown)
+                {
+                    switchCooldown = true;
+                    StartCoroutine(SwitchingCooldown());
+                    return true;
+                }
+                else
+                    return false;
+            }
+        }
+    }
+    #endregion 
+    #endregion
+
+    #region General Methods
+
+    private IEnumerator SwitchingCooldown()
+    {
+        yield return new WaitForSeconds(0.1f);
+        switchCooldown = false;
+    } 
+    #endregion
+
+
+
+
+
+
+
+
+
+
+
 }

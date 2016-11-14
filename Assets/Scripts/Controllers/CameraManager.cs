@@ -64,7 +64,7 @@ using UnityEngine.Events;
                 currentx += Input.GetAxis("RJHor") * currentPlCameraSettings.sensitivityX;
                 currenty += Input.GetAxis("RJVer") * currentPlCameraSettings.sensitivityY;
 
-                if (Input.GetButton("CameraZoom"))
+                if (Input.GetButton("CamZjoy"))
                     currentPlCameraSettings.currentDistance += Input.GetAxis("RJVer") * currentPlCameraSettings.sensitivityZoom;
 
                 currentPlCameraSettings.currentDistance = Mathf.Clamp(currentPlCameraSettings.currentDistance, currentPlCameraSettings.distanceMin, currentPlCameraSettings.distanceMax);

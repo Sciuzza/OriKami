@@ -5,42 +5,46 @@ using System.Collections;
 
 #region Structs
 
+#region Input Structs
+public enum buttonsJoy {A, B, Y, X, LT, RT, LB, RB };
+public enum buttonsPc { };
+
 [System.Serializable]
-public struct standardInputs
+public struct standardInputsJ
 {
-    public string Jump;
-    public string VerticalFissure;
+    public buttonsJoy Jump;
+    public buttonsJoy VerticalFissure;
 
 }
 
 [System.Serializable]
-public struct standardM
+public struct standardInputsPc
 {
-    public float moveSpeed;
-    public float jumpStrength;
+    public buttonsPc Jump;
+    public buttonsPc VerticalFissure;
 
 }
 
 [System.Serializable]
 public struct standardI
 {
-    public standardInputs joyInputs;
-    public standardInputs keyInputs;
+    public standardInputsJ joyInputs;
+    public standardInputsPc keyInputs;
 }
 
 [System.Serializable]
-public struct frogInputs
+public struct frogInputsJ
 {
-    public string Jump;
-    public string HorizontalFissure;
+    public buttonsJoy Jump;
+    public buttonsJoy HorizontalFissure;
 
 }
 
 [System.Serializable]
-public struct frogM
+public struct frogInputsPc
 {
-    public float moveSpeed;
-    public float jumpStrength;
+    public buttonsPc Jump;
+    public buttonsPc HorizontalFissure;
 
 }
 
@@ -48,93 +52,81 @@ public struct frogM
 public struct frogI
 {
 
-    public frogInputs joyInputs;
-    public frogInputs keyInputs;
+    public frogInputsJ joyInputs;
+    public frogInputsPc keyInputs;
 
 }
 
 [System.Serializable]
-public struct armaInputs
+public struct armaInputsJ
 {
-    public string roll;
-    public string rockMoving;
+    public buttonsJoy roll;
+    public buttonsJoy rockMoving;
 
 }
 
 [System.Serializable]
-public struct armaM
+public struct armaInputsPc
 {
-    public float moveSpeed;
-    public float rollingStrength;
-    public float rollingTime;
+    public buttonsPc roll;
+    public buttonsPc rockMoving;
 
 }
 
 [System.Serializable]
 public struct armaI
 {
-    
-    public armaInputs joyInputs;
-    public armaInputs keyInputs;
+
+    public armaInputsJ joyInputs;
+    public armaInputsPc keyInputs;
 
 }
 
 [System.Serializable]
-public struct craneInputs
+public struct craneInputsJ
 {
-    public string abi1;
-    public string abi2;
+    public buttonsJoy abi1;
+    public buttonsJoy abi2;
 
 }
 
 [System.Serializable]
-public struct craneM
+public struct craneInputsPc
 {
-    public float glideSpeed;
+    public buttonsPc abi1;
+    public buttonsPc abi2;
 
 }
 
 [System.Serializable]
 public struct craneI
 {
-    public craneInputs joyInputs;
-    public craneInputs keyInputs;
+    public craneInputsJ joyInputs;
+    public craneInputsPc keyInputs;
 
 }
 
 [System.Serializable]
-public struct dolphinInputs
+public struct dolphinInputsJ
 {
-    public string abi1;
-    public string abi2;
+    public buttonsJoy jump;
+    public buttonsJoy moveBelow;
 
 }
 
 [System.Serializable]
-public struct dolphinM
+public struct dolphinInputsPc
 {
-    public float swimSpeed;
-    public float jumpStrength;
+    public buttonsPc jump;
+    public buttonsPc moveBelow;
 
 }
 
 [System.Serializable]
 public struct dolphinI
 {
-    public dolphinInputs joyInputs;
-    public dolphinInputs keyInputs;
-
-}
-
-[System.Serializable]
-public struct generalTweaks
-{
-    public float globalGravity;
-    public float jumpGravity;
-    public float glideGravity;
-    [Range(0.5f, 5)]
-    public float rotateSpeed;
-   
+    public dolphinInputsJ joyInputs;
+    public dolphinInputsPc keyInputs;
 
 }
 
@@ -148,6 +140,49 @@ public struct inputSettings
     public dolphinI dolphinInputs;
 
 }
+#endregion
+
+#region Form Tweaks Structs
+
+[System.Serializable]
+public struct standardM
+{
+    public float moveSpeed;
+    public float jumpStrength;
+
+}
+
+[System.Serializable]
+public struct frogM
+{
+    public float moveSpeed;
+    public float jumpStrength;
+
+}
+
+[System.Serializable]
+public struct armaM
+{
+    public float moveSpeed;
+    public float rollingStrength;
+    public float rollingTime;
+
+}
+
+[System.Serializable]
+public struct craneM
+{
+    public float glideSpeed;
+
+}
+
+[System.Serializable]
+public struct dolphinM
+{
+    public float swimSpeed;
+    public float jumpStrength;
+
+}
 
 [System.Serializable]
 public struct moveValues
@@ -158,6 +193,19 @@ public struct moveValues
     public craneM craneMove;
     public armaM armaMove;
     public dolphinM dolphinMove;
+} 
+#endregion
+
+[System.Serializable]
+public struct generalTweaks
+{
+    public float globalGravity;
+    public float jumpGravity;
+    public float glideGravity;
+    [Range(0.5f, 5)]
+    public float rotateSpeed;
+   
+
 }
 
 [System.Serializable]
