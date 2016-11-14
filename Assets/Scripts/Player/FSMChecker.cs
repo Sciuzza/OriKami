@@ -94,7 +94,12 @@ public class FSMChecker : MonoBehaviour
 
     public playerStateEffectsRequest plStateChanged;
 
+    [System.Serializable]
+    public class availableInputs : UnityEvent<string>
+    {
+    }
 
+    public availableInputs formChangedInp;
 
     #endregion
 
@@ -197,14 +202,34 @@ public class FSMChecker : MonoBehaviour
                 case abilties.dolpSwimBel:
                     break;
                 case abilties.toStd:
+                    cPlayerState.previousForm = cPlayerState.currentForm;
+                    cPlayerState.currentForm = "Standard Form";
+                    formChangedInp.Invoke(cPlayerState.currentForm);
+                    formChanged.Invoke(cPlayerState.currentForm, cPlayerState.previousForm, cPlayerState.forms);
                     break;
                 case abilties.toFrog:
+                    cPlayerState.previousForm = cPlayerState.currentForm;
+                    cPlayerState.currentForm = "Frog Form";
+                    formChangedInp.Invoke(cPlayerState.currentForm);
+                    formChanged.Invoke(cPlayerState.currentForm, cPlayerState.previousForm, cPlayerState.forms);
                     break;
                 case abilties.toCrane:
+                    cPlayerState.previousForm = cPlayerState.currentForm;
+                    cPlayerState.currentForm = "Dragon Form";
+                    formChangedInp.Invoke(cPlayerState.currentForm);
+                    formChanged.Invoke(cPlayerState.currentForm, cPlayerState.previousForm, cPlayerState.forms);
                     break;
                 case abilties.toArma:
+                    cPlayerState.previousForm = cPlayerState.currentForm;
+                    cPlayerState.currentForm = "Armadillo Form";
+                    formChangedInp.Invoke(cPlayerState.currentForm);
+                    formChanged.Invoke(cPlayerState.currentForm, cPlayerState.previousForm, cPlayerState.forms);
                     break;
                 case abilties.toDolp:
+                    cPlayerState.previousForm = cPlayerState.currentForm;
+                    cPlayerState.currentForm = "Dolphin Form";
+                    formChangedInp.Invoke(cPlayerState.currentForm);
+                    formChanged.Invoke(cPlayerState.currentForm, cPlayerState.previousForm, cPlayerState.forms);
                     break;
                 case abilties.npcInter:
                     break;

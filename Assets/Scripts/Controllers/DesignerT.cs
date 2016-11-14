@@ -14,7 +14,10 @@ public struct standardInputsJ
 {
     public buttonsJoy Jump;
     public buttonsJoy VerticalFissure;
-
+    public buttonsJoy toFrog;
+    public buttonsJoy toArma;
+    public buttonsJoy toCrane;
+    public buttonsJoy toDolphin;
 }
 
 [System.Serializable]
@@ -37,6 +40,10 @@ public struct frogInputsJ
 {
     public buttonsJoy Jump;
     public buttonsJoy HorizontalFissure;
+    public buttonsJoy toStd;
+    public buttonsJoy toArma;
+    public buttonsJoy toCrane;
+    public buttonsJoy toDolphin;
 
 }
 
@@ -62,7 +69,10 @@ public struct armaInputsJ
 {
     public buttonsJoy roll;
     public buttonsJoy rockMoving;
-
+    public buttonsJoy toStd;
+    public buttonsJoy toFrog;
+    public buttonsJoy toCrane;
+    public buttonsJoy toDolphin;
 }
 
 [System.Serializable]
@@ -85,9 +95,10 @@ public struct armaI
 [System.Serializable]
 public struct craneInputsJ
 {
-    public buttonsJoy abi1;
-    public buttonsJoy abi2;
-
+    public buttonsJoy toStd;
+    public buttonsJoy toFrog;
+    public buttonsJoy toArma;
+    public buttonsJoy toDolphin;
 }
 
 [System.Serializable]
@@ -111,7 +122,10 @@ public struct dolphinInputsJ
 {
     public buttonsJoy jump;
     public buttonsJoy moveBelow;
-
+    public buttonsJoy toStd;
+    public buttonsJoy toFrog;
+    public buttonsJoy toArma;
+    public buttonsJoy toCrane;
 }
 
 [System.Serializable]
