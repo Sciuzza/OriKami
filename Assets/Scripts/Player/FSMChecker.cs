@@ -8,11 +8,9 @@ using System.Collections.Generic;
 
 public enum abilties
 {
-    move, rotate, cameraMove, jump,
-    roll, moveBlock,
-    toStd, toFrog, toArma, toCrane, toDolp,
-    VFissure, HFissure, dolpSwimBel,
-    npcInter, menu
+    move, rotate, cameraMove, npcInter, menu,
+    jump, roll, moveBlock, VFissure, HFissure, dolpSwimBel,
+    toStd, toFrog, toArma, toCrane, toDolp
 };
 
 public enum physicStates { onAir, onGround, onWater }
@@ -249,11 +247,119 @@ public class FSMChecker : MonoBehaviour
     {
 
         cPlayerState.currentPhState = stateToGo;
-        phStateChanged.Invoke(stateToGo);
+        //phStateChanged.Invoke(stateToGo);
+
+        UpdatingAbilityList();
+       
 
     }
 
 
+    private void UpdatingAbilityList()
+    {
+        switch (cPlayerState.currentForm)
+        {
+            case "Standard Form":
+                UpdatingStdAbilityList();
+                break;
+            case "Frog Form":
+                UpdatingFrogAbilityList();
+                break;
+            case "Armadillo Form":
+                UpdatingArmaAbilityList();
+                break;
+            case "Dragon Form":
+                UpdatingCraneAbilityList();
+                break;
+            case "Dolphin Form":
+                UpdatingDolpAbilityList();
+                break;
+        }
+    }
+
+    private void UpdatingStdAbilityList()
+    {
+
+        RemoveAbility(abilties.HFissure);
+        RemoveAbility(abilties.dolpSwimBel);
+        RemoveAbility(abilties.moveBlock);
+        RemoveAbility(abilties.roll);
+        RemoveAbility(abilties.toStd);
+
+        switch (cPlayerState.currentPhState)
+        {
+            case physicStates.onWater:
+            case physicStates.onAir:
+                RemoveAbility(abilties.jump);
+                RemoveAbility(abilties.VFissure);       
+                break;
+            case physicStates.onGround:
+                AddAbility(abilties.jump);
+                AddAbility(abilties.VFissure);             
+                break;
+        }
+    }
+
+    private void UpdatingFrogAbilityList()
+    {
+        switch (cPlayerState.currentPhState)
+        {
+            case physicStates.onAir:
+                RemoveAbility(abilties.jump);
+                RemoveAbility(abilties.HFissure);
+                break;
+            case physicStates.onGround:
+                AddAbility(abilties.jump);
+                AddAbility(abilties.HFissure);
+                break;
+            case physicStates.onWater:
+                RemoveAbility(abilties.jump);
+                RemoveAbility(abilties.HFissure);
+                break;
+        }
+    }
+
+    private void UpdatingArmaAbilityList()
+    {
+        switch (cPlayerState.currentPhState)
+        {
+            case physicStates.onAir:
+                RemoveAbility(abilties.roll);
+                RemoveAbility(abilties.moveBlock);
+                break;
+            case physicStates.onGround:
+                AddAbility(abilties.roll);
+                AddAbility(abilties.moveBlock);
+                break;
+            case physicStates.onWater:
+                RemoveAbility(abilties.roll);
+                RemoveAbility(abilties.moveBlock);
+                break;
+        }
+    }
+
+    private void UpdatingCraneAbilityList()
+    {
+
+    }
+
+    private void UpdatingDolpAbilityList()
+    {
+
+    }
+
+    private void RemoveAbility(abilties abiToRemove)
+    {
+        if (cPlayerState.currentAbilities.Contains(abiToRemove))
+            cPlayerState.currentAbilities.Remove(abiToRemove);
+      
+    }
+
+    private void AddAbility(abilties abiToAdd)
+    {
+        if (!cPlayerState.currentAbilities.Contains(abiToAdd))
+            cPlayerState.currentAbilities.Add(abiToAdd);
+    }
     /*
     private bool RequirementsCheckHandler(List<string> availableForms, abilties abilityToSearch, List<physicStates> possiblePhStates,
         List<playerStates> possiblePlStates)

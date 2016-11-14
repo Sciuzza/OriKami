@@ -51,9 +51,11 @@ public class FSMExecutor : MonoBehaviour
         fsmCheckerTempLink.dirAbiUsed.AddListener(ApplyingAbilityEffect);
         fsmCheckerTempLink.genAbiUsed.AddListener(ApplyingAbilityEffect);
         fsmCheckerTempLink.rotationUsed.AddListener(ApplyingRotationEffect);
+
+        /*
         fsmCheckerTempLink.phStateChanged.AddListener(ApplyingPhStateEffect);
         fsmCheckerTempLink.plStateChanged.AddListener(ApplyingPlStateEffect);
-
+        */
 
      
     }
@@ -151,6 +153,9 @@ public class FSMExecutor : MonoBehaviour
 
     }
 
+
+
+    /*
     private void ApplyingPhStateEffect(physicStates currentPhState)
     {
         phChangeEffect.Invoke(currentPhState);
@@ -173,5 +178,5 @@ public class FSMExecutor : MonoBehaviour
         }
     }
 
-
+    */
 }
