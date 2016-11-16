@@ -3,11 +3,161 @@ using System.Collections;
 
 
 
-
-public enum playMode { KMInput, JoyInput };
-
-
 #region Structs
+
+#region Input Structs
+public enum buttonsJoy {A, B, Y, X, LT, RT, LB, RB };
+public enum buttonsPc { };
+
+[System.Serializable]
+public struct standardInputsJ
+{
+    public buttonsJoy Jump;
+    public buttonsJoy VerticalFissure;
+    public buttonsJoy toFrog;
+    public buttonsJoy toArma;
+    public buttonsJoy toCrane;
+    public buttonsJoy toDolphin;
+}
+
+[System.Serializable]
+public struct standardInputsPc
+{
+    public buttonsPc Jump;
+    public buttonsPc VerticalFissure;
+
+}
+
+[System.Serializable]
+public struct standardI
+{
+    public standardInputsJ joyInputs;
+    public standardInputsPc keyInputs;
+}
+
+[System.Serializable]
+public struct frogInputsJ
+{
+    public buttonsJoy Jump;
+    public buttonsJoy HorizontalFissure;
+    public buttonsJoy toStd;
+    public buttonsJoy toArma;
+    public buttonsJoy toCrane;
+    public buttonsJoy toDolphin;
+
+}
+
+[System.Serializable]
+public struct frogInputsPc
+{
+    public buttonsPc Jump;
+    public buttonsPc HorizontalFissure;
+
+}
+
+[System.Serializable]
+public struct frogI
+{
+
+    public frogInputsJ joyInputs;
+    public frogInputsPc keyInputs;
+
+}
+
+[System.Serializable]
+public struct armaInputsJ
+{
+    public buttonsJoy roll;
+    public buttonsJoy rockMoving;
+    public buttonsJoy toStd;
+    public buttonsJoy toFrog;
+    public buttonsJoy toCrane;
+    public buttonsJoy toDolphin;
+}
+
+[System.Serializable]
+public struct armaInputsPc
+{
+    public buttonsPc roll;
+    public buttonsPc rockMoving;
+
+}
+
+[System.Serializable]
+public struct armaI
+{
+
+    public armaInputsJ joyInputs;
+    public armaInputsPc keyInputs;
+
+}
+
+[System.Serializable]
+public struct craneInputsJ
+{
+    public buttonsJoy toStd;
+    public buttonsJoy toFrog;
+    public buttonsJoy toArma;
+    public buttonsJoy toDolphin;
+}
+
+[System.Serializable]
+public struct craneInputsPc
+{
+    public buttonsPc abi1;
+    public buttonsPc abi2;
+
+}
+
+[System.Serializable]
+public struct craneI
+{
+    public craneInputsJ joyInputs;
+    public craneInputsPc keyInputs;
+
+}
+
+[System.Serializable]
+public struct dolphinInputsJ
+{
+    public buttonsJoy jump;
+    public buttonsJoy moveBelow;
+    public buttonsJoy toStd;
+    public buttonsJoy toFrog;
+    public buttonsJoy toArma;
+    public buttonsJoy toCrane;
+}
+
+[System.Serializable]
+public struct dolphinInputsPc
+{
+    public buttonsPc jump;
+    public buttonsPc moveBelow;
+
+}
+
+[System.Serializable]
+public struct dolphinI
+{
+    public dolphinInputsJ joyInputs;
+    public dolphinInputsPc keyInputs;
+
+}
+
+[System.Serializable]
+public struct inputSettings
+{
+    public standardI standardInputs;
+    public frogI frogInputs;
+    public armaI armaInputs;
+    public craneI craneInputs;
+    public dolphinI dolphinInputs;
+
+}
+#endregion
+
+#region Form Tweaks Structs
+
 [System.Serializable]
 public struct standardM
 {
@@ -41,7 +191,7 @@ public struct craneM
 }
 
 [System.Serializable]
-public struct dolphin
+public struct dolphinM
 {
     public float swimSpeed;
     public float jumpStrength;
@@ -49,30 +199,16 @@ public struct dolphin
 }
 
 [System.Serializable]
-public struct keyMouseInputs
+public struct moveValues
 {
-    public string frogForm;
-    public string craneForm;
-    public string armaForm;
-    public string dolphinForm;
-    public string primaryAbility;
-    public string secondaryAbility;
-    public string tertiaryAbility;
-    public string quaternaryAbility;
-}
 
-[System.Serializable]
-public struct joyInputs
-{
-    public string frogForm;
-    public string craneForm;
-    public string armaForm;
-    public string dolphinForm;
-    public string primaryAbility;
-    public string secondaryAbility;
-    public string tertiaryAbility;
-    public string quaternaryAbility;
-}
+    public standardM standMove;
+    public frogM frogMove;
+    public craneM craneMove;
+    public armaM armaMove;
+    public dolphinM dolphinMove;
+} 
+#endregion
 
 [System.Serializable]
 public struct generalTweaks
@@ -82,26 +218,8 @@ public struct generalTweaks
     public float glideGravity;
     [Range(0.5f, 5)]
     public float rotateSpeed;
-    public playMode currentInput;
+   
 
-}
-
-[System.Serializable]
-public struct keybindings
-{
-    public keyMouseInputs TastieraMouse;
-    public joyInputs Joypad;
-}
-
-[System.Serializable]
-public struct Movement
-{
-
-    public standardM standMove;
-    public frogM frogMove;
-    public craneM craneMove;
-    public armaM armaMove;
-    public dolphin dolphinMove;
 }
 
 [System.Serializable]
@@ -132,8 +250,9 @@ public struct CameraPlayer
 public class DesignerT : MonoBehaviour
 {
     public generalTweaks GeneralTweaks;
-    public keybindings GestioneInputs;
-    public Movement GestioneMovimento;
+   
+    public moveValues GestioneMovimento;
+    public inputSettings GestioneInputs;
     public CameraPlayer GestioneCamera;
 
     void Awake()
@@ -149,15 +268,19 @@ public class DesignerT : MonoBehaviour
 
     public void ApplyingDesignTweaks(GameObject player)
     {
-        PlCore plCoreTempLink = player.GetComponent<PlCore>();
+        FSMExecutor fsmExecutorTempLink = player.GetComponent<FSMExecutor>();
 
-        plCoreTempLink.CurrentMoveValues = GestioneMovimento;
-        plCoreTempLink.GeneralValues = GeneralTweaks;
+        fsmExecutorTempLink.currentMoveValues = GestioneMovimento;
+        fsmExecutorTempLink.generalValues = GeneralTweaks;
 
         this.GetComponent<CameraManager>().currentPlCameraSettings = GestioneCamera;
 
-        InterCC interCCTempLink = player.GetComponent<InterCC>();
-        interCCTempLink.currentInputs = GestioneInputs;
+       
+
+
+        PlayerInputs playerInputsTempLink = player.GetComponent<PlayerInputs>();
+
+        playerInputsTempLink.currentInputs = GestioneInputs;
 
         Physics.gravity = GeneralTweaks.globalGravity * Vector3.down;
     }

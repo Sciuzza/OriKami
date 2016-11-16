@@ -11,7 +11,7 @@ public class ButtonRamp : MonoBehaviour
     {
         rampLinker.SetActive(false);
 
-        GameObject.FindGameObjectWithTag("Player").GetComponent<PlCore>().activateRamp.AddListener(ActivatingRamp);
+       // GameObject.FindGameObjectWithTag("Player").GetComponent<PlCore>().activateRamp.AddListener(ActivatingRamp);
 
     }
 

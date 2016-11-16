@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿/*
+using UnityEngine;
 using System.Collections;
 using UnityEngine.Events;
 
@@ -8,7 +9,7 @@ using UnityEngine.Events;
 public class InterCC : MonoBehaviour
 {
 
-    public keybindings currentInputs;
+    
 
      
 
@@ -163,3 +164,4 @@ public class InterCC : MonoBehaviour
     
 
 }
+*/

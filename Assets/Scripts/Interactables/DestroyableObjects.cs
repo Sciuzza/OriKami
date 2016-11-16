@@ -7,7 +7,7 @@ using System.Collections;
 
         void Awake()
         {
-            GameObject.FindGameObjectWithTag("Player").GetComponent<PlCore>().brokeSomething.AddListener(DestroyingMySelf);
+          //  GameObject.FindGameObjectWithTag("Player").GetComponent<PlCore>().brokeSomething.AddListener(DestroyingMySelf);
         }
 
     

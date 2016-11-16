@@ -4,7 +4,7 @@ using UnityEngine.Events;
 using System.Collections.Generic;
 
 
-
+/*
 #region Finite State Machine Structure
 public enum forms { standard, frog, crane, armadillo, dolphin };
 
@@ -38,8 +38,8 @@ public struct playerState
     public control currentControl;
 }
 #endregion
-
-
+*/
+/*
 public class PlCore : MonoBehaviour
 {
 
@@ -56,8 +56,8 @@ public class PlCore : MonoBehaviour
 
 
     [SerializeField]
-    private Movement currentMoveValues;
-    public Movement CurrentMoveValues
+    private moveValues currentMoveValues;
+    public moveValues CurrentMoveValues
     {
         get
         {
@@ -120,7 +120,7 @@ public class PlCore : MonoBehaviour
     private void Awake()
     {
         #region Initializing Player Data
-        SettingDefaultValues();
+       // SettingDefaultValues();
 
         SettingStandardForm();
 
@@ -322,7 +322,7 @@ public class PlCore : MonoBehaviour
     #region Player Initialization
     private void SettingDefaultValues()
     {
-        Movement defaultMove;
+        moveValues defaultMove;
 
         defaultMove.standMove.moveSpeed = 10;
         defaultMove.standMove.jumpStrength = 10;
@@ -339,7 +339,7 @@ public class PlCore : MonoBehaviour
         defaultMove.dolphinMove.swimSpeed = 10;
         defaultMove.dolphinMove.jumpStrength = 8;
 
-        CurrentMoveValues = defaultMove;
+       
 
 
         generalTweaks defaultGeneral;
@@ -348,7 +348,7 @@ public class PlCore : MonoBehaviour
         defaultGeneral.jumpGravity = 20;
         defaultGeneral.glideGravity = 10;
         defaultGeneral.rotateSpeed = 2;
-        defaultGeneral.currentInput = playMode.KMInput;
+        
 
         GeneralValues = defaultGeneral;
 
@@ -874,3 +874,4 @@ public class PlCore : MonoBehaviour
 
 
 }
+*/
