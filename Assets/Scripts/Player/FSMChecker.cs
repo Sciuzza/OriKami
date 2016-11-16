@@ -9,7 +9,7 @@ using System.Collections.Generic;
 public enum abilties
 {
     move, rotate, cameraMove, npcInter, menu,
-    jump, roll, moveBlock, VFissure, HFissure, dolpSwimBel,
+    jump, roll, moveOnRoll, moveBlock, VFissure, HFissure, dolpSwimBel,
     toStd, toFrog, toArma, toCrane, toDolp
 };
 
@@ -114,6 +114,7 @@ public class FSMChecker : MonoBehaviour
 
         plInputsTempLink.dirAbiRequest.AddListener(CheckingAbiRequirements);
         plInputsTempLink.genAbiRequest.AddListener(CheckingAbiRequirements);
+        plInputsTempLink.rollStopped.AddListener(EnablingMove);
 
         EnvInputs enInputsTempLink = this.gameObject.GetComponent<EnvInputs>();
 
@@ -193,8 +194,9 @@ public class FSMChecker : MonoBehaviour
                     break;
                 case abilties.cameraMove:
                     break;
-
                 case abilties.roll:
+                    RemoveAbility(abilties.move);
+                    genAbiUsed.Invoke(abiReceived, cPlayerState.currentForm);
                     break;
                 case abilties.moveBlock:
                     break;
@@ -1659,6 +1661,11 @@ public class FSMChecker : MonoBehaviour
         if (!cPlayerState.currentAbilities.Contains(abiToAdd))
             cPlayerState.currentAbilities.Add(abiToAdd);
     } 
+
+    private void EnablingMove()
+    {
+        //AddAbility(abilties.move);
+    }
     #endregion
     #endregion
 

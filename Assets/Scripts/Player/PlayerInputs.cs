@@ -34,6 +34,7 @@ public class PlayerInputs : MonoBehaviour
     public generalAbiInput genAbiRequest;
     #endregion
 
+    public UnityEvent rollStopped;
 
     private void Awake()
     {
@@ -71,7 +72,7 @@ public class PlayerInputs : MonoBehaviour
         moveDirection.z = -Input.GetAxis("LJVer");
 
         //moveDirection.x = Input.GetAxis("Horizontal");
-        //oveDirection.z = Input.GetAxis("Vertical");
+        //moveDirection.z = Input.GetAxis("Vertical");
 
         if (moveDirection.x < 0)
             moveDirection.x = -1f;
@@ -110,6 +111,9 @@ public class PlayerInputs : MonoBehaviour
             genAbiRequest.Invoke(abilties.toStd);
         if (rollPressed())
             genAbiRequest.Invoke(abilties.roll);
+        else
+            rollStopped.Invoke();
+
     }
 
     #region Jump Input
@@ -1519,7 +1523,7 @@ public class PlayerInputs : MonoBehaviour
         currentInputs.armaInputs.joyInputs.roll.ToString() != "RT")
         {
 
-            if (Input.GetButtonDown(currentInputs.armaInputs.joyInputs.roll.ToString()))
+            if (Input.GetButton(currentInputs.armaInputs.joyInputs.roll.ToString()))
                 return true;
             else
                 return false;
@@ -1528,10 +1532,8 @@ public class PlayerInputs : MonoBehaviour
         {
             if (currentInputs.armaInputs.joyInputs.roll.ToString() == "LT")
             {
-                if (Input.GetAxis("LRT") > 0 && !switchCooldown)
-                {
-                    switchCooldown = true;
-                    StartCoroutine(SwitchingCooldown());
+                if (Input.GetAxis("LRT") > 0)
+                {                 
                     return true;
                 }
                 else
@@ -1539,10 +1541,8 @@ public class PlayerInputs : MonoBehaviour
             }
             else
             {
-                if (Input.GetAxis("LRT") < 0 && !switchCooldown)
+                if (Input.GetAxis("LRT") < 0)
                 {
-                    switchCooldown = true;
-                    StartCoroutine(SwitchingCooldown());
                     return true;
                 }
                 else
@@ -1553,7 +1553,7 @@ public class PlayerInputs : MonoBehaviour
 
     private bool armaRollPcI()
     {
-        if (Input.GetButtonDown(currentInputs.armaInputs.keyInputs.roll.ToString()))
+        if (Input.GetButton(currentInputs.armaInputs.keyInputs.roll.ToString()))
             return true;
         else
             return false;
