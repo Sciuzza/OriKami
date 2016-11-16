@@ -23,7 +23,7 @@ using UnityEngine.Events;
 
         #endregion
 
-        private bool initPlayerDone = false;
+        public bool initPlayerDone = false;
 
         void Awake()
         {
@@ -75,15 +75,8 @@ using UnityEngine.Events;
         void LateUpdate()
         {
 
-            #region Camera Player Follow
-            if (initPlayerDone)
-            {
-                Vector3 dir = new Vector3(0, 0, -currentPlCameraSettings.currentDistance);
-                Quaternion rotation = Quaternion.Euler(currenty, currentx, 0);
-                camTransform.position = lookAt.position + rotation * dir;
-
-                camTransform.LookAt(lookAt.position);
-            }
+        #region Camera Player Follow
+        InitializingCamera();
             #endregion
 
         }
@@ -117,5 +110,15 @@ using UnityEngine.Events;
             currentPlCameraSettings = defaultValues;
         }
 
-       
+    public void InitializingCamera()
+    {
+        if (initPlayerDone)
+        {
+            Vector3 dir = new Vector3(0, 0, -currentPlCameraSettings.currentDistance);
+            Quaternion rotation = Quaternion.Euler(currenty, currentx, 0);
+            camTransform.position = lookAt.position + rotation * dir;
+
+            camTransform.LookAt(lookAt.position);
+        }
     }
+}
