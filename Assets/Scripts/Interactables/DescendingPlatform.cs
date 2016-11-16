@@ -15,7 +15,7 @@ namespace Orikami
         {
             if (resetPosition)
             {
-                transform.position = Vector3.Slerp(transform.position, TargetB.position, 0.01f);
+              //  transform.position = Vector3.Slerp(transform.position, TargetB.position, 0.01f);
             }
         }
         void Start()

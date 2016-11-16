@@ -1,0 +1,7 @@
+Npc: Hey I have a quest for you 
+Npc: Do you want to accept it  ?
+Player: Sure ! 
+Player: What do I have to do  ?
+Npc: It's an easy quest ! You will have to kill 10 Cristiani Piromalli !
+Player: Sure ! It's always fun to kill Pyromallies.
+

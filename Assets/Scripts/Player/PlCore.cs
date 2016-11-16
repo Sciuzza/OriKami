@@ -50,6 +50,10 @@ public class PlCore : MonoBehaviour
     public UnityEvent activateWaterStairs;
     public UnityEvent activateRamp;
 
+    public float weight = 10.0f;
+
+
+
 
     [SerializeField]
     private moveValues currentMoveValues;
@@ -169,7 +173,7 @@ public class PlCore : MonoBehaviour
     void OnTriggerEnter(Collider objectHit)
     {
 
-        if (objectHit.gameObject.GetComponentInParent<DestroyableObjects>() )// && isRolling)
+        if (objectHit.gameObject.GetComponentInParent<DestroyableObjects>()) // && isRolling)
         {
             objectHit.gameObject.GetComponentInParent<DestroyableObjects>().DestroyingMySelf();
         }
@@ -190,6 +194,10 @@ public class PlCore : MonoBehaviour
         if (objectHit.gameObject.GetComponent<ButtonRamp>() != null)
         {
             activateWaterStairs.Invoke();
+        }
+        if (objectHit.gameObject.name == "DeathTrigger")
+        {
+            Application.LoadLevel(Application.loadedLevel);
         }
 
 
@@ -219,6 +227,12 @@ public class PlCore : MonoBehaviour
         if (hit.gameObject.tag == "movable")
         {
             hit.gameObject.GetComponent<Rigidbody>().velocity = (hit.moveDirection * 2);
+        }
+
+        if ((hit.gameObject.tag == "Platform"))
+        {
+              
+            hit.gameObject.GetComponent<Rigidbody>().AddForce(-hit.normal * weight);
         }
 
         if (hit.gameObject.tag == "Water")
@@ -353,6 +367,7 @@ public class PlCore : MonoBehaviour
 
         armadillo = GameObject.FindGameObjectWithTag("Armadillo Form");
         armadillo.SetActive(false);
+        
 
         dolphin = GameObject.FindGameObjectWithTag("Dolphin Form");
         dolphin.SetActive(false);
