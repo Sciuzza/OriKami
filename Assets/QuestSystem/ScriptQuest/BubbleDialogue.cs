@@ -16,7 +16,7 @@ public class BubbleDialogue : MonoBehaviour
     public int currentLine;
     public int endAtLine;
 
-    public MoveCC player;
+   
 
     public bool isActive;
     // public bool stopPlayerMovement;       LO DEVE IMPLEMENTARE CRISTIANO  
