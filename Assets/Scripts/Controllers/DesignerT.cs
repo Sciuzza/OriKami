@@ -7,7 +7,7 @@ using System.Collections;
 
 #region Input Structs
 public enum buttonsJoy {A, B, Y, X, LT, RT, LB, RB };
-public enum buttonsPc { };
+public enum buttonsPc {Q, E, R, F, Z, X, C, Space, N1, N2, N3, N4 };
 
 [System.Serializable]
 public struct standardInputsJ
@@ -25,6 +25,10 @@ public struct standardInputsPc
 {
     public buttonsPc Jump;
     public buttonsPc VerticalFissure;
+    public buttonsPc toFrog;
+    public buttonsPc toArma;
+    public buttonsPc toCrane;
+    public buttonsPc toDolphin;
 
 }
 
@@ -52,7 +56,10 @@ public struct frogInputsPc
 {
     public buttonsPc Jump;
     public buttonsPc HorizontalFissure;
-
+    public buttonsPc toStd;
+    public buttonsPc toArma;
+    public buttonsPc toCrane;
+    public buttonsPc toDolphin;
 }
 
 [System.Serializable]
@@ -80,7 +87,10 @@ public struct armaInputsPc
 {
     public buttonsPc roll;
     public buttonsPc rockMoving;
-
+    public buttonsPc toStd;
+    public buttonsPc toFrog;
+    public buttonsPc toCrane;
+    public buttonsPc toDolphin;
 }
 
 [System.Serializable]
@@ -104,8 +114,10 @@ public struct craneInputsJ
 [System.Serializable]
 public struct craneInputsPc
 {
-    public buttonsPc abi1;
-    public buttonsPc abi2;
+    public buttonsPc toStd;
+    public buttonsPc toFrog;
+    public buttonsPc toArma;
+    public buttonsPc toDolphin;
 
 }
 
@@ -133,6 +145,10 @@ public struct dolphinInputsPc
 {
     public buttonsPc jump;
     public buttonsPc moveBelow;
+    public buttonsPc toStd;
+    public buttonsPc toFrog;
+    public buttonsPc toArma;
+    public buttonsPc toCrane;
 
 }
 
@@ -214,8 +230,6 @@ public struct moveValues
 public struct generalTweaks
 {
     public float globalGravity;
-    public float jumpGravity;
-    public float glideGravity;
     [Range(0.5f, 5)]
     public float rotateSpeed;
    

@@ -70,6 +70,9 @@ public class PlayerInputs : MonoBehaviour
         moveDirection.x = Input.GetAxis("LJHor");
         moveDirection.z = -Input.GetAxis("LJVer");
 
+        //moveDirection.x = Input.GetAxis("Horizontal");
+        //oveDirection.z = Input.GetAxis("Vertical");
+
         if (moveDirection.x < 0)
             moveDirection.x = -1f;
         else if (moveDirection.x > 0)
@@ -131,6 +134,14 @@ public class PlayerInputs : MonoBehaviour
 
     private bool stdJumpInput()
     {
+        if (stdJumpJoyI() || stdJumpPcI())
+            return true;
+        else
+            return false;
+    }
+
+    private bool stdJumpJoyI()
+    {
         if (currentInputs.standardInputs.joyInputs.Jump.ToString() != "LT" &&
          currentInputs.standardInputs.joyInputs.Jump.ToString() != "RT")
         {
@@ -167,10 +178,26 @@ public class PlayerInputs : MonoBehaviour
         }
     }
 
+    private bool stdJumpPcI()
+    {
+        if (Input.GetButtonDown(currentInputs.standardInputs.keyInputs.Jump.ToString()))
+            return true;
+        else
+            return false;
+    }
+
     private bool frogJumpInput()
     {
+        if (frogJumpJoyI() || frogJumpPcI())
+            return true;
+        else
+            return false;
+    }
+
+    private bool frogJumpJoyI()
+    {
         if (currentInputs.frogInputs.joyInputs.Jump.ToString() != "LT" &&
-         currentInputs.frogInputs.joyInputs.Jump.ToString() != "RT")
+        currentInputs.frogInputs.joyInputs.Jump.ToString() != "RT")
         {
 
             if (Input.GetButtonDown(currentInputs.frogInputs.joyInputs.Jump.ToString()))
@@ -205,7 +232,23 @@ public class PlayerInputs : MonoBehaviour
         }
     }
 
+    private bool frogJumpPcI()
+    {
+        if (Input.GetButtonDown(currentInputs.frogInputs.keyInputs.Jump.ToString()))
+            return true;
+        else
+            return false;
+    }
+
     private bool dolphJumpInput()
+    {
+        if (dolphJumpJoyI() || dolphJumpPcI())
+            return true;
+        else
+            return false;
+    }
+
+    private bool dolphJumpJoyI()
     {
         if (currentInputs.dolphinInputs.joyInputs.jump.ToString() != "LT" &&
          currentInputs.dolphinInputs.joyInputs.jump.ToString() != "RT")
@@ -242,6 +285,15 @@ public class PlayerInputs : MonoBehaviour
             }
         }
     }
+
+    private bool dolphJumpPcI()
+    {
+        if (Input.GetButtonDown(currentInputs.dolphinInputs.keyInputs.jump.ToString()))
+            return true;
+        else
+            return false;
+    }
+
     #endregion
 
     #region To Frog Input
@@ -265,7 +317,15 @@ public class PlayerInputs : MonoBehaviour
 
     private bool toFrogbyStdInput()
     {
+        if (toFrogbyStdJoyI() || toFrogbyStdPcI())
+            return true;
+        else
+            return false;
+        
+    }
 
+    private bool toFrogbyStdJoyI()
+    {
         if (currentInputs.standardInputs.joyInputs.toFrog.ToString() != "LT" &&
          currentInputs.standardInputs.joyInputs.toFrog.ToString() != "RT")
         {
@@ -302,9 +362,25 @@ public class PlayerInputs : MonoBehaviour
         }
     }
 
+    private bool toFrogbyStdPcI()
+    {
+        if (Input.GetButtonDown(currentInputs.standardInputs.keyInputs.toFrog.ToString()))
+            return true;
+        else
+            return false;
+    }
+
     private bool toFrogbyCraneInput()
     {
+        if (toFrogbyCraneJoyI() || toFrogbyCranePcI())
+            return true;
+        else
+            return false;
+        
+    }
 
+    private bool toFrogbyCraneJoyI()
+    {
         if (currentInputs.craneInputs.joyInputs.toFrog.ToString() != "LT" &&
          currentInputs.craneInputs.joyInputs.toFrog.ToString() != "RT")
         {
@@ -341,9 +417,25 @@ public class PlayerInputs : MonoBehaviour
         }
     }
 
+    private bool toFrogbyCranePcI()
+    {
+        if (Input.GetButtonDown(currentInputs.craneInputs.keyInputs.toFrog.ToString()))
+            return true;
+        else
+            return false;
+    }
+
     private bool toFrogbyArmaInput()
     {
+        if (toFrogbyArmaJoyI() || toFrogbyArmaPcI())
+            return true;
+        else
+            return false;
+        
+    }
 
+    private bool toFrogbyArmaJoyI()
+    {
         if (currentInputs.armaInputs.joyInputs.toFrog.ToString() != "LT" &&
          currentInputs.armaInputs.joyInputs.toFrog.ToString() != "RT")
         {
@@ -380,9 +472,25 @@ public class PlayerInputs : MonoBehaviour
         }
     }
 
+    private bool toFrogbyArmaPcI()
+    {
+        if (Input.GetButtonDown(currentInputs.armaInputs.keyInputs.toFrog.ToString()))
+            return true;
+        else
+            return false;
+    }
+
     private bool toFrogbyDolpInput()
     {
+        if (toFrogbyDolpJoyI() || toFrogbyDolpPcI())
+            return true;
+        else
+            return false;
+        
+    }
 
+    private bool toFrogbyDolpJoyI()
+    {
         if (currentInputs.dolphinInputs.joyInputs.toFrog.ToString() != "LT" &&
          currentInputs.dolphinInputs.joyInputs.toFrog.ToString() != "RT")
         {
@@ -418,6 +526,14 @@ public class PlayerInputs : MonoBehaviour
             }
         }
     }
+
+    private bool toFrogbyDolpPcI()
+    {
+        if (Input.GetButtonDown(currentInputs.dolphinInputs.keyInputs.toFrog.ToString()))
+            return true;
+        else
+            return false;
+    }
     #endregion
 
     #region To Arma Input
@@ -441,9 +557,17 @@ public class PlayerInputs : MonoBehaviour
 
     private bool toArmabyStdInput()
     {
+        if (toArmabyStdJoyI() || toArmabyStdPcI())
+            return true;
+        else
+            return false;
+      
+    }
 
+    private bool toArmabyStdJoyI()
+    {
         if (currentInputs.standardInputs.joyInputs.toArma.ToString() != "LT" &&
-         currentInputs.standardInputs.joyInputs.toArma.ToString() != "RT")
+       currentInputs.standardInputs.joyInputs.toArma.ToString() != "RT")
         {
 
             if (Input.GetButtonDown(currentInputs.standardInputs.joyInputs.toArma.ToString()))
@@ -478,11 +602,27 @@ public class PlayerInputs : MonoBehaviour
         }
     }
 
+    private bool toArmabyStdPcI()
+    {
+        if (Input.GetButtonDown(currentInputs.standardInputs.keyInputs.toArma.ToString()))
+            return true;
+        else
+            return false;
+    }
+
     private bool toArmabyCraneInput()
     {
+        if (toArmabyCraneJoyI() || toArmabyCranePcI())
+            return true;
+        else
+            return false;
+       
+    }
 
+    private bool toArmabyCraneJoyI()
+    {
         if (currentInputs.craneInputs.joyInputs.toArma.ToString() != "LT" &&
-         currentInputs.craneInputs.joyInputs.toArma.ToString() != "RT")
+        currentInputs.craneInputs.joyInputs.toArma.ToString() != "RT")
         {
 
             if (Input.GetButtonDown(currentInputs.craneInputs.joyInputs.toArma.ToString()))
@@ -517,9 +657,25 @@ public class PlayerInputs : MonoBehaviour
         }
     }
 
+    private bool toArmabyCranePcI()
+    {
+        if (Input.GetButtonDown(currentInputs.craneInputs.keyInputs.toArma.ToString()))
+            return true;
+        else
+            return false;
+    }
+
     private bool toArmabyFrogInput()
     {
+        if (toArmabyFrogJoyI() || toArmabyFrogPcI())
+            return true;
+        else
+            return false;
+        
+    }
 
+    private bool toArmabyFrogJoyI()
+    {
         if (currentInputs.frogInputs.joyInputs.toArma.ToString() != "LT" &&
          currentInputs.frogInputs.joyInputs.toArma.ToString() != "RT")
         {
@@ -556,11 +712,27 @@ public class PlayerInputs : MonoBehaviour
         }
     }
 
+    private bool toArmabyFrogPcI()
+    {
+        if (Input.GetButtonDown(currentInputs.frogInputs.keyInputs.toArma.ToString()))
+            return true;
+        else
+            return false;
+    }
+
     private bool toArmabyDolpInput()
     {
+        if (toArmabyDolpJoyI() || toArmabyDolpPcI())
+            return true;
+        else
+            return false;
+       
+    }
 
+    private bool toArmabyDolpJoyI()
+    {
         if (currentInputs.dolphinInputs.joyInputs.toArma.ToString() != "LT" &&
-         currentInputs.dolphinInputs.joyInputs.toArma.ToString() != "RT")
+        currentInputs.dolphinInputs.joyInputs.toArma.ToString() != "RT")
         {
 
             if (Input.GetButtonDown(currentInputs.dolphinInputs.joyInputs.toArma.ToString()))
@@ -594,6 +766,14 @@ public class PlayerInputs : MonoBehaviour
             }
         }
     }
+
+    private bool toArmabyDolpPcI()
+    {
+        if (Input.GetButtonDown(currentInputs.dolphinInputs.keyInputs.toArma.ToString()))
+            return true;
+        else
+            return false;
+    }
     #endregion
 
     #region To Crane Input
@@ -617,9 +797,17 @@ public class PlayerInputs : MonoBehaviour
 
     private bool toCranebyStdInput()
     {
+        if (toCranebyStdJoyI() || toCranebyStdPcI())
+            return true;
+        else
+            return false;
+       
+    }
 
+    private bool toCranebyStdJoyI()
+    {
         if (currentInputs.standardInputs.joyInputs.toCrane.ToString() != "LT" &&
-         currentInputs.standardInputs.joyInputs.toCrane.ToString() != "RT")
+        currentInputs.standardInputs.joyInputs.toCrane.ToString() != "RT")
         {
 
             if (Input.GetButtonDown(currentInputs.standardInputs.joyInputs.toCrane.ToString()))
@@ -654,11 +842,27 @@ public class PlayerInputs : MonoBehaviour
         }
     }
 
+    private bool toCranebyStdPcI()
+    {
+        if (Input.GetButtonDown(currentInputs.standardInputs.keyInputs.toCrane.ToString()))
+            return true;
+        else
+            return false;
+    }
+
     private bool toCranebyFrogInput()
     {
+        if (toCranebyFrogJoyI() || toCranebyFrogPcI())
+            return true;
+        else
+            return false;
+      
+    }
 
+    private bool toCranebyFrogJoyI()
+    {
         if (currentInputs.frogInputs.joyInputs.toCrane.ToString() != "LT" &&
-         currentInputs.frogInputs.joyInputs.toCrane.ToString() != "RT")
+       currentInputs.frogInputs.joyInputs.toCrane.ToString() != "RT")
         {
 
             if (Input.GetButtonDown(currentInputs.frogInputs.joyInputs.toCrane.ToString()))
@@ -693,11 +897,27 @@ public class PlayerInputs : MonoBehaviour
         }
     }
 
+    private bool toCranebyFrogPcI()
+    {
+        if (Input.GetButtonDown(currentInputs.frogInputs.keyInputs.toCrane.ToString()))
+            return true;
+        else
+            return false;
+    }
+
     private bool toCranebyArmaInput()
     {
+        if (toCranebyArmaJoyI() || toCranebyArmaPcI())
+            return true;
+        else
+            return false;
+       
+    }
 
+    private bool toCranebyArmaJoyI()
+    {
         if (currentInputs.armaInputs.joyInputs.toCrane.ToString() != "LT" &&
-         currentInputs.armaInputs.joyInputs.toCrane.ToString() != "RT")
+        currentInputs.armaInputs.joyInputs.toCrane.ToString() != "RT")
         {
 
             if (Input.GetButtonDown(currentInputs.armaInputs.joyInputs.toCrane.ToString()))
@@ -732,9 +952,25 @@ public class PlayerInputs : MonoBehaviour
         }
     }
 
+    private bool toCranebyArmaPcI()
+    {
+        if (Input.GetButtonDown(currentInputs.armaInputs.keyInputs.toCrane.ToString()))
+            return true;
+        else
+            return false;
+    }
+
     private bool toCranebyDolpInput()
     {
+        if (toCranebyDolpJoyI() || toCranebyDolpPcI())
+            return true;
+        else
+            return false;
+        
+    }
 
+    private bool toCranebyDolpJoyI()
+    {
         if (currentInputs.dolphinInputs.joyInputs.toCrane.ToString() != "LT" &&
          currentInputs.dolphinInputs.joyInputs.toCrane.ToString() != "RT")
         {
@@ -770,6 +1006,14 @@ public class PlayerInputs : MonoBehaviour
             }
         }
     }
+
+    private bool toCranebyDolpPcI()
+    {
+        if (Input.GetButtonDown(currentInputs.dolphinInputs.keyInputs.toCrane.ToString()))
+            return true;
+        else
+            return false;
+    }
     #endregion
 
     #region To Dolp Input
@@ -793,7 +1037,15 @@ public class PlayerInputs : MonoBehaviour
 
     private bool toDolpbyStdInput()
     {
+        if (toDolpbyStdJoyI() || toDolpbyStdPcI())
+            return true;
+        else
+            return false;
+        
+    }
 
+    private bool toDolpbyStdJoyI()
+    {
         if (currentInputs.standardInputs.joyInputs.toDolphin.ToString() != "LT" &&
          currentInputs.standardInputs.joyInputs.toDolphin.ToString() != "RT")
         {
@@ -830,11 +1082,27 @@ public class PlayerInputs : MonoBehaviour
         }
     }
 
+    private bool toDolpbyStdPcI()
+    {
+        if (Input.GetButtonDown(currentInputs.standardInputs.keyInputs.toDolphin.ToString()))
+            return true;
+        else
+            return false;
+    }
+
     private bool toDolpbyCraneInput()
     {
+        if (toDolpbyCraneJoyI() || toDolpbyCranePcI())
+            return true;
+        else
+            return false;
+       
+    }
 
+    private bool toDolpbyCraneJoyI()
+    {
         if (currentInputs.craneInputs.joyInputs.toDolphin.ToString() != "LT" &&
-         currentInputs.craneInputs.joyInputs.toDolphin.ToString() != "RT")
+        currentInputs.craneInputs.joyInputs.toDolphin.ToString() != "RT")
         {
 
             if (Input.GetButtonDown(currentInputs.craneInputs.joyInputs.toDolphin.ToString()))
@@ -869,9 +1137,25 @@ public class PlayerInputs : MonoBehaviour
         }
     }
 
+    private bool toDolpbyCranePcI()
+    {
+        if (Input.GetButtonDown(currentInputs.craneInputs.keyInputs.toDolphin.ToString()))
+            return true;
+        else
+            return false;
+    }
+
     private bool toDolpbyArmaInput()
     {
+        if (toDolpbyArmaJoyI() || toDolpbyArmaPcI())
+            return true;
+        else
+            return false;
+        
+    }
 
+    private bool toDolpbyArmaJoyI()
+    {
         if (currentInputs.armaInputs.joyInputs.toDolphin.ToString() != "LT" &&
          currentInputs.armaInputs.joyInputs.toDolphin.ToString() != "RT")
         {
@@ -908,9 +1192,25 @@ public class PlayerInputs : MonoBehaviour
         }
     }
 
+    private bool toDolpbyArmaPcI()
+    {
+        if (Input.GetButtonDown(currentInputs.armaInputs.keyInputs.toDolphin.ToString()))
+            return true;
+        else
+            return false;
+    }
+
     private bool toDolpbyFrogInput()
     {
+        if (toDolpbyFrogJoyI() || toDolpbyFrogPcI())
+            return true;
+        else
+            return false;
+        
+    }
 
+    private bool toDolpbyFrogJoyI()
+    {
         if (currentInputs.frogInputs.joyInputs.toDolphin.ToString() != "LT" &&
          currentInputs.frogInputs.joyInputs.toDolphin.ToString() != "RT")
         {
@@ -946,6 +1246,14 @@ public class PlayerInputs : MonoBehaviour
             }
         }
     }
+
+    private bool toDolpbyFrogPcI()
+    {
+        if (Input.GetButtonDown(currentInputs.frogInputs.keyInputs.toDolphin.ToString()))
+            return true;
+        else
+            return false;
+    }
     #endregion
 
     #region To Std Input
@@ -969,9 +1277,17 @@ public class PlayerInputs : MonoBehaviour
 
     private bool toStdbyFrogInput()
     {
+        if (toStdbyFrogJoyI() || toStdbyFrogPcI())
+            return true;
+        else
+            return false;
+       
+    }
 
+    private bool toStdbyFrogJoyI()
+    {
         if (currentInputs.frogInputs.joyInputs.toStd.ToString() != "LT" &&
-         currentInputs.frogInputs.joyInputs.toStd.ToString() != "RT")
+        currentInputs.frogInputs.joyInputs.toStd.ToString() != "RT")
         {
 
             if (Input.GetButtonDown(currentInputs.frogInputs.joyInputs.toStd.ToString()))
@@ -1006,9 +1322,25 @@ public class PlayerInputs : MonoBehaviour
         }
     }
 
+    private bool toStdbyFrogPcI()
+    {
+        if (Input.GetButtonDown(currentInputs.frogInputs.keyInputs.toStd.ToString()))
+            return true;
+        else
+            return false;
+    }
+
     private bool toStdbyCraneInput()
     {
+        if (toStdbyCraneJoyI() || toStdbyCranePcI())
+            return true;
+        else
+            return false;
+        
+    }
 
+    private bool toStdbyCraneJoyI()
+    {
         if (currentInputs.craneInputs.joyInputs.toStd.ToString() != "LT" &&
          currentInputs.craneInputs.joyInputs.toStd.ToString() != "RT")
         {
@@ -1045,11 +1377,27 @@ public class PlayerInputs : MonoBehaviour
         }
     }
 
+    private bool toStdbyCranePcI()
+    {
+        if (Input.GetButtonDown(currentInputs.craneInputs.keyInputs.toStd.ToString()))
+            return true;
+        else
+            return false;
+    }
+
     private bool toStdbyArmaInput()
     {
+        if (toStdbyArmaJoyI() || toStdbyArmaPcI())
+            return true;
+        else
+            return false;
+        
+    }
 
+    private bool toStdbyArmaJoyI()
+    {
         if (currentInputs.armaInputs.joyInputs.toStd.ToString() != "LT" &&
-         currentInputs.armaInputs.joyInputs.toStd.ToString() != "RT")
+        currentInputs.armaInputs.joyInputs.toStd.ToString() != "RT")
         {
 
             if (Input.GetButtonDown(currentInputs.armaInputs.joyInputs.toStd.ToString()))
@@ -1084,9 +1432,25 @@ public class PlayerInputs : MonoBehaviour
         }
     }
 
+    private bool toStdbyArmaPcI()
+    {
+        if (Input.GetButtonDown(currentInputs.armaInputs.keyInputs.toStd.ToString()))
+            return true;
+        else
+            return false;
+    }
+
     private bool toStdbyDolpInput()
     {
+        if (toStdbyDolpJoyI() || toStdbyDolpPcI())
+            return true;
+        else
+            return false;
+        
+    }
 
+    private bool toStdbyDolpJoyI()
+    {
         if (currentInputs.dolphinInputs.joyInputs.toStd.ToString() != "LT" &&
          currentInputs.dolphinInputs.joyInputs.toStd.ToString() != "RT")
         {
@@ -1122,6 +1486,14 @@ public class PlayerInputs : MonoBehaviour
             }
         }
     }
+
+    private bool toStdbyDolpPcI()
+    {
+        if (Input.GetButtonDown(currentInputs.dolphinInputs.keyInputs.toStd.ToString()))
+            return true;
+        else
+            return false;
+    }
     #endregion
 
     #region Roll Input
@@ -1134,6 +1506,14 @@ public class PlayerInputs : MonoBehaviour
     }
 
     private bool armaRollInput()
+    {
+        if (armaRollJoyI() || armaRollPcI())
+            return true;
+        else
+            return false;
+    }
+
+    private bool armaRollJoyI()
     {
         if (currentInputs.armaInputs.joyInputs.roll.ToString() != "LT" &&
         currentInputs.armaInputs.joyInputs.roll.ToString() != "RT")
@@ -1169,6 +1549,14 @@ public class PlayerInputs : MonoBehaviour
                     return false;
             }
         }
+    }
+
+    private bool armaRollPcI()
+    {
+        if (Input.GetButtonDown(currentInputs.armaInputs.keyInputs.roll.ToString()))
+            return true;
+        else
+            return false;
     }
     #endregion
 
