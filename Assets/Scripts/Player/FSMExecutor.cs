@@ -12,9 +12,7 @@ public class FSMExecutor : MonoBehaviour
     [HideInInspector]
     public generalTweaks generalValues;
 
-    
-
-
+    #region Events
     [System.Serializable]
     public class dirAbiHandling : UnityEvent<Vector3, float>
     {
@@ -41,7 +39,8 @@ public class FSMExecutor : MonoBehaviour
     {
     }
 
-    public phHandling phChangeEffect;
+    public phHandling phChangeEffect; 
+    #endregion
 
     void Awake()
     {
@@ -51,10 +50,8 @@ public class FSMExecutor : MonoBehaviour
         fsmCheckerTempLink.dirAbiUsed.AddListener(ApplyingAbilityEffect);
         fsmCheckerTempLink.genAbiUsed.AddListener(ApplyingAbilityEffect);
         fsmCheckerTempLink.rotationUsed.AddListener(ApplyingRotationEffect);
-        fsmCheckerTempLink.phStateChanged.AddListener(ApplyingPhStateEffect);
-        fsmCheckerTempLink.plStateChanged.AddListener(ApplyingPlStateEffect);
 
-
+      
      
     }
 
@@ -89,10 +86,10 @@ public class FSMExecutor : MonoBehaviour
                     case ("Frog Form"):
                         moveSelected.Invoke(moveDirInput, currentMoveValues.frogMove.moveSpeed);
                         break;
-                    case ("Crane Form"):
+                    case ("Dragon Form"):
                         moveSelected.Invoke(moveDirInput, currentMoveValues.craneMove.glideSpeed);
                         break;
-                    case ("Arma Form"):
+                    case ("Armadillo Form"):
                         moveSelected.Invoke(moveDirInput, currentMoveValues.armaMove.moveSpeed);
                         break;
                     case ("Dolphin Form"):
@@ -151,27 +148,7 @@ public class FSMExecutor : MonoBehaviour
 
     }
 
-    private void ApplyingPhStateEffect(physicStates currentPhState)
-    {
-        phChangeEffect.Invoke(currentPhState);
-    }
 
-    private void ApplyingPlStateEffect(playerStates currentPlState)
-    {
-        switch (currentPlState)
-        {
-            case playerStates.standingStill:
-                break;
-            case playerStates.moving:
-                break;
-            case playerStates.flying:
-                break;
-            case playerStates.movingBlock:
-                break;
-            case playerStates.rolling:
-                break;
-        }
-    }
 
 
 }

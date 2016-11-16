@@ -8,11 +8,9 @@ using System.Collections.Generic;
 
 public enum abilties
 {
-    move, rotate, cameraMove, jump,
-    roll, moveBlock,
-    toStd, toFrog, toArma, toCrane, toDolp,
-    VFissure, HFissure, dolpSwimBel,
-    npcInter, menu
+    move, rotate, cameraMove, npcInter, menu,
+    jump, roll, moveBlock, VFissure, HFissure, dolpSwimBel,
+    toStd, toFrog, toArma, toCrane, toDolp
 };
 
 public enum physicStates { onAir, onGround, onWater }
@@ -23,7 +21,7 @@ public enum playerStates
     rolling, movingBlock
 };
 
-
+public enum controlStates { totalControl, noCamera, noMove, noGenAbi, noCamAndMove, noMoveAndGenAbi, noCameraAndGenAbi, noControl };
 
 
 #endregion
@@ -42,6 +40,7 @@ public class FSMChecker : MonoBehaviour
         public List<abilties> currentAbilities;
         public physicStates currentPhState;
         public playerStates currentPlState;
+        public controlStates currentClState;
 
     }
 
@@ -103,6 +102,7 @@ public class FSMChecker : MonoBehaviour
 
     #endregion
 
+    #region Initialization Methods
     void Awake()
     {
         SettingPlayerInitialState();
@@ -128,7 +128,6 @@ public class FSMChecker : MonoBehaviour
         formChanged.Invoke(cPlayerState.currentForm, cPlayerState.previousForm, cPlayerState.forms);
     }
 
-
     private void SettingPlayerInitialState()
     {
         cPlayerState.currentForm = "Standard Form";
@@ -151,9 +150,13 @@ public class FSMChecker : MonoBehaviour
 
         cPlayerState.currentPlState = playerStates.standingStill;
 
+        cPlayerState.currentClState = controlStates.totalControl;
 
-    }
 
+    } 
+    #endregion
+
+    #region Player Inputs Handler
     private void CheckingAbiRequirements(abilties abiReceived, Vector3 abiDir)
     {
 
@@ -168,7 +171,7 @@ public class FSMChecker : MonoBehaviour
                 case abilties.rotate:
                     rotationUsed.Invoke(abiDir, cPlayerState.currentPlState);
                     break;
-               
+
             }
 
 
@@ -184,9 +187,9 @@ public class FSMChecker : MonoBehaviour
         {
             switch (abiReceived)
             {
-        
+
                 case abilties.jump:
-                     genAbiUsed.Invoke(abiReceived, cPlayerState.currentForm);
+                    genAbiUsed.Invoke(abiReceived, cPlayerState.currentForm);
                     break;
                 case abilties.cameraMove:
                     break;
@@ -205,30 +208,35 @@ public class FSMChecker : MonoBehaviour
                     cPlayerState.previousForm = cPlayerState.currentForm;
                     cPlayerState.currentForm = "Standard Form";
                     formChangedInp.Invoke(cPlayerState.currentForm);
+                    UpdatingAbilityList();
                     formChanged.Invoke(cPlayerState.currentForm, cPlayerState.previousForm, cPlayerState.forms);
                     break;
                 case abilties.toFrog:
                     cPlayerState.previousForm = cPlayerState.currentForm;
                     cPlayerState.currentForm = "Frog Form";
                     formChangedInp.Invoke(cPlayerState.currentForm);
+                    UpdatingAbilityList();
                     formChanged.Invoke(cPlayerState.currentForm, cPlayerState.previousForm, cPlayerState.forms);
                     break;
                 case abilties.toCrane:
                     cPlayerState.previousForm = cPlayerState.currentForm;
                     cPlayerState.currentForm = "Dragon Form";
                     formChangedInp.Invoke(cPlayerState.currentForm);
+                    UpdatingAbilityList();
                     formChanged.Invoke(cPlayerState.currentForm, cPlayerState.previousForm, cPlayerState.forms);
                     break;
                 case abilties.toArma:
                     cPlayerState.previousForm = cPlayerState.currentForm;
                     cPlayerState.currentForm = "Armadillo Form";
                     formChangedInp.Invoke(cPlayerState.currentForm);
+                    UpdatingAbilityList();
                     formChanged.Invoke(cPlayerState.currentForm, cPlayerState.previousForm, cPlayerState.forms);
                     break;
                 case abilties.toDolp:
                     cPlayerState.previousForm = cPlayerState.currentForm;
                     cPlayerState.currentForm = "Dolphin Form";
                     formChangedInp.Invoke(cPlayerState.currentForm);
+                    UpdatingAbilityList();
                     formChanged.Invoke(cPlayerState.currentForm, cPlayerState.previousForm, cPlayerState.forms);
                     break;
                 case abilties.npcInter:
@@ -244,67 +252,1420 @@ public class FSMChecker : MonoBehaviour
         else
             Debug.Log("Requirements not met");
     }
+    #endregion
 
+    #region Environment Inputs Handler
     private void ChangingPHStates(physicStates stateToGo)
     {
 
         cPlayerState.currentPhState = stateToGo;
-        phStateChanged.Invoke(stateToGo);
-
-    }
+        UpdatingAbilityList();
 
 
-    /*
-    private bool RequirementsCheckHandler(List<string> availableForms, abilties abilityToSearch, List<physicStates> possiblePhStates,
-        List<playerStates> possiblePlStates)
+    } 
+    #endregion
+
+    #region Ability List Handler
+    //totalControl, noCamera, noMove, noGenAbi, noCamAndMove, noMoveAndGenAbi, noCameraAndGenAbi, noControl
+    // move, rotate, cameraMove, npcInter, menu, jump, roll, moveBlock, VFissure, HFissure, dolpSwimBel, toStd, toFrog, toArma, toCrane, toDolp
+
+    private void UpdatingAbilityList()
     {
-        if (!GeneralFormRequirementCheck(availableForms))
-            return false;
-        else if (!GeneralAbilityRequirementCheck(abilityToSearch))
-            return false;
-        else if (!GeneralPhysicStateRequirement(possiblePhStates))
-            return false;
-        else if (!GeneralPlayerStateRequirement(possiblePlStates))
-            return false;
-        else
-            return true;
+        switch (cPlayerState.currentForm)
+        {
+            case "Standard Form":
+                UpdatingStdAbilityList();
+                break;
+            case "Frog Form":
+                UpdatingFrogAbilityList();
+                break;
+            case "Armadillo Form":
+                UpdatingArmaAbilityList();
+                break;
+            case "Dragon Form":
+                UpdatingCraneAbilityList();
+                break;
+            case "Dolphin Form":
+                UpdatingDolpAbilityList();
+                break;
+        }
     }
 
-    private bool GeneralFormRequirementCheck(List<string> availableForms)
+    #region Standard Abilities Handler
+    private void UpdatingStdAbilityList()
     {
-        if (availableForms.Contains(cPlayerState.currentForm))
-            return true;
-        else
-            return false;
+        switch (cPlayerState.currentClState)
+        {
+            case controlStates.totalControl:
+                StdTotalControl();
+                break;
+            case controlStates.noCamera:
+                StdNoCamera();
+                break;
+            case controlStates.noMove:
+                StdNoMove();
+                break;
+            case controlStates.noGenAbi:
+                StdNoGenAbi();
+                break;
+            case controlStates.noCamAndMove:
+                StdNoCamAndMove();
+                break;
+            case controlStates.noMoveAndGenAbi:
+                StdNoMoveAndGenAbi();
+                break;
+            case controlStates.noCameraAndGenAbi:
+                StdNoCameraAndGenAbi();
+                break;
+            case controlStates.noControl:
+                NoControl();
+                break;
+        }
+
+
     }
 
-    private bool GeneralAbilityRequirementCheck(abilties abilityToSearch)
+    private void StdTotalControl()
     {
-        if (cPlayerState.currentAbilities.Contains(abilityToSearch))
-            return true;
-        else
-            return false;
 
+        AddAbility(abilties.move);
+        AddAbility(abilties.rotate);
+
+        AddAbility(abilties.cameraMove);
+
+        AddAbility(abilties.npcInter);
+        AddAbility(abilties.menu);
+
+        RemoveAbility(abilties.roll);
+        RemoveAbility(abilties.moveBlock);
+        RemoveAbility(abilties.HFissure);
+        RemoveAbility(abilties.dolpSwimBel);
+
+
+        RemoveAbility(abilties.toStd);
+        AddAbility(abilties.toCrane);
+        AddAbility(abilties.toFrog);
+        AddAbility(abilties.toArma);
+        AddAbility(abilties.toDolp);
+
+
+
+        switch (cPlayerState.currentPhState)
+        {
+            case physicStates.onWater:
+            case physicStates.onAir:
+                RemoveAbility(abilties.jump);
+                RemoveAbility(abilties.VFissure);
+                break;
+            case physicStates.onGround:
+                AddAbility(abilties.jump);
+                AddAbility(abilties.VFissure);
+                break;
+        }
     }
 
-    private bool GeneralPhysicStateRequirement(List<physicStates> possiblePhStates)
+    private void StdNoCamera()
     {
-        if (possiblePhStates.Contains(cPlayerState.currentPhState))
-            return true;
-        else
-            return false;
+        AddAbility(abilties.move);
+        AddAbility(abilties.rotate);
+
+        RemoveAbility(abilties.cameraMove);
+
+        AddAbility(abilties.npcInter);
+        AddAbility(abilties.menu);
+
+        RemoveAbility(abilties.roll);
+        RemoveAbility(abilties.moveBlock);
+        RemoveAbility(abilties.HFissure);
+        RemoveAbility(abilties.dolpSwimBel);
+
+
+        RemoveAbility(abilties.toStd);
+        AddAbility(abilties.toCrane);
+        AddAbility(abilties.toFrog);
+        AddAbility(abilties.toArma);
+        AddAbility(abilties.toDolp);
+
+
+
+        switch (cPlayerState.currentPhState)
+        {
+            case physicStates.onWater:
+            case physicStates.onAir:
+                RemoveAbility(abilties.jump);
+                RemoveAbility(abilties.VFissure);
+                break;
+            case physicStates.onGround:
+                AddAbility(abilties.jump);
+                AddAbility(abilties.VFissure);
+                break;
+        }
     }
 
-    private bool GeneralPlayerStateRequirement(List<playerStates> possiblePlStates)
+    private void StdNoMove()
     {
-        if (possiblePlStates.Contains(cPlayerState.currentPlState))
-            return true;
-        else
-            return false;
+        RemoveAbility(abilties.move);
+        AddAbility(abilties.rotate);
+
+        AddAbility(abilties.cameraMove);
+
+        AddAbility(abilties.npcInter);
+        AddAbility(abilties.menu);
+
+        RemoveAbility(abilties.roll);
+        RemoveAbility(abilties.moveBlock);
+        RemoveAbility(abilties.HFissure);
+        RemoveAbility(abilties.dolpSwimBel);
+
+
+        RemoveAbility(abilties.toStd);
+        AddAbility(abilties.toCrane);
+        AddAbility(abilties.toFrog);
+        AddAbility(abilties.toArma);
+        AddAbility(abilties.toDolp);
+
+
+
+        switch (cPlayerState.currentPhState)
+        {
+            case physicStates.onWater:
+            case physicStates.onAir:
+                RemoveAbility(abilties.jump);
+                RemoveAbility(abilties.VFissure);
+                break;
+            case physicStates.onGround:
+                AddAbility(abilties.jump);
+                AddAbility(abilties.VFissure);
+                break;
+        }
     }
 
+    private void StdNoGenAbi()
+    {
+        AddAbility(abilties.move);
+        AddAbility(abilties.rotate);
 
-    */
+        AddAbility(abilties.cameraMove);
+
+        AddAbility(abilties.npcInter);
+        AddAbility(abilties.menu);
+
+        RemoveAbility(abilties.roll);
+        RemoveAbility(abilties.moveBlock);
+        RemoveAbility(abilties.HFissure);
+        RemoveAbility(abilties.dolpSwimBel);
+
+
+        RemoveAbility(abilties.toStd);
+        RemoveAbility(abilties.toCrane);
+        RemoveAbility(abilties.toFrog);
+        RemoveAbility(abilties.toArma);
+        RemoveAbility(abilties.toDolp);
+
+
+
+        RemoveAbility(abilties.jump);
+        RemoveAbility(abilties.VFissure);
+    }
+
+    private void StdNoCamAndMove()
+    {
+        RemoveAbility(abilties.move);
+        AddAbility(abilties.rotate);
+
+        RemoveAbility(abilties.cameraMove);
+
+        AddAbility(abilties.npcInter);
+        AddAbility(abilties.menu);
+
+        RemoveAbility(abilties.roll);
+        RemoveAbility(abilties.moveBlock);
+        RemoveAbility(abilties.HFissure);
+        RemoveAbility(abilties.dolpSwimBel);
+
+
+        RemoveAbility(abilties.toStd);
+        AddAbility(abilties.toCrane);
+        AddAbility(abilties.toFrog);
+        AddAbility(abilties.toArma);
+        AddAbility(abilties.toDolp);
+
+
+
+        switch (cPlayerState.currentPhState)
+        {
+            case physicStates.onWater:
+            case physicStates.onAir:
+                RemoveAbility(abilties.jump);
+                RemoveAbility(abilties.VFissure);
+                break;
+            case physicStates.onGround:
+                AddAbility(abilties.jump);
+                AddAbility(abilties.VFissure);
+                break;
+        }
+    }
+
+    private void StdNoMoveAndGenAbi()
+    {
+        RemoveAbility(abilties.move);
+        AddAbility(abilties.rotate);
+
+        AddAbility(abilties.cameraMove);
+
+        AddAbility(abilties.npcInter);
+        AddAbility(abilties.menu);
+
+        RemoveAbility(abilties.roll);
+        RemoveAbility(abilties.moveBlock);
+        RemoveAbility(abilties.HFissure);
+        RemoveAbility(abilties.dolpSwimBel);
+
+
+        RemoveAbility(abilties.toStd);
+        RemoveAbility(abilties.toCrane);
+        RemoveAbility(abilties.toFrog);
+        RemoveAbility(abilties.toArma);
+        RemoveAbility(abilties.toDolp);
+
+
+
+        RemoveAbility(abilties.jump);
+        RemoveAbility(abilties.VFissure);
+    }
+
+    private void StdNoCameraAndGenAbi()
+    {
+        AddAbility(abilties.move);
+        AddAbility(abilties.rotate);
+
+        RemoveAbility(abilties.cameraMove);
+
+        AddAbility(abilties.npcInter);
+        AddAbility(abilties.menu);
+
+        RemoveAbility(abilties.roll);
+        RemoveAbility(abilties.moveBlock);
+        RemoveAbility(abilties.HFissure);
+        RemoveAbility(abilties.dolpSwimBel);
+
+
+        RemoveAbility(abilties.toStd);
+        RemoveAbility(abilties.toCrane);
+        RemoveAbility(abilties.toFrog);
+        RemoveAbility(abilties.toArma);
+        RemoveAbility(abilties.toDolp);
+
+
+
+        RemoveAbility(abilties.jump);
+        RemoveAbility(abilties.VFissure);
+    }
+    #endregion
+
+    #region Frog Abilities Handler
+    private void UpdatingFrogAbilityList()
+    {
+
+        switch (cPlayerState.currentClState)
+        {
+            case controlStates.totalControl:
+                FrogTotalControl();
+                break;
+            case controlStates.noCamera:
+                FrogNoCamera();
+                break;
+            case controlStates.noMove:
+                FrogNoMove();
+                break;
+            case controlStates.noGenAbi:
+                FrogNoGenAbi();
+                break;
+            case controlStates.noCamAndMove:
+                FrogNoCamAndMove();
+                break;
+            case controlStates.noMoveAndGenAbi:
+                FrogNoMoveAndGenAbi();
+                break;
+            case controlStates.noCameraAndGenAbi:
+                FrogNoCameraAndGenAbi();
+                break;
+            case controlStates.noControl:
+                NoControl();
+                break;
+        }
+    }
+
+    private void FrogTotalControl()
+    {
+
+        AddAbility(abilties.move);
+        AddAbility(abilties.rotate);
+
+        AddAbility(abilties.cameraMove);
+
+        AddAbility(abilties.npcInter);
+        AddAbility(abilties.menu);
+
+        RemoveAbility(abilties.roll);
+        RemoveAbility(abilties.moveBlock);
+        RemoveAbility(abilties.VFissure);
+        RemoveAbility(abilties.dolpSwimBel);
+
+
+        AddAbility(abilties.toStd);
+        AddAbility(abilties.toCrane);
+        RemoveAbility(abilties.toFrog);
+        AddAbility(abilties.toArma);
+        AddAbility(abilties.toDolp);
+
+
+
+        switch (cPlayerState.currentPhState)
+        {
+            case physicStates.onWater:
+            case physicStates.onAir:
+                RemoveAbility(abilties.jump);
+                RemoveAbility(abilties.HFissure);
+                break;
+            case physicStates.onGround:
+                AddAbility(abilties.jump);
+                AddAbility(abilties.HFissure);
+                break;
+        }
+    }
+
+    private void FrogNoCamera()
+    {
+        AddAbility(abilties.move);
+        AddAbility(abilties.rotate);
+
+        RemoveAbility(abilties.cameraMove);
+
+        AddAbility(abilties.npcInter);
+        AddAbility(abilties.menu);
+
+        RemoveAbility(abilties.roll);
+        RemoveAbility(abilties.moveBlock);
+        RemoveAbility(abilties.VFissure);
+        RemoveAbility(abilties.dolpSwimBel);
+
+
+        AddAbility(abilties.toStd);
+        AddAbility(abilties.toCrane);
+        RemoveAbility(abilties.toFrog);
+        AddAbility(abilties.toArma);
+        AddAbility(abilties.toDolp);
+
+
+
+        switch (cPlayerState.currentPhState)
+        {
+            case physicStates.onWater:
+            case physicStates.onAir:
+                RemoveAbility(abilties.jump);
+                RemoveAbility(abilties.HFissure);
+                break;
+            case physicStates.onGround:
+                AddAbility(abilties.jump);
+                AddAbility(abilties.HFissure);
+                break;
+        }
+    }
+
+    private void FrogNoMove()
+    {
+        RemoveAbility(abilties.move);
+        AddAbility(abilties.rotate);
+
+        AddAbility(abilties.cameraMove);
+
+        AddAbility(abilties.npcInter);
+        AddAbility(abilties.menu);
+
+        RemoveAbility(abilties.roll);
+        RemoveAbility(abilties.moveBlock);
+        RemoveAbility(abilties.VFissure);
+        RemoveAbility(abilties.dolpSwimBel);
+
+
+        AddAbility(abilties.toStd);
+        AddAbility(abilties.toCrane);
+        RemoveAbility(abilties.toFrog);
+        AddAbility(abilties.toArma);
+        AddAbility(abilties.toDolp);
+
+
+
+        switch (cPlayerState.currentPhState)
+        {
+            case physicStates.onWater:
+            case physicStates.onAir:
+                RemoveAbility(abilties.jump);
+                RemoveAbility(abilties.HFissure);
+                break;
+            case physicStates.onGround:
+                AddAbility(abilties.jump);
+                AddAbility(abilties.HFissure);
+                break;
+        }
+    }
+
+    private void FrogNoGenAbi()
+    {
+        AddAbility(abilties.move);
+        AddAbility(abilties.rotate);
+
+        AddAbility(abilties.cameraMove);
+
+        AddAbility(abilties.npcInter);
+        AddAbility(abilties.menu);
+
+        RemoveAbility(abilties.roll);
+        RemoveAbility(abilties.moveBlock);
+        RemoveAbility(abilties.VFissure);
+        RemoveAbility(abilties.dolpSwimBel);
+
+
+        RemoveAbility(abilties.toStd);
+        RemoveAbility(abilties.toCrane);
+        RemoveAbility(abilties.toFrog);
+        RemoveAbility(abilties.toArma);
+        RemoveAbility(abilties.toDolp);
+
+
+        RemoveAbility(abilties.jump);
+        RemoveAbility(abilties.HFissure);
+        
+    }
+
+    private void FrogNoCamAndMove()
+    {
+        RemoveAbility(abilties.move);
+        AddAbility(abilties.rotate);
+
+        RemoveAbility(abilties.cameraMove);
+
+        AddAbility(abilties.npcInter);
+        AddAbility(abilties.menu);
+
+        RemoveAbility(abilties.roll);
+        RemoveAbility(abilties.moveBlock);
+        RemoveAbility(abilties.VFissure);
+        RemoveAbility(abilties.dolpSwimBel);
+
+
+        AddAbility(abilties.toStd);
+        AddAbility(abilties.toCrane);
+        RemoveAbility(abilties.toFrog);
+        AddAbility(abilties.toArma);
+        AddAbility(abilties.toDolp);
+
+
+
+        switch (cPlayerState.currentPhState)
+        {
+            case physicStates.onWater:
+            case physicStates.onAir:
+                RemoveAbility(abilties.jump);
+                RemoveAbility(abilties.HFissure);
+                break;
+            case physicStates.onGround:
+                AddAbility(abilties.jump);
+                AddAbility(abilties.HFissure);
+                break;
+        }
+    }
+
+    private void FrogNoMoveAndGenAbi()
+    {
+        RemoveAbility(abilties.move);
+        AddAbility(abilties.rotate);
+
+        RemoveAbility(abilties.cameraMove);
+
+        AddAbility(abilties.npcInter);
+        AddAbility(abilties.menu);
+
+        RemoveAbility(abilties.roll);
+        RemoveAbility(abilties.moveBlock);
+        RemoveAbility(abilties.VFissure);
+        RemoveAbility(abilties.dolpSwimBel);
+
+
+        RemoveAbility(abilties.toStd);
+        RemoveAbility(abilties.toCrane);
+        RemoveAbility(abilties.toFrog);
+        RemoveAbility(abilties.toArma);
+        RemoveAbility(abilties.toDolp);
+
+
+        RemoveAbility(abilties.jump);
+        RemoveAbility(abilties.HFissure);
+       
+    }
+
+    private void FrogNoCameraAndGenAbi()
+    {
+        AddAbility(abilties.move);
+        AddAbility(abilties.rotate);
+
+        RemoveAbility(abilties.cameraMove);
+
+        AddAbility(abilties.npcInter);
+        AddAbility(abilties.menu);
+
+        RemoveAbility(abilties.roll);
+        RemoveAbility(abilties.moveBlock);
+        RemoveAbility(abilties.VFissure);
+        RemoveAbility(abilties.dolpSwimBel);
+
+
+        RemoveAbility(abilties.toStd);
+        RemoveAbility(abilties.toCrane);
+        RemoveAbility(abilties.toFrog);
+        RemoveAbility(abilties.toArma);
+        RemoveAbility(abilties.toDolp);
+
+
+        RemoveAbility(abilties.jump);
+        RemoveAbility(abilties.HFissure);
+        
+    }
+    #endregion
+
+    #region Armadillo Abilities Handler
+    private void UpdatingArmaAbilityList()
+    {
+
+        switch (cPlayerState.currentClState)
+        {
+            case controlStates.totalControl:
+                ArmaTotalControl();
+                break;
+            case controlStates.noCamera:
+                ArmaNoCamera();
+                break;
+            case controlStates.noMove:
+                ArmaNoMove();
+                break;
+            case controlStates.noGenAbi:
+                ArmaNoGenAbi();
+                break;
+            case controlStates.noCamAndMove:
+                ArmaNoCamAndMove();
+                break;
+            case controlStates.noMoveAndGenAbi:
+                ArmaNoMoveAndGenAbi();
+                break;
+            case controlStates.noCameraAndGenAbi:
+                ArmaNoCameraAndGenAbi();
+                break;
+            case controlStates.noControl:
+                NoControl();
+                break;
+        }
+    }
+
+    private void ArmaTotalControl()
+    {
+
+        AddAbility(abilties.move);
+        AddAbility(abilties.rotate);
+
+        AddAbility(abilties.cameraMove);
+
+        AddAbility(abilties.npcInter);
+        AddAbility(abilties.menu);
+
+        RemoveAbility(abilties.jump);
+        RemoveAbility(abilties.VFissure);
+        RemoveAbility(abilties.HFissure);
+        RemoveAbility(abilties.dolpSwimBel);
+
+        AddAbility(abilties.toStd);
+        AddAbility(abilties.toCrane);
+        AddAbility(abilties.toFrog);
+        RemoveAbility(abilties.toArma);
+        AddAbility(abilties.toDolp);
+
+
+
+        switch (cPlayerState.currentPhState)
+        {
+            case physicStates.onWater:
+            case physicStates.onAir:
+                RemoveAbility(abilties.roll);
+                RemoveAbility(abilties.moveBlock);
+                break;
+            case physicStates.onGround:
+                AddAbility(abilties.roll);
+                AddAbility(abilties.moveBlock);
+                break;
+        }
+    }
+
+    private void ArmaNoCamera()
+    {
+        AddAbility(abilties.move);
+        AddAbility(abilties.rotate);
+
+        RemoveAbility(abilties.cameraMove);
+
+        AddAbility(abilties.npcInter);
+        AddAbility(abilties.menu);
+
+        RemoveAbility(abilties.jump);
+        RemoveAbility(abilties.VFissure);
+        RemoveAbility(abilties.HFissure);
+        RemoveAbility(abilties.dolpSwimBel);
+
+        AddAbility(abilties.toStd);
+        AddAbility(abilties.toCrane);
+        AddAbility(abilties.toFrog);
+        RemoveAbility(abilties.toArma);
+        AddAbility(abilties.toDolp);
+
+
+
+        switch (cPlayerState.currentPhState)
+        {
+            case physicStates.onWater:
+            case physicStates.onAir:
+                RemoveAbility(abilties.roll);
+                RemoveAbility(abilties.moveBlock);
+                break;
+            case physicStates.onGround:
+                AddAbility(abilties.roll);
+                AddAbility(abilties.moveBlock);
+                break;
+        }
+    }
+
+    private void ArmaNoMove()
+    {
+        RemoveAbility(abilties.move);
+        AddAbility(abilties.rotate);
+
+        AddAbility(abilties.cameraMove);
+
+        AddAbility(abilties.npcInter);
+        AddAbility(abilties.menu);
+
+        RemoveAbility(abilties.jump);
+        RemoveAbility(abilties.VFissure);
+        RemoveAbility(abilties.HFissure);
+        RemoveAbility(abilties.dolpSwimBel);
+
+        AddAbility(abilties.toStd);
+        AddAbility(abilties.toCrane);
+        AddAbility(abilties.toFrog);
+        RemoveAbility(abilties.toArma);
+        AddAbility(abilties.toDolp);
+
+
+
+        switch (cPlayerState.currentPhState)
+        {
+            case physicStates.onWater:
+            case physicStates.onAir:
+                RemoveAbility(abilties.roll);
+                RemoveAbility(abilties.moveBlock);
+                break;
+            case physicStates.onGround:
+                AddAbility(abilties.roll);
+                AddAbility(abilties.moveBlock);
+                break;
+        }
+    }
+
+    private void ArmaNoGenAbi()
+    {
+        AddAbility(abilties.move);
+        AddAbility(abilties.rotate);
+
+        AddAbility(abilties.cameraMove);
+
+        AddAbility(abilties.npcInter);
+        AddAbility(abilties.menu);
+
+        RemoveAbility(abilties.jump);
+        RemoveAbility(abilties.VFissure);
+        RemoveAbility(abilties.HFissure);
+        RemoveAbility(abilties.dolpSwimBel);
+
+        RemoveAbility(abilties.toStd);
+        RemoveAbility(abilties.toCrane);
+        RemoveAbility(abilties.toFrog);
+        RemoveAbility(abilties.toArma);
+        RemoveAbility(abilties.toDolp);
+
+
+        RemoveAbility(abilties.roll);
+        RemoveAbility(abilties.moveBlock);
+        
+    }
+
+    private void ArmaNoCamAndMove()
+    {
+
+        RemoveAbility(abilties.move);
+        AddAbility(abilties.rotate);
+
+        RemoveAbility(abilties.cameraMove);
+
+        AddAbility(abilties.npcInter);
+        AddAbility(abilties.menu);
+
+        RemoveAbility(abilties.jump);
+        RemoveAbility(abilties.VFissure);
+        RemoveAbility(abilties.HFissure);
+        RemoveAbility(abilties.dolpSwimBel);
+
+        AddAbility(abilties.toStd);
+        AddAbility(abilties.toCrane);
+        AddAbility(abilties.toFrog);
+        RemoveAbility(abilties.toArma);
+        AddAbility(abilties.toDolp);
+
+
+
+        switch (cPlayerState.currentPhState)
+        {
+            case physicStates.onWater:
+            case physicStates.onAir:
+                RemoveAbility(abilties.roll);
+                RemoveAbility(abilties.moveBlock);
+                break;
+            case physicStates.onGround:
+                AddAbility(abilties.roll);
+                AddAbility(abilties.moveBlock);
+                break;
+        }
+    }
+
+    private void ArmaNoMoveAndGenAbi()
+    {
+
+        RemoveAbility(abilties.move);
+        AddAbility(abilties.rotate);
+
+        AddAbility(abilties.cameraMove);
+
+        AddAbility(abilties.npcInter);
+        AddAbility(abilties.menu);
+
+        RemoveAbility(abilties.jump);
+        RemoveAbility(abilties.VFissure);
+        RemoveAbility(abilties.HFissure);
+        RemoveAbility(abilties.dolpSwimBel);
+
+        RemoveAbility(abilties.toStd);
+        RemoveAbility(abilties.toCrane);
+        RemoveAbility(abilties.toFrog);
+        RemoveAbility(abilties.toArma);
+        RemoveAbility(abilties.toDolp);
+
+
+        RemoveAbility(abilties.roll);
+        RemoveAbility(abilties.moveBlock);
+       
+    }
+
+    private void ArmaNoCameraAndGenAbi()
+    {
+
+        AddAbility(abilties.move);
+        AddAbility(abilties.rotate);
+
+        RemoveAbility(abilties.cameraMove);
+
+        AddAbility(abilties.npcInter);
+        AddAbility(abilties.menu);
+
+        RemoveAbility(abilties.jump);
+        RemoveAbility(abilties.VFissure);
+        RemoveAbility(abilties.HFissure);
+        RemoveAbility(abilties.dolpSwimBel);
+
+        RemoveAbility(abilties.toStd);
+        RemoveAbility(abilties.toCrane);
+        RemoveAbility(abilties.toFrog);
+        RemoveAbility(abilties.toArma);
+        RemoveAbility(abilties.toDolp);
+
+
+        RemoveAbility(abilties.roll);
+        RemoveAbility(abilties.moveBlock);
+        
+    }
+    #endregion
+
+    #region Crane Abilities Handler
+    private void UpdatingCraneAbilityList()
+    {
+        switch (cPlayerState.currentClState)
+        {
+            case controlStates.totalControl:
+                CraneTotalControl();
+                break;
+            case controlStates.noCamera:
+                CraneNoCamera();
+                break;
+            case controlStates.noMove:
+                CraneNoMove();
+                break;
+            case controlStates.noGenAbi:
+                CraneNoGenAbi();
+                break;
+            case controlStates.noCamAndMove:
+                CraneNoCamAndMove();
+                break;
+            case controlStates.noMoveAndGenAbi:
+                CraneNoMoveAndGenAbi();
+                break;
+            case controlStates.noCameraAndGenAbi:
+                CraneNoCameraAndGenAbi();
+                break;
+            case controlStates.noControl:
+                NoControl();
+                break;
+        }
+
+    }
+
+    private void CraneTotalControl()
+    {
+     
+        AddAbility(abilties.rotate);
+
+        AddAbility(abilties.cameraMove);
+
+        AddAbility(abilties.npcInter);
+        AddAbility(abilties.menu);
+
+        RemoveAbility(abilties.roll);
+        RemoveAbility(abilties.moveBlock);
+        RemoveAbility(abilties.HFissure);
+        RemoveAbility(abilties.dolpSwimBel);
+        RemoveAbility(abilties.jump);
+        RemoveAbility(abilties.VFissure);
+
+        AddAbility(abilties.toStd);
+        RemoveAbility(abilties.toCrane);
+        AddAbility(abilties.toFrog);
+        AddAbility(abilties.toArma);
+        AddAbility(abilties.toDolp);
+
+
+
+        switch (cPlayerState.currentPhState)
+        {
+            case physicStates.onAir:
+                AddAbility(abilties.move);
+                break;
+            case physicStates.onWater:
+            case physicStates.onGround:
+                RemoveAbility(abilties.move);
+                break;
+        }
+    }
+
+    private void CraneNoCamera()
+    {
+        AddAbility(abilties.rotate);
+
+        RemoveAbility(abilties.cameraMove);
+
+        AddAbility(abilties.npcInter);
+        AddAbility(abilties.menu);
+
+        RemoveAbility(abilties.roll);
+        RemoveAbility(abilties.moveBlock);
+        RemoveAbility(abilties.HFissure);
+        RemoveAbility(abilties.dolpSwimBel);
+        RemoveAbility(abilties.jump);
+        RemoveAbility(abilties.VFissure);
+
+        AddAbility(abilties.toStd);
+        RemoveAbility(abilties.toCrane);
+        AddAbility(abilties.toFrog);
+        AddAbility(abilties.toArma);
+        AddAbility(abilties.toDolp);
+
+
+
+        switch (cPlayerState.currentPhState)
+        {
+            case physicStates.onAir:
+                AddAbility(abilties.move);
+                break;
+            case physicStates.onWater:
+            case physicStates.onGround:
+                RemoveAbility(abilties.move);
+                break;
+        }
+    }
+
+    private void CraneNoMove()
+    {
+        AddAbility(abilties.rotate);
+
+        AddAbility(abilties.cameraMove);
+
+        AddAbility(abilties.npcInter);
+        AddAbility(abilties.menu);
+
+        RemoveAbility(abilties.roll);
+        RemoveAbility(abilties.moveBlock);
+        RemoveAbility(abilties.HFissure);
+        RemoveAbility(abilties.dolpSwimBel);
+        RemoveAbility(abilties.jump);
+        RemoveAbility(abilties.VFissure);
+
+        AddAbility(abilties.toStd);
+        RemoveAbility(abilties.toCrane);
+        AddAbility(abilties.toFrog);
+        AddAbility(abilties.toArma);
+        AddAbility(abilties.toDolp);
+
+
+        RemoveAbility(abilties.move);
+
+      
+    }
+
+    private void CraneNoGenAbi()
+    {
+        AddAbility(abilties.rotate);
+
+        AddAbility(abilties.cameraMove);
+
+        AddAbility(abilties.npcInter);
+        AddAbility(abilties.menu);
+
+        RemoveAbility(abilties.roll);
+        RemoveAbility(abilties.moveBlock);
+        RemoveAbility(abilties.HFissure);
+        RemoveAbility(abilties.dolpSwimBel);
+        RemoveAbility(abilties.jump);
+        RemoveAbility(abilties.VFissure);
+
+        RemoveAbility(abilties.toStd);
+        RemoveAbility(abilties.toCrane);
+        RemoveAbility(abilties.toFrog);
+        RemoveAbility(abilties.toArma);
+        RemoveAbility(abilties.toDolp);
+
+
+
+        switch (cPlayerState.currentPhState)
+        {
+            case physicStates.onAir:
+                AddAbility(abilties.move);
+                break;
+            case physicStates.onWater:
+            case physicStates.onGround:
+                RemoveAbility(abilties.move);
+                break;
+        }
+    }
+
+    private void CraneNoCamAndMove()
+    {
+        AddAbility(abilties.rotate);
+
+        RemoveAbility(abilties.cameraMove);
+
+        AddAbility(abilties.npcInter);
+        AddAbility(abilties.menu);
+
+        RemoveAbility(abilties.roll);
+        RemoveAbility(abilties.moveBlock);
+        RemoveAbility(abilties.HFissure);
+        RemoveAbility(abilties.dolpSwimBel);
+        RemoveAbility(abilties.jump);
+        RemoveAbility(abilties.VFissure);
+
+        AddAbility(abilties.toStd);
+        RemoveAbility(abilties.toCrane);
+        AddAbility(abilties.toFrog);
+        AddAbility(abilties.toArma);
+        AddAbility(abilties.toDolp);
+
+
+        RemoveAbility(abilties.move);
+
+       
+    }
+
+    private void CraneNoMoveAndGenAbi()
+    {
+        AddAbility(abilties.rotate);
+
+        AddAbility(abilties.cameraMove);
+
+        AddAbility(abilties.npcInter);
+        AddAbility(abilties.menu);
+
+        RemoveAbility(abilties.roll);
+        RemoveAbility(abilties.moveBlock);
+        RemoveAbility(abilties.HFissure);
+        RemoveAbility(abilties.dolpSwimBel);
+        RemoveAbility(abilties.jump);
+        RemoveAbility(abilties.VFissure);
+
+        RemoveAbility(abilties.toStd);
+        RemoveAbility(abilties.toCrane);
+        RemoveAbility(abilties.toFrog);
+        RemoveAbility(abilties.toArma);
+        RemoveAbility(abilties.toDolp);
+
+
+        RemoveAbility(abilties.move);
+
+    }
+
+    private void CraneNoCameraAndGenAbi()
+    {
+        AddAbility(abilties.rotate);
+
+        RemoveAbility(abilties.cameraMove);
+
+        AddAbility(abilties.npcInter);
+        AddAbility(abilties.menu);
+
+        RemoveAbility(abilties.roll);
+        RemoveAbility(abilties.moveBlock);
+        RemoveAbility(abilties.HFissure);
+        RemoveAbility(abilties.dolpSwimBel);
+        RemoveAbility(abilties.jump);
+        RemoveAbility(abilties.VFissure);
+
+        RemoveAbility(abilties.toStd);
+        RemoveAbility(abilties.toCrane);
+        RemoveAbility(abilties.toFrog);
+        RemoveAbility(abilties.toArma);
+        RemoveAbility(abilties.toDolp);
+
+
+        switch (cPlayerState.currentPhState)
+        {
+            case physicStates.onAir:
+                AddAbility(abilties.move);
+                break;
+            case physicStates.onWater:
+            case physicStates.onGround:
+                RemoveAbility(abilties.move);
+                break;
+        }
+    }
+    #endregion
+
+    #region Dolphin Abilities Handler
+    private void UpdatingDolpAbilityList()
+    {
+        switch (cPlayerState.currentClState)
+        {
+            case controlStates.totalControl:
+                DolpTotalControl();
+                break;
+            case controlStates.noCamera:
+                DolpNoCamera();
+                break;
+            case controlStates.noMove:
+                DolpNoMove();
+                break;
+            case controlStates.noGenAbi:
+                DolpNoGenAbi();
+                break;
+            case controlStates.noCamAndMove:
+                DolpNoCamAndMove();
+                break;
+            case controlStates.noMoveAndGenAbi:
+                DolpNoMoveAndGenAbi();
+                break;
+            case controlStates.noCameraAndGenAbi:
+                DolpNoCameraAndGenAbi();
+                break;
+            case controlStates.noControl:
+                NoControl();
+                break;
+        }
+    }
+
+    private void DolpTotalControl()
+    {
+  
+        AddAbility(abilties.rotate);
+
+        AddAbility(abilties.cameraMove);
+
+        AddAbility(abilties.npcInter);
+        AddAbility(abilties.menu);
+
+        RemoveAbility(abilties.roll);
+        RemoveAbility(abilties.moveBlock);
+        RemoveAbility(abilties.HFissure);
+        RemoveAbility(abilties.dolpSwimBel);
+        RemoveAbility(abilties.VFissure);
+
+        AddAbility(abilties.toStd);
+        AddAbility(abilties.toCrane);
+        AddAbility(abilties.toFrog);
+        AddAbility(abilties.toArma);
+        RemoveAbility(abilties.toDolp);
+
+
+
+        switch (cPlayerState.currentPhState)
+        {
+            case physicStates.onWater:
+                AddAbility(abilties.jump);
+                AddAbility(abilties.move);
+                break;
+            case physicStates.onGround:
+            case physicStates.onAir:
+                RemoveAbility(abilties.jump);
+                RemoveAbility(abilties.move);
+                break;         
+        }
+    }
+
+    private void DolpNoCamera()
+    {
+        AddAbility(abilties.rotate);
+
+        RemoveAbility(abilties.cameraMove);
+
+        AddAbility(abilties.npcInter);
+        AddAbility(abilties.menu);
+
+        RemoveAbility(abilties.roll);
+        RemoveAbility(abilties.moveBlock);
+        RemoveAbility(abilties.HFissure);
+        RemoveAbility(abilties.dolpSwimBel);
+        RemoveAbility(abilties.VFissure);
+
+        AddAbility(abilties.toStd);
+        AddAbility(abilties.toCrane);
+        AddAbility(abilties.toFrog);
+        AddAbility(abilties.toArma);
+        RemoveAbility(abilties.toDolp);
+
+
+
+        switch (cPlayerState.currentPhState)
+        {
+            case physicStates.onWater:
+                AddAbility(abilties.jump);
+                AddAbility(abilties.move);
+                break;
+            case physicStates.onGround:
+            case physicStates.onAir:
+                RemoveAbility(abilties.jump);
+                RemoveAbility(abilties.move);
+                break;
+        }
+    }
+
+    private void DolpNoMove()
+    {
+        AddAbility(abilties.rotate);
+
+        AddAbility(abilties.cameraMove);
+
+        AddAbility(abilties.npcInter);
+        AddAbility(abilties.menu);
+
+        RemoveAbility(abilties.roll);
+        RemoveAbility(abilties.moveBlock);
+        RemoveAbility(abilties.HFissure);
+        RemoveAbility(abilties.dolpSwimBel);
+        RemoveAbility(abilties.VFissure);
+
+        AddAbility(abilties.toStd);
+        AddAbility(abilties.toCrane);
+        AddAbility(abilties.toFrog);
+        AddAbility(abilties.toArma);
+        RemoveAbility(abilties.toDolp);
+
+
+        RemoveAbility(abilties.move);
+
+        switch (cPlayerState.currentPhState)
+        {
+            case physicStates.onWater:
+                AddAbility(abilties.jump);
+                break;
+            case physicStates.onGround:
+            case physicStates.onAir:
+                RemoveAbility(abilties.jump);      
+                break;
+        }
+    }
+
+    private void DolpNoGenAbi()
+    {
+        AddAbility(abilties.rotate);
+
+        AddAbility(abilties.cameraMove);
+
+        AddAbility(abilties.npcInter);
+        AddAbility(abilties.menu);
+
+        RemoveAbility(abilties.roll);
+        RemoveAbility(abilties.moveBlock);
+        RemoveAbility(abilties.HFissure);
+        RemoveAbility(abilties.dolpSwimBel);
+        RemoveAbility(abilties.VFissure);
+
+        RemoveAbility(abilties.toStd);
+        RemoveAbility(abilties.toCrane);
+        RemoveAbility(abilties.toFrog);
+        RemoveAbility(abilties.toArma);
+        RemoveAbility(abilties.toDolp);
+
+
+        RemoveAbility(abilties.jump);
+
+        switch (cPlayerState.currentPhState)
+        {
+            case physicStates.onWater:
+                AddAbility(abilties.move);
+                break;
+            case physicStates.onGround:
+            case physicStates.onAir:
+                RemoveAbility(abilties.move);
+                break;
+        }
+    }
+
+    private void DolpNoCamAndMove()
+    {
+        AddAbility(abilties.rotate);
+
+        RemoveAbility(abilties.cameraMove);
+
+        AddAbility(abilties.npcInter);
+        AddAbility(abilties.menu);
+
+        RemoveAbility(abilties.roll);
+        RemoveAbility(abilties.moveBlock);
+        RemoveAbility(abilties.HFissure);
+        RemoveAbility(abilties.dolpSwimBel);
+        RemoveAbility(abilties.VFissure);
+
+        AddAbility(abilties.toStd);
+        AddAbility(abilties.toCrane);
+        AddAbility(abilties.toFrog);
+        AddAbility(abilties.toArma);
+        RemoveAbility(abilties.toDolp);
+
+        RemoveAbility(abilties.move);
+
+        switch (cPlayerState.currentPhState)
+        {
+            case physicStates.onWater:
+                AddAbility(abilties.jump);
+                break;
+            case physicStates.onGround:
+            case physicStates.onAir:
+                RemoveAbility(abilties.jump);
+                break;
+        }
+    }
+
+    private void DolpNoMoveAndGenAbi()
+    {
+        AddAbility(abilties.rotate);
+
+        AddAbility(abilties.cameraMove);
+
+        AddAbility(abilties.npcInter);
+        AddAbility(abilties.menu);
+
+        RemoveAbility(abilties.roll);
+        RemoveAbility(abilties.moveBlock);
+        RemoveAbility(abilties.HFissure);
+        RemoveAbility(abilties.dolpSwimBel);
+        RemoveAbility(abilties.VFissure);
+
+        RemoveAbility(abilties.toStd);
+        RemoveAbility(abilties.toCrane);
+        RemoveAbility(abilties.toFrog);
+        RemoveAbility(abilties.toArma);
+        RemoveAbility(abilties.toDolp);
+
+
+        RemoveAbility(abilties.jump);
+        RemoveAbility(abilties.move);
+        
+    }
+
+    private void DolpNoCameraAndGenAbi()
+    {
+        AddAbility(abilties.rotate);
+
+        RemoveAbility(abilties.cameraMove);
+
+        AddAbility(abilties.npcInter);
+        AddAbility(abilties.menu);
+
+        RemoveAbility(abilties.roll);
+        RemoveAbility(abilties.moveBlock);
+        RemoveAbility(abilties.HFissure);
+        RemoveAbility(abilties.dolpSwimBel);
+        RemoveAbility(abilties.VFissure);
+
+        RemoveAbility(abilties.toStd);
+        RemoveAbility(abilties.toCrane);
+        RemoveAbility(abilties.toFrog);
+        RemoveAbility(abilties.toArma);
+        RemoveAbility(abilties.toDolp);
+
+        RemoveAbility(abilties.jump);
+
+        switch (cPlayerState.currentPhState)
+        {
+            case physicStates.onWater:
+                AddAbility(abilties.move);
+                break;
+            case physicStates.onGround:
+            case physicStates.onAir:
+                RemoveAbility(abilties.move);
+                break;
+        }
+    }
+    #endregion
+
+    #region Generic Ability Handler Methods
+    private void NoControl()
+    {
+        cPlayerState.currentAbilities.Clear();
+        cPlayerState.currentAbilities.TrimExcess();
+        AddAbility(abilties.menu);
+    }
+
+    private void RemoveAbility(abilties abiToRemove)
+    {
+        if (cPlayerState.currentAbilities.Contains(abiToRemove))
+            cPlayerState.currentAbilities.Remove(abiToRemove);
+
+    }
+
+    private void AddAbility(abilties abiToAdd)
+    {
+        if (!cPlayerState.currentAbilities.Contains(abiToAdd))
+            cPlayerState.currentAbilities.Add(abiToAdd);
+    } 
+    #endregion
+    #endregion
+
+
+
+
+  
 
 
 }
