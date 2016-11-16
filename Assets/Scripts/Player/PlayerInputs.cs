@@ -57,9 +57,11 @@ public class PlayerInputs : MonoBehaviour
 
         MoveInput();
 
-        dirAbiRequest.Invoke(abilties.move, moveDirection);
-        dirAbiRequest.Invoke(abilties.rotate, moveDirection);
-
+        if (moveDirection.sqrMagnitude != 0)
+        {
+            dirAbiRequest.Invoke(abilties.move, moveDirection);
+            dirAbiRequest.Invoke(abilties.rotate, moveDirection);
+        }
     }
 
     private void MoveInput()
@@ -103,6 +105,8 @@ public class PlayerInputs : MonoBehaviour
             genAbiRequest.Invoke(abilties.toDolp);
         if (toStdPressed())
             genAbiRequest.Invoke(abilties.toStd);
+        if (rollPressed())
+            genAbiRequest.Invoke(abilties.roll);
     }
 
     #region Jump Input
@@ -1118,6 +1122,58 @@ public class PlayerInputs : MonoBehaviour
             }
         }
     }
+    #endregion
+
+    #region Roll Input
+    private bool rollPressed()
+    {
+        if (cForm == currentForm.arma)
+            return armaRollInput();
+        else
+            return false;
+    }
+
+    private bool armaRollInput()
+    {
+        if (currentInputs.armaInputs.joyInputs.roll.ToString() != "LT" &&
+        currentInputs.armaInputs.joyInputs.roll.ToString() != "RT")
+        {
+
+            if (Input.GetButtonDown(currentInputs.armaInputs.joyInputs.roll.ToString()))
+                return true;
+            else
+                return false;
+        }
+        else
+        {
+            if (currentInputs.armaInputs.joyInputs.roll.ToString() == "LT")
+            {
+                if (Input.GetAxis("LRT") > 0 && !switchCooldown)
+                {
+                    switchCooldown = true;
+                    StartCoroutine(SwitchingCooldown());
+                    return true;
+                }
+                else
+                    return false;
+            }
+            else
+            {
+                if (Input.GetAxis("LRT") < 0 && !switchCooldown)
+                {
+                    switchCooldown = true;
+                    StartCoroutine(SwitchingCooldown());
+                    return true;
+                }
+                else
+                    return false;
+            }
+        }
+    }
+    #endregion
+
+    #region Vertical Fissure Input
+
     #endregion
 
     #endregion
