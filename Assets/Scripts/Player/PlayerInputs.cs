@@ -71,7 +71,7 @@ public class PlayerInputs : MonoBehaviour
         moveDirection.z = -Input.GetAxis("LJVer");
 
         //moveDirection.x = Input.GetAxis("Horizontal");
-        //oveDirection.z = Input.GetAxis("Vertical");
+        //moveDirection.z = Input.GetAxis("Vertical");
 
         if (moveDirection.x < 0)
             moveDirection.x = -1f;
