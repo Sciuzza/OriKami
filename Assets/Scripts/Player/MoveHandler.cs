@@ -21,7 +21,8 @@ public class MoveHandler : MonoBehaviour
         fsmExecTempLink.moveSelected.AddListener(HandlingMove);
         fsmExecTempLink.rotSelected.AddListener(HandlingRot);
         fsmExecTempLink.jumpSelected.AddListener(HandlingJump);
-
+        fsmExecTempLink.StopMoveLogic.AddListener(StoppingMove);
+        fsmExecTempLink.EnableMoveLogic.AddListener(EnablingMove);
 
         ccLink = this.gameObject.GetComponent<CharacterController>();
 
@@ -52,6 +53,17 @@ public class MoveHandler : MonoBehaviour
 
     }
 
+    private void StoppingMove()
+    {
+        Debug.Log("Move Stopped");
+        StopCoroutine(Moving());
+    }
+
+    private void EnablingMove()
+    {
+        Debug.Log("Move Enabled");
+        StartCoroutine(Moving());
+    }
 
     IEnumerator Moving()
     {

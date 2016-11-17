@@ -21,6 +21,10 @@ public enum playerStates
     rolling, movingBlock
 };
 
+public enum triggerGenAbiStates { onVFissure, onHFissure, onDolpSwimBel, npcTalk, noTrigger };
+
+public enum triggerSpecial { cameraLimited, noTrigger };
+
 public enum controlStates { totalControl, noCamera, noMove, noGenAbi, noCamAndMove, noMoveAndGenAbi, noCameraAndGenAbi, noControl };
 
 
@@ -40,6 +44,8 @@ public class FSMChecker : MonoBehaviour
         public List<abilties> currentAbilities;
         public physicStates currentPhState;
         public playerStates currentPlState;
+        public triggerGenAbiStates currentTRGState;
+        public triggerSpecial currentTSState;
         public controlStates currentClState;
 
     }
@@ -100,7 +106,17 @@ public class FSMChecker : MonoBehaviour
 
     public availableInputs formChangedInp;
 
+    [System.Serializable]
+    public class vFissureUse : UnityEvent<VFissure, string>
+    {
+    }
+
+    public vFissureUse vFissureUsed;
+
     #endregion
+
+    private VFissure vfLink;
+    private string vFissureEntrance;
 
     #region Initialization Methods
     void Awake()
@@ -119,8 +135,12 @@ public class FSMChecker : MonoBehaviour
         EnvInputs enInputsTempLink = this.gameObject.GetComponent<EnvInputs>();
 
         enInputsTempLink.psChanged.AddListener(ChangingPHStates);
+        enInputsTempLink.vFissureRequestOn.AddListener(AddingVFissureAvailability);
+        enInputsTempLink.vFissureRequestOff.AddListener(RemovingVFissureAvailability);
 
+        FSMExecutor fsmExeTempLink = this.gameObject.GetComponent<FSMExecutor>();
 
+        fsmExeTempLink.vFissureAniEnded.AddListener(VFissureAniEndEffects);
     }
 
     void Start()
@@ -138,12 +158,12 @@ public class FSMChecker : MonoBehaviour
         cPlayerState.currentAbilities.Add(abilties.menu);
         cPlayerState.currentAbilities.Add(abilties.cameraMove);
         cPlayerState.currentAbilities.Add(abilties.move);
-        cPlayerState.currentAbilities.Add(abilties.npcInter);
+
         cPlayerState.currentAbilities.Add(abilties.toArma);
         cPlayerState.currentAbilities.Add(abilties.toCrane);
         cPlayerState.currentAbilities.Add(abilties.toDolp);
         cPlayerState.currentAbilities.Add(abilties.toFrog);
-        cPlayerState.currentAbilities.Add(abilties.VFissure);
+
         cPlayerState.currentAbilities.Add(abilties.rotate);
 
 
@@ -151,10 +171,14 @@ public class FSMChecker : MonoBehaviour
 
         cPlayerState.currentPlState = playerStates.standingStill;
 
+        cPlayerState.currentTRGState = triggerGenAbiStates.noTrigger;
+
+        cPlayerState.currentTSState = triggerSpecial.noTrigger;
+
         cPlayerState.currentClState = controlStates.totalControl;
 
 
-    } 
+    }
     #endregion
 
     #region Player Inputs Handler
@@ -201,6 +225,10 @@ public class FSMChecker : MonoBehaviour
                 case abilties.moveBlock:
                     break;
                 case abilties.VFissure:
+                    Debug.Log("VFissure Pressed");
+                    cPlayerState.currentClState = controlStates.noMoveAndGenAbi;
+                    UpdatingAbilityList();
+                    vFissureUsed.Invoke(vfLink, vFissureEntrance);
                     break;
                 case abilties.HFissure:
                     break;
@@ -264,7 +292,30 @@ public class FSMChecker : MonoBehaviour
         UpdatingAbilityList();
 
 
-    } 
+    }
+
+    private void AddingVFissureAvailability(VFissure vfTempLink, string vfTag)
+    {
+        vfLink = vfTempLink;
+        vFissureEntrance = vfTag;
+        cPlayerState.currentTRGState = triggerGenAbiStates.onVFissure;
+        UpdatingAbilityList();
+
+    }
+
+    private void RemovingVFissureAvailability()
+    {
+        vfLink = null;
+        cPlayerState.currentTRGState = triggerGenAbiStates.noTrigger;
+        UpdatingAbilityList();
+
+    }
+
+    private void VFissureAniEndEffects()
+    {
+        cPlayerState.currentClState = controlStates.totalControl;
+        UpdatingAbilityList();
+    }
     #endregion
 
     #region Ability List Handler
@@ -329,22 +380,15 @@ public class FSMChecker : MonoBehaviour
 
     private void StdTotalControl()
     {
+        cPlayerState.currentAbilities.Clear();
+        cPlayerState.currentAbilities.TrimExcess();
 
         AddAbility(abilties.move);
         AddAbility(abilties.rotate);
-
         AddAbility(abilties.cameraMove);
 
-        AddAbility(abilties.npcInter);
         AddAbility(abilties.menu);
 
-        RemoveAbility(abilties.roll);
-        RemoveAbility(abilties.moveBlock);
-        RemoveAbility(abilties.HFissure);
-        RemoveAbility(abilties.dolpSwimBel);
-
-
-        RemoveAbility(abilties.toStd);
         AddAbility(abilties.toCrane);
         AddAbility(abilties.toFrog);
         AddAbility(abilties.toArma);
@@ -357,32 +401,31 @@ public class FSMChecker : MonoBehaviour
             case physicStates.onWater:
             case physicStates.onAir:
                 RemoveAbility(abilties.jump);
-                RemoveAbility(abilties.VFissure);
                 break;
             case physicStates.onGround:
                 AddAbility(abilties.jump);
-                AddAbility(abilties.VFissure);
                 break;
         }
+
+        if (cPlayerState.currentTRGState == triggerGenAbiStates.onVFissure)
+            AddAbility(abilties.VFissure);
+        else if (cPlayerState.currentTRGState == triggerGenAbiStates.npcTalk)
+            AddAbility(abilties.npcInter);
+
+
     }
 
     private void StdNoCamera()
     {
+        cPlayerState.currentAbilities.Clear();
+        cPlayerState.currentAbilities.TrimExcess();
+
         AddAbility(abilties.move);
         AddAbility(abilties.rotate);
 
-        RemoveAbility(abilties.cameraMove);
 
-        AddAbility(abilties.npcInter);
         AddAbility(abilties.menu);
 
-        RemoveAbility(abilties.roll);
-        RemoveAbility(abilties.moveBlock);
-        RemoveAbility(abilties.HFissure);
-        RemoveAbility(abilties.dolpSwimBel);
-
-
-        RemoveAbility(abilties.toStd);
         AddAbility(abilties.toCrane);
         AddAbility(abilties.toFrog);
         AddAbility(abilties.toArma);
@@ -395,32 +438,29 @@ public class FSMChecker : MonoBehaviour
             case physicStates.onWater:
             case physicStates.onAir:
                 RemoveAbility(abilties.jump);
-                RemoveAbility(abilties.VFissure);
                 break;
             case physicStates.onGround:
                 AddAbility(abilties.jump);
-                AddAbility(abilties.VFissure);
                 break;
         }
+
+        if (cPlayerState.currentTRGState == triggerGenAbiStates.onVFissure)
+            AddAbility(abilties.VFissure);
+        else if (cPlayerState.currentTRGState == triggerGenAbiStates.npcTalk)
+            AddAbility(abilties.npcInter);
     }
 
     private void StdNoMove()
     {
-        RemoveAbility(abilties.move);
-        AddAbility(abilties.rotate);
+        cPlayerState.currentAbilities.Clear();
+        cPlayerState.currentAbilities.TrimExcess();
+
+
 
         AddAbility(abilties.cameraMove);
 
-        AddAbility(abilties.npcInter);
         AddAbility(abilties.menu);
 
-        RemoveAbility(abilties.roll);
-        RemoveAbility(abilties.moveBlock);
-        RemoveAbility(abilties.HFissure);
-        RemoveAbility(abilties.dolpSwimBel);
-
-
-        RemoveAbility(abilties.toStd);
         AddAbility(abilties.toCrane);
         AddAbility(abilties.toFrog);
         AddAbility(abilties.toArma);
@@ -433,60 +473,42 @@ public class FSMChecker : MonoBehaviour
             case physicStates.onWater:
             case physicStates.onAir:
                 RemoveAbility(abilties.jump);
-                RemoveAbility(abilties.VFissure);
                 break;
             case physicStates.onGround:
                 AddAbility(abilties.jump);
-                AddAbility(abilties.VFissure);
                 break;
         }
+
+        if (cPlayerState.currentTRGState == triggerGenAbiStates.onVFissure)
+            AddAbility(abilties.VFissure);
+        else if (cPlayerState.currentTRGState == triggerGenAbiStates.npcTalk)
+            AddAbility(abilties.npcInter);
     }
 
     private void StdNoGenAbi()
     {
+        cPlayerState.currentAbilities.Clear();
+        cPlayerState.currentAbilities.TrimExcess();
+
         AddAbility(abilties.move);
         AddAbility(abilties.rotate);
-
         AddAbility(abilties.cameraMove);
 
-        AddAbility(abilties.npcInter);
         AddAbility(abilties.menu);
 
-        RemoveAbility(abilties.roll);
-        RemoveAbility(abilties.moveBlock);
-        RemoveAbility(abilties.HFissure);
-        RemoveAbility(abilties.dolpSwimBel);
-
-
-        RemoveAbility(abilties.toStd);
-        RemoveAbility(abilties.toCrane);
-        RemoveAbility(abilties.toFrog);
-        RemoveAbility(abilties.toArma);
-        RemoveAbility(abilties.toDolp);
-
-
-
-        RemoveAbility(abilties.jump);
-        RemoveAbility(abilties.VFissure);
     }
 
     private void StdNoCamAndMove()
     {
-        RemoveAbility(abilties.move);
+        cPlayerState.currentAbilities.Clear();
+        cPlayerState.currentAbilities.TrimExcess();
+
+
         AddAbility(abilties.rotate);
 
-        RemoveAbility(abilties.cameraMove);
 
-        AddAbility(abilties.npcInter);
         AddAbility(abilties.menu);
 
-        RemoveAbility(abilties.roll);
-        RemoveAbility(abilties.moveBlock);
-        RemoveAbility(abilties.HFissure);
-        RemoveAbility(abilties.dolpSwimBel);
-
-
-        RemoveAbility(abilties.toStd);
         AddAbility(abilties.toCrane);
         AddAbility(abilties.toFrog);
         AddAbility(abilties.toArma);
@@ -499,69 +521,43 @@ public class FSMChecker : MonoBehaviour
             case physicStates.onWater:
             case physicStates.onAir:
                 RemoveAbility(abilties.jump);
-                RemoveAbility(abilties.VFissure);
                 break;
             case physicStates.onGround:
                 AddAbility(abilties.jump);
-                AddAbility(abilties.VFissure);
                 break;
         }
+
+        if (cPlayerState.currentTRGState == triggerGenAbiStates.onVFissure)
+            AddAbility(abilties.VFissure);
+        else if (cPlayerState.currentTRGState == triggerGenAbiStates.npcTalk)
+            AddAbility(abilties.npcInter);
     }
 
     private void StdNoMoveAndGenAbi()
     {
-        RemoveAbility(abilties.move);
-        AddAbility(abilties.rotate);
+        cPlayerState.currentAbilities.Clear();
+        cPlayerState.currentAbilities.TrimExcess();
+
+
 
         AddAbility(abilties.cameraMove);
-
-        AddAbility(abilties.npcInter);
         AddAbility(abilties.menu);
 
-        RemoveAbility(abilties.roll);
-        RemoveAbility(abilties.moveBlock);
-        RemoveAbility(abilties.HFissure);
-        RemoveAbility(abilties.dolpSwimBel);
 
-
-        RemoveAbility(abilties.toStd);
-        RemoveAbility(abilties.toCrane);
-        RemoveAbility(abilties.toFrog);
-        RemoveAbility(abilties.toArma);
-        RemoveAbility(abilties.toDolp);
-
-
-
-        RemoveAbility(abilties.jump);
-        RemoveAbility(abilties.VFissure);
     }
 
     private void StdNoCameraAndGenAbi()
     {
+        cPlayerState.currentAbilities.Clear();
+        cPlayerState.currentAbilities.TrimExcess();
+
         AddAbility(abilties.move);
         AddAbility(abilties.rotate);
 
-        RemoveAbility(abilties.cameraMove);
 
-        AddAbility(abilties.npcInter);
         AddAbility(abilties.menu);
 
-        RemoveAbility(abilties.roll);
-        RemoveAbility(abilties.moveBlock);
-        RemoveAbility(abilties.HFissure);
-        RemoveAbility(abilties.dolpSwimBel);
 
-
-        RemoveAbility(abilties.toStd);
-        RemoveAbility(abilties.toCrane);
-        RemoveAbility(abilties.toFrog);
-        RemoveAbility(abilties.toArma);
-        RemoveAbility(abilties.toDolp);
-
-
-
-        RemoveAbility(abilties.jump);
-        RemoveAbility(abilties.VFissure);
     }
     #endregion
 
@@ -738,7 +734,7 @@ public class FSMChecker : MonoBehaviour
 
         RemoveAbility(abilties.jump);
         RemoveAbility(abilties.HFissure);
-        
+
     }
 
     private void FrogNoCamAndMove()
@@ -804,7 +800,7 @@ public class FSMChecker : MonoBehaviour
 
         RemoveAbility(abilties.jump);
         RemoveAbility(abilties.HFissure);
-       
+
     }
 
     private void FrogNoCameraAndGenAbi()
@@ -832,7 +828,7 @@ public class FSMChecker : MonoBehaviour
 
         RemoveAbility(abilties.jump);
         RemoveAbility(abilties.HFissure);
-        
+
     }
     #endregion
 
@@ -1005,7 +1001,7 @@ public class FSMChecker : MonoBehaviour
 
         RemoveAbility(abilties.roll);
         RemoveAbility(abilties.moveBlock);
-        
+
     }
 
     private void ArmaNoCamAndMove()
@@ -1071,7 +1067,7 @@ public class FSMChecker : MonoBehaviour
 
         RemoveAbility(abilties.roll);
         RemoveAbility(abilties.moveBlock);
-       
+
     }
 
     private void ArmaNoCameraAndGenAbi()
@@ -1099,7 +1095,7 @@ public class FSMChecker : MonoBehaviour
 
         RemoveAbility(abilties.roll);
         RemoveAbility(abilties.moveBlock);
-        
+
     }
     #endregion
 
@@ -1138,7 +1134,7 @@ public class FSMChecker : MonoBehaviour
 
     private void CraneTotalControl()
     {
-     
+
         AddAbility(abilties.rotate);
 
         AddAbility(abilties.cameraMove);
@@ -1234,7 +1230,7 @@ public class FSMChecker : MonoBehaviour
 
         RemoveAbility(abilties.move);
 
-      
+
     }
 
     private void CraneNoGenAbi()
@@ -1298,7 +1294,7 @@ public class FSMChecker : MonoBehaviour
 
         RemoveAbility(abilties.move);
 
-       
+
     }
 
     private void CraneNoMoveAndGenAbi()
@@ -1398,7 +1394,7 @@ public class FSMChecker : MonoBehaviour
 
     private void DolpTotalControl()
     {
-  
+
         AddAbility(abilties.rotate);
 
         AddAbility(abilties.cameraMove);
@@ -1430,7 +1426,7 @@ public class FSMChecker : MonoBehaviour
             case physicStates.onAir:
                 RemoveAbility(abilties.jump);
                 RemoveAbility(abilties.move);
-                break;         
+                break;
         }
     }
 
@@ -1502,7 +1498,7 @@ public class FSMChecker : MonoBehaviour
                 break;
             case physicStates.onGround:
             case physicStates.onAir:
-                RemoveAbility(abilties.jump);      
+                RemoveAbility(abilties.jump);
                 break;
         }
     }
@@ -1602,7 +1598,7 @@ public class FSMChecker : MonoBehaviour
 
         RemoveAbility(abilties.jump);
         RemoveAbility(abilties.move);
-        
+
     }
 
     private void DolpNoCameraAndGenAbi()
@@ -1660,7 +1656,7 @@ public class FSMChecker : MonoBehaviour
     {
         if (!cPlayerState.currentAbilities.Contains(abiToAdd))
             cPlayerState.currentAbilities.Add(abiToAdd);
-    } 
+    }
 
     private void EnablingMove()
     {
@@ -1672,7 +1668,7 @@ public class FSMChecker : MonoBehaviour
 
 
 
-  
+
 
 
 }

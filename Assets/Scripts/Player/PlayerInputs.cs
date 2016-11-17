@@ -32,6 +32,9 @@ public class PlayerInputs : MonoBehaviour
     }
 
     public generalAbiInput genAbiRequest;
+
+
+
     #endregion
 
     public UnityEvent rollStopped;
@@ -113,7 +116,8 @@ public class PlayerInputs : MonoBehaviour
             genAbiRequest.Invoke(abilties.roll);
         else
             rollStopped.Invoke();
-
+        if (VFissurePressed())
+            genAbiRequest.Invoke(abilties.VFissure);
     }
 
     #region Jump Input
@@ -1561,7 +1565,67 @@ public class PlayerInputs : MonoBehaviour
     #endregion
 
     #region Vertical Fissure Input
+    private bool VFissurePressed() 
+    {
+        if (cForm == currentForm.std)
+            return StdVFissureInput();
+        else
+            return false;
+    }
 
+    private bool StdVFissureInput()
+    {
+        if (StdVFissureJoyI() || StdVFissurePcI())
+            return true;
+        else
+            return false;
+    }
+
+    private bool StdVFissureJoyI()
+    {
+        if (currentInputs.standardInputs.joyInputs.VerticalFissure.ToString() != "LT" &&
+        currentInputs.standardInputs.joyInputs.VerticalFissure.ToString() != "RT")
+        {
+
+            if (Input.GetButtonDown(currentInputs.standardInputs.joyInputs.VerticalFissure.ToString()))
+                return true;
+            else
+                return false;
+        }
+        else
+        {
+            if (currentInputs.standardInputs.joyInputs.VerticalFissure.ToString() == "LT")
+            {
+                if (Input.GetAxis("LRT") > 0)
+                {
+                    switchCooldown = true;
+                    StartCoroutine(SwitchingCooldown());
+                    return true;
+                }
+                else
+                    return false;
+            }
+            else
+            {
+                if (Input.GetAxis("LRT") < 0)
+                {
+                    switchCooldown = true;
+                    StartCoroutine(SwitchingCooldown());
+                    return true;
+                }
+                else
+                    return false;
+            }
+        }
+    }
+
+    private bool StdVFissurePcI()
+    {
+        if (Input.GetButtonDown(currentInputs.standardInputs.keyInputs.VerticalFissure.ToString()))
+            return true;
+        else
+            return false;
+    }
     #endregion
 
     #endregion

@@ -39,7 +39,10 @@ public class FSMExecutor : MonoBehaviour
     {
     }
 
-    public phHandling phChangeEffect; 
+    public phHandling phChangeEffect;
+
+    public UnityEvent vFissureAniEnded;
+    public UnityEvent StopMoveLogic, EnableMoveLogic;
     #endregion
 
     void Awake()
@@ -50,7 +53,7 @@ public class FSMExecutor : MonoBehaviour
         fsmCheckerTempLink.dirAbiUsed.AddListener(ApplyingAbilityEffect);
         fsmCheckerTempLink.genAbiUsed.AddListener(ApplyingAbilityEffect);
         fsmCheckerTempLink.rotationUsed.AddListener(ApplyingRotationEffect);
-
+        fsmCheckerTempLink.vFissureUsed.AddListener(ApplyingVFissure);
       
      
     }
@@ -129,6 +132,12 @@ public class FSMExecutor : MonoBehaviour
         }
     }
 
+    private void ApplyingVFissure(VFissure vfTempLink, string vfTag)
+    {
+        bool vFissureAniOn = true;
+        StartCoroutine(VFissureExecution(vFissureAniOn, vfTempLink, vfTag));
+    }
+
     private void ApplyingRotationEffect(Vector3 abiDirInput, playerStates currentPl)
     {
 
@@ -149,7 +158,120 @@ public class FSMExecutor : MonoBehaviour
 
     }
 
+    private IEnumerator VFissureExecution(bool vFissureAniOn, VFissure vfTempLink, string vfEntrance)
+    {
+        StopMoveLogic.Invoke();
 
+        CharacterController ccTempLink = this.gameObject.GetComponent<CharacterController>();
+
+        float radius = ccTempLink.radius;
+
+        ccTempLink.radius = 0;
+
+        bool secondRotationisOn = false, moveFinished = false, secondMoveIsOn = false;
+
+        if (vfTempLink == null)
+            Debug.Log("Cazzo");
+
+        Quaternion vTriggerRotation, vGuidanceRotation;
+        Vector3 vTriggerMidPosition, vGuidanceFinPosition, vGuidanceDir;
+
+        if (vfEntrance == "vAbilityta")
+        {
+            vTriggerRotation = vfTempLink.aTrigger.transform.rotation;
+            vGuidanceRotation = vfTempLink.mGuidance.transform.rotation;
+
+
+            vTriggerMidPosition = vfTempLink.aTrigger.transform.position;
+            vTriggerMidPosition.y = 0.0f;
+
+            vGuidanceFinPosition = vfTempLink.exitA.transform.position;
+            vGuidanceFinPosition.y = 0.0f;
+
+
+            vGuidanceDir = vfTempLink.mGuidance.transform.right;
+        }
+        else 
+        {
+            vTriggerRotation = vfTempLink.bTrigger.transform.rotation;
+            vGuidanceRotation = vfTempLink.mGuidance.transform.rotation;
+
+
+            vTriggerMidPosition = vfTempLink.bTrigger.transform.position;
+            vTriggerMidPosition.y = 0.0f;
+
+            vGuidanceFinPosition = vfTempLink.exitB.transform.position;
+            vGuidanceFinPosition.y = 0.0f;
+
+
+            vGuidanceDir = -vfTempLink.mGuidance.transform.right;
+        }
+
+        while (vFissureAniOn)
+        {
+            if (Quaternion.Angle(this.transform.rotation, vTriggerRotation) > 0.1f && !secondRotationisOn)
+            {
+
+                this.transform.localRotation = Quaternion.Slerp(this.transform.rotation, vTriggerRotation, Time.deltaTime * 5);
+                //Debug.Log(Quaternion.Angle(this.transform.rotation, coreLink.vTriggerRotation));
+            }
+            else if (moveFinished)
+            {
+                vFissureAniOn = false;
+                moveFinished = false;
+                secondMoveIsOn = false;
+            }
+            else
+            {
+
+
+
+                Vector3 distance = vTriggerMidPosition - this.transform.position;
+
+                if (distance.sqrMagnitude >= 0.71f && !secondMoveIsOn)
+                {
+                    //Debug.Log(distance.sqrMagnitude);
+                    Vector3 direction = (vTriggerMidPosition - this.transform.position).normalized;
+                    direction.y = 0;
+                    this.transform.position += direction * Time.deltaTime * 3;
+                }
+                else
+                {
+                    secondRotationisOn = true;
+
+                    if (Quaternion.Angle(this.transform.rotation, vGuidanceRotation) > 0.1f)
+
+                        this.transform.rotation = Quaternion.Slerp(this.transform.localRotation, vGuidanceRotation, Time.deltaTime * 5);
+                    else
+                    {
+                        secondMoveIsOn = true;
+
+                        distance = vGuidanceFinPosition - this.transform.position;
+
+                        if (distance.sqrMagnitude >= 0.8f)
+                        {
+
+                            // Vector3 direction = (coreLink.vGuidanceFinPosition - this.transform.position).normalized;
+                            Vector3 direction = vGuidanceDir.normalized;
+                            direction.y = 0;
+                            this.transform.position += direction * Time.deltaTime * 3;
+                        }
+                        else
+                        {
+                            moveFinished = true;
+                            secondRotationisOn = false;
+                        }
+
+                    }
+                }
+            }
+            yield return new WaitForSeconds(Time.deltaTime);
+        }
+        vFissureAniOn = false;
+        vFissureAniEnded.Invoke();
+        EnableMoveLogic.Invoke();
+        ccTempLink.radius = radius;
+    }
 
 
 }

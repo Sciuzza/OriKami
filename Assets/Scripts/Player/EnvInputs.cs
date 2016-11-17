@@ -17,7 +17,19 @@ public class EnvInputs : MonoBehaviour {
 
 	public physicChangeRequest psChanged;
 
-	void Awake(){
+ 
+
+    [System.Serializable]
+    public class vFissureAbility : UnityEvent<VFissure, string>
+    {
+    }
+
+    public vFissureAbility vFissureRequestOn;
+
+    public UnityEvent vFissureRequestOff;
+
+
+    void Awake(){
 
 		ccLink = this.GetComponent<CharacterController> ();
         //StartCoroutine(DebugGrounded());
@@ -51,58 +63,36 @@ public class EnvInputs : MonoBehaviour {
 
    
 
-    /*
+    
 	void OnTriggerEnter (Collider envTrigger){
 
 		switch (envTrigger.gameObject.tag) {
 
-		case "Water":
+		case "vAbilityta":
+        case "vAbilitytb":
+                vFissureRequestOn.Invoke(envTrigger.gameObject.GetComponentInParent<VFissure>(), envTrigger.gameObject.tag);
 			break;
-		case "Camera Constraint":
-			break;
-		case "a": 
-			break;
-		case "b": 
-			break;
-		case "c": 
-			break;
-		case "d": 
-			break;
-		case "e": 
-			break;
-		case "f": 
-			break;
+		
 
 
 		}
 
 	}
 
+ 
 
 	void OnTriggerExit (Collider envTrigger){
 
 
 		switch (envTrigger.gameObject.tag) {
 
-		case "Water":
-			break;
-		case "Camera Constraint":
-			break;
-		case "a": 
-			break;
-		case "b": 
-			break;
-		case "c": 
-			break;
-		case "d": 
-			break;
-		case "e": 
-			break;
-		case "f": 
-			break;
+            case "vAbilityta":
+            case "vAbilitytb":
+                vFissureRequestOff.Invoke();
+                break;
 
 
-		}
+        }
 	}
-    */
+    
 }
