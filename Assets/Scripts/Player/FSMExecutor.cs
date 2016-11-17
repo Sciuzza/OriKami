@@ -123,7 +123,8 @@ public class FSMExecutor : MonoBehaviour
                         break;
                 }
                 break;
-           
+            case abilties.roll:
+                break;
        
         }
     }

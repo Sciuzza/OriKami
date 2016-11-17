@@ -7,7 +7,7 @@ public class EnvInputs : MonoBehaviour {
 
 	CharacterController ccLink;
 
-	bool onWater = false;
+	bool onWater = false, onAir = false;
 
 
 	[System.Serializable]
@@ -26,31 +26,30 @@ public class EnvInputs : MonoBehaviour {
 
 	void Update(){
 
-        
-     if ((ccLink.collisionFlags & CollisionFlags.Below) != 0)
+
+        if ((ccLink.collisionFlags & CollisionFlags.Below) != 0  && onAir)
         {
+            Debug.Log("Terra");
             if (!onWater)
                 psChanged.Invoke(physicStates.onGround);
             else
                 psChanged.Invoke(physicStates.onWater);
+
+            onAir = false;
         }
-     else
+        else if ((ccLink.collisionFlags & CollisionFlags.Below) == 0 && !onAir) {
+            Debug.LogWarning("Aria");
             psChanged.Invoke(physicStates.onAir);
 
-
-
-
-    }
-
-
-    IEnumerator DebugGrounded()
-    {
-        while (true)
-        {
-            Debug.Log(ccLink.collisionFlags == CollisionFlags.None);
-            yield return new WaitForSeconds(2);
+            onAir = true;
         }
+
+        
+
     }
+
+
+   
 
     /*
 	void OnTriggerEnter (Collider envTrigger){

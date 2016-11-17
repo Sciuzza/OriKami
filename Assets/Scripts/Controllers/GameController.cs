@@ -27,11 +27,7 @@ public class GameController : MonoBehaviour {
 
     void Start()
     {
-        if (FindingPlayer())
-        {
-            initializer.Invoke(player);
-            
-        }
+        InitializingScene();
 
        
       
@@ -46,7 +42,7 @@ public class GameController : MonoBehaviour {
         }
     }
 
-    private bool FindingPlayer()
+    public bool FindingPlayer()
     {
         player = GameObject.FindGameObjectWithTag("Player");
         if (player == null)
@@ -58,6 +54,13 @@ public class GameController : MonoBehaviour {
             return true;
     }
 
+    public void InitializingScene()
+    {
+        if (FindingPlayer())
+        {
+            initializer.Invoke(player);
 
+        }
+    }
     
 }
