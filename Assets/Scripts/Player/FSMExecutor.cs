@@ -183,10 +183,10 @@ public class FSMExecutor : MonoBehaviour
 
 
             vTriggerMidPosition = vfTempLink.aTrigger.transform.position;
-            vTriggerMidPosition.y = 0.0f;
+            vTriggerMidPosition.y = this.transform.position.y;
 
             vGuidanceFinPosition = vfTempLink.exitA.transform.position;
-            vGuidanceFinPosition.y = 0.0f;
+            vGuidanceFinPosition.y = this.transform.position.y;
 
 
             vGuidanceDir = vfTempLink.mGuidance.transform.right;
@@ -198,10 +198,10 @@ public class FSMExecutor : MonoBehaviour
 
 
             vTriggerMidPosition = vfTempLink.bTrigger.transform.position;
-            vTriggerMidPosition.y = 0.0f;
+             vTriggerMidPosition.y = this.transform.position.y;
 
             vGuidanceFinPosition = vfTempLink.exitB.transform.position;
-            vGuidanceFinPosition.y = 0.0f;
+            vGuidanceFinPosition.y = this.transform.position.y;
 
 
             vGuidanceDir = -vfTempLink.mGuidance.transform.right;
@@ -225,15 +225,15 @@ public class FSMExecutor : MonoBehaviour
             {
 
 
-
+               
                 Vector3 distance = vTriggerMidPosition - this.transform.position;
 
-                if (distance.sqrMagnitude >= 0.71f && !secondMoveIsOn)
+                if (distance.sqrMagnitude >= 0.001f && !secondMoveIsOn)
                 {
-                    //Debug.Log(distance.sqrMagnitude);
+                    Debug.Log(distance.sqrMagnitude);
                     Vector3 direction = (vTriggerMidPosition - this.transform.position).normalized;
                     direction.y = 0;
-                    this.transform.position += direction * Time.deltaTime * 3;
+                    this.transform.position += direction * Time.deltaTime * 4;
                 }
                 else
                 {
@@ -248,13 +248,13 @@ public class FSMExecutor : MonoBehaviour
 
                         distance = vGuidanceFinPosition - this.transform.position;
 
-                        if (distance.sqrMagnitude >= 0.8f)
+                        if (distance.sqrMagnitude >= 0.001f)
                         {
 
                             // Vector3 direction = (coreLink.vGuidanceFinPosition - this.transform.position).normalized;
                             Vector3 direction = vGuidanceDir.normalized;
                             direction.y = 0;
-                            this.transform.position += direction * Time.deltaTime * 3;
+                            this.transform.position += direction * Time.deltaTime * 4;
                         }
                         else
                         {

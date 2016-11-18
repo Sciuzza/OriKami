@@ -77,6 +77,7 @@ public class PlayerInputs : MonoBehaviour
         moveDirection.x = Input.GetAxis("Horizontal");
         moveDirection.z = Input.GetAxis("Vertical");
 
+        
         if (moveDirection.x < 0)
             moveDirection.x = -1f;
         else if (moveDirection.x > 0)
@@ -86,7 +87,7 @@ public class PlayerInputs : MonoBehaviour
             moveDirection.z = -1f;
         else if (moveDirection.z > 0)
             moveDirection.z = 1f;
-
+            
         moveDirection = Vector3.ClampMagnitude(moveDirection, 1f);
 
 

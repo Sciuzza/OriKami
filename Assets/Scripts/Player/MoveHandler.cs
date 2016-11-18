@@ -71,7 +71,7 @@ public class MoveHandler : MonoBehaviour
         {
             finalMove *= Time.deltaTime;
 
-            verticalVelocity -= gravityStr * Time.deltaTime;
+            verticalVelocity -= gravityStr * 1.5f * Time.deltaTime;
 
 
             finalMove.y = verticalVelocity * Time.deltaTime;
