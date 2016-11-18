@@ -119,6 +119,8 @@ public class PlayerInputs : MonoBehaviour
             rollStopped.Invoke();
         if (VFissurePressed())
             genAbiRequest.Invoke(abilties.VFissure);
+        if (HFissurePressed())
+            genAbiRequest.Invoke(abilties.HFissure);
     }
 
     #region Jump Input
@@ -1629,6 +1631,69 @@ public class PlayerInputs : MonoBehaviour
     }
     #endregion
 
+    #region Horizontal Fissure Input
+    private bool HFissurePressed()
+    {
+        if (cForm == currentForm.frog)
+            return StdVFissureInput();
+        else
+            return false;
+    }
+
+    private bool FrogHFissureInput()
+    {
+        if (FrogHFissureJoyI() || FrogHFissurePcI())
+            return true;
+        else
+            return false;
+    }
+
+    private bool FrogHFissureJoyI()
+    {
+        if (currentInputs.frogInputs.joyInputs.HorizontalFissure.ToString() != "LT" &&
+        currentInputs.frogInputs.joyInputs.HorizontalFissure.ToString() != "RT")
+        {
+
+            if (Input.GetButtonDown(currentInputs.frogInputs.joyInputs.HorizontalFissure.ToString()))
+                return true;
+            else
+                return false;
+        }
+        else
+        {
+            if (currentInputs.frogInputs.joyInputs.HorizontalFissure.ToString() == "LT")
+            {
+                if (Input.GetAxis("LRT") > 0)
+                {
+                    switchCooldown = true;
+                    StartCoroutine(SwitchingCooldown());
+                    return true;
+                }
+                else
+                    return false;
+            }
+            else
+            {
+                if (Input.GetAxis("LRT") < 0)
+                {
+                    switchCooldown = true;
+                    StartCoroutine(SwitchingCooldown());
+                    return true;
+                }
+                else
+                    return false;
+            }
+        }
+    }
+
+    private bool FrogHFissurePcI()
+    {
+        if (Input.GetButtonDown(currentInputs.frogInputs.keyInputs.HorizontalFissure.ToString()))
+            return true;
+        else
+            return false;
+    }
+    #endregion
     #endregion
 
     #region General Methods
