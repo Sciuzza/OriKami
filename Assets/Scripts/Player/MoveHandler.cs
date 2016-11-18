@@ -10,7 +10,7 @@ public class MoveHandler : MonoBehaviour
 
     CharacterController ccLink;
 
-    private float verticalVelocity, gravityStr = 9.8f;
+    private float verticalVelocity = 0.0f, gravityStr = 9.8f;
 
     // Use this for initialization
     void Awake()
@@ -30,6 +30,8 @@ public class MoveHandler : MonoBehaviour
 
     void Start()
     {
+        StartCoroutine(Moving());
+        StopCoroutine(Moving());
         StartCoroutine(Moving());
     }
 
@@ -71,7 +73,7 @@ public class MoveHandler : MonoBehaviour
         {
             finalMove *= Time.deltaTime;
 
-            verticalVelocity -= gravityStr * 1.5f * Time.deltaTime;
+            verticalVelocity -= gravityStr * Time.deltaTime;
 
 
             finalMove.y = verticalVelocity * Time.deltaTime;
@@ -81,6 +83,8 @@ public class MoveHandler : MonoBehaviour
 
             if ((flags & CollisionFlags.Below) != 0)
                 verticalVelocity = -3f;
+
+            Debug.Log(verticalVelocity);
 
             yield return new WaitForSeconds(Time.deltaTime);
         }

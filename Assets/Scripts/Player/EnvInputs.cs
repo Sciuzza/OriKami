@@ -2,22 +2,23 @@
 using System.Collections;
 using UnityEngine.Events;
 
-public class EnvInputs : MonoBehaviour {
+public class EnvInputs : MonoBehaviour
+{
 
 
-	CharacterController ccLink;
+    CharacterController ccLink;
 
-	bool onWater = false, onAir = false;
+    bool onWater = false, onAir = false;
 
 
-	[System.Serializable]
-	public class physicChangeRequest : UnityEvent<physicStates>
-	{
-	}
+    [System.Serializable]
+    public class physicChangeRequest : UnityEvent<physicStates>
+    {
+    }
 
-	public physicChangeRequest psChanged;
+    public physicChangeRequest psChanged;
 
- 
+
 
     [System.Serializable]
     public class vFissureAbility : UnityEvent<VFissure, string>
@@ -29,17 +30,19 @@ public class EnvInputs : MonoBehaviour {
     public UnityEvent vFissureRequestOff;
 
 
-    void Awake(){
+    void Awake()
+    {
 
-		ccLink = this.GetComponent<CharacterController> ();
+        ccLink = this.GetComponent<CharacterController>();
         //StartCoroutine(DebugGrounded());
     }
 
 
-	void Update(){
+    void Update()
+    {
 
 
-        if ((ccLink.collisionFlags & CollisionFlags.Below) != 0  && onAir)
+        if ((ccLink.collisionFlags & CollisionFlags.Below) != 0 && onAir)
         {
             Debug.Log("Terra");
             if (!onWater)
@@ -49,50 +52,61 @@ public class EnvInputs : MonoBehaviour {
 
             onAir = false;
         }
-        else if ((ccLink.collisionFlags & CollisionFlags.Below) == 0 && !onAir) {
+        else if ((ccLink.collisionFlags & CollisionFlags.Below) == 0 && !onAir)
+        {
             Debug.LogWarning("Aria");
             psChanged.Invoke(physicStates.onAir);
 
             onAir = true;
         }
 
-        
+
 
     }
 
 
-   
 
-    
-	void OnTriggerEnter (Collider envTrigger){
 
-		switch (envTrigger.gameObject.tag) {
 
-		case "vAbilityta":
-        case "vAbilitytb":
+    void OnTriggerEnter(Collider envTrigger)
+    {
+
+        switch (envTrigger.gameObject.tag)
+        {
+
+            case "vAbilityta":
+            case "vAbilitytb":
                 vFissureRequestOn.Invoke(envTrigger.gameObject.GetComponentInParent<VFissure>(), envTrigger.gameObject.tag);
-			break;
-		
+                break;
+            case "hAbilityta":
+            case "hAbilitytb":
+                vFissureRequestOn.Invoke(envTrigger.gameObject.GetComponentInParent<VFissure>(), envTrigger.gameObject.tag);
+                break;
 
 
-		}
+        }
 
-	}
-
- 
-
-	void OnTriggerExit (Collider envTrigger){
+    }
 
 
-		switch (envTrigger.gameObject.tag) {
+
+    void OnTriggerExit(Collider envTrigger)
+    {
+
+
+        switch (envTrigger.gameObject.tag)
+        {
 
             case "vAbilityta":
             case "vAbilitytb":
                 vFissureRequestOff.Invoke();
                 break;
-
+            case "hAbilityta":
+            case "hAbilitytb":
+                vFissureRequestOff.Invoke();
+                break;
 
         }
-	}
-    
+    }
+
 }

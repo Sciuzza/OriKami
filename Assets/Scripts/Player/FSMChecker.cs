@@ -231,6 +231,10 @@ public class FSMChecker : MonoBehaviour
                     vFissureUsed.Invoke(vfLink, vFissureEntrance);
                     break;
                 case abilties.HFissure:
+                    Debug.Log("HFissure Pressed");
+                    cPlayerState.currentClState = controlStates.noMoveAndGenAbi;
+                    UpdatingAbilityList();
+                    vFissureUsed.Invoke(vfLink, vFissureEntrance);
                     break;
                 case abilties.dolpSwimBel:
                     break;
@@ -298,7 +302,19 @@ public class FSMChecker : MonoBehaviour
     {
         vfLink = vfTempLink;
         vFissureEntrance = vfTag;
-        cPlayerState.currentTRGState = triggerGenAbiStates.onVFissure;
+
+        switch (vFissureEntrance)
+        {
+            case "vAbilityta":
+            case "vAbilitytb":
+                cPlayerState.currentTRGState = triggerGenAbiStates.onVFissure;
+                break;
+            case "hAbilityta":
+            case "hAbilitytb":
+                cPlayerState.currentTRGState = triggerGenAbiStates.onHFissure;
+                break;
+        }
+        
         UpdatingAbilityList();
 
     }
