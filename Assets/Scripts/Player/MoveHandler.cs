@@ -6,7 +6,9 @@ public class MoveHandler : MonoBehaviour
 
 
 
-    private Vector3 finalMove;
+    private Vector3 finalMove = new Vector3(0,0,0), rollImpulse, rollDir;
+    private float rollStrength;
+    private bool rolling = false;
 
     CharacterController ccLink;
 
@@ -23,16 +25,25 @@ public class MoveHandler : MonoBehaviour
         fsmExecTempLink.jumpSelected.AddListener(HandlingJump);
         fsmExecTempLink.StopMoveLogic.AddListener(StoppingMove);
         fsmExecTempLink.EnableMoveLogic.AddListener(EnablingMove);
+        fsmExecTempLink.rollSelected.AddListener(HandlingRoll);
+        fsmExecTempLink.specialRotSelected.AddListener(HandlingSpecialRot);
+    
 
         ccLink = this.gameObject.GetComponent<CharacterController>();
+
+        FSMChecker fsmCheckTempLink = this.GetComponent<FSMChecker>();
+
+        fsmCheckTempLink.StoppingRollCoroutine.AddListener(StoppingRoll);
+
 
     }
 
     void Start()
     {
         StartCoroutine(Moving());
-        StopCoroutine(Moving());
-        StartCoroutine(Moving());
+        
+       // StopCoroutine(Moving());
+        //StartCoroutine(Moving());
     }
 
     private void HandlingMove(Vector3 inputDir, float moveSpeed)
@@ -48,6 +59,16 @@ public class MoveHandler : MonoBehaviour
 
     }
 
+    private void HandlingSpecialRot(Vector3 inputDir, float rotSpeed)
+    {
+
+        //Quaternion rotation = Quaternion.LookRotation(inputDir, Vector3.up);
+        //this.transform.rotation = Quaternion.Slerp(this.transform.rotation, rotation, Time.deltaTime * rotSpeed);
+       
+        rollDir = inputDir;
+       
+    }
+
     private void HandlingJump(float jumpStrength)
     {
 
@@ -55,16 +76,36 @@ public class MoveHandler : MonoBehaviour
 
     }
 
+    private void HandlingRoll(float rollStr)
+    {
+        rollImpulse = this.transform.forward;
+        rollDir = this.transform.forward;
+        rollStrength = rollStr;
+
+        rolling = true;
+        StartCoroutine(Rolling());
+       
+    }
+
+    
+
     private void StoppingMove()
     {
         Debug.Log("Move Stopped");
+        
         StopCoroutine(Moving());
     }
 
     private void EnablingMove()
     {
         Debug.Log("Move Enabled");
+        finalMove = new Vector3(0, 0, 0);
         StartCoroutine(Moving());
+    }
+
+    private void StoppingRoll()
+    {
+        rolling = false;
     }
 
     IEnumerator Moving()
@@ -84,7 +125,29 @@ public class MoveHandler : MonoBehaviour
             if ((flags & CollisionFlags.Below) != 0)
                 verticalVelocity = -3f;
 
-            Debug.Log(verticalVelocity);
+           // Debug.Log(verticalVelocity);
+
+            yield return new WaitForSeconds(Time.deltaTime);
+        }
+    }
+
+    IEnumerator Rolling()
+    {
+        finalMove = rollImpulse;
+
+        while (rolling)
+        {
+            finalMove = Vector3.Slerp(finalMove.normalized, rollDir.normalized, Time.deltaTime);
+
+            float height = finalMove.y;
+
+            finalMove.y = 0;
+            this.transform.rotation = Quaternion.LookRotation(finalMove, Vector3.up);
+
+            finalMove.y = height;
+
+            finalMove *= rollStrength;
+
 
             yield return new WaitForSeconds(Time.deltaTime);
         }

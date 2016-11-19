@@ -112,6 +112,7 @@ public class FSMChecker : MonoBehaviour
     }
 
     public vFissureUse vFissureUsed;
+    public UnityEvent StoppingRollCoroutine;
 
     #endregion
 
@@ -196,13 +197,14 @@ public class FSMChecker : MonoBehaviour
                 case abilties.rotate:
                     rotationUsed.Invoke(abiDir, cPlayerState.currentPlState);
                     break;
-
+                case abilties.moveOnRoll:
+                    rotationUsed.Invoke(abiDir, cPlayerState.currentPlState);
+                    break;
             }
 
 
         }
-        else
-            Debug.Log("Requirements not met");
+       
     }
 
     private void CheckingAbiRequirements(abilties abiReceived)
@@ -219,7 +221,10 @@ public class FSMChecker : MonoBehaviour
                 case abilties.cameraMove:
                     break;
                 case abilties.roll:
+                    cPlayerState.currentPlState = playerStates.rolling;
                     RemoveAbility(abilties.move);
+                    RemoveAbility(abilties.rotate);
+                    AddAbility(abilties.moveOnRoll);
                     genAbiUsed.Invoke(abiReceived, cPlayerState.currentForm);
                     break;
                 case abilties.moveBlock:
@@ -1431,7 +1436,11 @@ public class FSMChecker : MonoBehaviour
 
     private void EnablingMove()
     {
-        //AddAbility(abilties.move);
+        cPlayerState.currentPlState = playerStates.standingStill;
+        AddAbility(abilties.move);
+        AddAbility(abilties.rotate);
+        RemoveAbility(abilties.moveOnRoll);
+        StoppingRollCoroutine.Invoke();
     }
     #endregion
     #endregion

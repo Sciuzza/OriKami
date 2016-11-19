@@ -6,7 +6,7 @@ public class PlayerInputs : MonoBehaviour
 {
 
     public inputSettings currentInputs;
-
+    private bool isRollPressed = false;
 
     #region Private Use Variables
     private Vector3 moveDirection;
@@ -66,6 +66,9 @@ public class PlayerInputs : MonoBehaviour
             dirAbiRequest.Invoke(abilties.move, moveDirection);
             dirAbiRequest.Invoke(abilties.rotate, moveDirection);
         }
+       
+            dirAbiRequest.Invoke(abilties.moveOnRoll, moveDirection);
+
     }
 
     private void MoveInput()
@@ -114,9 +117,15 @@ public class PlayerInputs : MonoBehaviour
         if (toStdPressed())
             genAbiRequest.Invoke(abilties.toStd);
         if (rollPressed())
+        {
+            Debug.Log("Roll Pressed");
             genAbiRequest.Invoke(abilties.roll);
-        else
+        }
+        if (rollReleased())
+        {
+            Debug.Log("Roll Released");
             rollStopped.Invoke();
+        }
         if (VFissurePressed())
             genAbiRequest.Invoke(abilties.VFissure);
         if (HFissurePressed())
@@ -1530,17 +1539,18 @@ public class PlayerInputs : MonoBehaviour
         currentInputs.armaInputs.joyInputs.roll.ToString() != "RT")
         {
 
-            if (Input.GetButton(currentInputs.armaInputs.joyInputs.roll.ToString()))
+            if (Input.GetButtonDown(currentInputs.armaInputs.joyInputs.roll.ToString()))
                 return true;
             else
                 return false;
         }
         else
         {
-            if (currentInputs.armaInputs.joyInputs.roll.ToString() == "LT")
+            if (currentInputs.armaInputs.joyInputs.roll.ToString() == "LT" && !isRollPressed)
             {
                 if (Input.GetAxis("LRT") > 0)
-                {                 
+                {
+                    isRollPressed = true;         
                     return true;
                 }
                 else
@@ -1548,8 +1558,9 @@ public class PlayerInputs : MonoBehaviour
             }
             else
             {
-                if (Input.GetAxis("LRT") < 0)
+                if (Input.GetAxis("LRT") < 0 && !isRollPressed)
                 {
+                    isRollPressed = true;
                     return true;
                 }
                 else
@@ -1560,7 +1571,67 @@ public class PlayerInputs : MonoBehaviour
 
     private bool armaRollPcI()
     {
-        if (Input.GetButton(currentInputs.armaInputs.keyInputs.roll.ToString()))
+        if (Input.GetButtonDown(currentInputs.armaInputs.keyInputs.roll.ToString()))
+            return true;
+        else
+            return false;
+    }
+
+    private bool rollReleased()
+    {
+        if (cForm == currentForm.arma)
+            return armaRollRInput();
+        else
+            return false;
+    }
+
+    private bool armaRollRInput()
+    {
+        if (armaRollRJoyI() || armaRollRPcI())
+            return true;
+        else
+            return false;
+    }
+
+    private bool armaRollRJoyI()
+    {
+        if (currentInputs.armaInputs.joyInputs.roll.ToString() != "LT" &&
+        currentInputs.armaInputs.joyInputs.roll.ToString() != "RT")
+        {
+
+            if (Input.GetButtonUp(currentInputs.armaInputs.joyInputs.roll.ToString()))
+                return true;
+            else
+                return false;
+        }
+        else
+        {
+            if (currentInputs.armaInputs.joyInputs.roll.ToString() == "LT" && isRollPressed)
+            {
+                if (Input.GetAxis("LRT") == 0)
+                {
+                    isRollPressed = false;
+                    return true;
+                }
+                else
+                    return false;
+            }
+            else
+            {
+                if (Input.GetAxis("LRT") == 0 && isRollPressed)
+                {
+                    isRollPressed = false;
+                    return true;
+                }
+                else
+                    return false;
+            }
+        }
+    }
+
+    private bool armaRollRPcI()
+    {
+        if (Input.GetButtonUp(currentInputs.armaInputs.keyInputs.roll.ToString()))
             return true;
         else
             return false;

@@ -25,14 +25,14 @@ public class FSMExecutor : MonoBehaviour
     {
     }
 
-    public genAbiHandling jumpSelected;
+    public genAbiHandling jumpSelected, rollSelected;
 
     [System.Serializable]
     public class rotHandling : UnityEvent<Vector3, float>
     {
     }
 
-    public rotHandling rotSelected;
+    public rotHandling rotSelected, specialRotSelected;
 
     [System.Serializable]
     public class phHandling : UnityEvent<physicStates>
@@ -40,6 +40,8 @@ public class FSMExecutor : MonoBehaviour
     }
 
     public phHandling phChangeEffect;
+
+ 
 
     public UnityEvent vFissureAniEnded;
     public UnityEvent StopMoveLogic, EnableMoveLogic;
@@ -99,11 +101,7 @@ public class FSMExecutor : MonoBehaviour
                         moveSelected.Invoke(moveDirInput, currentMoveValues.dolphinMove.swimSpeed);
                         break;
                 }
-
-
                 break;
-
-
         }
     }
 
@@ -127,6 +125,7 @@ public class FSMExecutor : MonoBehaviour
                 }
                 break;
             case abilties.roll:
+                rollSelected.Invoke(currentMoveValues.armaMove.rollingStrength);
                 break;
 
         }
@@ -150,8 +149,10 @@ public class FSMExecutor : MonoBehaviour
 
             case playerStates.flying:
             case playerStates.movingBlock:
-            case playerStates.rolling:
                 rotSelected.Invoke(abiDirInput, generalValues.rotateSpeed / 3);
+                break;
+            case playerStates.rolling:
+                specialRotSelected.Invoke(abiDirInput, generalValues.rotateSpeed / 3);
                 break;
             default:
                 rotSelected.Invoke(abiDirInput, generalValues.rotateSpeed);
@@ -234,7 +235,7 @@ public class FSMExecutor : MonoBehaviour
 
                 if (distance.sqrMagnitude >= 0.001f && !secondMoveIsOn)
                 {
-                    Debug.Log(distance.sqrMagnitude);
+                    //Debug.Log(distance.sqrMagnitude);
                     Vector3 direction = (vTriggerMidPosition - this.transform.position).normalized;
                     direction.y = 0;
                     this.transform.position += direction * Time.deltaTime * 4;
@@ -349,7 +350,7 @@ public class FSMExecutor : MonoBehaviour
 
                 if (distance.sqrMagnitude >= 0.5f && !secondMoveIsOn)
                 {
-                    Debug.Log(distance.sqrMagnitude);
+                    //Debug.Log(distance.sqrMagnitude);
                     Vector3 direction = (vTriggerMidPosition - this.transform.position).normalized;
                     direction.y = 0;
                     this.transform.position += direction * Time.deltaTime * 4;
