@@ -63,7 +63,7 @@ public class FSMChecker : MonoBehaviour
 
 
     [System.Serializable]
-    public class dirAbilityUsed : UnityEvent<abilties, Vector3, string>
+    public class dirAbilityUsed : UnityEvent<abilties, Vector3, string, physicStates>
     {
     }
 
@@ -192,7 +192,7 @@ public class FSMChecker : MonoBehaviour
             {
 
                 case abilties.move:
-                    dirAbiUsed.Invoke(abiReceived, abiDir, cPlayerState.currentForm);
+                    dirAbiUsed.Invoke(abiReceived, abiDir, cPlayerState.currentForm, cPlayerState.currentPhState);
                     break;
                 case abilties.rotate:
                     rotationUsed.Invoke(abiDir, cPlayerState.currentPlState);
@@ -201,7 +201,6 @@ public class FSMChecker : MonoBehaviour
                     rotationUsed.Invoke(abiDir, cPlayerState.currentPlState);
                     break;
             }
-
 
         }
        
@@ -241,6 +240,10 @@ public class FSMChecker : MonoBehaviour
                     vFissureUsed.Invoke(vfLink, vFissureEntrance);
                     break;
                 case abilties.dolpSwimBel:
+                    Debug.Log("DolpSwimBelow Pressed");
+                    cPlayerState.currentClState = controlStates.noMoveAndGenAbi;
+                    UpdatingAbilityList();
+                    vFissureUsed.Invoke(vfLink, vFissureEntrance);
                     break;
                 case abilties.toStd:
                     cPlayerState.previousForm = cPlayerState.currentForm;
@@ -325,6 +328,10 @@ public class FSMChecker : MonoBehaviour
             case "hAbilityta":
             case "hAbilitytb":
                 cPlayerState.currentTRGState = triggerGenAbiStates.onHFissure;
+                break;
+            case "dAbilityta":
+            case "dAbilitytb":
+                cPlayerState.currentTRGState = triggerGenAbiStates.onDolpSwimBel;
                 break;
         }
         
@@ -412,7 +419,7 @@ public class FSMChecker : MonoBehaviour
         cPlayerState.currentAbilities.Clear();
         cPlayerState.currentAbilities.TrimExcess();
 
-       
+        AddAbility(abilties.move);
         AddAbility(abilties.rotate);
         AddAbility(abilties.cameraMove);
 
@@ -427,21 +434,12 @@ public class FSMChecker : MonoBehaviour
 
         switch (cPlayerState.currentPhState)
         {
-            case physicStates.onWater:
-                RemoveAbility(abilties.jump);
-                RemoveAbility(abilties.move);
-                break;
-            case physicStates.onAir:
-                RemoveAbility(abilties.jump);
-                AddAbility(abilties.move);
-                break;
             case physicStates.onGround:
                 if (cPlayerState.currentTRGState == triggerGenAbiStates.onVFissure)
                     AddAbility(abilties.VFissure);
                 else if (cPlayerState.currentTRGState == triggerGenAbiStates.npcTalk)
                     AddAbility(abilties.npcInter);
                 AddAbility(abilties.jump);
-                AddAbility(abilties.move);
                 break;
         }
 
@@ -453,7 +451,7 @@ public class FSMChecker : MonoBehaviour
         cPlayerState.currentAbilities.Clear();
         cPlayerState.currentAbilities.TrimExcess();
 
-        
+        AddAbility(abilties.move);
         AddAbility(abilties.rotate);
 
 
@@ -467,25 +465,17 @@ public class FSMChecker : MonoBehaviour
 
 
         switch (cPlayerState.currentPhState)
-        {
-            case physicStates.onWater:
-                RemoveAbility(abilties.jump);
-                RemoveAbility(abilties.move);
-                break;
-            case physicStates.onAir:
-                RemoveAbility(abilties.jump);
-                break;
+        { 
             case physicStates.onGround:
                 if (cPlayerState.currentTRGState == triggerGenAbiStates.onVFissure)
                     AddAbility(abilties.VFissure);
                 else if (cPlayerState.currentTRGState == triggerGenAbiStates.npcTalk)
                     AddAbility(abilties.npcInter);
                 AddAbility(abilties.jump);
-                AddAbility(abilties.move);
                 break;
         }
 
-        
+
     }
 
     private void StdNoMove()
@@ -508,10 +498,7 @@ public class FSMChecker : MonoBehaviour
 
         switch (cPlayerState.currentPhState)
         {
-            case physicStates.onWater:
-            case physicStates.onAir:
-                RemoveAbility(abilties.jump);
-                break;
+ 
             case physicStates.onGround:
                 if (cPlayerState.currentTRGState == triggerGenAbiStates.onVFissure)
                     AddAbility(abilties.VFissure);
@@ -521,7 +508,7 @@ public class FSMChecker : MonoBehaviour
                 break;
         }
 
-       
+
     }
 
     private void StdNoGenAbi()
@@ -529,22 +516,11 @@ public class FSMChecker : MonoBehaviour
         cPlayerState.currentAbilities.Clear();
         cPlayerState.currentAbilities.TrimExcess();
 
-      
+        AddAbility(abilties.move);
         AddAbility(abilties.rotate);
         AddAbility(abilties.cameraMove);
 
         AddAbility(abilties.menu);
-
-        switch (cPlayerState.currentPhState)
-        {
-            case physicStates.onWater:
-                RemoveAbility(abilties.move);
-                break;
-            case physicStates.onAir:         
-            case physicStates.onGround:
-                AddAbility(abilties.move);
-                break;
-        }
 
     }
 
@@ -1268,10 +1244,8 @@ public class FSMChecker : MonoBehaviour
 
         switch (cPlayerState.currentPhState)
         {
-            case physicStates.onGround:
             case physicStates.onAir:
-                RemoveAbility(abilties.jump);
-                RemoveAbility(abilties.move);
+                AddAbility(abilties.move);
                 break;
             case physicStates.onWater:
                 if (cPlayerState.currentTRGState == triggerGenAbiStates.onDolpSwimBel)

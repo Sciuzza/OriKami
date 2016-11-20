@@ -232,6 +232,8 @@ public struct generalTweaks
     public float globalGravity;
     [Range(0.5f, 5)]
     public float rotateSpeed;
+    [Range(0.2f, 4)]
+    public float moveInWater;
    
 
 }

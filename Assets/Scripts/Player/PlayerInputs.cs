@@ -130,6 +130,8 @@ public class PlayerInputs : MonoBehaviour
             genAbiRequest.Invoke(abilties.VFissure);
         if (HFissurePressed())
             genAbiRequest.Invoke(abilties.HFissure);
+        if (DolpSwimBPressed())
+            genAbiRequest.Invoke(abilties.dolpSwimBel);
     }
 
     #region Jump Input
@@ -1760,6 +1762,70 @@ public class PlayerInputs : MonoBehaviour
     private bool FrogHFissurePcI()
     {
         if (Input.GetButtonDown(currentInputs.frogInputs.keyInputs.HorizontalFissure.ToString()))
+            return true;
+        else
+            return false;
+    }
+    #endregion
+
+    #region Dolphin Swim Below Input
+    private bool DolpSwimBPressed()
+    {
+        if (cForm == currentForm.dolphin)
+            return DolpSwimBInput();
+        else
+            return false;
+    }
+
+    private bool DolpSwimBInput()
+    {
+        if (DolpSwimBJoyI() || DolpSwimBPcI())
+            return true;
+        else
+            return false;
+    }
+
+    private bool DolpSwimBJoyI()
+    {
+        if (currentInputs.dolphinInputs.joyInputs.moveBelow.ToString() != "LT" &&
+        currentInputs.dolphinInputs.joyInputs.moveBelow.ToString() != "RT")
+        {
+
+            if (Input.GetButtonDown(currentInputs.dolphinInputs.joyInputs.moveBelow.ToString()))
+                return true;
+            else
+                return false;
+        }
+        else
+        {
+            if (currentInputs.dolphinInputs.joyInputs.moveBelow.ToString() == "LT")
+            {
+                if (Input.GetAxis("LRT") > 0)
+                {
+                    switchCooldown = true;
+                    StartCoroutine(SwitchingCooldown());
+                    return true;
+                }
+                else
+                    return false;
+            }
+            else
+            {
+                if (Input.GetAxis("LRT") < 0)
+                {
+                    switchCooldown = true;
+                    StartCoroutine(SwitchingCooldown());
+                    return true;
+                }
+                else
+                    return false;
+            }
+        }
+    }
+
+    private bool DolpSwimBPcI()
+    {
+        if (Input.GetButtonDown(currentInputs.dolphinInputs.keyInputs.moveBelow.ToString()))
             return true;
         else
             return false;

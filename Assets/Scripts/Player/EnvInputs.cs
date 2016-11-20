@@ -66,6 +66,10 @@ public class EnvInputs : MonoBehaviour
             case "hAbilitytb":
                 vFissureRequestOn.Invoke(envTrigger.gameObject.GetComponentInParent<VFissure>(), envTrigger.gameObject.tag);
                 break;
+            case "dAbilityta":
+            case "dAbilitytb":
+                vFissureRequestOn.Invoke(envTrigger.gameObject.GetComponentInParent<VFissure>(), envTrigger.gameObject.tag);
+                break;
             case "Water":
                 onWaterFlag = true;
                 break;
@@ -90,6 +94,10 @@ public class EnvInputs : MonoBehaviour
                 break;
             case "hAbilityta":
             case "hAbilitytb":
+                vFissureRequestOff.Invoke();
+                break;
+            case "dAbilityta":
+            case "dAbilitytb":
                 vFissureRequestOff.Invoke();
                 break;
             case "Water":

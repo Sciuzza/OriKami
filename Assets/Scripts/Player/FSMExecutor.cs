@@ -77,7 +77,7 @@ public class FSMExecutor : MonoBehaviour
 
     }
 
-    private void ApplyingAbilityEffect(abilties abiUsed, Vector3 moveDirInput, string currentForm)
+    private void ApplyingAbilityEffect(abilties abiUsed, Vector3 moveDirInput, string currentForm, physicStates currentPHState)
     {
         switch (abiUsed)
         {
@@ -85,16 +85,25 @@ public class FSMExecutor : MonoBehaviour
                 switch (currentForm)
                 {
                     case ("Standard Form"):
-                        moveSelected.Invoke(moveDirInput, currentMoveValues.standMove.moveSpeed);
+                        if (currentPHState != physicStates.onWater)
+                            moveSelected.Invoke(moveDirInput, currentMoveValues.standMove.moveSpeed);
+                        else
+                            moveSelected.Invoke(moveDirInput, generalValues.moveInWater);
                         break;
                     case ("Frog Form"):
-                        moveSelected.Invoke(moveDirInput, currentMoveValues.frogMove.moveSpeed);
+                        if (currentPHState != physicStates.onWater)
+                            moveSelected.Invoke(moveDirInput, currentMoveValues.frogMove.moveSpeed);
+                        else
+                            moveSelected.Invoke(moveDirInput, generalValues.moveInWater);
                         break;
                     case ("Dragon Form"):
                         moveSelected.Invoke(moveDirInput, currentMoveValues.craneMove.glideSpeed);
                         break;
                     case ("Armadillo Form"):
-                        moveSelected.Invoke(moveDirInput, currentMoveValues.armaMove.moveSpeed);
+                        if (currentPHState != physicStates.onWater)
+                            moveSelected.Invoke(moveDirInput, currentMoveValues.armaMove.moveSpeed);
+                        else
+                            moveSelected.Invoke(moveDirInput, generalValues.moveInWater);
                         break;
                     case ("Dolphin Form"):
                         moveSelected.Invoke(moveDirInput, currentMoveValues.dolphinMove.swimSpeed);
@@ -136,8 +145,10 @@ public class FSMExecutor : MonoBehaviour
 
         if (vfTag == "vAbilityta" || vfTag == "vAbilitytb")
             StartCoroutine(VFissureExecution(vFissureAniOn, vfTempLink, vfTag));
-        else
+        else if (vfTag == "hAbilityta" || vfTag == "hAbilitytb")
             StartCoroutine(HFissureExecution(vFissureAniOn, vfTempLink, vfTag));
+        else
+            StartCoroutine(DolpSwimBExecution(vFissureAniOn, vfTempLink, vfTag));
     }
 
     private void ApplyingRotationEffect(Vector3 abiDirInput, playerStates currentPl)
@@ -373,6 +384,115 @@ public class FSMExecutor : MonoBehaviour
                         }
 
                     
+                }
+            }
+            yield return new WaitForSeconds(Time.deltaTime);
+        }
+        vFissureAniOn = false;
+        vFissureAniEnded.Invoke();
+        ccTempLink.radius = radius;
+    }
+
+    private IEnumerator DolpSwimBExecution(bool vFissureAniOn, VFissure vfTempLink, string vfEntrance)
+    {
+
+        CharacterController ccTempLink = this.gameObject.GetComponent<CharacterController>();
+
+        float radius = ccTempLink.radius;
+
+        ccTempLink.radius = 0;
+
+        bool moveFinished = false, secondMoveIsOn = false;
+
+        if (vfTempLink == null)
+            Debug.Log("Cazzo");
+
+        Quaternion vTriggerRotation, vGuidanceRotation;
+        Vector3 vTriggerMidPosition, vGuidanceFinPosition, vGuidanceDir;
+
+        if (vfEntrance == "dAbilityta")
+        {
+            vTriggerRotation = vfTempLink.aTrigger.transform.rotation;
+            vGuidanceRotation = vfTempLink.mGuidance.transform.rotation;
+
+
+            vTriggerMidPosition = vfTempLink.aTrigger.transform.position;
+            vTriggerMidPosition.y = this.transform.position.y;
+
+            vGuidanceFinPosition = vfTempLink.exitA.transform.position;
+            vGuidanceFinPosition.y = this.transform.position.y;
+
+
+            vGuidanceDir = -vfTempLink.mGuidance.transform.right;
+        }
+        else
+        {
+            vTriggerRotation = vfTempLink.bTrigger.transform.rotation;
+            vGuidanceRotation = vfTempLink.mGuidance.transform.rotation;
+
+
+            vTriggerMidPosition = vfTempLink.bTrigger.transform.position;
+            vTriggerMidPosition.y = this.transform.position.y;
+
+            vGuidanceFinPosition = vfTempLink.exitB.transform.position;
+            vGuidanceFinPosition.y = this.transform.position.y;
+
+
+            vGuidanceDir = vfTempLink.mGuidance.transform.right;
+        }
+
+        while (vFissureAniOn)
+        {
+            if (Quaternion.Angle(this.transform.rotation, vTriggerRotation) > 0.1f)
+            {
+
+                this.transform.localRotation = Quaternion.Slerp(this.transform.rotation, vTriggerRotation, Time.deltaTime * 5);
+                //Debug.Log(Quaternion.Angle(this.transform.rotation, coreLink.vTriggerRotation));
+            }
+            else if (moveFinished)
+            {
+                vFissureAniOn = false;
+                moveFinished = false;
+                secondMoveIsOn = false;
+            }
+            else
+            {
+
+
+                Vector3 distance = vTriggerMidPosition - this.transform.position;
+
+                if (distance.sqrMagnitude >= 0.5f && !secondMoveIsOn)
+                {
+                    //Debug.Log(distance.sqrMagnitude);
+                    Vector3 direction = (vTriggerMidPosition - this.transform.position).normalized;
+                    direction.y = 0;
+                    this.transform.position += direction * Time.deltaTime * 4;
+                }
+                else
+                {
+
+                    secondMoveIsOn = true;
+                    this.transform.position = vGuidanceFinPosition;
+                    moveFinished = true;
+
+                    /*
+                    distance = vGuidanceFinPosition - this.transform.position;
+
+                    if (distance.sqrMagnitude >= 0.55f)
+                    {
+
+                        // Vector3 direction = (coreLink.vGuidanceFinPosition - this.transform.position).normalized;
+                        Vector3 direction = vGuidanceDir.normalized;
+                        direction.y = 0;
+                        this.transform.position += direction * Time.deltaTime * 4;
+                    }
+                    else
+                    {
+                        moveFinished = true;
+
+                    }
+                    */
+
                 }
             }
             yield return new WaitForSeconds(Time.deltaTime);
