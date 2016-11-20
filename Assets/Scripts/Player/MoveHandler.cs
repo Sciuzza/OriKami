@@ -6,13 +6,15 @@ public class MoveHandler : MonoBehaviour
 
 
 
-    private Vector3 finalMove = new Vector3(0,0,0), rollImpulse, rollDir;
+    private Vector3 finalMove = new Vector3(0,0,0), rollImpulse = new Vector3(0,0,0), rollDir;
     private float rollStrength;
-    private bool rolling = false;
+    private bool rolling = false, gliding = false;
 
     CharacterController ccLink;
 
-    private float verticalVelocity = 0.0f, gravityStr = 9.8f;
+    private float verticalVelocity = 0.0f, gravityStr = Physics.gravity.y;
+
+    CollisionFlags flags;
 
     // Use this for initialization
     void Awake()
@@ -23,8 +25,6 @@ public class MoveHandler : MonoBehaviour
         fsmExecTempLink.moveSelected.AddListener(HandlingMove);
         fsmExecTempLink.rotSelected.AddListener(HandlingRot);
         fsmExecTempLink.jumpSelected.AddListener(HandlingJump);
-        fsmExecTempLink.StopMoveLogic.AddListener(StoppingMove);
-        fsmExecTempLink.EnableMoveLogic.AddListener(EnablingMove);
         fsmExecTempLink.rollSelected.AddListener(HandlingRoll);
         fsmExecTempLink.specialRotSelected.AddListener(HandlingSpecialRot);
     
@@ -33,17 +33,55 @@ public class MoveHandler : MonoBehaviour
 
         FSMChecker fsmCheckTempLink = this.GetComponent<FSMChecker>();
 
-        fsmCheckTempLink.StoppingRollCoroutine.AddListener(StoppingRoll);
-
+        fsmCheckTempLink.stoppingRollLogic.AddListener(StoppingRoll);
+        fsmCheckTempLink.enableGlideLogic.AddListener(SettingGlideGravity);
+        fsmCheckTempLink.stopGlideLogic.AddListener(SettingNormalGravity);
 
     }
 
-    void Start()
+
+    void Update()
     {
-        StartCoroutine(Moving());
+
+
+        float timeTakeThisFrame = Time.deltaTime;
+
+        if (rolling)
+        {
+            finalMove = Vector3.Slerp(finalMove.normalized, rollDir.normalized, timeTakeThisFrame);
+
+            float height = finalMove.y;
+
+            finalMove.y = 0;
+
+            if ((ccLink.collisionFlags & CollisionFlags.Below) != 0)
+                this.transform.rotation = Quaternion.LookRotation(finalMove, Vector3.up);
+
+            finalMove.y = height;
+
+            finalMove *= rollStrength;
+
+
+        }
+
         
-       // StopCoroutine(Moving());
-        //StartCoroutine(Moving());
+
+        finalMove *= timeTakeThisFrame;
+
+        if (!gliding)
+            verticalVelocity -= gravityStr * timeTakeThisFrame;
+        else
+            verticalVelocity = -1;
+
+        finalMove.y = verticalVelocity * timeTakeThisFrame;
+
+
+
+
+        flags = ccLink.Move(finalMove);
+
+        if ((flags & CollisionFlags.Below) != 0)
+            verticalVelocity = -3f;
     }
 
     private void HandlingMove(Vector3 inputDir, float moveSpeed)
@@ -72,7 +110,7 @@ public class MoveHandler : MonoBehaviour
     private void HandlingJump(float jumpStrength)
     {
 
-        verticalVelocity += jumpStrength;
+        verticalVelocity = jumpStrength;
 
     }
 
@@ -81,26 +119,11 @@ public class MoveHandler : MonoBehaviour
         rollImpulse = this.transform.forward;
         rollDir = this.transform.forward;
         rollStrength = rollStr;
+        finalMove = rollImpulse;
 
         rolling = true;
-        StartCoroutine(Rolling());
+      
        
-    }
-
-    
-
-    private void StoppingMove()
-    {
-        Debug.Log("Move Stopped");
-        
-        StopCoroutine(Moving());
-    }
-
-    private void EnablingMove()
-    {
-        Debug.Log("Move Enabled");
-        finalMove = new Vector3(0, 0, 0);
-        StartCoroutine(Moving());
     }
 
     private void StoppingRoll()
@@ -108,52 +131,15 @@ public class MoveHandler : MonoBehaviour
         rolling = false;
     }
 
-    IEnumerator Moving()
+    private void SettingGlideGravity()
     {
-        while (true)
-        {
-            finalMove *= Time.deltaTime;
-
-            verticalVelocity -= gravityStr * Time.deltaTime;
-
-
-            finalMove.y = verticalVelocity * Time.deltaTime;
-
-
-            CollisionFlags flags = ccLink.Move(finalMove);
-
-            if ((flags & CollisionFlags.Below) != 0)
-                verticalVelocity = -3f;
-
-           // Debug.Log(verticalVelocity);
-
-            yield return new WaitForSeconds(Time.deltaTime);
-        }
+        gliding = true;
     }
 
-    IEnumerator Rolling()
+    private void SettingNormalGravity()
     {
-        finalMove = rollImpulse;
-
-        while (rolling)
-        {
-            finalMove = Vector3.Slerp(finalMove.normalized, rollDir.normalized, Time.deltaTime);
-
-            float height = finalMove.y;
-
-            finalMove.y = 0;
-            this.transform.rotation = Quaternion.LookRotation(finalMove, Vector3.up);
-
-            finalMove.y = height;
-
-            finalMove *= rollStrength;
-
-
-            yield return new WaitForSeconds(Time.deltaTime);
-        }
+        gliding = false;
     }
-
-
 
 
 

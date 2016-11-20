@@ -8,7 +8,7 @@ public class EnvInputs : MonoBehaviour
 
     CharacterController ccLink;
 
-    bool onWater = false, onAir = false;
+    bool onWaterFlag = false, onAir = false, onWater = false, onGround = false;
 
 
     [System.Serializable]
@@ -42,23 +42,7 @@ public class EnvInputs : MonoBehaviour
     {
 
 
-        if ((ccLink.collisionFlags & CollisionFlags.Below) != 0 && onAir)
-        {
-            Debug.Log("Terra");
-            if (!onWater)
-                psChanged.Invoke(physicStates.onGround);
-            else
-                psChanged.Invoke(physicStates.onWater);
-
-            onAir = false;
-        }
-        else if ((ccLink.collisionFlags & CollisionFlags.Below) == 0 && !onAir)
-        {
-            Debug.LogWarning("Aria");
-            psChanged.Invoke(physicStates.onAir);
-
-            onAir = true;
-        }
+        PhysicStateInput();
 
 
 
@@ -81,6 +65,9 @@ public class EnvInputs : MonoBehaviour
             case "hAbilityta":
             case "hAbilitytb":
                 vFissureRequestOn.Invoke(envTrigger.gameObject.GetComponentInParent<VFissure>(), envTrigger.gameObject.tag);
+                break;
+            case "Water":
+                onWaterFlag = true;
                 break;
 
 
@@ -105,8 +92,65 @@ public class EnvInputs : MonoBehaviour
             case "hAbilitytb":
                 vFissureRequestOff.Invoke();
                 break;
-
+            case "Water":
+                onWaterFlag = false;
+                break;
         }
     }
 
+
+    private void PhysicStateInput()
+    {
+        if ((ccLink.collisionFlags & CollisionFlags.Below) != 0)
+        {
+            if (onAir)
+            {
+
+                if (!onWaterFlag && !onWater)
+                {
+                    Debug.Log("Terra");
+                    psChanged.Invoke(physicStates.onGround);
+                    onWater = false;
+                    onGround = true;
+                }
+                else if (onWaterFlag && !onWater)
+                {
+                    Debug.Log("Acqua");
+                    psChanged.Invoke(physicStates.onWater);
+                    onWater = true;
+                    onGround = false;
+                }
+
+                onAir = false;
+            }
+            else
+            {
+                if (!onWaterFlag && onWater && !onGround)
+                {
+                    Debug.Log("Terra");
+                    psChanged.Invoke(physicStates.onGround);
+                    onWater = false;
+                    onGround = true;
+                    
+                }
+                else if (onWaterFlag && !onWater && onGround)
+                {
+                    Debug.Log("Acqua");
+                    psChanged.Invoke(physicStates.onWater);
+                    onWater = true;
+                    onGround = false;
+                }
+            }
+            
+        }
+        else if ((ccLink.collisionFlags & CollisionFlags.Below) == 0 && !onAir)
+        {
+            Debug.LogWarning("Aria");
+            psChanged.Invoke(physicStates.onAir);
+
+            onWater = false;
+            onGround = false;
+            onAir = true;
+        }
+    }
 }

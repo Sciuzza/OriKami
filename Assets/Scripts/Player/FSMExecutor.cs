@@ -44,7 +44,6 @@ public class FSMExecutor : MonoBehaviour
  
 
     public UnityEvent vFissureAniEnded;
-    public UnityEvent StopMoveLogic, EnableMoveLogic;
     #endregion
 
     void Awake()
@@ -165,7 +164,6 @@ public class FSMExecutor : MonoBehaviour
 
     private IEnumerator VFissureExecution(bool vFissureAniOn, VFissure vfTempLink, string vfEntrance)
     {
-        StopMoveLogic.Invoke();
 
         CharacterController ccTempLink = this.gameObject.GetComponent<CharacterController>();
 
@@ -233,7 +231,7 @@ public class FSMExecutor : MonoBehaviour
 
                 Vector3 distance = vTriggerMidPosition - this.transform.position;
 
-                if (distance.sqrMagnitude >= 0.001f && !secondMoveIsOn)
+                if (distance.sqrMagnitude >= 0.002f && !secondMoveIsOn)
                 {
                     //Debug.Log(distance.sqrMagnitude);
                     Vector3 direction = (vTriggerMidPosition - this.transform.position).normalized;
@@ -253,7 +251,7 @@ public class FSMExecutor : MonoBehaviour
 
                         distance = vGuidanceFinPosition - this.transform.position;
 
-                        if (distance.sqrMagnitude >= 0.001f)
+                        if (distance.sqrMagnitude >= 0.002f)
                         {
 
                             // Vector3 direction = (coreLink.vGuidanceFinPosition - this.transform.position).normalized;
@@ -274,13 +272,11 @@ public class FSMExecutor : MonoBehaviour
         }
         vFissureAniOn = false;
         vFissureAniEnded.Invoke();
-        EnableMoveLogic.Invoke();
         ccTempLink.radius = radius;
     }
 
     private IEnumerator HFissureExecution(bool vFissureAniOn, VFissure vfTempLink, string vfEntrance)
     {
-        StopMoveLogic.Invoke();
 
         CharacterController ccTempLink = this.gameObject.GetComponent<CharacterController>();
 
@@ -383,7 +379,6 @@ public class FSMExecutor : MonoBehaviour
         }
         vFissureAniOn = false;
         vFissureAniEnded.Invoke();
-        EnableMoveLogic.Invoke();
         ccTempLink.radius = radius;
     }
 }

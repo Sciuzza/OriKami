@@ -112,7 +112,7 @@ public class FSMChecker : MonoBehaviour
     }
 
     public vFissureUse vFissureUsed;
-    public UnityEvent StoppingRollCoroutine;
+    public UnityEvent stoppingRollLogic, enableGlideLogic, stopGlideLogic;
 
     #endregion
 
@@ -222,9 +222,8 @@ public class FSMChecker : MonoBehaviour
                     break;
                 case abilties.roll:
                     cPlayerState.currentPlState = playerStates.rolling;
-                    RemoveAbility(abilties.move);
-                    RemoveAbility(abilties.rotate);
-                    AddAbility(abilties.moveOnRoll);
+                    cPlayerState.currentClState = controlStates.noMove;
+                    UpdatingAbilityList();
                     genAbiUsed.Invoke(abiReceived, cPlayerState.currentForm);
                     break;
                 case abilties.moveBlock:
@@ -249,6 +248,8 @@ public class FSMChecker : MonoBehaviour
                     formChangedInp.Invoke(cPlayerState.currentForm);
                     UpdatingAbilityList();
                     formChanged.Invoke(cPlayerState.currentForm, cPlayerState.previousForm, cPlayerState.forms);
+                    if (cPlayerState.previousForm == "Dragon Form")
+                        stopGlideLogic.Invoke();
                     break;
                 case abilties.toFrog:
                     cPlayerState.previousForm = cPlayerState.currentForm;
@@ -256,6 +257,8 @@ public class FSMChecker : MonoBehaviour
                     formChangedInp.Invoke(cPlayerState.currentForm);
                     UpdatingAbilityList();
                     formChanged.Invoke(cPlayerState.currentForm, cPlayerState.previousForm, cPlayerState.forms);
+                    if (cPlayerState.previousForm == "Dragon Form")
+                        stopGlideLogic.Invoke();
                     break;
                 case abilties.toCrane:
                     cPlayerState.previousForm = cPlayerState.currentForm;
@@ -263,6 +266,7 @@ public class FSMChecker : MonoBehaviour
                     formChangedInp.Invoke(cPlayerState.currentForm);
                     UpdatingAbilityList();
                     formChanged.Invoke(cPlayerState.currentForm, cPlayerState.previousForm, cPlayerState.forms);
+                    enableGlideLogic.Invoke();
                     break;
                 case abilties.toArma:
                     cPlayerState.previousForm = cPlayerState.currentForm;
@@ -270,6 +274,8 @@ public class FSMChecker : MonoBehaviour
                     formChangedInp.Invoke(cPlayerState.currentForm);
                     UpdatingAbilityList();
                     formChanged.Invoke(cPlayerState.currentForm, cPlayerState.previousForm, cPlayerState.forms);
+                    if (cPlayerState.previousForm == "Dragon Form")
+                        stopGlideLogic.Invoke();
                     break;
                 case abilties.toDolp:
                     cPlayerState.previousForm = cPlayerState.currentForm;
@@ -277,6 +283,8 @@ public class FSMChecker : MonoBehaviour
                     formChangedInp.Invoke(cPlayerState.currentForm);
                     UpdatingAbilityList();
                     formChanged.Invoke(cPlayerState.currentForm, cPlayerState.previousForm, cPlayerState.forms);
+                    if (cPlayerState.previousForm == "Dragon Form")
+                        stopGlideLogic.Invoke();
                     break;
                 case abilties.npcInter:
                     break;
@@ -404,7 +412,7 @@ public class FSMChecker : MonoBehaviour
         cPlayerState.currentAbilities.Clear();
         cPlayerState.currentAbilities.TrimExcess();
 
-        AddAbility(abilties.move);
+       
         AddAbility(abilties.rotate);
         AddAbility(abilties.cameraMove);
 
@@ -420,8 +428,12 @@ public class FSMChecker : MonoBehaviour
         switch (cPlayerState.currentPhState)
         {
             case physicStates.onWater:
+                RemoveAbility(abilties.jump);
+                RemoveAbility(abilties.move);
+                break;
             case physicStates.onAir:
                 RemoveAbility(abilties.jump);
+                AddAbility(abilties.move);
                 break;
             case physicStates.onGround:
                 if (cPlayerState.currentTRGState == triggerGenAbiStates.onVFissure)
@@ -429,6 +441,7 @@ public class FSMChecker : MonoBehaviour
                 else if (cPlayerState.currentTRGState == triggerGenAbiStates.npcTalk)
                     AddAbility(abilties.npcInter);
                 AddAbility(abilties.jump);
+                AddAbility(abilties.move);
                 break;
         }
 
@@ -440,7 +453,7 @@ public class FSMChecker : MonoBehaviour
         cPlayerState.currentAbilities.Clear();
         cPlayerState.currentAbilities.TrimExcess();
 
-        AddAbility(abilties.move);
+        
         AddAbility(abilties.rotate);
 
 
@@ -456,6 +469,9 @@ public class FSMChecker : MonoBehaviour
         switch (cPlayerState.currentPhState)
         {
             case physicStates.onWater:
+                RemoveAbility(abilties.jump);
+                RemoveAbility(abilties.move);
+                break;
             case physicStates.onAir:
                 RemoveAbility(abilties.jump);
                 break;
@@ -465,6 +481,7 @@ public class FSMChecker : MonoBehaviour
                 else if (cPlayerState.currentTRGState == triggerGenAbiStates.npcTalk)
                     AddAbility(abilties.npcInter);
                 AddAbility(abilties.jump);
+                AddAbility(abilties.move);
                 break;
         }
 
@@ -512,11 +529,22 @@ public class FSMChecker : MonoBehaviour
         cPlayerState.currentAbilities.Clear();
         cPlayerState.currentAbilities.TrimExcess();
 
-        AddAbility(abilties.move);
+      
         AddAbility(abilties.rotate);
         AddAbility(abilties.cameraMove);
 
         AddAbility(abilties.menu);
+
+        switch (cPlayerState.currentPhState)
+        {
+            case physicStates.onWater:
+                RemoveAbility(abilties.move);
+                break;
+            case physicStates.onAir:         
+            case physicStates.onGround:
+                AddAbility(abilties.move);
+                break;
+        }
 
     }
 
@@ -925,6 +953,11 @@ public class FSMChecker : MonoBehaviour
                     AddAbility(abilties.moveBlock);
                 else if (cPlayerState.currentTRGState == triggerGenAbiStates.npcTalk)
                     AddAbility(abilties.npcInter);
+                if (cPlayerState.currentPlState == playerStates.rolling)
+                    AddAbility(abilties.moveOnRoll);
+                else if (cPlayerState.currentPlState == playerStates.movingBlock)
+                    Debug.Log("Something");
+                else
                 AddAbility(abilties.roll);
                 break;
         }
@@ -1437,10 +1470,9 @@ public class FSMChecker : MonoBehaviour
     private void EnablingMove()
     {
         cPlayerState.currentPlState = playerStates.standingStill;
-        AddAbility(abilties.move);
-        AddAbility(abilties.rotate);
-        RemoveAbility(abilties.moveOnRoll);
-        StoppingRollCoroutine.Invoke();
+        cPlayerState.currentClState = controlStates.totalControl;
+        UpdatingAbilityList();
+        stoppingRollLogic.Invoke();
     }
     #endregion
     #endregion

@@ -276,7 +276,7 @@ public class DesignerT : MonoBehaviour
         gcLink.initializer.AddListener(ApplyingDesignTweaks);
         gcLink.designRunningTweaks.AddListener(ApplyingDesignTweaks);
 
-        Physics.gravity = GeneralTweaks.globalGravity * Vector3.down;
+        Physics.gravity = GeneralTweaks.globalGravity * Vector3.up;
     }
 
 
@@ -296,7 +296,7 @@ public class DesignerT : MonoBehaviour
 
         playerInputsTempLink.currentInputs = GestioneInputs;
 
-        Physics.gravity = GeneralTweaks.globalGravity * Vector3.down;
+        Physics.gravity = GeneralTweaks.globalGravity * Vector3.up;
     }
 
    
