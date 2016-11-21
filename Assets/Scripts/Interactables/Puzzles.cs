@@ -6,6 +6,8 @@ public class Puzzles : MonoBehaviour
 {
 
     // bool per tutti i puzzle 
+    
+    
     public bool isPuzzle1;
     public bool isPuzzle2;
     public bool isPuzzle3;
@@ -18,6 +20,8 @@ public class Puzzles : MonoBehaviour
     public bool isDown;
 
     private bool keyHit = false;
+
+    
 
     public GameObject rotatingObject;
     public GameObject generatedObject;
