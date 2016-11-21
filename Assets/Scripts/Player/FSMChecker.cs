@@ -53,6 +53,8 @@ public class FSMChecker : MonoBehaviour
     [SerializeField]
     playerCState cPlayerState;
 
+    private CharacterController ccLink;
+
     #region Effects Request Observer Path
     [System.Serializable]
     public class formEffectsRequest : UnityEvent<string, string, List<GameObject>>
@@ -122,6 +124,9 @@ public class FSMChecker : MonoBehaviour
     #region Initialization Methods
     void Awake()
     {
+
+        ccLink = this.gameObject.GetComponent<CharacterController>();
+
         SettingPlayerInitialState();
 
 
@@ -142,6 +147,9 @@ public class FSMChecker : MonoBehaviour
         FSMExecutor fsmExeTempLink = this.gameObject.GetComponent<FSMExecutor>();
 
         fsmExeTempLink.vFissureAniEnded.AddListener(VFissureAniEndEffects);
+
+
+     
     }
 
     void Start()
@@ -178,6 +186,7 @@ public class FSMChecker : MonoBehaviour
 
         cPlayerState.currentClState = controlStates.totalControl;
 
+        SettingCapsuleCollider(0.15f, 1);
 
     }
     #endregion
@@ -253,6 +262,7 @@ public class FSMChecker : MonoBehaviour
                     formChanged.Invoke(cPlayerState.currentForm, cPlayerState.previousForm, cPlayerState.forms);
                     if (cPlayerState.previousForm == "Dragon Form")
                         stopGlideLogic.Invoke();
+                    SettingCapsuleCollider(0.15f, 1);
                     break;
                 case abilties.toFrog:
                     cPlayerState.previousForm = cPlayerState.currentForm;
@@ -262,6 +272,7 @@ public class FSMChecker : MonoBehaviour
                     formChanged.Invoke(cPlayerState.currentForm, cPlayerState.previousForm, cPlayerState.forms);
                     if (cPlayerState.previousForm == "Dragon Form")
                         stopGlideLogic.Invoke();
+                    SettingCapsuleCollider(0.3f, 0.7f);
                     break;
                 case abilties.toCrane:
                     cPlayerState.previousForm = cPlayerState.currentForm;
@@ -270,6 +281,7 @@ public class FSMChecker : MonoBehaviour
                     UpdatingAbilityList();
                     formChanged.Invoke(cPlayerState.currentForm, cPlayerState.previousForm, cPlayerState.forms);
                     enableGlideLogic.Invoke();
+                    SettingCapsuleCollider(0.3f, 0.7f);
                     break;
                 case abilties.toArma:
                     cPlayerState.previousForm = cPlayerState.currentForm;
@@ -279,6 +291,7 @@ public class FSMChecker : MonoBehaviour
                     formChanged.Invoke(cPlayerState.currentForm, cPlayerState.previousForm, cPlayerState.forms);
                     if (cPlayerState.previousForm == "Dragon Form")
                         stopGlideLogic.Invoke();
+                    SettingCapsuleCollider(0.3f, 0.7f);
                     break;
                 case abilties.toDolp:
                     cPlayerState.previousForm = cPlayerState.currentForm;
@@ -288,6 +301,7 @@ public class FSMChecker : MonoBehaviour
                     formChanged.Invoke(cPlayerState.currentForm, cPlayerState.previousForm, cPlayerState.forms);
                     if (cPlayerState.previousForm == "Dragon Form")
                         stopGlideLogic.Invoke();
+                    SettingCapsuleCollider(0.3f, 0.7f);
                     break;
                 case abilties.npcInter:
                     break;
@@ -1447,6 +1461,12 @@ public class FSMChecker : MonoBehaviour
         cPlayerState.currentClState = controlStates.totalControl;
         UpdatingAbilityList();
         stoppingRollLogic.Invoke();
+    }
+
+    private void SettingCapsuleCollider(float rad, float height)
+    {
+        ccLink.radius = rad;
+        ccLink.height = height;
     }
     #endregion
     #endregion

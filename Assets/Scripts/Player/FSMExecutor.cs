@@ -12,6 +12,9 @@ public class FSMExecutor : MonoBehaviour
     [HideInInspector]
     public generalTweaks generalValues;
 
+   
+
+
     #region Events
     [System.Serializable]
     public class dirAbiHandling : UnityEvent<Vector3, float>
@@ -56,7 +59,7 @@ public class FSMExecutor : MonoBehaviour
         fsmCheckerTempLink.rotationUsed.AddListener(ApplyingRotationEffect);
         fsmCheckerTempLink.vFissureUsed.AddListener(ApplyingVFissure);
 
-
+        
     }
 
     private void ApplyingFormEffect(string newForm, string previousForm, List<GameObject> formReferences)

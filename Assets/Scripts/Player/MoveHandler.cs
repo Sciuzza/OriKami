@@ -82,6 +82,8 @@ public class MoveHandler : MonoBehaviour
 
         if ((flags & CollisionFlags.Below) != 0)
             verticalVelocity = -3f;
+        else if ((flags & CollisionFlags.Above) != 0)
+            verticalVelocity = 0;
     }
 
     private void HandlingMove(Vector3 inputDir, float moveSpeed)
