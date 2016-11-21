@@ -9,10 +9,15 @@ public class MenuManager : MonoBehaviour
     private int sceneIndex;
     private int sceneToLoad = 0;
 
+    GameController gcTempLink;
 
     void Awake()
     {
         //this.GetComponent<GameController>().initializer.AddListener(GettingSceneIndex);
+
+        //gcTempLink = this.GetComponent<GameController>();
+
+        //gcTempLink.initializer.AddListener(Initialization);
     }
 
     void Update()
@@ -20,10 +25,21 @@ public class MenuManager : MonoBehaviour
         SkipLevel();
     }
 
+    private void Initialization(GameObject player)
+    {
+        EnvInputs envInputsTempLink = player.GetComponent<EnvInputs>();
+        envInputsTempLink.playerIsDead.AddListener(ResettingScene);
+    }
+
     public void SceneLoader(string sceneName)
     {
         SceneManager.LoadScene(sceneName);
 
+    }
+
+    private void ResettingScene()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
     public void QuitGame()

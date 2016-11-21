@@ -27,7 +27,7 @@ public class EnvInputs : MonoBehaviour
 
     public vFissureAbility vFissureRequestOn;
 
-    public UnityEvent vFissureRequestOff;
+    public UnityEvent vFissureRequestOff, playerIsDead;
 
 
     void Awake()
@@ -73,7 +73,9 @@ public class EnvInputs : MonoBehaviour
             case "Water":
                 onWaterFlag = true;
                 break;
-
+            case "Death":
+                playerIsDead.Invoke();
+                break;
 
         }
 
