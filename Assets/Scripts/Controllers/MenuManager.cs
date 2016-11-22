@@ -76,13 +76,16 @@ public class MenuManager : MonoBehaviour
 
     }
 
-
-
     public void GameStarter()
     {
         SceneManager.LoadScene("Proto Main Menu");
 
 
     }
+
+    #region Main Menu Methods
+
+    #endregion
+
 
 }
