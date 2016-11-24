@@ -5,30 +5,25 @@ using UnityEngine.Events;
 public class GameLoader : MonoBehaviour
 {
 
-    private GameController gameControllerLinker;
-    private CameraManager cameraManagerLinker;
+    
 
+    private GameObject gbTempLink;
 
     // Use this for initialization
     void Awake()
     {
-        gameControllerLinker = FindObjectOfType<GameController>();
-        cameraManagerLinker = FindObjectOfType<CameraManager>();
 
-        if (cameraManagerLinker.tag == "GameController")
-        {
-            cameraManagerLinker.initPlayerDone = false;
-        }
-        gameControllerLinker.InitializingScene();
-        cameraManagerLinker.InitializingCamera();
+        gbTempLink = GameObject.FindGameObjectWithTag("GameController");
+
+        GameController gcTempLink = gbTempLink.GetComponent<GameController>();
+        CameraManager cmTempLink = gbTempLink.GetComponent<CameraManager>();
+
+       
+        gcTempLink.InitializingScene();
+        cmTempLink.InitializingCamera();
         
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
 
 }
     

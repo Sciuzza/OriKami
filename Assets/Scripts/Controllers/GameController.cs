@@ -25,14 +25,6 @@ public class GameController : MonoBehaviour {
         
     }
 
-    void Start()
-    {
-        InitializingScene();
-
-       
-      
-    }
-
     void Update()
     {
         if (Input.GetKeyDown("k"))

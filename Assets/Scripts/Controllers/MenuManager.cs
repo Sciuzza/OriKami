@@ -25,6 +25,7 @@ public class MenuManager : MonoBehaviour
         SkipLevel();
     }
 
+    #region Old
     private void Initialization(GameObject player)
     {
         EnvInputs envInputsTempLink = player.GetComponent<EnvInputs>();
@@ -81,7 +82,8 @@ public class MenuManager : MonoBehaviour
         SceneManager.LoadScene("Proto Main Menu");
 
 
-    }
+    } 
+    #endregion
 
     #region Main Menu Methods
 

@@ -245,7 +245,7 @@ public class FSMExecutor : MonoBehaviour
 
                 Vector3 distance = vTriggerMidPosition - this.transform.position;
 
-                if (distance.sqrMagnitude >= 0.002f && !secondMoveIsOn)
+                if (distance.sqrMagnitude >= 0.004f && !secondMoveIsOn)
                 {
                     //Debug.Log(distance.sqrMagnitude);
                     Vector3 direction = (vTriggerMidPosition - this.transform.position).normalized;
@@ -265,7 +265,7 @@ public class FSMExecutor : MonoBehaviour
 
                         distance = vGuidanceFinPosition - this.transform.position;
 
-                        if (distance.sqrMagnitude >= 0.002f)
+                        if (distance.sqrMagnitude >= 0.004f)
                         {
 
                             // Vector3 direction = (coreLink.vGuidanceFinPosition - this.transform.position).normalized;
