@@ -9,6 +9,8 @@ public class BubbleDialogue : MonoBehaviour
 
     public Text theText;
 
+    
+
     public TextAsset textFile;
     public string[] textLines;
     public bool isCoroutine = true;

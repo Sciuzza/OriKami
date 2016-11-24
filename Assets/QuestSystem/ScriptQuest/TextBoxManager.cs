@@ -58,7 +58,7 @@ public class TextBoxManager : MonoBehaviour
             currentLine += 1;
         }
 
-        if (currentLine > endAtLine)
+        if (currentLine >= endAtLine)
         {
             DisableTextBox();
         }

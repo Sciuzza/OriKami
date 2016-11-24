@@ -14,14 +14,23 @@ public class ActivateTextAtLine : MonoBehaviour
     //public BubblePlayerDialogue playerBubbleDialogue;
 
     public bool requireButtonPress;
-    private bool waitForPress;
     public bool isBubble = false;
     public bool isPlayerBubble = false;
     public bool destroyWhenActivated;
+    private bool waitForPress;
+
+    public Vector3 playerPos;
+    public Vector3 npcPos, delta;
+
+   
+ 
 
 
     void Start()
     {
+
+        delta = new Vector3(playerPos.x - npcPos.x, 0.0f, playerPos.z - npcPos.z);
+
         if (isBubble)
         {
           //  theBubbleDialogue = FindObjectOfType<BubbleDialogue>();
@@ -68,8 +77,10 @@ public class ActivateTextAtLine : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.tag == "Player" && !isBubble &&!isPlayerBubble)
+        if (other.tag == "Player")
         {
+            
+            theTextBox.EnableTextBox();
             if (requireButtonPress)
             {
                 waitForPress = true;
@@ -79,7 +90,7 @@ public class ActivateTextAtLine : MonoBehaviour
             theTextBox.ReloadScript(theText);
             theTextBox.currentLine = startLine;
             theTextBox.endAtLine = endLine;
-            theTextBox.EnableTextBox();
+          
 
             if (destroyWhenActivated)
             {

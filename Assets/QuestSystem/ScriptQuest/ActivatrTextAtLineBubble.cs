@@ -15,6 +15,9 @@ public class ActivatrTextAtLineBubble : MonoBehaviour {
     public bool isBubble = false;
     public bool destroyWhenActivated;
 
+    public Transform targetPlayer;
+    
+      
 
     void Start()
     {
@@ -40,6 +43,13 @@ public class ActivatrTextAtLineBubble : MonoBehaviour {
         //        Destroy(gameObject);
         //    }
         //}
+
+     
+        
+        Vector3 relativePos = targetPlayer.position - transform.position;
+        transform.rotation = Quaternion.LookRotation(relativePos);
+     
+
         if(waitForPress && Input.GetKeyDown(KeyCode.J) && isBubble)
        {
             theBubbleDialogue.ReloadScript(theText);
@@ -58,7 +68,10 @@ public class ActivatrTextAtLineBubble : MonoBehaviour {
     {
        if (other.tag == "Player")
         {
+               
             Debug.Log("ciOA!");
+          
+
             if (requireButtonPress)
            {
                 waitForPress = true;
