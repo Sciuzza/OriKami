@@ -181,7 +181,7 @@ public class Puzzles2 : MonoBehaviour
             //if (platform.GetComponent<Puzzles2>().isUp)
 
             endPosUpObject = GetComponent<Transform>().position + Vector3.down * distance;
-            while (platform.transform.position.y >= endPosUpObject.y)
+            while (true)
             {
                 currentLerpTime += Time.deltaTime;
                 if (currentLerpTime >= lerpTime)
@@ -233,6 +233,7 @@ public class Puzzles2 : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
+        
         if (other.gameObject.tag == "Player" && isPuzzle2)
         {
             Instantiate(generatedObject);
@@ -246,11 +247,12 @@ public class Puzzles2 : MonoBehaviour
 
         if (other.gameObject.tag == "Player" && isPuzzle4)
         {
+
+          
             foreach (var platform in platforms)
             {
                 if (platform.GetComponent<Puzzles2>().isUp && platform != this.gameObject)
                 {
-                    
                     platform.GetComponent<Puzzles2>().isUp = false;
                     platform.GetComponent<Puzzles2>().isDown = true;
                     StartCoroutine(TowerMovingCO(platform));

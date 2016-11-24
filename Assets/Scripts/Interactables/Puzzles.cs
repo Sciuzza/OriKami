@@ -5,32 +5,31 @@ using System.Collections;
 public class Puzzles : MonoBehaviour
 {
 
-    // bool per tutti i puzzle 
-    
-    
+    // bool per tutti i puzzle   
     public bool isPuzzle1;
     public bool isPuzzle2;
     public bool isPuzzle3;
     public bool isPuzzle4;
 
-    public bool doorOpen;
-    public bool doorClosed;
+    public bool openDoor;
+    public bool closeDoor;
 
     public bool isUp;
     public bool isDown;
-
+    public bool moveUp;
+    public bool moveDown;
+    public bool moveRight;
+    public bool moveLeft;
     private bool keyHit = false;
 
-    
-
-    public GameObject rotatingObject;
     public GameObject generatedObject;
     public GameObject leftDoor;
     public GameObject rightDoor;
 
     public GameObject goUp;
     public GameObject goDown;
-    public GameObject goDown2;
+    public GameObject goRight;
+    public GameObject goLeft;
 
 
     private Vector3 startPosLeftDoor;
@@ -45,18 +44,20 @@ public class Puzzles : MonoBehaviour
     private Vector3 startDownObject;
     private Vector3 endDownObject;
 
-    private Vector3 startDownObject2;
-    private Vector3 endDownObject2;
-    
+    private Vector3 startLeftObject;
+    private Vector3 endLeftObject;
+
+    private Vector3 startRightObject;
+    private Vector3 endRightObject;
+
 
     public float distance; // di quanto si muove la porta  x designer
     private float lerpTime = 5;
     private float currentLerpTime = 0;
-
-
+    
     void Start()
     {
-        if (doorOpen)
+        if (openDoor)
         {
             startPosLeftDoor = leftDoor.transform.position;
             endPosLeftDoor = leftDoor.transform.position + Vector3.forward * distance;
@@ -65,41 +66,64 @@ public class Puzzles : MonoBehaviour
             endPosRightDoor = rightDoor.transform.position + Vector3.back * distance;
         }
 
-        else if (doorClosed)
+        else if (closeDoor)
         {
-            startPosUpObject = leftDoor.transform.position;
+            startPosLeftDoor = leftDoor.transform.position;
             endPosLeftDoor = leftDoor.transform.position + Vector3.back * distance;
 
             startPosRightDoor = rightDoor.transform.position;
             endPosRightDoor = rightDoor.transform.position + Vector3.forward * distance;
         }
 
-        else if (isPuzzle4)
+        //else if (isPuzzle4)
+        //{
+        //    if (isUp)
+        //    {
+        //        startPosUpObject = goUp.transform.position;
+        //        endPosUpObject = goUp.transform.position + Vector3.down * distance;
+
+        //        startDownObject = goDown.transform.position;
+        //        endDownObject = goDown.transform.position + Vector3.down * distance;
+
+        //        startDownObject2 = goDown2.transform.position;
+        //        endDownObject2 = goDown2.transform.position + Vector3.down * distance;
+        //    }
+
+        //    else if (isDown)
+        //    {
+        //        startPosUpObject = goUp.transform.position;
+        //        endPosUpObject = goUp.transform.position + Vector3.up * distance;
+
+        //        startDownObject = goDown.transform.position;
+        //        endDownObject = goDown.transform.position + Vector3.up * distance;
+
+        //        startDownObject2 = goDown2.transform.position;
+        //        endDownObject2 = goDown2.transform.position + Vector3.up * distance;
+        //    }
+
+        //}
+
+        else if (isPuzzle1 && moveUp)
         {
-            if (isUp)
-            {
-                startPosUpObject = goUp.transform.position;
-                endPosUpObject = goUp.transform.position + Vector3.down * distance;
+            startPosUpObject = goUp.transform.position;
+            endPosUpObject = goUp.transform.position + Vector3.up * distance;
+        }
+        else if (isPuzzle1 && moveDown)
+        {
+            startDownObject = goDown.transform.position;
+            endDownObject = goDown.transform.position + Vector3.down * distance;
+        }
 
-                startDownObject = goDown.transform.position;
-                endDownObject = goDown.transform.position + Vector3.down * distance;
+        else if (isPuzzle1 && moveLeft)
+        {
+            startLeftObject = goLeft.transform.position;
+            endLeftObject = goLeft.transform.position + Vector3.back * distance;
+        }
+        else if (isPuzzle1 && moveRight)
+        {
+            startRightObject = goRight.transform.position;
+            endRightObject = goRight.transform.position + Vector3.forward * distance;
 
-                startDownObject2 = goDown2.transform.position;
-                endDownObject2 = goDown2.transform.position + Vector3.down * distance;
-            }
-
-            else if (isDown)
-            {
-                startPosUpObject = goUp.transform.position;
-                endPosUpObject = goUp.transform.position + Vector3.up * distance;
-                
-                startDownObject = goDown.transform.position;
-                endDownObject = goDown.transform.position + Vector3.up * distance;
-
-                startDownObject2 = goDown2.transform.position;
-                endDownObject2 = goDown2.transform.position + Vector3.up * distance;
-            }
-                 
         }
 
     }
@@ -144,7 +168,7 @@ public class Puzzles : MonoBehaviour
     }
 
 
-    IEnumerator TowerMovingCO()
+    IEnumerator ObjectMovingCO()
     {
         keyHit = true;
         if (keyHit == true)
@@ -157,10 +181,27 @@ public class Puzzles : MonoBehaviour
 
             float leftPerc = currentLerpTime / lerpTime;
             float rightPerc = currentLerpTime / lerpTime;
-            
-            goUp.transform.position = Vector3.Lerp(startPosUpObject, endPosUpObject, leftPerc);
-            goDown.transform.position = Vector3.Lerp(startDownObject, endDownObject, rightPerc);
-            goDown2.transform.position = Vector3.Lerp(startDownObject2, endDownObject2, rightPerc);
+
+            if (moveUp)
+            {
+                goUp.transform.position = Vector3.Lerp(startPosUpObject, endPosUpObject, leftPerc);
+            }
+            else if (moveDown)
+            {
+                goDown.transform.position = Vector3.Lerp(startDownObject, endDownObject, rightPerc);
+            }
+
+            else if (moveRight)
+            {
+
+                goRight.transform.position = Vector3.Lerp(startRightObject, endRightObject, leftPerc);
+            }
+            else if (moveLeft)
+            {
+                goLeft.transform.position = Vector3.Lerp(startLeftObject, endLeftObject, rightPerc);
+            }
+
+
         }
         yield return null;
     }
@@ -177,21 +218,23 @@ public class Puzzles : MonoBehaviour
 
     void OnTriggerStay(Collider other)
     {
-        if (other.gameObject.tag == "Player" && isPuzzle3 && doorOpen)
+        if (other.gameObject.tag == "Player" && isPuzzle3 && openDoor)
         {
+            Debug.Log("THE DOOR IS OPENING LOLLO COGLIONE");
             StartCoroutine(DoorOpeningCO());
             // leftFissure.transform.Translate(transform.right * 10 * Time.deltaTime);
 
         }
 
-        if (other.gameObject.tag == "Player" && isPuzzle3 && doorClosed)
+        if (other.gameObject.tag == "Player" && isPuzzle3 && closeDoor)
         {
+            Debug.Log("THE DOOR IS CLOSING LOLLO COGLIONE");
             StartCoroutine(DoorClosingCO());
         }
 
-        if (other.gameObject.tag == "Player" && isPuzzle4)
+        if (other.gameObject.tag == "Player" && isPuzzle1)
         {
-            StartCoroutine(TowerMovingCO());
+            StartCoroutine(ObjectMovingCO());
         }
 
 
