@@ -79,7 +79,7 @@ public class MenuManager : MonoBehaviour
 
     public void GameStarter()
     {
-        SceneManager.LoadScene("Proto Main Menu");
+       // SceneManager.LoadScene("Proto Main Menu");
 
 
     } 

@@ -103,36 +103,50 @@ public class PlayerInputs : MonoBehaviour
     #region General Abi Input
     private void genAbiInputs()
     {
+        if (!switchCooldown)
+        {
+            if (jumpPressed())
+            {
+                genAbiRequest.Invoke(abilties.jump);
+            }
+            if (toFrogPressed())
+                genAbiRequest.Invoke(abilties.toFrog);
+            if (toArmaPressed())
+                genAbiRequest.Invoke(abilties.toArma);
+            if (toCranePressed())
+            {
+                Debug.Log("Pressing");
+                switchCooldown = true;
+                StartCoroutine(SwitchingCooldown());
+                genAbiRequest.Invoke(abilties.toCrane);
+            }
+            if (toDolpPressed())
+                genAbiRequest.Invoke(abilties.toDolp);
+            if (toStdPressed())
+            {
+                Debug.Log("Pressing");
+                genAbiRequest.Invoke(abilties.toStd);
+            }
+            if (rollPressed())
+            {
+                Debug.Log("Roll Pressed");
+                genAbiRequest.Invoke(abilties.roll);
+            }
+            if (rollReleased())
+            {
+                Debug.Log("Roll Released");
+                rollStopped.Invoke();
+            }
+            if (VFissurePressed())
+                genAbiRequest.Invoke(abilties.VFissure);
+            if (HFissurePressed())
+                genAbiRequest.Invoke(abilties.HFissure);
+            if (DolpSwimBPressed())
+                genAbiRequest.Invoke(abilties.dolpSwimBel);
 
-        if (jumpPressed())
-            genAbiRequest.Invoke(abilties.jump);
-        if (toFrogPressed())
-            genAbiRequest.Invoke(abilties.toFrog);
-        if (toArmaPressed())
-            genAbiRequest.Invoke(abilties.toArma);
-        if (toCranePressed())
-            genAbiRequest.Invoke(abilties.toCrane);
-        if (toDolpPressed())
-            genAbiRequest.Invoke(abilties.toDolp);
-        if (toStdPressed())
-            genAbiRequest.Invoke(abilties.toStd);
-        if (rollPressed())
-        {
-            Debug.Log("Roll Pressed");
-            genAbiRequest.Invoke(abilties.roll);
         }
-        if (rollReleased())
-        {
-            Debug.Log("Roll Released");
-            rollStopped.Invoke();
-        }
-        if (VFissurePressed())
-            genAbiRequest.Invoke(abilties.VFissure);
-        if (HFissurePressed())
-            genAbiRequest.Invoke(abilties.HFissure);
-        if (DolpSwimBPressed())
-            genAbiRequest.Invoke(abilties.dolpSwimBel);
     }
+
 
     #region Jump Input
     private bool jumpPressed()
@@ -1847,18 +1861,23 @@ public class PlayerInputs : MonoBehaviour
         {
             case "Standard Form":
                 cForm = PlayerInputs.currentForm.std;
+                StartCoroutine(SwitchingCooldown());
                 break;
             case "Frog Form":
                 cForm = PlayerInputs.currentForm.frog;
+                StartCoroutine(SwitchingCooldown());
                 break;
             case "Armadillo Form":
                 cForm = PlayerInputs.currentForm.arma;
+                StartCoroutine(SwitchingCooldown());
                 break;
             case "Dragon Form":
                 cForm = PlayerInputs.currentForm.crane;
+                StartCoroutine(SwitchingCooldown());
                 break;
             case "Dolphin Form":
                 cForm = PlayerInputs.currentForm.dolphin;
+                StartCoroutine(SwitchingCooldown());
                 break;
         }
     }

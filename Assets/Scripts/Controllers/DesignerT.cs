@@ -274,7 +274,7 @@ public class DesignerT : MonoBehaviour
     void Awake()
     {
         GameController gcLink = this.GetComponent<GameController>();
-
+        
         gcLink.initializer.AddListener(ApplyingDesignTweaks);
         gcLink.designRunningTweaks.AddListener(ApplyingDesignTweaks);
 
@@ -284,6 +284,9 @@ public class DesignerT : MonoBehaviour
 
     public void ApplyingDesignTweaks(GameObject player)
     {
+
+        Debug.Log("Design Tweaks Applied Once");
+
         FSMExecutor fsmExecutorTempLink = player.GetComponent<FSMExecutor>();
 
         fsmExecutorTempLink.currentMoveValues = GestioneMovimento;
@@ -297,7 +300,7 @@ public class DesignerT : MonoBehaviour
         PlayerInputs playerInputsTempLink = player.GetComponent<PlayerInputs>();
 
         playerInputsTempLink.currentInputs = GestioneInputs;
-
+     
         Physics.gravity = GeneralTweaks.globalGravity * Vector3.up;
     }
 

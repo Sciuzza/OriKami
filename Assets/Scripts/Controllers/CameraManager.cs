@@ -28,7 +28,9 @@ public class CameraManager : MonoBehaviour
     #region Linking References
     void Awake()
     {
-        this.GetComponent<GameController>().initializer.AddListener(SettingPlayerCamera);
+        GameController gcLink = this.GetComponent<GameController>();
+
+        gcLink.initializer.AddListener(SettingPlayerCamera);
 
         //SettingDefaultCameraPlValues();
     } 
@@ -81,7 +83,7 @@ public class CameraManager : MonoBehaviour
     {
 
         #region Camera Player Follow
-        InitializingCamera();
+        CameraFollow();
         #endregion
 
     }
@@ -104,7 +106,7 @@ public class CameraManager : MonoBehaviour
     #endregion
 
     #region Initializing Camera in Gameplay Scenes
-    public void InitializingCamera()
+    public void CameraFollow()
     {
         if (initPlayerDone)
         {
@@ -118,8 +120,10 @@ public class CameraManager : MonoBehaviour
 
     public void SettingPlayerCamera(GameObject player)
     {
+
         camTransform = Camera.main.transform;
         lookAt = player.transform;
+        Debug.Log("Camera");
         initPlayerDone = true;
     } 
     #endregion

@@ -15,15 +15,15 @@ public class GameLoader : MonoBehaviour
 
         gbTempLink = GameObject.FindGameObjectWithTag("GameController");
 
-        GameController gcTempLink = gbTempLink.GetComponent<GameController>();
-        CameraManager cmTempLink = gbTempLink.GetComponent<CameraManager>();
 
-       
-        gcTempLink.InitializingScene();
-        cmTempLink.InitializingCamera();
         
     }
-
+    void Start()
+    {
+        GameController gcTempLink = gbTempLink.GetComponent<GameController>();
+        Debug.Log("Game Loader once");
+        gcTempLink.InitializingScene();
+    }
 
 }
     

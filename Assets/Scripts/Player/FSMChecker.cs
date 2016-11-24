@@ -259,6 +259,7 @@ public class FSMChecker : MonoBehaviour
                     cPlayerState.currentForm = "Standard Form";
                     formChangedInp.Invoke(cPlayerState.currentForm);
                     UpdatingAbilityList();
+                    Debug.Log("GG");
                     formChanged.Invoke(cPlayerState.currentForm, cPlayerState.previousForm, cPlayerState.forms);
                     if (cPlayerState.previousForm == "Dragon Form")
                         stopGlideLogic.Invoke();
@@ -279,6 +280,7 @@ public class FSMChecker : MonoBehaviour
                     cPlayerState.currentForm = "Dragon Form";
                     formChangedInp.Invoke(cPlayerState.currentForm);
                     UpdatingAbilityList();
+                    Debug.Log("GG");
                     formChanged.Invoke(cPlayerState.currentForm, cPlayerState.previousForm, cPlayerState.forms);
                     enableGlideLogic.Invoke();
                     SettingCapsuleCollider(0.3f, 0.7f);

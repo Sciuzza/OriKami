@@ -14,7 +14,7 @@ public class GameController : MonoBehaviour {
 
     
 
-    [HideInInspector]
+   
     public gbEvent initializer, designRunningTweaks;
 
     public UnityEvent currentInputChange;
@@ -27,11 +27,13 @@ public class GameController : MonoBehaviour {
 
     void Update()
     {
+        /*
         if (Input.GetKeyDown("k"))
         {
             designRunningTweaks.Invoke(player);
             currentInputChange.Invoke();
         }
+        */
     }
 
     public bool FindingPlayer()
@@ -50,9 +52,12 @@ public class GameController : MonoBehaviour {
     {
         if (FindingPlayer())
         {
+            Debug.Log("Initializer Invoked Once");
             initializer.Invoke(player);
 
         }
+        else
+            Debug.Log("Not on Gameplay Scene");
     }
     
 }

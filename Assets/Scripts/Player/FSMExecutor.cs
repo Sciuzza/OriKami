@@ -65,7 +65,7 @@ public class FSMExecutor : MonoBehaviour
     private void ApplyingFormEffect(string newForm, string previousForm, List<GameObject> formReferences)
     {
         formReferences.Find(x => x.tag == newForm).SetActive(false);
-
+        
         bool allDisabled = false;
 
         while (!allDisabled)
@@ -77,7 +77,7 @@ public class FSMExecutor : MonoBehaviour
         }
 
         formReferences.Find(x => x.tag == newForm).SetActive(true);
-
+        Debug.Log("Ciao");
     }
 
     private void ApplyingAbilityEffect(abilties abiUsed, Vector3 moveDirInput, string currentForm, physicStates currentPHState)
