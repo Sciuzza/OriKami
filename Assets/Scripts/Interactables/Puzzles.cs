@@ -220,6 +220,7 @@ public class Puzzles : MonoBehaviour
     {
         if (other.gameObject.tag == "Player" && isPuzzle3 && openDoor)
         {
+            Debug.Log("THE DOOR IS OPENING LOLLO COGLIONE");
             StartCoroutine(DoorOpeningCO());
             // leftFissure.transform.Translate(transform.right * 10 * Time.deltaTime);
 
@@ -227,6 +228,7 @@ public class Puzzles : MonoBehaviour
 
         if (other.gameObject.tag == "Player" && isPuzzle3 && closeDoor)
         {
+            Debug.Log("THE DOOR IS CLOSING LOLLO COGLIONE");
             StartCoroutine(DoorClosingCO());
         }
 
