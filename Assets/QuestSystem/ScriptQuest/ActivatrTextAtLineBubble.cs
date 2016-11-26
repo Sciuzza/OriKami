@@ -1,29 +1,37 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class ActivatrTextAtLineBubble : MonoBehaviour {
+public class ActivatrTextAtLineBubble : MonoBehaviour
+{
     public TextAsset theText;
 
     public int startLine;
     public int endLine;
-        
+
     public BubbleDialogue theBubbleDialogue;
-   
 
     public bool requireButtonPress;
     private bool waitForPress;
     public bool isBubble = false;
     public bool destroyWhenActivated;
+    private bool isFollowing;
+
+    public Transform targetPlayer;
+    public Vector3 lookAtTarget;
+    public BubbleDialogue couroutineLinker;
+    
 
 
     void Start()
     {
+
+        couroutineLinker = GetComponent<BubbleDialogue>();
         if (isBubble)
         {
-              theBubbleDialogue = FindObjectOfType<BubbleDialogue>();
+            theBubbleDialogue = FindObjectOfType<BubbleDialogue>();
 
         }
-     
+
     }
 
     void Update()
@@ -40,8 +48,17 @@ public class ActivatrTextAtLineBubble : MonoBehaviour {
         //        Destroy(gameObject);
         //    }
         //}
-        if(waitForPress && Input.GetKeyDown(KeyCode.J) && isBubble)
-       {
+
+        if (isFollowing ==true)
+        {
+            lookAtTarget = new Vector3(targetPlayer.position.x, this.transform.position.y, targetPlayer.position.z);
+            transform.LookAt(lookAtTarget);
+        }
+      
+
+
+        if (waitForPress && Input.GetKeyDown(KeyCode.J) && isBubble)
+        {
             theBubbleDialogue.ReloadScript(theText);
             theBubbleDialogue.currentLine = startLine;
             theBubbleDialogue.endAtLine = endLine;
@@ -50,30 +67,35 @@ public class ActivatrTextAtLineBubble : MonoBehaviour {
             if (destroyWhenActivated)
             {
                 Destroy(gameObject);
-          }
+            }
         }
     }
 
     void OnTriggerEnter(Collider other)
     {
-       if (other.tag == "Player")
+        if (other.tag == "Player")
         {
-            Debug.Log("ciOA!");
+
+            Debug.Log("TriggerEnter");
+
+            isFollowing = true;
+
             if (requireButtonPress)
-           {
+            {
                 waitForPress = true;
-               return;
+                return;
             }
 
             theBubbleDialogue.ReloadScript(theText);
             theBubbleDialogue.currentLine = startLine;
             theBubbleDialogue.endAtLine = endLine;
+           
             theBubbleDialogue.EnableTextBox();
-   
+     
             if (destroyWhenActivated)
-           {
-              Destroy(gameObject);
-           }
+            {
+                Destroy(gameObject);
+            }
         }
     }
 
@@ -81,7 +103,12 @@ public class ActivatrTextAtLineBubble : MonoBehaviour {
     {
         if (other.tag == "Player")
         {
+            isFollowing = false;  
             waitForPress = false;
+            theBubbleDialogue.DisableTextBox();
+            theBubbleDialogue.currentLine = 0;
+
+
         }
     }
 }

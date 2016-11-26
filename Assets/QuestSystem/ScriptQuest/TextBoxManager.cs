@@ -14,15 +14,13 @@ public class TextBoxManager : MonoBehaviour
 
     public int currentLine;
     public int endAtLine;
-
     
-
     public bool isActive;
-   // public bool stopPlayerMovement;       LO DEVE IMPLEMENTARE CRISTIANO  
+    // public bool stopPlayerMovement;       LO DEVE IMPLEMENTARE CRISTIANO  
 
     void Start()
     {
-        
+
 
         if (textFile != null)
         {
@@ -58,7 +56,7 @@ public class TextBoxManager : MonoBehaviour
             currentLine += 1;
         }
 
-        if (currentLine > endAtLine)
+        if (currentLine >= endAtLine)
         {
             DisableTextBox();
         }
@@ -78,7 +76,7 @@ public class TextBoxManager : MonoBehaviour
 
     public void ReloadScript(TextAsset theText)
     {
-        if (theText !=null)
+        if (theText != null)
         {
             textLines = new string[1];
             textLines = (theText.text.Split('\n'));

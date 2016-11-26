@@ -14,14 +14,20 @@ public class ActivateTextAtLine : MonoBehaviour
     //public BubblePlayerDialogue playerBubbleDialogue;
 
     public bool requireButtonPress;
-    private bool waitForPress;
     public bool isBubble = false;
     public bool isPlayerBubble = false;
     public bool destroyWhenActivated;
+    private bool waitForPress;
+    private bool isFollowing;
 
-
+    public Transform targetPlayer;
+    public Vector3 lookAtTarget;
+    
     void Start()
     {
+
+       
+
         if (isBubble)
         {
           //  theBubbleDialogue = FindObjectOfType<BubbleDialogue>();
@@ -35,6 +41,13 @@ public class ActivateTextAtLine : MonoBehaviour
         {
           //  playerBubbleDialogue = FindObjectOfType<BubblePlayerDialogue>();
         }
+
+        if (isFollowing == true)
+        {
+            lookAtTarget = new Vector3(targetPlayer.position.x, this.transform.position.y, targetPlayer.position.z);
+            transform.LookAt(lookAtTarget);
+        }
+
 
     }
 
@@ -52,6 +65,14 @@ public class ActivateTextAtLine : MonoBehaviour
                 Destroy(gameObject);
             }
         }
+
+        if (isFollowing == true)
+        {
+            lookAtTarget = new Vector3(targetPlayer.position.x, this.transform.position.y, targetPlayer.position.z);
+            transform.LookAt(lookAtTarget);
+        }
+
+
         //if(waitForPress && Input.GetKeyDown(KeyCode.J) && isBubble)
         //{
         //    theBubbleDialogue.ReloadScript(theText);
@@ -68,8 +89,11 @@ public class ActivateTextAtLine : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.tag == "Player" && !isBubble &&!isPlayerBubble)
+        if (other.tag == "Player")
         {
+            isFollowing = true;
+            theTextBox.EnableTextBox();      
+
             if (requireButtonPress)
             {
                 waitForPress = true;
@@ -79,8 +103,7 @@ public class ActivateTextAtLine : MonoBehaviour
             theTextBox.ReloadScript(theText);
             theTextBox.currentLine = startLine;
             theTextBox.endAtLine = endLine;
-            theTextBox.EnableTextBox();
-
+          
             if (destroyWhenActivated)
             {
                 Destroy(gameObject);
@@ -110,7 +133,9 @@ public class ActivateTextAtLine : MonoBehaviour
     {
         if (other.tag == "Player")
         {
+            isFollowing = false;
             waitForPress = false;
+            theTextBox.DisableTextBox();
         }
     }
 

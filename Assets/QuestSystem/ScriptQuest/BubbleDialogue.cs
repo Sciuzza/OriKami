@@ -9,9 +9,11 @@ public class BubbleDialogue : MonoBehaviour
 
     public Text theText;
 
+    
+
     public TextAsset textFile;
     public string[] textLines;
-    public bool isCoroutine = true;
+    public bool isCoroutine;
 
     public int currentLine;
     public int endAtLine;
@@ -59,8 +61,10 @@ public class BubbleDialogue : MonoBehaviour
 
         
     }
-    IEnumerator TextCO()
+    public IEnumerator TextCO()
     {
+
+        Debug.Log(currentLine);
 
         theText.text = textLines[currentLine];
                 
