@@ -263,7 +263,10 @@ public class FSMChecker : MonoBehaviour
                     cPlayerState.previousForm = cPlayerState.currentForm;
                     cPlayerState.currentForm = "Standard Form";
                     formChangedInp.Invoke(cPlayerState.currentForm);
-                    UpdatingAbilityList();
+                    if (cPlayerState.currentPlState == playerStates.rolling)
+                        EnablingMove();
+                    else
+                        UpdatingAbilityList();
                     formChanged.Invoke(cPlayerState.currentForm, cPlayerState.previousForm, cPlayerState.forms);
                     if (cPlayerState.previousForm == "Dragon Form")
                         stopGlideLogic.Invoke();
@@ -273,7 +276,10 @@ public class FSMChecker : MonoBehaviour
                     cPlayerState.previousForm = cPlayerState.currentForm;
                     cPlayerState.currentForm = "Frog Form";
                     formChangedInp.Invoke(cPlayerState.currentForm);
-                    UpdatingAbilityList();
+                    if (cPlayerState.currentPlState == playerStates.rolling)
+                        EnablingMove();
+                    else
+                        UpdatingAbilityList();
                     formChanged.Invoke(cPlayerState.currentForm, cPlayerState.previousForm, cPlayerState.forms);
                     if (cPlayerState.previousForm == "Dragon Form")
                         stopGlideLogic.Invoke();
@@ -283,7 +289,10 @@ public class FSMChecker : MonoBehaviour
                     cPlayerState.previousForm = cPlayerState.currentForm;
                     cPlayerState.currentForm = "Dragon Form";
                     formChangedInp.Invoke(cPlayerState.currentForm);
-                    UpdatingAbilityList();
+                    if (cPlayerState.currentPlState == playerStates.rolling)
+                        EnablingMove();
+                    else
+                        UpdatingAbilityList();
                     formChanged.Invoke(cPlayerState.currentForm, cPlayerState.previousForm, cPlayerState.forms);
                     enableGlideLogic.Invoke();
                     SettingCapsuleCollider(0.3f, 0.7f);
@@ -302,7 +311,10 @@ public class FSMChecker : MonoBehaviour
                     cPlayerState.previousForm = cPlayerState.currentForm;
                     cPlayerState.currentForm = "Dolphin Form";
                     formChangedInp.Invoke(cPlayerState.currentForm);
-                    UpdatingAbilityList();
+                    if (cPlayerState.currentPlState == playerStates.rolling)
+                        EnablingMove();
+                    else
+                        UpdatingAbilityList();
                     formChanged.Invoke(cPlayerState.currentForm, cPlayerState.previousForm, cPlayerState.forms);
                     if (cPlayerState.previousForm == "Dragon Form")
                         stopGlideLogic.Invoke();

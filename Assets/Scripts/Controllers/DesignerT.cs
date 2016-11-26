@@ -6,7 +6,7 @@ using System.Collections;
 
 #region Input Structs
 public enum buttonsJoy {A, B, Y, X, LT, RT, LB, RB };
-public enum buttonsPc {Q, E, R, F, Z, X, C, Space, N1, N2, N3, N4 };
+public enum buttonsPc {Q, E, R, F, Z, V, C, Space, N1, N2, N3, N4 };
 
 [System.Serializable]
 public struct standardInputsJ

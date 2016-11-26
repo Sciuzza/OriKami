@@ -74,23 +74,22 @@ public class PlayerInputs : MonoBehaviour
     private void MoveInput()
     {
 
-        moveDirection.x = Input.GetAxis("LJHor");
-        moveDirection.z = -Input.GetAxis("LJVer");
+        moveDirection.x = Input.GetAxis("LJHor") + Input.GetAxis("Horizontal");
+        moveDirection.z = -Input.GetAxis("LJVer") + Input.GetAxis("Vertical");
 
-        //moveDirection.x = Input.GetAxis("Horizontal");
-        //moveDirection.z = Input.GetAxis("Vertical");
+        if (Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0)
+        {
+            if (moveDirection.x < 0)
+                moveDirection.x = -1f;
+            else if (moveDirection.x > 0)
+                moveDirection.x = 1f;
 
-
-        if (moveDirection.x < 0)
-            moveDirection.x = -1f;
-        else if (moveDirection.x > 0)
-            moveDirection.x = 1f;
-
-        if (moveDirection.z < 0)
-            moveDirection.z = -1f;
-        else if (moveDirection.z > 0)
-            moveDirection.z = 1f;
-
+            if (moveDirection.z < 0)
+                moveDirection.z = -1f;
+            else if (moveDirection.z > 0)
+                moveDirection.z = 1f;
+        }
+            
         moveDirection = Vector3.ClampMagnitude(moveDirection, 1f);
 
 
@@ -104,9 +103,7 @@ public class PlayerInputs : MonoBehaviour
     private void genAbiInputs()
     {
         if (jumpPressed())
-        {
             genAbiRequest.Invoke(abilties.jump);
-        }
         else if (toFrogPressed())
             genAbiRequest.Invoke(abilties.toFrog);
         else if (toArmaPressed())
