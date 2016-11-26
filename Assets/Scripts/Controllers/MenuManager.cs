@@ -7,14 +7,24 @@ using UnityEngine.Events;
 public class MenuManager : MonoBehaviour
 {
     private GameObject mainMenuPanel;
-    private Button newGame, loadGame, options, credits, quitGame;
+    private Button newGame, levelSel, quitGame;
+
+    private GameObject levelSelPanel;
+    private Button route1, frogsV, route2, armaV, route3, dolphinsV, route4, back;
 
     [System.Serializable]
-    public class ngEvent : UnityEvent<string>
+    public class ngEvent : UnityEvent<int>
     {
     }
 
-    public ngEvent newGameRequest;
+    public ngEvent switchSceneRequestByInt;
+
+    [System.Serializable]
+    public class ngEvent2 : UnityEvent<string>
+    {
+    }
+
+    public ngEvent2 switchSceneRequestByName;
 
     void Awake()
     {
@@ -26,37 +36,124 @@ public class MenuManager : MonoBehaviour
 
     private void InitializingNgpScene()
     {
-        switch (SceneManager.GetActiveScene().name)
+        switch (SceneManager.GetActiveScene().buildIndex)
         {
-            case "Main Menu":
+            case 1:
                 InitializingMainMenuPanel();
+                break;
+            case 2:
+                InitializingLevelSelection();
                 break;
         }
     }
 
+    #region Main Menu Handler
     private void InitializingMainMenuPanel()
     {
         mainMenuPanel = GameObject.FindGameObjectWithTag("Menu Panel");
 
-        Button[] mmButtonRef = new Button[5];
+        Button[] mmButtonRef = new Button[3];
 
         mmButtonRef = mainMenuPanel.GetComponentsInChildren<Button>();
 
         newGame = mmButtonRef[0];
-        loadGame = mmButtonRef[1];
-        options = mmButtonRef[2];
-        credits = mmButtonRef[3];
-        quitGame = mmButtonRef[4];
+        levelSel = mmButtonRef[1];
+        quitGame = mmButtonRef[2];
+
 
 
         newGame.onClick.AddListener(InvokingNewGame);
-
+        levelSel.onClick.AddListener(InvokingLevelSel);
+        quitGame.onClick.AddListener(QuitGame);
     }
 
     private void InvokingNewGame()
     {
-        newGameRequest.Invoke("Cri Testing 2");
+        switchSceneRequestByInt.Invoke(3);
     }
+
+    private void InvokingLevelSel()
+    {
+        switchSceneRequestByInt.Invoke(2);
+    }
+
+    private void QuitGame()
+    {
+        Application.Quit();
+    }
+    #endregion
+
+    #region Level Selection Handler
+    private void InitializingLevelSelection()
+    {
+        levelSelPanel = GameObject.FindGameObjectWithTag("Proto Sel");
+
+        Button[] mmButtonRef = new Button[8];
+
+        mmButtonRef = levelSelPanel.GetComponentsInChildren<Button>();
+
+        route1 = mmButtonRef[0];
+        frogsV = mmButtonRef[1];
+        route2 = mmButtonRef[2];
+        armaV = mmButtonRef[3];
+        route3 = mmButtonRef[4];
+        dolphinsV = mmButtonRef[5];
+        route4 = mmButtonRef[6];
+        back = mmButtonRef[7];
+
+
+        route1.onClick.AddListener(InvokingRoute1);
+        frogsV.onClick.AddListener(InvokingFrogsV);
+        route2.onClick.AddListener(InvokingRoute2);
+        armaV.onClick.AddListener(InvokingArmaV);
+        route3.onClick.AddListener(InvokingRoute3);
+        dolphinsV.onClick.AddListener(InvokingDolphinsV);
+        route4.onClick.AddListener(InvokingRoute4);
+        back.onClick.AddListener(InvokingMainMenu);
+    }
+
+    private void InvokingRoute1()
+    {
+        switchSceneRequestByName.Invoke("Route 1");
+    }
+
+    private void InvokingFrogsV()
+    {
+        switchSceneRequestByName.Invoke("Frogs' Village");
+    }
+
+    private void InvokingRoute2()
+    {
+        switchSceneRequestByName.Invoke("Route 2");
+    }
+
+    private void InvokingArmaV()
+    {
+        switchSceneRequestByName.Invoke("Armadillos' Village");
+    }
+
+    private void InvokingRoute3()
+    {
+        switchSceneRequestByName.Invoke("Route 3");
+    }
+
+    private void InvokingDolphinsV()
+    {
+        switchSceneRequestByName.Invoke("Dolphins and Swallows' Village");
+    }
+
+    private void InvokingRoute4()
+    {
+        switchSceneRequestByName.Invoke("Route 4");
+    }
+
+    private void InvokingMainMenu()
+    {
+        switchSceneRequestByName.Invoke("Proto Main Menu");
+    }
+
+    #endregion
+
 
     private void InitializingGpScene(GameObject player)
     {

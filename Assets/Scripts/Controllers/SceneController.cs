@@ -10,7 +10,8 @@ public class SceneController : MonoBehaviour
     {
         MenuManager mmTempLink = this.GetComponent<MenuManager>();
 
-        mmTempLink.newGameRequest.AddListener(LoadingScenebyName);
+        mmTempLink.switchSceneRequestByInt.AddListener(LoadingScenebyIndex);
+        mmTempLink.switchSceneRequestByName.AddListener(LoadingScenebyName);
 
         GameController gcTempLink = this.GetComponent<GameController>();
 
