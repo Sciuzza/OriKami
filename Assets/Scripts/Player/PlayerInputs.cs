@@ -66,8 +66,8 @@ public class PlayerInputs : MonoBehaviour
             dirAbiRequest.Invoke(abilties.move, moveDirection);
             dirAbiRequest.Invoke(abilties.rotate, moveDirection);
         }
-       
-            dirAbiRequest.Invoke(abilties.moveOnRoll, moveDirection);
+
+        dirAbiRequest.Invoke(abilties.moveOnRoll, moveDirection);
 
     }
 
@@ -80,7 +80,7 @@ public class PlayerInputs : MonoBehaviour
         //moveDirection.x = Input.GetAxis("Horizontal");
         //moveDirection.z = Input.GetAxis("Vertical");
 
-        
+
         if (moveDirection.x < 0)
             moveDirection.x = -1f;
         else if (moveDirection.x > 0)
@@ -90,7 +90,7 @@ public class PlayerInputs : MonoBehaviour
             moveDirection.z = -1f;
         else if (moveDirection.z > 0)
             moveDirection.z = 1f;
-            
+
         moveDirection = Vector3.ClampMagnitude(moveDirection, 1f);
 
 
@@ -103,48 +103,32 @@ public class PlayerInputs : MonoBehaviour
     #region General Abi Input
     private void genAbiInputs()
     {
-        if (!switchCooldown)
+        if (jumpPressed())
         {
-            if (jumpPressed())
-            {
-                genAbiRequest.Invoke(abilties.jump);
-            }
-            if (toFrogPressed())
-                genAbiRequest.Invoke(abilties.toFrog);
-            if (toArmaPressed())
-                genAbiRequest.Invoke(abilties.toArma);
-            if (toCranePressed())
-            {
-                Debug.Log("Pressing");
-                switchCooldown = true;
-                StartCoroutine(SwitchingCooldown());
-                genAbiRequest.Invoke(abilties.toCrane);
-            }
-            if (toDolpPressed())
-                genAbiRequest.Invoke(abilties.toDolp);
-            if (toStdPressed())
-            {
-                Debug.Log("Pressing");
-                genAbiRequest.Invoke(abilties.toStd);
-            }
-            if (rollPressed())
-            {
-                Debug.Log("Roll Pressed");
-                genAbiRequest.Invoke(abilties.roll);
-            }
-            if (rollReleased())
-            {
-                Debug.Log("Roll Released");
-                rollStopped.Invoke();
-            }
-            if (VFissurePressed())
-                genAbiRequest.Invoke(abilties.VFissure);
-            if (HFissurePressed())
-                genAbiRequest.Invoke(abilties.HFissure);
-            if (DolpSwimBPressed())
-                genAbiRequest.Invoke(abilties.dolpSwimBel);
-
+            genAbiRequest.Invoke(abilties.jump);
         }
+        else if (toFrogPressed())
+            genAbiRequest.Invoke(abilties.toFrog);
+        else if (toArmaPressed())
+            genAbiRequest.Invoke(abilties.toArma);
+        else if (toCranePressed())
+            genAbiRequest.Invoke(abilties.toCrane);
+        else if (toDolpPressed())
+            genAbiRequest.Invoke(abilties.toDolp);
+        else if (toStdPressed())
+            genAbiRequest.Invoke(abilties.toStd);    
+        else if (rollPressed())  
+            genAbiRequest.Invoke(abilties.roll);
+        else if (rollReleased())   
+            rollStopped.Invoke();
+        else if (VFissurePressed())
+            genAbiRequest.Invoke(abilties.VFissure);
+        else if (HFissurePressed())
+            genAbiRequest.Invoke(abilties.HFissure);
+        else if (DolpSwimBPressed())
+            genAbiRequest.Invoke(abilties.dolpSwimBel);
+
+
     }
 
 
@@ -162,7 +146,7 @@ public class PlayerInputs : MonoBehaviour
 
         }
 
-        
+
         return false;
 
 
@@ -347,7 +331,7 @@ public class PlayerInputs : MonoBehaviour
 
         }
 
-       
+
         return false;
     }
 
@@ -357,7 +341,7 @@ public class PlayerInputs : MonoBehaviour
             return true;
         else
             return false;
-        
+
     }
 
     private bool toFrogbyStdJoyI()
@@ -412,7 +396,7 @@ public class PlayerInputs : MonoBehaviour
             return true;
         else
             return false;
-        
+
     }
 
     private bool toFrogbyCraneJoyI()
@@ -467,7 +451,7 @@ public class PlayerInputs : MonoBehaviour
             return true;
         else
             return false;
-        
+
     }
 
     private bool toFrogbyArmaJoyI()
@@ -522,7 +506,7 @@ public class PlayerInputs : MonoBehaviour
             return true;
         else
             return false;
-        
+
     }
 
     private bool toFrogbyDolpJoyI()
@@ -587,7 +571,7 @@ public class PlayerInputs : MonoBehaviour
 
         }
 
-       
+
         return false;
     }
 
@@ -597,7 +581,7 @@ public class PlayerInputs : MonoBehaviour
             return true;
         else
             return false;
-      
+
     }
 
     private bool toArmabyStdJoyI()
@@ -652,7 +636,7 @@ public class PlayerInputs : MonoBehaviour
             return true;
         else
             return false;
-       
+
     }
 
     private bool toArmabyCraneJoyI()
@@ -707,7 +691,7 @@ public class PlayerInputs : MonoBehaviour
             return true;
         else
             return false;
-        
+
     }
 
     private bool toArmabyFrogJoyI()
@@ -762,7 +746,7 @@ public class PlayerInputs : MonoBehaviour
             return true;
         else
             return false;
-       
+
     }
 
     private bool toArmabyDolpJoyI()
@@ -827,7 +811,7 @@ public class PlayerInputs : MonoBehaviour
 
         }
 
-       
+
         return false;
     }
 
@@ -837,7 +821,7 @@ public class PlayerInputs : MonoBehaviour
             return true;
         else
             return false;
-       
+
     }
 
     private bool toCranebyStdJoyI()
@@ -892,7 +876,7 @@ public class PlayerInputs : MonoBehaviour
             return true;
         else
             return false;
-      
+
     }
 
     private bool toCranebyFrogJoyI()
@@ -947,7 +931,7 @@ public class PlayerInputs : MonoBehaviour
             return true;
         else
             return false;
-       
+
     }
 
     private bool toCranebyArmaJoyI()
@@ -1002,7 +986,7 @@ public class PlayerInputs : MonoBehaviour
             return true;
         else
             return false;
-        
+
     }
 
     private bool toCranebyDolpJoyI()
@@ -1067,7 +1051,7 @@ public class PlayerInputs : MonoBehaviour
 
         }
 
-       
+
         return false;
     }
 
@@ -1077,7 +1061,7 @@ public class PlayerInputs : MonoBehaviour
             return true;
         else
             return false;
-        
+
     }
 
     private bool toDolpbyStdJoyI()
@@ -1132,7 +1116,7 @@ public class PlayerInputs : MonoBehaviour
             return true;
         else
             return false;
-       
+
     }
 
     private bool toDolpbyCraneJoyI()
@@ -1187,7 +1171,7 @@ public class PlayerInputs : MonoBehaviour
             return true;
         else
             return false;
-        
+
     }
 
     private bool toDolpbyArmaJoyI()
@@ -1242,7 +1226,7 @@ public class PlayerInputs : MonoBehaviour
             return true;
         else
             return false;
-        
+
     }
 
     private bool toDolpbyFrogJoyI()
@@ -1307,7 +1291,7 @@ public class PlayerInputs : MonoBehaviour
 
         }
 
-        
+
         return false;
     }
 
@@ -1317,7 +1301,7 @@ public class PlayerInputs : MonoBehaviour
             return true;
         else
             return false;
-       
+
     }
 
     private bool toStdbyFrogJoyI()
@@ -1372,7 +1356,7 @@ public class PlayerInputs : MonoBehaviour
             return true;
         else
             return false;
-        
+
     }
 
     private bool toStdbyCraneJoyI()
@@ -1427,7 +1411,7 @@ public class PlayerInputs : MonoBehaviour
             return true;
         else
             return false;
-        
+
     }
 
     private bool toStdbyArmaJoyI()
@@ -1482,7 +1466,7 @@ public class PlayerInputs : MonoBehaviour
             return true;
         else
             return false;
-        
+
     }
 
     private bool toStdbyDolpJoyI()
@@ -1566,7 +1550,7 @@ public class PlayerInputs : MonoBehaviour
             {
                 if (Input.GetAxis("LRT") > 0)
                 {
-                    isRollPressed = true;         
+                    isRollPressed = true;
                     return true;
                 }
                 else
@@ -1655,7 +1639,7 @@ public class PlayerInputs : MonoBehaviour
     #endregion
 
     #region Vertical Fissure Input
-    private bool VFissurePressed() 
+    private bool VFissurePressed()
     {
         if (cForm == currentForm.std)
             return StdVFissureInput();

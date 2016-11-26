@@ -1,12 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.Events;
 
 public class MoveHandler : MonoBehaviour
 {
 
 
 
-    private Vector3 finalMove = new Vector3(0,0,0), rollImpulse = new Vector3(0,0,0), rollDir;
+    private Vector3 finalMove = new Vector3(0, 0, 0), rollImpulse = new Vector3(0, 0, 0), rollDir;
     private float rollStrength;
     private bool rolling = false, gliding = false;
 
@@ -15,6 +16,10 @@ public class MoveHandler : MonoBehaviour
     private float verticalVelocity = 0.0f, gravityStr = Physics.gravity.y;
 
     CollisionFlags flags;
+
+    public UnityEvent deathRequest;
+
+    public float hitImpactVel;
 
     // Use this for initialization
     void Awake()
@@ -27,7 +32,7 @@ public class MoveHandler : MonoBehaviour
         fsmExecTempLink.jumpSelected.AddListener(HandlingJump);
         fsmExecTempLink.rollSelected.AddListener(HandlingRoll);
         fsmExecTempLink.specialRotSelected.AddListener(HandlingSpecialRot);
-    
+
 
         ccLink = this.gameObject.GetComponent<CharacterController>();
 
@@ -38,7 +43,6 @@ public class MoveHandler : MonoBehaviour
         fsmCheckTempLink.stopGlideLogic.AddListener(SettingNormalGravity);
 
     }
-
 
     void Update()
     {
@@ -64,7 +68,7 @@ public class MoveHandler : MonoBehaviour
 
         }
 
-        
+
 
         finalMove *= timeTakeThisFrame;
 
@@ -75,13 +79,15 @@ public class MoveHandler : MonoBehaviour
 
         finalMove.y = verticalVelocity * timeTakeThisFrame;
 
-
-
-
         flags = ccLink.Move(finalMove);
 
         if ((flags & CollisionFlags.Below) != 0)
-            verticalVelocity = -3f;
+        {
+            if (verticalVelocity <= -hitImpactVel)
+                deathRequest.Invoke();
+            else
+                verticalVelocity = -3f;
+        }
         else if ((flags & CollisionFlags.Above) != 0)
             verticalVelocity = 0;
     }
@@ -104,9 +110,9 @@ public class MoveHandler : MonoBehaviour
 
         //Quaternion rotation = Quaternion.LookRotation(inputDir, Vector3.up);
         //this.transform.rotation = Quaternion.Slerp(this.transform.rotation, rotation, Time.deltaTime * rotSpeed);
-       
+
         rollDir = inputDir;
-       
+
     }
 
     private void HandlingJump(float jumpStrength)
@@ -124,8 +130,8 @@ public class MoveHandler : MonoBehaviour
         finalMove = rollImpulse;
 
         rolling = true;
-      
-       
+
+
     }
 
     private void StoppingRoll()

@@ -4,36 +4,49 @@ using UnityEngine.Events;
 
 public class GameController : MonoBehaviour {
 
-    [HideInInspector]
-    public GameObject player;
+   
+    private GameObject player;
 
+    #region Event Variables
     [System.Serializable]
     public class gbEvent : UnityEvent<GameObject>
     {
     }
 
-    
+    public gbEvent gpInitializer, gameSettingsChanged;
 
-   
-    public gbEvent initializer, designRunningTweaks;
+    public UnityEvent ngpInitializer;
+    #endregion
 
-    public UnityEvent currentInputChange;
-
+    #region Do not Destroy Behaviour
     void Awake()
     {
         DontDestroyOnLoad(this.gameObject);
-        
     }
+    #endregion
 
+    #region In game Design Tweaks
     void Update()
     {
-        /*
         if (Input.GetKeyDown("k"))
+            gameSettingsChanged.Invoke(player);
+    }
+    #endregion
+
+    #region Initialization Methods
+    public void InitializingScene()
+    {
+        if (FindingPlayer())
         {
-            designRunningTweaks.Invoke(player);
-            currentInputChange.Invoke();
+            Debug.Log("Initializer Invoked Once");
+            gpInitializer.Invoke(player);
+
         }
-        */
+        else
+        {
+            Debug.Log("Not on Gameplay Scene");
+            ngpInitializer.Invoke();
+        }
     }
 
     public bool FindingPlayer()
@@ -46,18 +59,7 @@ public class GameController : MonoBehaviour {
         }
         else
             return true;
-    }
+    } 
+    #endregion
 
-    public void InitializingScene()
-    {
-        if (FindingPlayer())
-        {
-            Debug.Log("Initializer Invoked Once");
-            initializer.Invoke(player);
-
-        }
-        else
-            Debug.Log("Not on Gameplay Scene");
-    }
-    
 }

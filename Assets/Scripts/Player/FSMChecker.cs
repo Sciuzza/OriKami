@@ -34,27 +34,6 @@ public enum controlStates { totalControl, noCamera, noMove, noGenAbi, noCamAndMo
 public class FSMChecker : MonoBehaviour
 {
 
-
-    [System.Serializable]
-    public struct playerCState
-    {
-        public string currentForm;
-        public string previousForm;
-        public List<GameObject> forms;
-        public List<abilties> currentAbilities;
-        public physicStates currentPhState;
-        public playerStates currentPlState;
-        public triggerGenAbiStates currentTRGState;
-        public triggerSpecial currentTSState;
-        public controlStates currentClState;
-
-    }
-
-    [SerializeField]
-    playerCState cPlayerState;
-
-    private CharacterController ccLink;
-
     #region Effects Request Observer Path
     [System.Serializable]
     public class formEffectsRequest : UnityEvent<string, string, List<GameObject>>
@@ -114,12 +93,38 @@ public class FSMChecker : MonoBehaviour
     }
 
     public vFissureUse vFissureUsed;
-    public UnityEvent stoppingRollLogic, enableGlideLogic, stopGlideLogic;
+    public UnityEvent stoppingRollLogic, enableGlideLogic, stopGlideLogic, deathRequest;
 
     #endregion
 
+    [System.Serializable]
+    public struct playerCState
+    {
+        public string currentForm;
+        public string previousForm;
+        public List<GameObject> forms;
+        public List<abilties> currentAbilities;
+        public physicStates currentPhState;
+        public playerStates currentPlState;
+        public triggerGenAbiStates currentTRGState;
+        public triggerSpecial currentTSState;
+        public controlStates currentClState;
+
+    }
+
+    [SerializeField]
+    playerCState cPlayerState;
+
+    public formsSettings abiUnlocked;
+
+    private CharacterController ccLink;
+
     private VFissure vfLink;
     private string vFissureEntrance;
+
+    public float drowTimerSetting;
+    private bool dying = false;
+
 
     #region Initialization Methods
     void Awake()
@@ -149,7 +154,7 @@ public class FSMChecker : MonoBehaviour
         fsmExeTempLink.vFissureAniEnded.AddListener(VFissureAniEndEffects);
 
 
-     
+
     }
 
     void Start()
@@ -212,7 +217,7 @@ public class FSMChecker : MonoBehaviour
             }
 
         }
-       
+
     }
 
     private void CheckingAbiRequirements(abilties abiReceived)
@@ -259,7 +264,6 @@ public class FSMChecker : MonoBehaviour
                     cPlayerState.currentForm = "Standard Form";
                     formChangedInp.Invoke(cPlayerState.currentForm);
                     UpdatingAbilityList();
-                    Debug.Log("GG");
                     formChanged.Invoke(cPlayerState.currentForm, cPlayerState.previousForm, cPlayerState.forms);
                     if (cPlayerState.previousForm == "Dragon Form")
                         stopGlideLogic.Invoke();
@@ -280,7 +284,6 @@ public class FSMChecker : MonoBehaviour
                     cPlayerState.currentForm = "Dragon Form";
                     formChangedInp.Invoke(cPlayerState.currentForm);
                     UpdatingAbilityList();
-                    Debug.Log("GG");
                     formChanged.Invoke(cPlayerState.currentForm, cPlayerState.previousForm, cPlayerState.forms);
                     enableGlideLogic.Invoke();
                     SettingCapsuleCollider(0.3f, 0.7f);
@@ -350,7 +353,7 @@ public class FSMChecker : MonoBehaviour
                 cPlayerState.currentTRGState = triggerGenAbiStates.onDolpSwimBel;
                 break;
         }
-        
+
         UpdatingAbilityList();
 
     }
@@ -441,21 +444,19 @@ public class FSMChecker : MonoBehaviour
 
         AddAbility(abilties.menu);
 
-        AddAbility(abilties.toCrane);
-        AddAbility(abilties.toFrog);
-        AddAbility(abilties.toArma);
-        AddAbility(abilties.toDolp);
+        HandlingAbiDiscovered();
 
-		if (cPlayerState.currentPhState == physicStates.onGround) {
-			
-			if (cPlayerState.currentTRGState == triggerGenAbiStates.onVFissure)
-				AddAbility(abilties.VFissure);
-			else if (cPlayerState.currentTRGState == triggerGenAbiStates.npcTalk)
-				AddAbility(abilties.npcInter);
-			AddAbility(abilties.jump);
+        if (cPlayerState.currentPhState == physicStates.onGround)
+        {
 
-		}
-      
+            if (cPlayerState.currentTRGState == triggerGenAbiStates.onVFissure)
+                AddAbility(abilties.VFissure);
+            else if (cPlayerState.currentTRGState == triggerGenAbiStates.npcTalk)
+                AddAbility(abilties.npcInter);
+            AddAbility(abilties.jump);
+
+        }
+
     }
 
     private void StdNoCamera()
@@ -469,22 +470,20 @@ public class FSMChecker : MonoBehaviour
 
         AddAbility(abilties.menu);
 
-        AddAbility(abilties.toCrane);
-        AddAbility(abilties.toFrog);
-        AddAbility(abilties.toArma);
-        AddAbility(abilties.toDolp);
+        HandlingAbiDiscovered();
 
 
 
-		if (cPlayerState.currentPhState == physicStates.onGround) {
+        if (cPlayerState.currentPhState == physicStates.onGround)
+        {
 
-			if (cPlayerState.currentTRGState == triggerGenAbiStates.onVFissure)
-				AddAbility(abilties.VFissure);
-			else if (cPlayerState.currentTRGState == triggerGenAbiStates.npcTalk)
-				AddAbility(abilties.npcInter);
-			AddAbility(abilties.jump);
+            if (cPlayerState.currentTRGState == triggerGenAbiStates.onVFissure)
+                AddAbility(abilties.VFissure);
+            else if (cPlayerState.currentTRGState == triggerGenAbiStates.npcTalk)
+                AddAbility(abilties.npcInter);
+            AddAbility(abilties.jump);
 
-		}
+        }
 
 
     }
@@ -500,22 +499,20 @@ public class FSMChecker : MonoBehaviour
 
         AddAbility(abilties.menu);
 
-        AddAbility(abilties.toCrane);
-        AddAbility(abilties.toFrog);
-        AddAbility(abilties.toArma);
-        AddAbility(abilties.toDolp);
+        HandlingAbiDiscovered();
 
 
 
-		if (cPlayerState.currentPhState == physicStates.onGround) {
+        if (cPlayerState.currentPhState == physicStates.onGround)
+        {
 
-			if (cPlayerState.currentTRGState == triggerGenAbiStates.onVFissure)
-				AddAbility(abilties.VFissure);
-			else if (cPlayerState.currentTRGState == triggerGenAbiStates.npcTalk)
-				AddAbility(abilties.npcInter);
-			AddAbility(abilties.jump);
+            if (cPlayerState.currentTRGState == triggerGenAbiStates.onVFissure)
+                AddAbility(abilties.VFissure);
+            else if (cPlayerState.currentTRGState == triggerGenAbiStates.npcTalk)
+                AddAbility(abilties.npcInter);
+            AddAbility(abilties.jump);
 
-		}
+        }
 
 
     }
@@ -544,24 +541,22 @@ public class FSMChecker : MonoBehaviour
 
         AddAbility(abilties.menu);
 
-        AddAbility(abilties.toCrane);
-        AddAbility(abilties.toFrog);
-        AddAbility(abilties.toArma);
-        AddAbility(abilties.toDolp);
+        HandlingAbiDiscovered();
 
 
 
-		if (cPlayerState.currentPhState == physicStates.onGround) {
+        if (cPlayerState.currentPhState == physicStates.onGround)
+        {
 
-			if (cPlayerState.currentTRGState == triggerGenAbiStates.onVFissure)
-				AddAbility(abilties.VFissure);
-			else if (cPlayerState.currentTRGState == triggerGenAbiStates.npcTalk)
-				AddAbility(abilties.npcInter);
-			AddAbility(abilties.jump);
+            if (cPlayerState.currentTRGState == triggerGenAbiStates.onVFissure)
+                AddAbility(abilties.VFissure);
+            else if (cPlayerState.currentTRGState == triggerGenAbiStates.npcTalk)
+                AddAbility(abilties.npcInter);
+            AddAbility(abilties.jump);
 
-		}
+        }
 
-       
+
     }
 
     private void StdNoMoveAndGenAbi()
@@ -637,20 +632,20 @@ public class FSMChecker : MonoBehaviour
 
         AddAbility(abilties.menu);
 
-        AddAbility(abilties.toCrane);
         AddAbility(abilties.toStd);
-        AddAbility(abilties.toArma);
-        AddAbility(abilties.toDolp);
+       
+        HandlingAbiDiscovered();
 
-		if (cPlayerState.currentPhState == physicStates.onGround) {
+        if (cPlayerState.currentPhState == physicStates.onGround)
+        {
 
-			if (cPlayerState.currentTRGState == triggerGenAbiStates.onHFissure)
-				AddAbility(abilties.HFissure);
-			else if (cPlayerState.currentTRGState == triggerGenAbiStates.npcTalk)
-				AddAbility(abilties.npcInter);
-			AddAbility(abilties.jump);
-		}
-			
+            if (cPlayerState.currentTRGState == triggerGenAbiStates.onHFissure)
+                AddAbility(abilties.HFissure);
+            else if (cPlayerState.currentTRGState == triggerGenAbiStates.npcTalk)
+                AddAbility(abilties.npcInter);
+            AddAbility(abilties.jump);
+        }
+
     }
 
     private void FrogNoCamera()
@@ -660,24 +655,24 @@ public class FSMChecker : MonoBehaviour
 
         AddAbility(abilties.move);
         AddAbility(abilties.rotate);
-        
+
 
         AddAbility(abilties.menu);
 
-        AddAbility(abilties.toCrane);
         AddAbility(abilties.toStd);
-        AddAbility(abilties.toArma);
-        AddAbility(abilties.toDolp);
-	
 
-		if (cPlayerState.currentPhState == physicStates.onGround) {
+        HandlingAbiDiscovered();
 
-			if (cPlayerState.currentTRGState == triggerGenAbiStates.onHFissure)
-				AddAbility(abilties.HFissure);
-			else if (cPlayerState.currentTRGState == triggerGenAbiStates.npcTalk)
-				AddAbility(abilties.npcInter);
-			AddAbility(abilties.jump);
-		}
+
+        if (cPlayerState.currentPhState == physicStates.onGround)
+        {
+
+            if (cPlayerState.currentTRGState == triggerGenAbiStates.onHFissure)
+                AddAbility(abilties.HFissure);
+            else if (cPlayerState.currentTRGState == triggerGenAbiStates.npcTalk)
+                AddAbility(abilties.npcInter);
+            AddAbility(abilties.jump);
+        }
     }
 
     private void FrogNoMove()
@@ -685,25 +680,25 @@ public class FSMChecker : MonoBehaviour
         cPlayerState.currentAbilities.Clear();
         cPlayerState.currentAbilities.TrimExcess();
 
-       
+
         AddAbility(abilties.cameraMove);
 
         AddAbility(abilties.menu);
 
-        AddAbility(abilties.toCrane);
         AddAbility(abilties.toStd);
-        AddAbility(abilties.toArma);
-        AddAbility(abilties.toDolp);
+
+        HandlingAbiDiscovered();
 
 
-		if (cPlayerState.currentPhState == physicStates.onGround) {
+        if (cPlayerState.currentPhState == physicStates.onGround)
+        {
 
-			if (cPlayerState.currentTRGState == triggerGenAbiStates.onHFissure)
-				AddAbility(abilties.HFissure);
-			else if (cPlayerState.currentTRGState == triggerGenAbiStates.npcTalk)
-				AddAbility(abilties.npcInter);
-			AddAbility(abilties.jump);
-		}
+            if (cPlayerState.currentTRGState == triggerGenAbiStates.onHFissure)
+                AddAbility(abilties.HFissure);
+            else if (cPlayerState.currentTRGState == triggerGenAbiStates.npcTalk)
+                AddAbility(abilties.npcInter);
+            AddAbility(abilties.jump);
+        }
     }
 
     private void FrogNoGenAbi()
@@ -726,23 +721,23 @@ public class FSMChecker : MonoBehaviour
         cPlayerState.currentAbilities.Clear();
         cPlayerState.currentAbilities.TrimExcess();
 
-       
+
         AddAbility(abilties.menu);
 
-        AddAbility(abilties.toCrane);
         AddAbility(abilties.toStd);
-        AddAbility(abilties.toArma);
-        AddAbility(abilties.toDolp);
+
+        HandlingAbiDiscovered();
 
 
-		if (cPlayerState.currentPhState == physicStates.onGround) {
+        if (cPlayerState.currentPhState == physicStates.onGround)
+        {
 
-			if (cPlayerState.currentTRGState == triggerGenAbiStates.onHFissure)
-				AddAbility(abilties.HFissure);
-			else if (cPlayerState.currentTRGState == triggerGenAbiStates.npcTalk)
-				AddAbility(abilties.npcInter);
-			AddAbility(abilties.jump);
-		}
+            if (cPlayerState.currentTRGState == triggerGenAbiStates.onHFissure)
+                AddAbility(abilties.HFissure);
+            else if (cPlayerState.currentTRGState == triggerGenAbiStates.npcTalk)
+                AddAbility(abilties.npcInter);
+            AddAbility(abilties.jump);
+        }
     }
 
     private void FrogNoMoveAndGenAbi()
@@ -750,12 +745,12 @@ public class FSMChecker : MonoBehaviour
         cPlayerState.currentAbilities.Clear();
         cPlayerState.currentAbilities.TrimExcess();
 
-        
+
         AddAbility(abilties.cameraMove);
 
         AddAbility(abilties.menu);
 
- 
+
 
     }
 
@@ -766,11 +761,11 @@ public class FSMChecker : MonoBehaviour
 
         AddAbility(abilties.move);
         AddAbility(abilties.rotate);
-        
+
 
         AddAbility(abilties.menu);
 
-        
+
 
     }
     #endregion
@@ -820,23 +815,23 @@ public class FSMChecker : MonoBehaviour
 
         AddAbility(abilties.menu);
 
-        AddAbility(abilties.toCrane);
-        AddAbility(abilties.toFrog);
         AddAbility(abilties.toStd);
-        AddAbility(abilties.toDolp);
+
+        HandlingAbiDiscovered();
 
 
-		if (cPlayerState.currentPhState == physicStates.onGround) {
+        if (cPlayerState.currentPhState == physicStates.onGround)
+        {
 
-			if (cPlayerState.currentTRGState == triggerGenAbiStates.onMoveBlock)
-				AddAbility (abilties.moveBlock);
-			else if (cPlayerState.currentTRGState == triggerGenAbiStates.npcTalk)
-				AddAbility (abilties.npcInter);
-			AddAbility(abilties.roll);
-		}
+            if (cPlayerState.currentTRGState == triggerGenAbiStates.onMoveBlock)
+                AddAbility(abilties.moveBlock);
+            else if (cPlayerState.currentTRGState == triggerGenAbiStates.npcTalk)
+                AddAbility(abilties.npcInter);
+            AddAbility(abilties.roll);
+        }
 
 
-   
+
     }
 
     private void ArmaNoCamera()
@@ -846,24 +841,24 @@ public class FSMChecker : MonoBehaviour
 
         AddAbility(abilties.move);
         AddAbility(abilties.rotate);
-        
+
 
         AddAbility(abilties.menu);
 
-        AddAbility(abilties.toCrane);
-        AddAbility(abilties.toFrog);
         AddAbility(abilties.toStd);
-        AddAbility(abilties.toDolp);
+
+        HandlingAbiDiscovered();
 
 
-		if (cPlayerState.currentPhState == physicStates.onGround) {
+        if (cPlayerState.currentPhState == physicStates.onGround)
+        {
 
-			if (cPlayerState.currentTRGState == triggerGenAbiStates.onMoveBlock)
-				AddAbility (abilties.moveBlock);
-			else if (cPlayerState.currentTRGState == triggerGenAbiStates.npcTalk)
-				AddAbility (abilties.npcInter);
-			AddAbility(abilties.roll);
-		}
+            if (cPlayerState.currentTRGState == triggerGenAbiStates.onMoveBlock)
+                AddAbility(abilties.moveBlock);
+            else if (cPlayerState.currentTRGState == triggerGenAbiStates.npcTalk)
+                AddAbility(abilties.npcInter);
+            AddAbility(abilties.roll);
+        }
     }
 
     private void ArmaNoMove()
@@ -871,32 +866,33 @@ public class FSMChecker : MonoBehaviour
         cPlayerState.currentAbilities.Clear();
         cPlayerState.currentAbilities.TrimExcess();
 
-       
+
         AddAbility(abilties.cameraMove);
 
         AddAbility(abilties.menu);
 
-        AddAbility(abilties.toCrane);
-        AddAbility(abilties.toFrog);
         AddAbility(abilties.toStd);
-        AddAbility(abilties.toDolp);
 
-		if (cPlayerState.currentPhState == physicStates.onGround) {
+        HandlingAbiDiscovered();
 
-			if (cPlayerState.currentTRGState == triggerGenAbiStates.onMoveBlock)
-				AddAbility (abilties.moveBlock);
-			else if (cPlayerState.currentTRGState == triggerGenAbiStates.npcTalk)
-				AddAbility (abilties.npcInter);
-			if (cPlayerState.currentPlState == playerStates.rolling)
-				AddAbility (abilties.moveOnRoll);
-			else if (cPlayerState.currentPlState == playerStates.movingBlock)
-				Debug.Log ("Something");
-			else
-				AddAbility (abilties.roll);
-		} else if (cPlayerState.currentPhState == physicStates.onWater &&
-		         cPlayerState.currentPlState == playerStates.rolling)
-			EnablingMove ();
-    
+        if (cPlayerState.currentPhState == physicStates.onGround)
+        {
+
+            if (cPlayerState.currentTRGState == triggerGenAbiStates.onMoveBlock)
+                AddAbility(abilties.moveBlock);
+            else if (cPlayerState.currentTRGState == triggerGenAbiStates.npcTalk)
+                AddAbility(abilties.npcInter);
+            if (cPlayerState.currentPlState == playerStates.rolling)
+                AddAbility(abilties.moveOnRoll);
+            else if (cPlayerState.currentPlState == playerStates.movingBlock)
+                Debug.Log("Something");
+            else
+                AddAbility(abilties.roll);
+        }
+        else if (cPlayerState.currentPhState == physicStates.onWater &&
+               cPlayerState.currentPlState == playerStates.rolling)
+            EnablingMove();
+
     }
 
     private void ArmaNoGenAbi()
@@ -910,7 +906,7 @@ public class FSMChecker : MonoBehaviour
 
         AddAbility(abilties.menu);
 
-	
+
 
     }
 
@@ -920,24 +916,24 @@ public class FSMChecker : MonoBehaviour
         cPlayerState.currentAbilities.Clear();
         cPlayerState.currentAbilities.TrimExcess();
 
-      
+
 
         AddAbility(abilties.menu);
 
-        AddAbility(abilties.toCrane);
-        AddAbility(abilties.toFrog);
         AddAbility(abilties.toStd);
-        AddAbility(abilties.toDolp);
 
-		if (cPlayerState.currentPhState == physicStates.onGround) {
+        HandlingAbiDiscovered();
 
-			if (cPlayerState.currentTRGState == triggerGenAbiStates.onMoveBlock)
-				AddAbility(abilties.moveBlock);
-			else if (cPlayerState.currentTRGState == triggerGenAbiStates.npcTalk)
-				AddAbility(abilties.npcInter);
-			AddAbility(abilties.roll);
+        if (cPlayerState.currentPhState == physicStates.onGround)
+        {
 
-		}
+            if (cPlayerState.currentTRGState == triggerGenAbiStates.onMoveBlock)
+                AddAbility(abilties.moveBlock);
+            else if (cPlayerState.currentTRGState == triggerGenAbiStates.npcTalk)
+                AddAbility(abilties.npcInter);
+            AddAbility(abilties.roll);
+
+        }
 
     }
 
@@ -947,12 +943,12 @@ public class FSMChecker : MonoBehaviour
         cPlayerState.currentAbilities.Clear();
         cPlayerState.currentAbilities.TrimExcess();
 
-       
+
         AddAbility(abilties.cameraMove);
 
         AddAbility(abilties.menu);
 
-   
+
     }
 
     private void ArmaNoCameraAndGenAbi()
@@ -963,7 +959,7 @@ public class FSMChecker : MonoBehaviour
 
         AddAbility(abilties.move);
         AddAbility(abilties.rotate);
-       
+
 
         AddAbility(abilties.menu);
 
@@ -1010,20 +1006,19 @@ public class FSMChecker : MonoBehaviour
         cPlayerState.currentAbilities.Clear();
         cPlayerState.currentAbilities.TrimExcess();
 
-       
+
         AddAbility(abilties.rotate);
         AddAbility(abilties.cameraMove);
 
         AddAbility(abilties.menu);
 
         AddAbility(abilties.toStd);
-        AddAbility(abilties.toFrog);
-        AddAbility(abilties.toArma);
-        AddAbility(abilties.toDolp);
 
-		if (cPlayerState.currentPhState == physicStates.onAir)
-			AddAbility (abilties.move);
-    
+        HandlingAbiDiscovered();
+
+        if (cPlayerState.currentPhState == physicStates.onAir)
+            AddAbility(abilties.move);
+
     }
 
     private void CraneNoCamera()
@@ -1033,17 +1028,16 @@ public class FSMChecker : MonoBehaviour
 
 
         AddAbility(abilties.rotate);
-       
+
 
         AddAbility(abilties.menu);
 
         AddAbility(abilties.toStd);
-        AddAbility(abilties.toFrog);
-        AddAbility(abilties.toArma);
-        AddAbility(abilties.toDolp);
 
-		if (cPlayerState.currentPhState == physicStates.onAir)
-			AddAbility (abilties.move);
+        HandlingAbiDiscovered();
+
+        if (cPlayerState.currentPhState == physicStates.onAir)
+            AddAbility(abilties.move);
     }
 
     private void CraneNoMove()
@@ -1052,15 +1046,14 @@ public class FSMChecker : MonoBehaviour
         cPlayerState.currentAbilities.TrimExcess();
 
 
-      
+
         AddAbility(abilties.cameraMove);
 
         AddAbility(abilties.menu);
 
         AddAbility(abilties.toStd);
-        AddAbility(abilties.toFrog);
-        AddAbility(abilties.toArma);
-        AddAbility(abilties.toDolp);
+
+        HandlingAbiDiscovered();
 
 
     }
@@ -1077,8 +1070,8 @@ public class FSMChecker : MonoBehaviour
         AddAbility(abilties.menu);
 
 
-		if (cPlayerState.currentPhState == physicStates.onAir)
-			AddAbility (abilties.move);
+        if (cPlayerState.currentPhState == physicStates.onAir)
+            AddAbility(abilties.move);
     }
 
     private void CraneNoCamAndMove()
@@ -1090,9 +1083,8 @@ public class FSMChecker : MonoBehaviour
         AddAbility(abilties.menu);
 
         AddAbility(abilties.toStd);
-        AddAbility(abilties.toFrog);
-        AddAbility(abilties.toArma);
-        AddAbility(abilties.toDolp);
+
+        HandlingAbiDiscovered();
 
 
 
@@ -1102,12 +1094,12 @@ public class FSMChecker : MonoBehaviour
     {
         cPlayerState.currentAbilities.Clear();
         cPlayerState.currentAbilities.TrimExcess();
-      
+
         AddAbility(abilties.cameraMove);
 
         AddAbility(abilties.menu);
 
-    
+
 
     }
 
@@ -1118,13 +1110,13 @@ public class FSMChecker : MonoBehaviour
 
 
         AddAbility(abilties.rotate);
-       
+
 
         AddAbility(abilties.menu);
 
 
-		if (cPlayerState.currentPhState == physicStates.onAir)
-			AddAbility (abilties.move);
+        if (cPlayerState.currentPhState == physicStates.onAir)
+            AddAbility(abilties.move);
     }
     #endregion
 
@@ -1166,16 +1158,15 @@ public class FSMChecker : MonoBehaviour
         cPlayerState.currentAbilities.Clear();
         cPlayerState.currentAbilities.TrimExcess();
 
-      
+
         AddAbility(abilties.rotate);
         AddAbility(abilties.cameraMove);
 
         AddAbility(abilties.menu);
 
-        AddAbility(abilties.toCrane);
-        AddAbility(abilties.toFrog);
-        AddAbility(abilties.toArma);
         AddAbility(abilties.toStd);
+
+        HandlingAbiDiscovered();
 
 
 
@@ -1200,16 +1191,15 @@ public class FSMChecker : MonoBehaviour
         cPlayerState.currentAbilities.Clear();
         cPlayerState.currentAbilities.TrimExcess();
 
-      
+
         AddAbility(abilties.rotate);
-       
+
 
         AddAbility(abilties.menu);
 
-        AddAbility(abilties.toCrane);
-        AddAbility(abilties.toFrog);
-        AddAbility(abilties.toArma);
         AddAbility(abilties.toStd);
+
+        HandlingAbiDiscovered();
 
 
 
@@ -1234,26 +1224,26 @@ public class FSMChecker : MonoBehaviour
         cPlayerState.currentAbilities.Clear();
         cPlayerState.currentAbilities.TrimExcess();
 
-      
+
         AddAbility(abilties.cameraMove);
 
         AddAbility(abilties.menu);
 
-        AddAbility(abilties.toCrane);
-        AddAbility(abilties.toFrog);
-        AddAbility(abilties.toArma);
         AddAbility(abilties.toStd);
 
+        HandlingAbiDiscovered();
 
-		if (cPlayerState.currentPhState == physicStates.onWater) {
 
-			if (cPlayerState.currentTRGState == triggerGenAbiStates.onDolpSwimBel)
-				AddAbility(abilties.dolpSwimBel);
-			else if (cPlayerState.currentTRGState == triggerGenAbiStates.npcTalk)
-				AddAbility(abilties.npcInter);
-			AddAbility(abilties.jump);
-		}
-			
+        if (cPlayerState.currentPhState == physicStates.onWater)
+        {
+
+            if (cPlayerState.currentTRGState == triggerGenAbiStates.onDolpSwimBel)
+                AddAbility(abilties.dolpSwimBel);
+            else if (cPlayerState.currentTRGState == triggerGenAbiStates.npcTalk)
+                AddAbility(abilties.npcInter);
+            AddAbility(abilties.jump);
+        }
+
     }
 
     private void DolpNoGenAbi()
@@ -1261,15 +1251,15 @@ public class FSMChecker : MonoBehaviour
         cPlayerState.currentAbilities.Clear();
         cPlayerState.currentAbilities.TrimExcess();
 
-       
+
         AddAbility(abilties.rotate);
         AddAbility(abilties.cameraMove);
 
         AddAbility(abilties.menu);
 
 
-		if (cPlayerState.currentPhState == physicStates.onWater)
-			AddAbility (abilties.move);
+        if (cPlayerState.currentPhState == physicStates.onWater)
+            AddAbility(abilties.move);
 
     }
 
@@ -1278,25 +1268,25 @@ public class FSMChecker : MonoBehaviour
         cPlayerState.currentAbilities.Clear();
         cPlayerState.currentAbilities.TrimExcess();
 
-      
+
 
         AddAbility(abilties.menu);
 
-        AddAbility(abilties.toCrane);
-        AddAbility(abilties.toFrog);
-        AddAbility(abilties.toArma);
         AddAbility(abilties.toStd);
 
-		if (cPlayerState.currentPhState == physicStates.onWater) {
+        HandlingAbiDiscovered();
 
-			if (cPlayerState.currentTRGState == triggerGenAbiStates.onDolpSwimBel)
-				AddAbility(abilties.dolpSwimBel);
-			else if (cPlayerState.currentTRGState == triggerGenAbiStates.npcTalk)
-				AddAbility(abilties.npcInter);
-			AddAbility(abilties.jump);
+        if (cPlayerState.currentPhState == physicStates.onWater)
+        {
 
-		}
-			
+            if (cPlayerState.currentTRGState == triggerGenAbiStates.onDolpSwimBel)
+                AddAbility(abilties.dolpSwimBel);
+            else if (cPlayerState.currentTRGState == triggerGenAbiStates.npcTalk)
+                AddAbility(abilties.npcInter);
+            AddAbility(abilties.jump);
+
+        }
+
     }
 
     private void DolpNoMoveAndGenAbi()
@@ -1304,7 +1294,7 @@ public class FSMChecker : MonoBehaviour
         cPlayerState.currentAbilities.Clear();
         cPlayerState.currentAbilities.TrimExcess();
 
-       
+
         AddAbility(abilties.cameraMove);
 
         AddAbility(abilties.menu);
@@ -1316,13 +1306,13 @@ public class FSMChecker : MonoBehaviour
     {
         cPlayerState.currentAbilities.Clear();
         cPlayerState.currentAbilities.TrimExcess();
-		    
-        AddAbility(abilties.rotate); 
+
+        AddAbility(abilties.rotate);
 
         AddAbility(abilties.menu);
 
-		if (cPlayerState.currentPhState == physicStates.onWater)
-			AddAbility (abilties.move);
+        if (cPlayerState.currentPhState == physicStates.onWater)
+            AddAbility(abilties.move);
 
     }
     #endregion
@@ -1361,9 +1351,121 @@ public class FSMChecker : MonoBehaviour
         ccLink.radius = rad;
         ccLink.height = height;
     }
+
+    private void HandlingAbiDiscovered()
+    {
+
+        switch (cPlayerState.currentForm)
+        {
+
+            case "Standard Form":
+                if (abiUnlocked.armaUnlocked)
+                    AddAbility(abilties.toArma);
+                if (abiUnlocked.frogUnlocked)
+                    AddAbility(abilties.toFrog);
+                if (abiUnlocked.craneUnlocked)
+                    AddAbility(abilties.toCrane);
+                if (abiUnlocked.dolphinUnlocked)
+                    AddAbility(abilties.toDolp);
+                break;
+            case "Frog Form":
+                if (abiUnlocked.armaUnlocked)
+                    AddAbility(abilties.toArma);
+                if (abiUnlocked.craneUnlocked)
+                    AddAbility(abilties.toCrane);
+                if (abiUnlocked.dolphinUnlocked)
+                    AddAbility(abilties.toDolp);
+                break;
+            case "Armadillo Form":
+                if (abiUnlocked.frogUnlocked)
+                    AddAbility(abilties.toFrog);
+                if (abiUnlocked.craneUnlocked)
+                    AddAbility(abilties.toCrane);
+                if (abiUnlocked.dolphinUnlocked)
+                    AddAbility(abilties.toDolp);
+                break;
+            case "Dragon Form":
+                if (abiUnlocked.frogUnlocked)
+                    AddAbility(abilties.toFrog);
+                if (abiUnlocked.armaUnlocked)
+                    AddAbility(abilties.toArma);
+                if (abiUnlocked.dolphinUnlocked)
+                    AddAbility(abilties.toDolp);
+                break;
+            case "Dolphin Form":
+                if (abiUnlocked.frogUnlocked)
+                    AddAbility(abilties.toFrog);
+                if (abiUnlocked.armaUnlocked)
+                    AddAbility(abilties.toArma);
+                if (abiUnlocked.craneUnlocked)
+                    AddAbility(abilties.toCrane);
+                break;
+
+        }
+
+    }
     #endregion
     #endregion
 
+    #region Death Conditions Methods
+    void Update()
+    {
+        if (cPlayerState.currentForm != "Dolphin Form" && cPlayerState.currentPhState == physicStates.onWater && !dying)
+        {
+            dying = true;
+            StartCoroutine(Drowning());
+        }
+
+
+        #region Cheat Code 
+
+        if (Input.GetKeyDown(KeyCode.Y))
+        {
+            abiUnlocked.frogUnlocked = true;
+            UpdatingAbilityList();
+        }
+        else if (Input.GetKeyDown(KeyCode.U))
+        {
+            abiUnlocked.armaUnlocked = true;
+            UpdatingAbilityList();
+        }
+        else if (Input.GetKeyDown(KeyCode.I))
+        {
+            abiUnlocked.craneUnlocked = true;
+            UpdatingAbilityList();
+        }
+        else if (Input.GetKeyDown(KeyCode.O))
+        {
+            abiUnlocked.dolphinUnlocked = true;
+            UpdatingAbilityList();
+        }
+
+        #endregion
+
+    }
+
+    void OnTriggerEnter(Collider deathZone)
+    {
+        if (deathZone.gameObject.tag == "Death")
+            deathRequest.Invoke();
+    }
+
+    private IEnumerator Drowning()
+    {
+        float drowningTimer = drowTimerSetting;
+
+        while (cPlayerState.currentForm != "Dolphin Form" && cPlayerState.currentPhState == physicStates.onWater && drowningTimer > 0)
+        {
+            drowningTimer -= Time.deltaTime;
+            yield return null;
+        }
+
+        if (drowningTimer <= 0)
+            deathRequest.Invoke();
+        else
+            dying = false;
+    }
+    #endregion
 
 
 

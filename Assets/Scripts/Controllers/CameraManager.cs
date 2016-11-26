@@ -3,46 +3,33 @@ using System.Collections;
 using UnityEngine.Events;
 
 
-
-
 public class CameraManager : MonoBehaviour
 {
-
 
     #region Player Camera Variables
     private Transform lookAt;
     private Transform camTransform;
 
-
     private float currentx = 0.0f;
     private float currenty = 0.0f;
 
+    [HideInInspector]
     public CameraPlayer currentPlCameraSettings;
-
-
-
     #endregion
 
-    public bool initPlayerDone = false;
-
-    #region Linking References
+    #region Taking Game Controller Reference and Link the Initializer Event
     void Awake()
     {
         GameController gcLink = this.GetComponent<GameController>();
 
-        gcLink.initializer.AddListener(SettingPlayerCamera);
-
-        //SettingDefaultCameraPlValues();
-    } 
+        gcLink.gpInitializer.AddListener(SettingPlayerCamera);
+    }
     #endregion
 
-
-
+    #region Camera Player Mouse Zoom
     void Update()
     {
-
-
-        #region Camera Player Zoom
+        #region Pc Zoom
         if (Input.GetMouseButton(0))
         {
             Cursor.visible = false;
@@ -54,7 +41,6 @@ public class CameraManager : MonoBehaviour
             Cursor.visible = true;
         }
 
-
         currentPlCameraSettings.currentDistance -= Input.GetAxis("Mouse ScrollWheel") * currentPlCameraSettings.sensitivityZoom;
 
 
@@ -62,7 +48,7 @@ public class CameraManager : MonoBehaviour
         currenty = Mathf.Clamp(currenty, currentPlCameraSettings.yAngleMin, currentPlCameraSettings.yAngleMax);
         #endregion
 
-
+        #region Joy Zoom
 
         currentx += Input.GetAxis("RJHor") * currentPlCameraSettings.sensitivityX;
         currenty += Input.GetAxis("RJVer") * currentPlCameraSettings.sensitivityY;
@@ -71,44 +57,16 @@ public class CameraManager : MonoBehaviour
             currentPlCameraSettings.currentDistance += Input.GetAxis("RJVer") * currentPlCameraSettings.sensitivityZoom;
 
         currentPlCameraSettings.currentDistance = Mathf.Clamp(currentPlCameraSettings.currentDistance, currentPlCameraSettings.distanceMin, currentPlCameraSettings.distanceMax);
-        currenty = Mathf.Clamp(currenty, currentPlCameraSettings.yAngleMin, currentPlCameraSettings.yAngleMax);
-
+        currenty = Mathf.Clamp(currenty, currentPlCameraSettings.yAngleMin, currentPlCameraSettings.yAngleMax); 
+        #endregion
     }
+    #endregion
 
-
-
-    #region Old
-
+    #region Camera Follow 
     void LateUpdate()
     {
 
-        #region Camera Player Follow
-        CameraFollow();
-        #endregion
-
-    }
-
-    private void SettingDefaultCameraPlValues()
-    {
-        CameraPlayer defaultValues;
-
-        defaultValues.currentDistance = 15;
-        defaultValues.distanceMin = 5;
-        defaultValues.distanceMax = 30;
-        defaultValues.sensitivityX = 4;
-        defaultValues.sensitivityY = 1;
-        defaultValues.sensitivityZoom = 30;
-        defaultValues.yAngleMin = 0.5f;
-        defaultValues.yAngleMax = 50;
-
-        currentPlCameraSettings = defaultValues;
-    } 
-    #endregion
-
-    #region Initializing Camera in Gameplay Scenes
-    public void CameraFollow()
-    {
-        if (initPlayerDone)
+        if (lookAt != null)
         {
             Vector3 dir = new Vector3(0, 0, -currentPlCameraSettings.currentDistance);
             Quaternion rotation = Quaternion.Euler(currenty, currentx, 0);
@@ -116,15 +74,16 @@ public class CameraManager : MonoBehaviour
 
             camTransform.LookAt(lookAt.position);
         }
-    }
 
+    } 
+    #endregion
+
+    #region Initializing Camera in Gameplay Scenes
     public void SettingPlayerCamera(GameObject player)
     {
-
         camTransform = Camera.main.transform;
         lookAt = player.transform;
-        Debug.Log("Camera");
-        initPlayerDone = true;
+        Debug.Log("Camera Initialization Done");
     } 
     #endregion
 }

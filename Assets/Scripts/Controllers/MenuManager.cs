@@ -1,93 +1,65 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+using UnityEngine.Events;
 
 public class MenuManager : MonoBehaviour
 {
+    private GameObject mainMenuPanel;
+    private Button newGame, loadGame, options, credits, quitGame;
 
+    [System.Serializable]
+    public class ngEvent : UnityEvent<string>
+    {
+    }
 
-    private int sceneIndex;
-    private int sceneToLoad = 0;
-
-    GameController gcTempLink;
+    public ngEvent newGameRequest;
 
     void Awake()
     {
-        //this.GetComponent<GameController>().initializer.AddListener(GettingSceneIndex);
+        GameController gcTempLink = this.GetComponent<GameController>();
 
-        //gcTempLink = this.GetComponent<GameController>();
-
-        //gcTempLink.initializer.AddListener(Initialization);
+        gcTempLink.ngpInitializer.AddListener(InitializingNgpScene);
+        gcTempLink.gpInitializer.AddListener(InitializingGpScene);
     }
 
-    void Update()
+    private void InitializingNgpScene()
     {
-        SkipLevel();
-    }
-
-    #region Old
-    private void Initialization(GameObject player)
-    {
-        EnvInputs envInputsTempLink = player.GetComponent<EnvInputs>();
-        envInputsTempLink.playerIsDead.AddListener(ResettingScene);
-    }
-
-    public void SceneLoader(string sceneName)
-    {
-        SceneManager.LoadScene(sceneName);
-
-    }
-
-    private void ResettingScene()
-    {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-    }
-
-    public void QuitGame()
-    {
-        Application.Quit();
-    }
-
-    private void GettingSceneIndex()
-    {
-        sceneIndex = SceneManager.GetActiveScene().buildIndex;
-    }
-
-    public void SkipLevel()
-    {
-        if (Input.GetKeyDown(KeyCode.PageUp))
+        switch (SceneManager.GetActiveScene().name)
         {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+            case "Main Menu":
+                InitializingMainMenuPanel();
+                break;
         }
+    }
 
-        else if (Input.GetKeyDown(KeyCode.PageDown))
-        {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1);
+    private void InitializingMainMenuPanel()
+    {
+        mainMenuPanel = GameObject.FindGameObjectWithTag("Menu Panel");
 
-        }
-        else if (SceneManager.GetActiveScene().buildIndex == 0)
-        {
-            GameStarter();
-        }
-        else if (Input.GetKeyDown(KeyCode.End))
-        {
-            SceneManager.LoadScene("Proto Level Selection");
+        Button[] mmButtonRef = new Button[5];
 
-        }
+        mmButtonRef = mainMenuPanel.GetComponentsInChildren<Button>();
+
+        newGame = mmButtonRef[0];
+        loadGame = mmButtonRef[1];
+        options = mmButtonRef[2];
+        credits = mmButtonRef[3];
+        quitGame = mmButtonRef[4];
+
+
+        newGame.onClick.AddListener(InvokingNewGame);
 
     }
 
-    public void GameStarter()
+    private void InvokingNewGame()
     {
-       // SceneManager.LoadScene("Proto Main Menu");
+        newGameRequest.Invoke("Cri Testing 2");
+    }
 
+    private void InitializingGpScene(GameObject player)
+    {
 
-    } 
-    #endregion
-
-    #region Main Menu Methods
-
-    #endregion
-
-
+    }
 }
