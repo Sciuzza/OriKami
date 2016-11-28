@@ -174,10 +174,7 @@ public class FSMChecker : MonoBehaviour
         cPlayerState.currentAbilities.Add(abilties.cameraMove);
         cPlayerState.currentAbilities.Add(abilties.move);
 
-        cPlayerState.currentAbilities.Add(abilties.toArma);
-        cPlayerState.currentAbilities.Add(abilties.toCrane);
-        cPlayerState.currentAbilities.Add(abilties.toDolp);
-        cPlayerState.currentAbilities.Add(abilties.toFrog);
+        HandlingAbiDiscovered();
 
         cPlayerState.currentAbilities.Add(abilties.rotate);
 

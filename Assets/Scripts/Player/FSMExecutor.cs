@@ -333,7 +333,10 @@ public class FSMExecutor : MonoBehaviour
 
         float radius = ccTempLink.radius;
 
-        ccTempLink.radius = 0;
+        ccTempLink.enableOverlapRecovery = false;
+
+        //ccTempLink.radius = 0;
+        //ccTempLink.height = 0;
 
         bool moveFinished = false, secondMoveIsOn = false;
 
@@ -430,7 +433,10 @@ public class FSMExecutor : MonoBehaviour
         }
         vFissureAniOn = false;
         vFissureAniEnded.Invoke();
-        ccTempLink.radius = radius;
+
+        ccTempLink.enableOverlapRecovery = true;
+        //ccTempLink.radius = radius;
+        //ccTempLink.height = 0.7f;
     }
 
     private IEnumerator DolpSwimBExecution(bool vFissureAniOn, VFissure vfTempLink, string vfEntrance)
