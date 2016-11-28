@@ -61,6 +61,7 @@ public class PlayerInputs : MonoBehaviour
 
         MoveInput();
 
+
         if (moveDirection.sqrMagnitude != 0)
         {
             dirAbiRequest.Invoke(abilties.move, moveDirection);
@@ -89,7 +90,7 @@ public class PlayerInputs : MonoBehaviour
             else if (moveDirection.z > 0)
                 moveDirection.z = 1f;
         }
-            
+
         moveDirection = Vector3.ClampMagnitude(moveDirection, 1f);
 
 
@@ -113,10 +114,10 @@ public class PlayerInputs : MonoBehaviour
         else if (toDolpPressed())
             genAbiRequest.Invoke(abilties.toDolp);
         else if (toStdPressed())
-            genAbiRequest.Invoke(abilties.toStd);    
-        else if (rollPressed())  
+            genAbiRequest.Invoke(abilties.toStd);
+        else if (rollPressed())
             genAbiRequest.Invoke(abilties.roll);
-        else if (rollReleased())   
+        else if (rollReleased())
             rollStopped.Invoke();
         else if (VFissurePressed())
             genAbiRequest.Invoke(abilties.VFissure);

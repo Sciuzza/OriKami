@@ -318,14 +318,14 @@ public class DesignerT : MonoBehaviour
         MoveHandler mhTempLink = player.GetComponent<MoveHandler>();
 
         mhTempLink.hitImpactVel = GestioneMorte.hitImpactVel;
-
+        mhTempLink.gravityStr = -GeneralTweaks.globalGravity;
 
         PlayerInputs playerInputsTempLink = player.GetComponent<PlayerInputs>();
 
         playerInputsTempLink.currentInputs = GestioneInputs;
      
 
-        Physics.gravity = GeneralTweaks.globalGravity * Vector3.up;
+        Physics.gravity = -GeneralTweaks.globalGravity * Vector3.up;
     }
 
 }

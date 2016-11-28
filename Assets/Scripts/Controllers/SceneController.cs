@@ -21,6 +21,7 @@ public class SceneController : MonoBehaviour
 
     void Start()
     {
+        if (SceneManager.GetActiveScene().buildIndex == 0)
         SceneManager.LoadScene(1);
     }
 

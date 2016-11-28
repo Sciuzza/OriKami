@@ -281,10 +281,10 @@ public class FSMExecutor : MonoBehaviour
 
 
                 Vector3 distance = vTriggerMidPosition - this.transform.position;
-
-                if (distance.sqrMagnitude >= 0.004f && !secondMoveIsOn)
+                //Debug.Log(distance.sqrMagnitude);
+                if (distance.sqrMagnitude >= 0.04f && !secondMoveIsOn)
                 {
-                    //Debug.Log(distance.sqrMagnitude);
+                    
                     Vector3 direction = (vTriggerMidPosition - this.transform.position).normalized;
                     direction.y = 0;
                     this.transform.position += direction * Time.deltaTime * 4;
@@ -301,8 +301,8 @@ public class FSMExecutor : MonoBehaviour
                         secondMoveIsOn = true;
 
                         distance = vGuidanceFinPosition - this.transform.position;
-
-                        if (distance.sqrMagnitude >= 0.004f)
+                        //Debug.Log(distance.sqrMagnitude);
+                        if (distance.sqrMagnitude >= 0.04f)
                         {
 
                             // Vector3 direction = (coreLink.vGuidanceFinPosition - this.transform.position).normalized;

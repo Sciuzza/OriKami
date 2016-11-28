@@ -13,13 +13,14 @@ public class MoveHandler : MonoBehaviour
 
     CharacterController ccLink;
 
-    private float verticalVelocity = 0.0f, gravityStr = Physics.gravity.y;
+    private float verticalVelocity = 0.0f;
 
     CollisionFlags flags;
 
     public UnityEvent deathRequest;
 
     public float hitImpactVel;
+    public float gravityStr;
 
     // Use this for initialization
     void Awake()
@@ -73,7 +74,7 @@ public class MoveHandler : MonoBehaviour
         finalMove *= timeTakeThisFrame;
 
         if (!gliding)
-            verticalVelocity -= gravityStr * timeTakeThisFrame;
+            verticalVelocity += gravityStr * timeTakeThisFrame;
         else
             verticalVelocity = -1;
 
