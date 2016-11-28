@@ -22,6 +22,8 @@ public class MoveHandler : MonoBehaviour
     public float hitImpactVel;
     public float gravityStr;
 
+    private bool roofHit = false;
+
     // Use this for initialization
     void Awake()
     {
@@ -88,9 +90,15 @@ public class MoveHandler : MonoBehaviour
                 deathRequest.Invoke();
             else
                 verticalVelocity = -3f;
+
+            if(roofHit)
+            roofHit = false;
         }
-        else if ((flags & CollisionFlags.Above) != 0)
+        else if ((flags & CollisionFlags.Above) != 0 && !roofHit)
+        {
+            roofHit = true;
             verticalVelocity = 0;
+        }
     }
 
     private void HandlingMove(Vector3 inputDir, float moveSpeed)
