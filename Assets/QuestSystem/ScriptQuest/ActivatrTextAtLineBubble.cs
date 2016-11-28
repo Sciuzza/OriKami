@@ -20,12 +20,11 @@ public class ActivatrTextAtLineBubble : MonoBehaviour
     public Vector3 lookAtTarget;
     public BubbleDialogue couroutineLinker;
     
-
-
     void Start()
     {
 
         couroutineLinker = GetComponent<BubbleDialogue>();
+
         if (isBubble)
         {
             theBubbleDialogue = FindObjectOfType<BubbleDialogue>();
@@ -55,8 +54,6 @@ public class ActivatrTextAtLineBubble : MonoBehaviour
             transform.LookAt(lookAtTarget);
         }
       
-
-
         if (waitForPress && Input.GetKeyDown(KeyCode.J) && isBubble)
         {
             theBubbleDialogue.ReloadScript(theText);
@@ -79,7 +76,7 @@ public class ActivatrTextAtLineBubble : MonoBehaviour
             Debug.Log("TriggerEnter");
 
             isFollowing = true;
-
+           
             if (requireButtonPress)
             {
                 waitForPress = true;
@@ -89,7 +86,6 @@ public class ActivatrTextAtLineBubble : MonoBehaviour
             theBubbleDialogue.ReloadScript(theText);
             theBubbleDialogue.currentLine = startLine;
             theBubbleDialogue.endAtLine = endLine;
-           
             theBubbleDialogue.EnableTextBox();
      
             if (destroyWhenActivated)
@@ -99,6 +95,7 @@ public class ActivatrTextAtLineBubble : MonoBehaviour
         }
     }
 
+
     void OnTriggerExit(Collider other)
     {
         if (other.tag == "Player")
@@ -106,9 +103,10 @@ public class ActivatrTextAtLineBubble : MonoBehaviour
             isFollowing = false;  
             waitForPress = false;
             theBubbleDialogue.DisableTextBox();
-            theBubbleDialogue.currentLine = 0;
-
-
+            theBubbleDialogue.currentLine = startLine;
+            theBubbleDialogue.isCoroutine = true;
+            theBubbleDialogue.StopAllCoroutines();
+          
         }
     }
 }

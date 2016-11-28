@@ -6,11 +6,9 @@ public class BubbleDialogue : MonoBehaviour
 {
 
     public GameObject textBox;
+    public ActivatrTextAtLineBubble linker;
 
     public Text theText;
-
-    
-
     public TextAsset textFile;
     public string[] textLines;
     public bool isCoroutine;
@@ -18,14 +16,14 @@ public class BubbleDialogue : MonoBehaviour
     public int currentLine;
     public int endAtLine;
 
-   
-
     public bool isActive;
     // public bool stopPlayerMovement;       LO DEVE IMPLEMENTARE CRISTIANO  
 
     void Start()
     {
-        
+
+        linker = FindObjectOfType<ActivatrTextAtLineBubble>();
+
         if (textFile != null)
         {
             textLines = (textFile.text.Split('\n'));
@@ -57,28 +55,39 @@ public class BubbleDialogue : MonoBehaviour
         {
             isCoroutine = false;
             StartCoroutine(TextCO());
+
         }
 
-        
+
     }
     public IEnumerator TextCO()
     {
+        while (currentLine<=endAtLine)
+        {
+            Debug.Log(currentLine);
+            theText.text = textLines[currentLine];
+            currentLine += 1;
+            yield return new WaitForSeconds(2f);
+        }
+          
+              
 
-        Debug.Log(currentLine);
-
-        theText.text = textLines[currentLine];
-                
-        currentLine += 1;
-        
-        yield return new WaitForSeconds(1.5f);
         if (currentLine > endAtLine)
         {
+            Debug.Log("Disabilito");
             DisableTextBox();
+            //currentLine = 0;
+            //isCoroutine = true;
+
         }
-        else
-            StartCoroutine(TextCO());
+
+        //else {
+
+        //    StartCoroutine(TextCO());
+        //}
 
     }
+
 
     public void EnableTextBox()
     {
@@ -90,6 +99,7 @@ public class BubbleDialogue : MonoBehaviour
     {
         textBox.SetActive(false);
         isActive = false;
+
     }
 
     public void ReloadScript(TextAsset theText)
