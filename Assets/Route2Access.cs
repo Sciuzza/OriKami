@@ -2,17 +2,28 @@
 using System.Collections;
 using UnityEngine.SceneManagement;
 public class Route2Access : MonoBehaviour {
-    private void LoadingScenebyName()
+
+    public bool toArmadillo;
+    public bool toRoute2;
+
+    private void LoadingScenebyName(string sceneName)
     {
-        SceneManager.LoadScene("Armadillos' Village");
+        SceneManager.LoadScene(sceneName);
     }
 
 
     public void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag == "Player")
+        if (other.gameObject.tag == "Player" && toArmadillo==true)
         {
-            LoadingScenebyName();
+            LoadingScenebyName("Armadillos' Village");
+
+        }
+
+        if (other.gameObject.tag == "Player" && toRoute2 == true)
+        {
+            LoadingScenebyName("Route 2");
+
         }
     }
 
