@@ -4,7 +4,7 @@ using UnityEngine.Events;
 
 public class GameLoader : MonoBehaviour
 {
-
+    //Game Controller Reference
     private GameObject gbTempLink;
 
     #region Taking Brain Reference
