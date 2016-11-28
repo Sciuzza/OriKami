@@ -33,7 +33,12 @@ public class PlayerInputs : MonoBehaviour
 
     public generalAbiInput genAbiRequest;
 
+    [System.Serializable]
+    public class sceneSwitchInput : UnityEvent<int>
+    {
+    }
 
+    public sceneSwitchInput mainMenuRequest;
 
     #endregion
 
@@ -51,6 +56,7 @@ public class PlayerInputs : MonoBehaviour
 
         MovingInputHandler();
         genAbiInputs();
+        ExtraInputsHandler();
 
     }
 
@@ -1827,6 +1833,14 @@ public class PlayerInputs : MonoBehaviour
             return false;
     }
     #endregion
+    #endregion
+
+    #region Extra Inputs
+    private void ExtraInputsHandler()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+            mainMenuRequest.Invoke(1);
+    }
     #endregion
 
     #region General Methods

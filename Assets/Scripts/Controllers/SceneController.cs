@@ -39,6 +39,10 @@ public class SceneController : MonoBehaviour
 
         mhTempLink.deathRequest.AddListener(ResettingCurrentScene);
 
+        PlayerInputs plTempLink = player.GetComponent<PlayerInputs>();
+
+        plTempLink.mainMenuRequest.AddListener(LoadingScenebyIndex);
+
     }
 
     private void LoadingScenebyName(string sceneName)
