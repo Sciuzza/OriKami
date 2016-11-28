@@ -4,6 +4,8 @@ using UnityEngine.SceneManagement;
 public class MoveToPreviousLevel : MonoBehaviour {
 
 
+    public bool isRoute2;
+
     public void PreviousLevel()
     {
         //For completed levels !
@@ -15,6 +17,13 @@ public class MoveToPreviousLevel : MonoBehaviour {
         if (other.gameObject.tag == "Player")
         {
           PreviousLevel();
+        }
+
+        if (other.gameObject.tag == "Player" &&isRoute2)
+        {
+
+
+
         }
     }
 }
