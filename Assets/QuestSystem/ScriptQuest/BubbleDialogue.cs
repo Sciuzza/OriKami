@@ -22,7 +22,7 @@ public class BubbleDialogue : MonoBehaviour
     void Start()
     {
 
-        linker = FindObjectOfType<ActivatrTextAtLineBubble>();
+     //  linker = FindObjectOfType<ActivatrTextAtLineBubble>();
 
         if (textFile != null)
         {

@@ -18,7 +18,7 @@ public class ActivatrTextAtLineBubble : MonoBehaviour
 
     public Transform targetPlayer;
     public Vector3 lookAtTarget;
-    public BubbleDialogue couroutineLinker;
+    private BubbleDialogue couroutineLinker;
     
     void Start()
     {
@@ -27,7 +27,7 @@ public class ActivatrTextAtLineBubble : MonoBehaviour
 
         if (isBubble)
         {
-            theBubbleDialogue = FindObjectOfType<BubbleDialogue>();
+           // theBubbleDialogue = FindObjectOfType<BubbleDialogue>();
 
         }
 
