@@ -125,7 +125,7 @@ public class FSMChecker : MonoBehaviour
     public float drowTimerSetting;
     private bool dying = false;
 
-    private bool collOnRigidbodyCheck = false;
+    
 
     #region Initialization Methods
     void Awake()
@@ -272,8 +272,6 @@ public class FSMChecker : MonoBehaviour
                     if (cPlayerState.previousForm == "Dragon Form")
                         stopGlideLogic.Invoke();
                      SettingCapsuleCollider(0.15f, 1);
-                   
-                    //collOnRigidbodyCheck = true;
                     break;
                 case abilties.toFrog:
                     cPlayerState.previousForm = cPlayerState.currentForm;
@@ -286,9 +284,7 @@ public class FSMChecker : MonoBehaviour
                     formChanged.Invoke(cPlayerState.currentForm, cPlayerState.previousForm, cPlayerState.forms);
                     if (cPlayerState.previousForm == "Dragon Form")
                         stopGlideLogic.Invoke();
-                    //SettingCapsuleCollider(0.3f, 0.7f);
-              
-                    //collOnRigidbodyCheck = true;
+                     SettingCapsuleCollider(0.15f, 0.7f);
                     break;
                 case abilties.toCrane:
                     cPlayerState.previousForm = cPlayerState.currentForm;
@@ -300,9 +296,7 @@ public class FSMChecker : MonoBehaviour
                         UpdatingAbilityList();
                     formChanged.Invoke(cPlayerState.currentForm, cPlayerState.previousForm, cPlayerState.forms);
                     enableGlideLogic.Invoke();
-                   // SettingCapsuleCollider(0.3f, 0.7f);
-                  
-                    // collOnRigidbodyCheck = true;
+                    SettingCapsuleCollider(0.15f, 0.7f);
                     break;
                 case abilties.toArma:
                     cPlayerState.previousForm = cPlayerState.currentForm;
@@ -312,9 +306,7 @@ public class FSMChecker : MonoBehaviour
                     formChanged.Invoke(cPlayerState.currentForm, cPlayerState.previousForm, cPlayerState.forms);
                     if (cPlayerState.previousForm == "Dragon Form")
                         stopGlideLogic.Invoke();
-                   // SettingCapsuleCollider(0.3f, 0.7f);
-                  
-                    //collOnRigidbodyCheck = true;
+                    SettingCapsuleCollider(0.15f, 0.7f);
                     break;
                 case abilties.toDolp:
                     cPlayerState.previousForm = cPlayerState.currentForm;
@@ -327,9 +319,7 @@ public class FSMChecker : MonoBehaviour
                     formChanged.Invoke(cPlayerState.currentForm, cPlayerState.previousForm, cPlayerState.forms);
                     if (cPlayerState.previousForm == "Dragon Form")
                         stopGlideLogic.Invoke();
-                   // SettingCapsuleCollider(0.3f, 0.7f);
-                  
-                    // collOnRigidbodyCheck = true;
+                    SettingCapsuleCollider(0.15f, 0.7f);
                     break;
                 case abilties.npcInter:
                     break;
@@ -1427,20 +1417,6 @@ public class FSMChecker : MonoBehaviour
         }
 
     }
-/*
-    private void OnControllerColliderHit(ControllerColliderHit hit)
-    {
-        Rigidbody body = hit.collider.attachedRigidbody;
-
-        if (body != null && collOnRigidbodyCheck)
-        {
-            this.transform.position -= this.transform.forward;
-            collOnRigidbodyCheck = false;
-        }
-
-        
-    }
-    */
     #endregion
     #endregion
 
