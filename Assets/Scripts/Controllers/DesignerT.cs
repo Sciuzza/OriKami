@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-
 #region Structs
 
 #region Input Structs
@@ -288,9 +287,10 @@ public class DesignerT : MonoBehaviour
 
         gcLink.gpInitializer.AddListener(ApplyingGameSettings);
         gcLink.gameSettingsChanged.AddListener(ApplyingGameSettings);
-    } 
+    }
     #endregion
 
+    #region Design Tweaks Apply Method and Initializer
     public void ApplyingGameSettings(GameObject player)
     {
 
@@ -323,11 +323,11 @@ public class DesignerT : MonoBehaviour
         PlayerInputs playerInputsTempLink = player.GetComponent<PlayerInputs>();
 
         playerInputsTempLink.currentInputs = GestioneInputs;
-     
+
 
         Physics.gravity = -GeneralTweaks.globalGravity * Vector3.up;
-    }
-
+    } 
+    #endregion
 }
 
 

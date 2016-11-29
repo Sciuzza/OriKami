@@ -4,27 +4,26 @@ using UnityEngine.Events;
 
 public class MoveHandler : MonoBehaviour
 {
+    #region Public Variables
+    public float hitImpactVel;
+    public float gravityStr;
+    private bool roofHit = false;
+    #endregion
 
-
-
+    #region Private Variables
     private Vector3 finalMove = new Vector3(0, 0, 0), rollImpulse = new Vector3(0, 0, 0), rollDir;
     private float rollStrength;
     private bool rolling = false, gliding = false;
-
-    CharacterController ccLink;
-
+    private CharacterController ccLink;
     private float verticalVelocity = 0.0f;
+    private CollisionFlags flags;
+    #endregion
 
-    CollisionFlags flags;
-
+    #region Events
     public UnityEvent deathRequest;
+    #endregion
 
-    public float hitImpactVel;
-    public float gravityStr;
-
-    private bool roofHit = false;
-
-    // Use this for initialization
+    #region Taking References and Linking Events
     void Awake()
     {
 
@@ -46,7 +45,9 @@ public class MoveHandler : MonoBehaviour
         fsmCheckTempLink.stopGlideLogic.AddListener(SettingNormalGravity);
 
     }
+    #endregion
 
+    #region Move and Rotation Handling Methods
     void Update()
     {
 
@@ -91,8 +92,8 @@ public class MoveHandler : MonoBehaviour
             else
                 verticalVelocity = -3f;
 
-            if(roofHit)
-            roofHit = false;
+            if (roofHit)
+                roofHit = false;
         }
         else if ((flags & CollisionFlags.Above) != 0 && !roofHit)
         {
@@ -116,19 +117,12 @@ public class MoveHandler : MonoBehaviour
 
     private void HandlingSpecialRot(Vector3 inputDir, float rotSpeed)
     {
-
-        //Quaternion rotation = Quaternion.LookRotation(inputDir, Vector3.up);
-        //this.transform.rotation = Quaternion.Slerp(this.transform.rotation, rotation, Time.deltaTime * rotSpeed);
-
         rollDir = inputDir;
-
     }
 
     private void HandlingJump(float jumpStrength)
     {
-
         verticalVelocity = jumpStrength;
-
     }
 
     private void HandlingRoll(float rollStr)
@@ -137,10 +131,7 @@ public class MoveHandler : MonoBehaviour
         rollDir = this.transform.forward;
         rollStrength = rollStr;
         finalMove = rollImpulse;
-
         rolling = true;
-
-
     }
 
     private void StoppingRoll()
@@ -156,8 +147,6 @@ public class MoveHandler : MonoBehaviour
     private void SettingNormalGravity()
     {
         gliding = false;
-    }
-
-
-
+    } 
+    #endregion
 }

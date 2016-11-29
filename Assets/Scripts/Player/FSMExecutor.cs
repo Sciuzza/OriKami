@@ -5,60 +5,37 @@ using UnityEngine.Events;
 
 public class FSMExecutor : MonoBehaviour
 {
-
+    #region Public Variables
     [HideInInspector]
     public moveValues currentMoveValues;
 
     [HideInInspector]
     public generalTweaks generalValues;
+    #endregion
 
     #region Events
-    [System.Serializable]
-    public class dirAbiHandling : UnityEvent<Vector3, float>
-    {
-    }
-
-    public dirAbiHandling moveSelected;
-
-    [System.Serializable]
-    public class genAbiHandling : UnityEvent<float>
-    {
-    }
-
-    public genAbiHandling jumpSelected, rollSelected;
-
-    [System.Serializable]
-    public class rotHandling : UnityEvent<Vector3, float>
-    {
-    }
-
-    public rotHandling rotSelected, specialRotSelected;
-
-    [System.Serializable]
-    public class phHandling : UnityEvent<physicStates>
-    {
-    }
-
-    public phHandling phChangeEffect;
-
-
-
+    public event_vector3_float moveSelected, rotSelected, specialRotSelected;
+    public event_float jumpSelected, rollSelected;
+    public event_ps phChangeEffect;
     public UnityEvent vFissureAniEnded;
     #endregion
 
+    #region Taking References and linking Events
     void Awake()
     {
         FSMChecker fsmCheckerTempLink = this.gameObject.GetComponent<FSMChecker>();
 
         fsmCheckerTempLink.formChanged.AddListener(ApplyingFormEffect);
-        fsmCheckerTempLink.dirAbiUsed.AddListener(ApplyingAbilityEffect);
+        fsmCheckerTempLink.moveUsed.AddListener(ApplyingMoveAbiEffect);
         fsmCheckerTempLink.genAbiUsed.AddListener(ApplyingAbilityEffect);
         fsmCheckerTempLink.rotationUsed.AddListener(ApplyingRotationEffect);
-        fsmCheckerTempLink.vFissureUsed.AddListener(ApplyingVFissure);
+        fsmCheckerTempLink.vFissureUsed.AddListener(ApplyingSpecialAniAbi);
 
 
     }
+    #endregion
 
+    #region Normal Ability Handler Methods
     private void ApplyingFormEffect(string newForm, string previousForm, List<GameObject> formReferences)
     {
         formReferences.Find(x => x.tag == newForm).SetActive(false);
@@ -77,79 +54,76 @@ public class FSMExecutor : MonoBehaviour
 
     }
 
-    private void ApplyingAbilityEffect(abilties abiUsed, Vector3 moveDirInput, string currentForm, physicStates currentPHState)
+    private void ApplyingMoveAbiEffect(Vector3 moveDirInput, string currentForm, physicStates currentPHState)
     {
-        switch (abiUsed)
+
+        switch (currentForm)
         {
-            case abilties.move:
-                switch (currentForm)
+            case ("Standard Form"):
+
+                switch (currentPHState)
                 {
-                    case ("Standard Form"):
-
-                        switch (currentPHState)
-                        {
-                            case physicStates.onAir:
-                                moveSelected.Invoke(moveDirInput, generalValues.moveInAir);
-                                break;
-                            case physicStates.onWater:
-                                moveSelected.Invoke(moveDirInput, generalValues.moveInWater);
-                                break;
-                            case physicStates.onGround:
-                                moveSelected.Invoke(moveDirInput, currentMoveValues.standMove.moveSpeed);
-                                break;
-                        }
-
+                    case physicStates.onAir:
+                        moveSelected.Invoke(moveDirInput, generalValues.moveInAir);
                         break;
-                    case ("Frog Form"):
-
-                        switch (currentPHState)
-                        {
-                            case physicStates.onAir:
-                                moveSelected.Invoke(moveDirInput, generalValues.moveInAir);
-                                break;
-                            case physicStates.onWater:
-                                moveSelected.Invoke(moveDirInput, generalValues.moveInWater);
-                                break;
-                            case physicStates.onGround:
-                                moveSelected.Invoke(moveDirInput, currentMoveValues.frogMove.moveSpeed);
-                                break;
-                        }
-
+                    case physicStates.onWater:
+                        moveSelected.Invoke(moveDirInput, generalValues.moveInWater);
                         break;
-                    case ("Dragon Form"):
-                        moveSelected.Invoke(moveDirInput, currentMoveValues.craneMove.glideSpeed);
-                        break;
-                    case ("Armadillo Form"):
-
-                        switch (currentPHState)
-                        {
-                            case physicStates.onAir:
-                                moveSelected.Invoke(moveDirInput, generalValues.moveInAir);
-                                break;
-                            case physicStates.onWater:
-                                moveSelected.Invoke(moveDirInput, generalValues.moveInWater);
-                                break;
-                            case physicStates.onGround:
-                                moveSelected.Invoke(moveDirInput, currentMoveValues.armaMove.moveSpeed);
-                                break;
-                        }
-
-                        break;
-                    case ("Dolphin Form"):
-
-                        switch (currentPHState)
-                        {
-                            case physicStates.onAir:
-                                moveSelected.Invoke(moveDirInput, generalValues.moveInAir);
-                                break;
-                            case physicStates.onWater:
-                                moveSelected.Invoke(moveDirInput, currentMoveValues.dolphinMove.swimSpeed);
-                                break;
-                        }
-
+                    case physicStates.onGround:
+                        moveSelected.Invoke(moveDirInput, currentMoveValues.standMove.moveSpeed);
                         break;
                 }
+
                 break;
+            case ("Frog Form"):
+
+                switch (currentPHState)
+                {
+                    case physicStates.onAir:
+                        moveSelected.Invoke(moveDirInput, generalValues.moveInAir);
+                        break;
+                    case physicStates.onWater:
+                        moveSelected.Invoke(moveDirInput, generalValues.moveInWater);
+                        break;
+                    case physicStates.onGround:
+                        moveSelected.Invoke(moveDirInput, currentMoveValues.frogMove.moveSpeed);
+                        break;
+                }
+
+                break;
+            case ("Dragon Form"):
+                moveSelected.Invoke(moveDirInput, currentMoveValues.craneMove.glideSpeed);
+                break;
+            case ("Armadillo Form"):
+
+                switch (currentPHState)
+                {
+                    case physicStates.onAir:
+                        moveSelected.Invoke(moveDirInput, generalValues.moveInAir);
+                        break;
+                    case physicStates.onWater:
+                        moveSelected.Invoke(moveDirInput, generalValues.moveInWater);
+                        break;
+                    case physicStates.onGround:
+                        moveSelected.Invoke(moveDirInput, currentMoveValues.armaMove.moveSpeed);
+                        break;
+                }
+
+                break;
+            case ("Dolphin Form"):
+
+                switch (currentPHState)
+                {
+                    case physicStates.onAir:
+                        moveSelected.Invoke(moveDirInput, generalValues.moveInAir);
+                        break;
+                    case physicStates.onWater:
+                        moveSelected.Invoke(moveDirInput, currentMoveValues.dolphinMove.swimSpeed);
+                        break;
+                }
+
+                break;
+
         }
     }
 
@@ -179,18 +153,6 @@ public class FSMExecutor : MonoBehaviour
         }
     }
 
-    private void ApplyingVFissure(VFissure vfTempLink, string vfTag)
-    {
-        bool vFissureAniOn = true;
-
-        if (vfTag == "vAbilityta" || vfTag == "vAbilitytb")
-            StartCoroutine(VFissureExecution(vFissureAniOn, vfTempLink, vfTag));
-        else if (vfTag == "hAbilityta" || vfTag == "hAbilitytb")
-            StartCoroutine(HFissureExecution(vFissureAniOn, vfTempLink, vfTag));
-        else
-            StartCoroutine(DolpSwimBExecution(vFissureAniOn, vfTempLink, vfTag));
-    }
-
     private void ApplyingRotationEffect(Vector3 abiDirInput, playerStates currentPl)
     {
 
@@ -211,6 +173,20 @@ public class FSMExecutor : MonoBehaviour
 
         }
 
+    } 
+    #endregion
+
+    #region Special Animation Ability Handler Methods
+    private void ApplyingSpecialAniAbi(VFissure vfTempLink, string vfTag)
+    {
+        bool vFissureAniOn = true;
+
+        if (vfTag == "vAbilityta" || vfTag == "vAbilitytb")
+            StartCoroutine(VFissureExecution(vFissureAniOn, vfTempLink, vfTag));
+        else if (vfTag == "hAbilityta" || vfTag == "hAbilitytb")
+            StartCoroutine(HFissureExecution(vFissureAniOn, vfTempLink, vfTag));
+        else
+            StartCoroutine(DolpSwimBExecution(vFissureAniOn, vfTempLink, vfTag));
     }
 
     private IEnumerator VFissureExecution(bool vFissureAniOn, VFissure vfTempLink, string vfEntrance)
@@ -284,7 +260,7 @@ public class FSMExecutor : MonoBehaviour
                 //Debug.Log(distance.sqrMagnitude);
                 if (distance.sqrMagnitude >= 0.05f && !secondMoveIsOn)
                 {
-                    
+
                     Vector3 direction = (vTriggerMidPosition - this.transform.position).normalized;
                     direction.y = 0;
                     this.transform.position += direction * Time.deltaTime * 4;
@@ -302,7 +278,7 @@ public class FSMExecutor : MonoBehaviour
 
                         vGuidanceFinPosition.y = this.transform.position.y;
                         distance = vGuidanceFinPosition - this.transform.position;
-                         Debug.Log(distance.sqrMagnitude);
+                        Debug.Log(distance.sqrMagnitude);
 
                         if (distance.sqrMagnitude >= 0.1f)
                         {
@@ -548,5 +524,6 @@ public class FSMExecutor : MonoBehaviour
         vFissureAniOn = false;
         vFissureAniEnded.Invoke();
         ccTempLink.radius = radius;
-    }
+    } 
+    #endregion
 }

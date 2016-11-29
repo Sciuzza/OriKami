@@ -4,8 +4,7 @@ using UnityEngine.SceneManagement;
 
 public class SceneController : MonoBehaviour
 {
-
-
+    #region Taking References and linking Events
     void Awake()
     {
         MenuManager mmTempLink = this.GetComponent<MenuManager>();
@@ -16,18 +15,7 @@ public class SceneController : MonoBehaviour
         GameController gcTempLink = this.GetComponent<GameController>();
 
         gcTempLink.gpInitializer.AddListener(GamePlayInitialization);
-     
-    }
 
-    void Start()
-    {
-        if (SceneManager.GetActiveScene().buildIndex == 0)
-        SceneManager.LoadScene(1);
-    }
-
-    void Update()
-    {
-        SkipLevel();
     }
 
     private void GamePlayInitialization(GameObject player)
@@ -42,9 +30,22 @@ public class SceneController : MonoBehaviour
         PlayerInputs plTempLink = player.GetComponent<PlayerInputs>();
 
         plTempLink.mainMenuRequest.AddListener(LoadingScenebyIndex);
+        plTempLink.nextSceneRequest.AddListener(LoadingNextScene);
+        plTempLink.previousSceneRequest.AddListener(LoadingPreviousScene);
+        plTempLink.resettingSceneRequest.AddListener(ResettingCurrentScene);
 
     }
+    #endregion
 
+    #region Game Starter Una Tantum Initialization
+    void Start()
+    {
+        if (SceneManager.GetActiveScene().buildIndex == 0)
+            SceneManager.LoadScene(1);
+    }
+    #endregion
+
+    #region Scene Switch Handler Methods
     private void LoadingScenebyName(string sceneName)
     {
         SceneManager.LoadScene(sceneName);
@@ -68,53 +69,6 @@ public class SceneController : MonoBehaviour
     private void ResettingCurrentScene()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-    }
-
-    private void SkipLevel()
-    {
-        if (Input.GetKeyDown(KeyCode.PageUp))
-            LoadingNextScene();
-        else if (Input.GetKeyDown(KeyCode.PageDown))
-            LoadingPreviousScene();
-        else if (Input.GetKeyDown(KeyCode.End))
-            ResettingCurrentScene();
-    }
-
-    /*
-#region Old
-private void Initialization(GameObject player)
-{
-    EnvInputs envInputsTempLink = player.GetComponent<EnvInputs>();
-    envInputsTempLink.playerIsDead.AddListener(ResettingScene);
-}
-
-
-
-
-
-
-private void GettingSceneIndex()
-{
-    sceneIndex = SceneManager.GetActiveScene().buildIndex;
-}
-
-public void SkipLevel()
-{
-   
-    else if (SceneManager.GetActiveScene().buildIndex == 0)
-    {
-        GameStarter();
-    }
-    else if (Input.GetKeyDown(KeyCode.End))
-    {
-        SceneManager.LoadScene("Proto Level Selection");
-
-    }
-
-}
-
-
-
-
-*/
+    } 
+    #endregion
 }

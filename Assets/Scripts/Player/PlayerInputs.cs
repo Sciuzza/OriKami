@@ -4,35 +4,11 @@ using UnityEngine.Events;
 
 public class PlayerInputs : MonoBehaviour
 {
-
+    #region Public Variables
     public inputSettings currentInputs;
-    
-    #region Event Classes
-    [System.Serializable]
-    public class moveInp : UnityEvent<abilties, Vector3>
-    {
-    }
-
-    [System.Serializable]
-    public class generalAbiInput : UnityEvent<abilties>
-    {
-    }
-
-    [System.Serializable]
-    public class sceneSwitchInput : UnityEvent<int>
-    {
-    }
-
     #endregion
 
-    #region Events
-    public UnityEvent rollStopped;
-    public generalAbiInput genAbiRequest;
-    public moveInp dirAbiRequest;
-    public sceneSwitchInput mainMenuRequest;
-    #endregion
-
-    #region Private Use Variables
+    #region Private Variables
     private Vector3 moveDirection;
 
     private bool switchCooldown = false;
@@ -41,6 +17,13 @@ public class PlayerInputs : MonoBehaviour
     private enum currentForm { std, frog, crane, arma, dolphin };
 
     private currentForm cForm = currentForm.std;
+    #endregion
+
+    #region Events
+    public UnityEvent rollStopped, nextSceneRequest, previousSceneRequest, resettingSceneRequest;
+    public event_abi genAbiRequest;
+    public event_abi_vector3 dirAbiRequest;
+    public event_int mainMenuRequest;
     #endregion
 
     #region Taking References and Linking Events
@@ -1842,6 +1825,12 @@ public class PlayerInputs : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Escape))
             mainMenuRequest.Invoke(1);
+        if (Input.GetKeyDown(KeyCode.PageUp))
+            nextSceneRequest.Invoke();
+        if (Input.GetKeyDown(KeyCode.PageDown))
+            previousSceneRequest.Invoke();
+        if (Input.GetKeyDown(KeyCode.End))
+            resettingSceneRequest.Invoke();
     }
     #endregion
 
@@ -1882,5 +1871,4 @@ public class PlayerInputs : MonoBehaviour
 
     #endregion 
     #endregion
-
 }
