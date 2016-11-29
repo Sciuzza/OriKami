@@ -109,6 +109,8 @@ public class EnvInputs : MonoBehaviour
             case "Death":
                 playerIsDead.Invoke();
                 break;
+            case "Camera Control":
+                break;
 
         }
 
@@ -135,6 +137,8 @@ public class EnvInputs : MonoBehaviour
                 break;
             case "Water":
                 onWaterFlag = false;
+                break;
+            case "Camera Control":
                 break;
         }
     } 
