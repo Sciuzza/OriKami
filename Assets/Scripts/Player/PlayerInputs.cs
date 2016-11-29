@@ -6,51 +6,53 @@ public class PlayerInputs : MonoBehaviour
 {
 
     public inputSettings currentInputs;
-    private bool isRollPressed = false;
-
-    #region Private Use Variables
-    private Vector3 moveDirection;
-
-    private bool switchCooldown = false;
-
-    private enum currentForm { std, frog, crane, arma, dolphin };
-
-    private currentForm cForm = currentForm.std;
-    #endregion
-
-    #region Events Invoked
+    
+    #region Event Classes
     [System.Serializable]
     public class moveInp : UnityEvent<abilties, Vector3>
     {
     }
-
-    public moveInp dirAbiRequest;
 
     [System.Serializable]
     public class generalAbiInput : UnityEvent<abilties>
     {
     }
 
-    public generalAbiInput genAbiRequest;
-
     [System.Serializable]
     public class sceneSwitchInput : UnityEvent<int>
     {
     }
 
-    public sceneSwitchInput mainMenuRequest;
-
     #endregion
 
+    #region Events
     public UnityEvent rollStopped;
+    public generalAbiInput genAbiRequest;
+    public moveInp dirAbiRequest;
+    public sceneSwitchInput mainMenuRequest;
+    #endregion
 
+    #region Private Use Variables
+    private Vector3 moveDirection;
+
+    private bool switchCooldown = false;
+    private bool isRollPressed = false;
+
+    private enum currentForm { std, frog, crane, arma, dolphin };
+
+    private currentForm cForm = currentForm.std;
+    #endregion
+
+    #region Taking References and Linking Events
     private void Awake()
     {
         FSMChecker fsmCheckerTempLink = this.GetComponent<FSMChecker>();
 
         fsmCheckerTempLink.formChangedInp.AddListener(UpdatingCurrentFormInputs);
-    }
+    } 
+    #endregion
 
+    #region Player Inputs Handler
     private void Update()
     {
 
@@ -1878,16 +1880,7 @@ public class PlayerInputs : MonoBehaviour
         }
     }
 
+    #endregion 
     #endregion
-
-
-
-
-
-
-
-
-
-
 
 }
