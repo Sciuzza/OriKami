@@ -2,19 +2,19 @@
 using System.Collections;
 using UnityEngine.Events;
 
-
 public class CameraManager : MonoBehaviour
 {
+    #region Public Variables
+    [HideInInspector]
+    public CameraPlayer currentPlCameraSettings; 
+    #endregion
 
-    #region Player Camera Variables
+    #region Private Variables
     private Transform lookAt;
     private Transform camTransform;
 
     private float currentx = 0.0f;
     private float currenty = 0.0f;
-
-    [HideInInspector]
-    public CameraPlayer currentPlCameraSettings;
     #endregion
 
     #region Taking Game Controller Reference and Link the Initializer Event
@@ -23,6 +23,15 @@ public class CameraManager : MonoBehaviour
         GameController gcLink = this.GetComponent<GameController>();
 
         gcLink.gpInitializer.AddListener(SettingPlayerCamera);
+    }
+    #endregion
+
+    #region Initializing Camera in Gameplay Scenes
+    public void SettingPlayerCamera(GameObject player)
+    {
+        camTransform = Camera.main.transform;
+        lookAt = player.transform;
+        Debug.Log("Camera Initialization Done");
     }
     #endregion
 
@@ -75,15 +84,6 @@ public class CameraManager : MonoBehaviour
             camTransform.LookAt(lookAt.position);
         }
 
-    } 
-    #endregion
-
-    #region Initializing Camera in Gameplay Scenes
-    public void SettingPlayerCamera(GameObject player)
-    {
-        camTransform = Camera.main.transform;
-        lookAt = player.transform;
-        Debug.Log("Camera Initialization Done");
     } 
     #endregion
 }

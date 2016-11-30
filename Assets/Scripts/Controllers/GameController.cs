@@ -2,10 +2,11 @@
 using System.Collections;
 using UnityEngine.Events;
 
-public class GameController : MonoBehaviour {
-
-   
-    private GameObject player;
+public class GameController : MonoBehaviour
+{
+    #region Private Variables
+    private GameObject player; 
+    #endregion
 
     #region Event Variables
     [System.Serializable]
@@ -61,5 +62,4 @@ public class GameController : MonoBehaviour {
             return true;
     } 
     #endregion
-
 }

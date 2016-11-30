@@ -4,28 +4,15 @@ using UnityEngine.Events;
 
 public class EnvInputs : MonoBehaviour
 {
-
-    #region Event Classes
-    [System.Serializable]
-    public class physicChangeRequest : UnityEvent<physicStates>
-    {
-    }
-
-    [System.Serializable]
-    public class vFissureAbility : UnityEvent<VFissure, string>
-    {
-    }
-    #endregion
-
-    #region Events
-    public vFissureAbility vFissureRequestOn;
-    public physicChangeRequest psChanged;
-    public UnityEvent vFissureRequestOff, playerIsDead;
-    #endregion
-
     #region Private Variables
     private CharacterController ccLink;
     private bool onWaterFlag = false, onAir = false, onWater = false, onGround = false;
+    #endregion
+
+    #region Events
+    public event_vfscript_string vFissureRequestOn;
+    public event_ps psChanged;
+    public UnityEvent vFissureRequestOff, playerIsDead;
     #endregion
 
     #region Taking References
@@ -152,5 +139,4 @@ public class EnvInputs : MonoBehaviour
         }
     } 
     #endregion
-
 }

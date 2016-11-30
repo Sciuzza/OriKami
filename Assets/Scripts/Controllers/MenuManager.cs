@@ -6,26 +6,20 @@ using UnityEngine.Events;
 
 public class MenuManager : MonoBehaviour
 {
+    #region Public Variables
+    public event_int switchSceneRequestByInt;
+    public event_string switchSceneRequestByName; 
+    #endregion
+
+    #region Private Variables
     private GameObject mainMenuPanel;
     private Button newGame, levelSel, quitGame;
 
     private GameObject levelSelPanel;
-    private Button route1, frogsV, route2, armaV, route3, dolphinsV, route4, back;
+    private Button route1, frogsV, route2, armaV, route3, dolphinsV, route4, back; 
+    #endregion
 
-    [System.Serializable]
-    public class ngEvent : UnityEvent<int>
-    {
-    }
-
-    public ngEvent switchSceneRequestByInt;
-
-    [System.Serializable]
-    public class ngEvent2 : UnityEvent<string>
-    {
-    }
-
-    public ngEvent2 switchSceneRequestByName;
-
+    #region Taking References and linking Events
     void Awake()
     {
         GameController gcTempLink = this.GetComponent<GameController>();
@@ -33,7 +27,9 @@ public class MenuManager : MonoBehaviour
         gcTempLink.ngpInitializer.AddListener(InitializingNgpScene);
         gcTempLink.gpInitializer.AddListener(InitializingGpScene);
     }
+    #endregion
 
+    #region Menu Handling Methods
     private void InitializingNgpScene()
     {
         switch (SceneManager.GetActiveScene().buildIndex)
@@ -154,9 +150,11 @@ public class MenuManager : MonoBehaviour
 
     #endregion
 
-
+    #region Menu In Game Handler
     private void InitializingGpScene(GameObject player)
     {
 
     }
+    #endregion 
+    #endregion
 }

@@ -30,73 +30,81 @@ public enum controlStates { totalControl, noCamera, noMove, noGenAbi, noCamAndMo
 
 #endregion
 
+#region Event Classes
+[System.Serializable]
+public class event_ps : UnityEvent<physicStates>
+{
+}
+
+[System.Serializable]
+public class event_vfscript_string : UnityEvent<VFissure, string>
+{
+}
+
+[System.Serializable]
+public class event_abi_vector3 : UnityEvent<abilties, Vector3>
+{
+}
+
+[System.Serializable]
+public class event_abi : UnityEvent<abilties>
+{
+}
+
+[System.Serializable]
+public class event_int : UnityEvent<int>
+{
+}
+
+[System.Serializable]
+public class event_string_string_listGb : UnityEvent<string, string, List<GameObject>>
+{
+}
+
+[System.Serializable]
+public class event_vector3_string_ps : UnityEvent<Vector3, string, physicStates>
+{
+}
+
+[System.Serializable]
+public class event_vector3_ps : UnityEvent<Vector3, playerStates>
+{
+}
+
+[System.Serializable]
+public class event_abi_string : UnityEvent<abilties, string>
+{
+}
+
+[System.Serializable]
+public class event_pl : UnityEvent<playerStates>
+{
+}
+
+[System.Serializable]
+public class event_string : UnityEvent<string>
+{
+}
+
+[System.Serializable]
+public class event_vector3_float : UnityEvent<Vector3, float>
+{
+}
+
+[System.Serializable]
+public class event_float : UnityEvent<float>
+{
+}
+#endregion
 
 public class FSMChecker : MonoBehaviour
 {
-
-    #region Effects Request Observer Path
-    [System.Serializable]
-    public class formEffectsRequest : UnityEvent<string, string, List<GameObject>>
-    {
-    }
-
-    public formEffectsRequest formChanged;
-
-
-    [System.Serializable]
-    public class dirAbilityUsed : UnityEvent<abilties, Vector3, string, physicStates>
-    {
-    }
-
-    public dirAbilityUsed dirAbiUsed;
-
-    [System.Serializable]
-    public class rotEffectsRequest : UnityEvent<Vector3, playerStates>
-    {
-    }
-
-    public rotEffectsRequest rotationUsed;
-
-    [System.Serializable]
-    public class generalAbiUsed : UnityEvent<abilties, string>
-    {
-    }
-
-    public generalAbiUsed genAbiUsed;
-
-
-
-    [System.Serializable]
-    public class physicStateEffectsRequest : UnityEvent<physicStates>
-    {
-    }
-
-    public physicStateEffectsRequest phStateChanged;
-
-    [System.Serializable]
-    public class playerStateEffectsRequest : UnityEvent<playerStates>
-    {
-    }
-
-    public playerStateEffectsRequest plStateChanged;
-
-    [System.Serializable]
-    public class availableInputs : UnityEvent<string>
-    {
-    }
-
-    public availableInputs formChangedInp;
-
-    [System.Serializable]
-    public class vFissureUse : UnityEvent<VFissure, string>
-    {
-    }
-
-    public vFissureUse vFissureUsed;
-    public UnityEvent stoppingRollLogic, enableGlideLogic, stopGlideLogic, deathRequest;
-
+    #region Public Variables
+    public formsSettings abiUnlocked;
+    public float drowTimerSetting;
     #endregion
 
+    #region Private Variables
     [System.Serializable]
     public struct playerCState
     {
@@ -115,17 +123,23 @@ public class FSMChecker : MonoBehaviour
     [SerializeField]
     playerCState cPlayerState;
 
-    public formsSettings abiUnlocked;
-
     private CharacterController ccLink;
-
     private VFissure vfLink;
     private string vFissureEntrance;
-
-    public float drowTimerSetting;
     private bool dying = false;
+    #endregion
 
-    
+    #region Events
+    public event_string formChangedInp;
+    public event_vfscript_string vFissureUsed;
+    public UnityEvent stoppingRollLogic, enableGlideLogic, stopGlideLogic, deathRequest;
+    public event_abi_string genAbiUsed;
+    public event_vector3_ps rotationUsed;
+    public event_string_string_listGb formChanged;
+    public event_vector3_string_ps moveUsed;
+    public event_ps phStateChanged;
+    public event_pl plStateChanged; 
+    #endregion
 
     #region Initialization Methods
     void Awake()
@@ -140,7 +154,7 @@ public class FSMChecker : MonoBehaviour
         PlayerInputs plInputsTempLink = this.gameObject.GetComponent<PlayerInputs>();
 
 
-        plInputsTempLink.dirAbiRequest.AddListener(CheckingAbiRequirements);
+        plInputsTempLink.dirAbiRequest.AddListener(CheckingDirAbiRequirements);
         plInputsTempLink.genAbiRequest.AddListener(CheckingAbiRequirements);
         plInputsTempLink.rollStopped.AddListener(EnablingMove);
 
@@ -195,7 +209,7 @@ public class FSMChecker : MonoBehaviour
     #endregion
 
     #region Player Inputs Handler
-    private void CheckingAbiRequirements(abilties abiReceived, Vector3 abiDir)
+    private void CheckingDirAbiRequirements(abilties abiReceived, Vector3 abiDir)
     {
 
         if (cPlayerState.currentAbilities.Contains(abiReceived))
@@ -204,7 +218,7 @@ public class FSMChecker : MonoBehaviour
             {
 
                 case abilties.move:
-                    dirAbiUsed.Invoke(abiReceived, abiDir, cPlayerState.currentForm, cPlayerState.currentPhState);
+                    moveUsed.Invoke(abiDir, cPlayerState.currentForm, cPlayerState.currentPhState);
                     break;
                 case abilties.rotate:
                     rotationUsed.Invoke(abiDir, cPlayerState.currentPlState);
@@ -1476,11 +1490,5 @@ public class FSMChecker : MonoBehaviour
             dying = false;
     }
     #endregion
-
-
-
-
-
-
 }
 
