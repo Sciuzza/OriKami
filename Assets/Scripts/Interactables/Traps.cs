@@ -6,7 +6,7 @@ public class Traps : MonoBehaviour
 {
 
     public float sphereSpeed;
-    float sphereRotation = 30f;
+    float sphereRotation = 0f;
     Transform targetTr;
     public Transform A;
     public Transform B;
