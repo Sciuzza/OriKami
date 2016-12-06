@@ -1,0 +1,68 @@
+newmtl New Material
+Kd 0 0.0896554 1
+illum 2
+
+newmtl New Material 16
+Kd 1 0.4344827 0
+illum 2
+
+newmtl Red
+Kd 0.9448276 0 1
+illum 2
+
+newmtl New Material 14
+Kd 1 0 0
+illum 2
+
+newmtl Default-Material
+Kd 1 1 1
+illum 2
+
+newmtl New Material 8
+Kd 0.091 0.365 0.028
+illum 2
+
+newmtl New Material 5
+Kd 0.5529412 0.1960784 0.172549
+illum 2
+
+newmtl 03 - Default
+Kd 0.01176471 0.01176471 0.01176471
+illum 2
+
+newmtl New Material 4
+Kd 0.1014779 1 0
+illum 2
+
+newmtl New Material 10
+Kd 0.3676471 0.0405493 0.0405493
+illum 2
+
+newmtl New Material 3
+Kd 0 0.7931032 1
+illum 2
+
+newmtl New Material 1
+Kd 0.2039216 0.909804 0.8235295
+illum 2
+
+newmtl New Material 11
+Kd 0.2573529 0.04352292 0.04352292
+illum 2
+
+newmtl New Material 7
+Kd 0.1395618 0.6470588 0.03806228
+illum 2
+
+newmtl New Material 6
+Kd 0.1470588 0.01189447 0.01189447
+illum 2
+
+newmtl New Material 9
+Kd 0.3235294 0.1260813 0.1260813
+illum 2
+
+newmtl New Material 20
+Kd 0 0 0
+illum 2
+
