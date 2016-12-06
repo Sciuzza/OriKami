@@ -21,10 +21,12 @@ public class Puzzles : MonoBehaviour
     public bool moveDown;
     public bool moveRight;
     public bool moveLeft;
+    public bool rotate;
     public bool keyHit = false;
 
     public GameObject generatedObject;
     public GameObject disabledObject;
+    public GameObject rotateObject;
 
     public GameObject leftDoor;
     public GameObject rightDoor;
@@ -33,7 +35,6 @@ public class Puzzles : MonoBehaviour
     public GameObject goDown;
     public GameObject goRight;
     public GameObject goLeft;
-
 
     private Vector3 startPosLeftDoor;
     private Vector3 endPosLeftDoor;
@@ -57,6 +58,7 @@ public class Puzzles : MonoBehaviour
     public float distance; // di quanto si muove la porta  x designer
     private float lerpTime = 5;
     private float currentLerpTime = 0;
+    public float degrees;
 
     void Start()
     {
@@ -216,8 +218,18 @@ public class Puzzles : MonoBehaviour
 
                 yield return null;
             }
-              
+                
        
+    }
+    IEnumerator RotateMe(Vector3 byAngles, float inTime)
+    {
+        var fromAngle = rotateObject.transform.rotation;
+        var toAngle = Quaternion.Euler(rotateObject.transform.eulerAngles + byAngles);
+        for (var t = 0f; t < 1; t += Time.deltaTime / inTime)
+        {
+            rotateObject.transform.rotation = Quaternion.Lerp(fromAngle, toAngle, t);
+            yield return null;
+        }
     }
 
     void OnTriggerEnter(Collider other)
@@ -250,6 +262,12 @@ public class Puzzles : MonoBehaviour
         if (other.gameObject.tag == "Player" && moveObject)
         {
             StartCoroutine(ObjectMovingCO());
+        }
+
+        if (other.gameObject.tag == "Player" && rotate)
+        {
+            Debug.Log("Is rotating");
+            StartCoroutine(RotateMe(Vector3.up * degrees, 5));
         }
 
     }
