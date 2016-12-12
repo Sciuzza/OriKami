@@ -4,7 +4,7 @@ using UnityEngine.SceneManagement;
 
 public class Traps : MonoBehaviour
 {
-
+    public bool movingPlatforms;
     public float sphereSpeed;
     float sphereRotation = 0f;
     Transform targetTr;
@@ -55,7 +55,22 @@ public class Traps : MonoBehaviour
         }
     }
 
-    
+    void OnTriggerStay(Collider other)
+    {
+        if (other.gameObject.tag == "Player")
+        {
+            other.transform.SetParent(this.gameObject.transform);
+        }
+    }
+
+    void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.tag == "Player")
+        {
+            other.transform.parent = null;
+        }
+    }
+
 
 
     /*void OnCollisionEnter (Collision coll)

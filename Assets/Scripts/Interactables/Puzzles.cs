@@ -23,7 +23,7 @@ public class Puzzles : MonoBehaviour
     public bool moveLeft;
     public bool rotate;
     public bool keyHit = false;
-
+    
     public GameObject generatedObject;
     public GameObject disabledObject;
     public GameObject rotateObject;
@@ -269,8 +269,9 @@ public class Puzzles : MonoBehaviour
             Debug.Log("Is rotating");
             StartCoroutine(RotateMe(Vector3.up * degrees, 5));
         }
+            
+      }
 
-    }
-
+   
 
 }
