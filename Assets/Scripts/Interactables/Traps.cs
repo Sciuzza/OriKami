@@ -4,15 +4,17 @@ using UnityEngine.SceneManagement;
 
 public class Traps : MonoBehaviour
 {
+    bool isDirectionRight = true;
     public bool movingPlatforms;
+
     public float sphereSpeed;
     float sphereRotation = 0f;
-    Transform targetTr;
+    
     public Transform A;
     public Transform B;
+    Transform targetTr;
     Transform rotationSphere;
-    bool isDirectionRight = true;
-        
+
     void Start()
     {
         targetTr = A;
