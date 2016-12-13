@@ -5,24 +5,40 @@ using System.Collections;
 public class Puzzles : MonoBehaviour
 {
 
-    // bool per tutti i puzzle   
+    //Gestione Movimento oggetti  
     public bool moveObject;
-    public bool generateObject;
-    public bool disableObject;
-    public bool doorPuzzle;
-    public bool isPuzzle4;
-
-    public bool openDoor;
-    public bool closeDoor;
-
-    public bool isUp;
-    public bool isDown;
     public bool moveUp;
     public bool moveDown;
     public bool moveRight;
     public bool moveLeft;
-    public bool rotate;
+
+    //Generare e disabilitare oggetti 
+    public bool generateObject;
+    public bool disableObject;
+
+    // x Attivare gestione Porte 
+    public bool doorPuzzle;
+
+    //Puzzle pilastri da fare 
+    public bool isPuzzle4;
+
+    
+    public bool isUp;
+    public bool isDown;
+
+    //Gestire apertura e chiusura porte 
+    public bool openDoor;
+    public bool closeDoor;
+
+    // x rotazione continua  
+    public bool keepRotating;
+
+    // x raotione in gradi
+    public bool rotate;  
     public bool keyHit = false;
+
+    // x regolare la velocità di rotazione 
+    public float rotationSpeed;  
     
     public GameObject generatedObject;
     public GameObject disabledObject;
@@ -35,6 +51,7 @@ public class Puzzles : MonoBehaviour
     public GameObject goDown;
     public GameObject goRight;
     public GameObject goLeft;
+    public GameObject keep_Rotating;
 
     private Vector3 startPosLeftDoor;
     private Vector3 endPosLeftDoor;
@@ -54,11 +71,14 @@ public class Puzzles : MonoBehaviour
     private Vector3 startRightObject;
     private Vector3 endRightObject;
 
+    // di quanto si muove l'oggetto  x designer
+    public float distance; 
 
-    public float distance; // di quanto si muove la porta  x designer
     private float lerpTime = 5;
     private float currentLerpTime = 0;
-    public float degrees;
+
+    // di quanti gradi si muove l'oggetto 
+    public float degrees; 
 
     void Start()
     {
@@ -272,6 +292,12 @@ public class Puzzles : MonoBehaviour
             
       }
 
-   
+    void OnTriggerStay (Collider other)
+    {
+        if (other.gameObject.tag == "Player" && keepRotating)
+        {
+            keep_Rotating.transform.Rotate(Vector3.up * (rotationSpeed * Time.deltaTime));
+        }
+    }
 
 }
