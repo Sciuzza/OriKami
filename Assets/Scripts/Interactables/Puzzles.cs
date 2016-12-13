@@ -4,7 +4,6 @@ using System.Collections;
 
 public class Puzzles : MonoBehaviour
 {
-
     //Gestione Movimento oggetti  
     public bool moveObject;
     public bool moveUp;
@@ -22,7 +21,7 @@ public class Puzzles : MonoBehaviour
     //Puzzle pilastri da fare 
     public bool isPuzzle4;
 
-    
+
     public bool isUp;
     public bool isDown;
 
@@ -34,12 +33,18 @@ public class Puzzles : MonoBehaviour
     public bool keepRotating;
 
     // x raotione in gradi
-    public bool rotate;  
+    public bool rotate;
     public bool keyHit = false;
 
+    // di quanti gradi si muove l'oggetto 
+    public float degrees;
+
+    // di quanto si muove l'oggetto  x designer
+    public float distance;
+
     // x regolare la velocità di rotazione 
-    public float rotationSpeed;  
-    
+    public float rotationSpeed;
+
     public GameObject generatedObject;
     public GameObject disabledObject;
     public GameObject rotateObject;
@@ -71,14 +76,8 @@ public class Puzzles : MonoBehaviour
     private Vector3 startRightObject;
     private Vector3 endRightObject;
 
-    // di quanto si muove l'oggetto  x designer
-    public float distance; 
-
     private float lerpTime = 5;
     private float currentLerpTime = 0;
-
-    // di quanti gradi si muove l'oggetto 
-    public float degrees; 
 
     void Start()
     {
@@ -202,44 +201,44 @@ public class Puzzles : MonoBehaviour
     IEnumerator ObjectMovingCO()
     {
         keyHit = true;
-       
-            while ((endPosUpObject - this.transform.position).magnitude > 0.5f ||
-                   (endDownObject - this.transform.position).magnitude > 0.5f ||
-                   (endLeftObject - this.transform.position).magnitude > 0.5f ||
-                   (endRightObject - this.transform.position).magnitude > 0.5f)
+
+        while ((endPosUpObject - this.transform.position).magnitude > 0.5f ||
+               (endDownObject - this.transform.position).magnitude > 0.5f ||
+               (endLeftObject - this.transform.position).magnitude > 0.5f ||
+               (endRightObject - this.transform.position).magnitude > 0.5f)
+        {
+            currentLerpTime += Time.deltaTime;
+            if (currentLerpTime >= lerpTime)
             {
-                currentLerpTime += Time.deltaTime;
-                if (currentLerpTime >= lerpTime)
-                {
-                    currentLerpTime = lerpTime;
-                }
-
-                float leftPerc = currentLerpTime / lerpTime;
-                float rightPerc = currentLerpTime / lerpTime;
-
-                if (moveUp)
-                {
-                    goUp.transform.position = Vector3.Lerp(startPosUpObject, endPosUpObject, leftPerc);
-                }
-                else if (moveDown)
-                {
-                    goDown.transform.position = Vector3.Lerp(startDownObject, endDownObject, rightPerc);
-                }
-
-                else if (moveRight)
-                {
-
-                    goRight.transform.position = Vector3.Lerp(startRightObject, endRightObject, leftPerc);
-                }
-                else if (moveLeft)
-                {
-                    goLeft.transform.position = Vector3.Lerp(startLeftObject, endLeftObject, rightPerc);
-                }
-
-                yield return null;
+                currentLerpTime = lerpTime;
             }
-                
-       
+
+            float leftPerc = currentLerpTime / lerpTime;
+            float rightPerc = currentLerpTime / lerpTime;
+
+            if (moveUp)
+            {
+                goUp.transform.position = Vector3.Lerp(startPosUpObject, endPosUpObject, leftPerc);
+            }
+            else if (moveDown)
+            {
+                goDown.transform.position = Vector3.Lerp(startDownObject, endDownObject, rightPerc);
+            }
+
+            else if (moveRight)
+            {
+
+                goRight.transform.position = Vector3.Lerp(startRightObject, endRightObject, leftPerc);
+            }
+            else if (moveLeft)
+            {
+                goLeft.transform.position = Vector3.Lerp(startLeftObject, endLeftObject, rightPerc);
+            }
+
+            yield return null;
+        }
+
+
     }
     IEnumerator RotateMe(Vector3 byAngles, float inTime)
     {
@@ -268,14 +267,11 @@ public class Puzzles : MonoBehaviour
 
         if (other.gameObject.tag == "Player" && doorPuzzle && openDoor)
         {
-            Debug.Log("THE DOOR IS OPENING LOLLO COGLIONE");
+
             StartCoroutine(DoorOpeningCO());
-
-
         }
         if (other.gameObject.tag == "Player" && doorPuzzle && closeDoor)
         {
-            Debug.Log("THE DOOR IS CLOSING LOLLO COGLIONE");
             StartCoroutine(DoorClosingCO());
         }
 
@@ -286,13 +282,12 @@ public class Puzzles : MonoBehaviour
 
         if (other.gameObject.tag == "Player" && rotate)
         {
-            Debug.Log("Is rotating");
             StartCoroutine(RotateMe(Vector3.up * degrees, 5));
         }
-            
-      }
 
-    void OnTriggerStay (Collider other)
+    }
+
+    void OnTriggerStay(Collider other)
     {
         if (other.gameObject.tag == "Player" && keepRotating)
         {
