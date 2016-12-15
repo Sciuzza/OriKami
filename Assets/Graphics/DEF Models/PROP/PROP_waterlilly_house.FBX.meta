@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: 4492fba5049eae2498f0a329fd0e6bb3
-timeCreated: 1481559300
+guid: f7452ee2284a0904da6fc8a4e8932e38
+timeCreated: 1481646069
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
@@ -9,7 +9,7 @@ ModelImporter:
     400000: //RootNode
     2300000: //RootNode
     3300000: //RootNode
-    4300000: Frog's House
+    4300000: House
     9500000: //RootNode
   materials:
     importMaterials: 1
