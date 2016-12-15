@@ -17,7 +17,7 @@ namespace Orikami
 
 
             print("On platform");
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(0.4f);
             PlatformMesh.enabled = false;
             platformCollider.isTrigger = true;
             
