@@ -155,10 +155,10 @@ public class Puzzles : MonoBehaviour
     void Update()
     {
         if (keepRotating)
-        { 
-            // keep_Rotating.transform.Rotate(Vector3.up * (rotationSpeed * Time.deltaTime));
-            this.transform.Rotate(Vector3.up * (rotationSpeed * Time.deltaTime));
+        {
+            this.gameObject.transform.Rotate(Vector3.up * (rotationSpeed * Time.deltaTime));
         }
+
     }
 
     IEnumerator DoorOpeningCO()
@@ -264,26 +264,27 @@ public class Puzzles : MonoBehaviour
     {
         if (other.gameObject.tag == "Player" || other.gameObject.tag == "ActivatorTrigger" && generateObject)
         {
-            if (generatedObject !=null)
+            if (generatedObject != null)
             {
                 Instantiate(generatedObject);
+                generateObject = false;
             }
            
-            generateObject = false;
         }
 
         if (other.gameObject.tag == "Player" || other.gameObject.tag == "ActivatorTrigger" && disableObject)
         {
-            if (disabledObject !=null)
+            if (disabledObject != null)
             {
                 disabledObject.gameObject.SetActive(false);
+                disableObject = false;
             }
-           
-            disableObject = false;
+            
         }
 
         if (other.gameObject.tag == "Player" && doorPuzzle && openDoor)
         {
+
             StartCoroutine(DoorOpeningCO());
         }
         if (other.gameObject.tag == "Player" && doorPuzzle && closeDoor)
@@ -308,11 +309,8 @@ public class Puzzles : MonoBehaviour
         if (other.gameObject.tag == "Player" && keepRotating)
         {
             other.transform.SetParent(this.gameObject.transform);
-            // keep_Rotating.transform.Rotate(Vector3.up * (rotationSpeed * Time.deltaTime));
-            //this.transform.Rotate(Vector3.up * (rotationSpeed * Time.deltaTime));
         }
     }
-
     void OnTriggerExit(Collider other)
     {
         if (other.gameObject.tag == "Player")
@@ -320,5 +318,4 @@ public class Puzzles : MonoBehaviour
             other.transform.parent = null;
         }
     }
-
 }
