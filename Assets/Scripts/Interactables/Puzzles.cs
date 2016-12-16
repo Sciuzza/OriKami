@@ -152,15 +152,6 @@ public class Puzzles : MonoBehaviour
 
     }
 
-    void Update()
-    {
-        if (keepRotating)
-        { 
-            // keep_Rotating.transform.Rotate(Vector3.up * (rotationSpeed * Time.deltaTime));
-            this.transform.Rotate(Vector3.up * (rotationSpeed * Time.deltaTime));
-        }
-    }
-
     IEnumerator DoorOpeningCO()
     {
         keyHit = true;
@@ -262,28 +253,21 @@ public class Puzzles : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag == "Player" || other.gameObject.tag == "ActivatorTrigger" && generateObject)
+        if (other.gameObject.tag == "Player" && generateObject)
         {
-            if (generatedObject !=null)
-            {
-                Instantiate(generatedObject);
-            }
-           
+            Instantiate(generatedObject);
             generateObject = false;
         }
 
-        if (other.gameObject.tag == "Player" || other.gameObject.tag == "ActivatorTrigger" && disableObject)
+        if (other.gameObject.tag == "Player" && disableObject)
         {
-            if (disabledObject !=null)
-            {
-                disabledObject.gameObject.SetActive(false);
-            }
-           
+            disabledObject.gameObject.SetActive(false);
             disableObject = false;
         }
 
         if (other.gameObject.tag == "Player" && doorPuzzle && openDoor)
         {
+
             StartCoroutine(DoorOpeningCO());
         }
         if (other.gameObject.tag == "Player" && doorPuzzle && closeDoor)
@@ -291,7 +275,7 @@ public class Puzzles : MonoBehaviour
             StartCoroutine(DoorClosingCO());
         }
 
-        if (other.gameObject.tag == "Player" || other.gameObject.tag == "ActivatorTrigger" && moveObject)
+        if (other.gameObject.tag == "Player" && moveObject)
         {
             StartCoroutine(ObjectMovingCO());
         }
@@ -307,17 +291,7 @@ public class Puzzles : MonoBehaviour
     {
         if (other.gameObject.tag == "Player" && keepRotating)
         {
-            other.transform.SetParent(this.gameObject.transform);
-            // keep_Rotating.transform.Rotate(Vector3.up * (rotationSpeed * Time.deltaTime));
-            //this.transform.Rotate(Vector3.up * (rotationSpeed * Time.deltaTime));
-        }
-    }
-
-    void OnTriggerExit(Collider other)
-    {
-        if (other.gameObject.tag == "Player")
-        {
-            other.transform.parent = null;
+            keep_Rotating.transform.Rotate(Vector3.up * (rotationSpeed * Time.deltaTime));
         }
     }
 
