@@ -310,6 +310,10 @@ public class Puzzles : MonoBehaviour
         {
             other.transform.SetParent(this.gameObject.transform);
         }
+        //if (other.gameObject.tag == "Player")
+        //{
+        //    other.transform.SetParent(this.gameObject.transform);
+        //}
     }
     void OnTriggerExit(Collider other)
     {
