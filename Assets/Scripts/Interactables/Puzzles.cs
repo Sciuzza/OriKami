@@ -4,25 +4,51 @@ using System.Collections;
 
 public class Puzzles : MonoBehaviour
 {
-
-    // bool per tutti i puzzle   
-    public bool isPuzzle1;
-    public bool isPuzzle2;
-    public bool isPuzzle3;
-    public bool isPuzzle4;
-
-    public bool openDoor;
-    public bool closeDoor;
-
-    public bool isUp;
-    public bool isDown;
+    //Gestione Movimento oggetti  
+    public bool moveObject;
     public bool moveUp;
     public bool moveDown;
     public bool moveRight;
     public bool moveLeft;
-    private bool keyHit = false;
+
+    //Generare e disabilitare oggetti 
+    public bool generateObject;
+    public bool disableObject;
+
+    // x Attivare gestione Porte 
+    public bool doorPuzzle;
+
+    //Puzzle pilastri da fare 
+    public bool isPuzzle4;
+
+
+    public bool isUp;
+    public bool isDown;
+
+    //Gestire apertura e chiusura porte 
+    public bool openDoor;
+    public bool closeDoor;
+
+    // x rotazione continua  
+    public bool keepRotating;
+
+    // x raotione in gradi
+    public bool rotate;
+    public bool keyHit = false;
+
+    // di quanti gradi si muove l'oggetto 
+    public float degrees;
+
+    // di quanto si muove l'oggetto  x designer
+    public float distance;
+
+    // x regolare la velocità di rotazione 
+    public float rotationSpeed;
 
     public GameObject generatedObject;
+    public GameObject disabledObject;
+    public GameObject rotateObject;
+
     public GameObject leftDoor;
     public GameObject rightDoor;
 
@@ -30,7 +56,7 @@ public class Puzzles : MonoBehaviour
     public GameObject goDown;
     public GameObject goRight;
     public GameObject goLeft;
-
+    public GameObject keep_Rotating;
 
     private Vector3 startPosLeftDoor;
     private Vector3 endPosLeftDoor;
@@ -50,8 +76,6 @@ public class Puzzles : MonoBehaviour
     private Vector3 startRightObject;
     private Vector3 endRightObject;
 
-
-    public float distance; // di quanto si muove la porta  x designer
     private float lerpTime = 5;
     private float currentLerpTime = 0;
 
@@ -103,23 +127,23 @@ public class Puzzles : MonoBehaviour
 
         //}
 
-        else if (isPuzzle1 && moveUp)
+        else if (moveObject && moveUp)
         {
             startPosUpObject = goUp.transform.position;
             endPosUpObject = goUp.transform.position + goUp.transform.up * distance;
         }
-        else if (isPuzzle1 && moveDown)
+        else if (moveObject && moveDown)
         {
             startDownObject = goDown.transform.position;
             endDownObject = goDown.transform.position + goDown.transform.up * (-1) * distance;
         }
 
-        else if (isPuzzle1 && moveLeft)
+        else if (moveObject && moveLeft)
         {
             startLeftObject = goLeft.transform.position;
             endLeftObject = goLeft.transform.position + goLeft.transform.right * (-1) * distance;
         }
-        else if (isPuzzle1 && moveRight)
+        else if (moveObject && moveRight)
         {
             startRightObject = goRight.transform.position;
             endRightObject = goRight.transform.position + goRight.transform.right * distance;
@@ -127,7 +151,16 @@ public class Puzzles : MonoBehaviour
         }
 
     }
-    
+
+    void Update()
+    {
+        if (keepRotating)
+        {
+            this.gameObject.transform.Rotate(Vector3.up * (rotationSpeed * Time.deltaTime));
+        }
+
+    }
+
     IEnumerator DoorOpeningCO()
     {
         keyHit = true;
@@ -173,10 +206,11 @@ public class Puzzles : MonoBehaviour
         }
 
     }
-    
+
     IEnumerator ObjectMovingCO()
     {
         keyHit = true;
+
         while ((endPosUpObject - this.transform.position).magnitude > 0.5f ||
                (endDownObject - this.transform.position).magnitude > 0.5f ||
                (endLeftObject - this.transform.position).magnitude > 0.5f ||
@@ -213,35 +247,79 @@ public class Puzzles : MonoBehaviour
             yield return null;
         }
 
+
+    }
+    IEnumerator RotateMe(Vector3 byAngles, float inTime)
+    {
+        var fromAngle = rotateObject.transform.rotation;
+        var toAngle = Quaternion.Euler(rotateObject.transform.eulerAngles + byAngles);
+        for (var t = 0f; t < 1; t += Time.deltaTime / inTime)
+        {
+            rotateObject.transform.rotation = Quaternion.Lerp(fromAngle, toAngle, t);
+            yield return null;
+        }
     }
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag == "Player" && isPuzzle2)
+        if (other.gameObject.tag == "Player" || other.gameObject.tag == "ActivatorTrigger" && generateObject)
         {
-            Instantiate(generatedObject);
-            isPuzzle2 = false;
+            if (generatedObject != null)
+            {
+                Instantiate(generatedObject);
+                generateObject = false;
+            }
+           
         }
 
-        if (other.gameObject.tag == "Player" && isPuzzle3 && openDoor)
+        if (other.gameObject.tag == "Player" || other.gameObject.tag == "ActivatorTrigger" && disableObject)
         {
-            Debug.Log("THE DOOR IS OPENING LOLLO COGLIONE");
-            StartCoroutine(DoorOpeningCO());
+            if (disabledObject != null)
+            {
+                disabledObject.gameObject.SetActive(false);
+                disableObject = false;
+            }
             
-
         }
-        if (other.gameObject.tag == "Player" && isPuzzle3 && closeDoor)
+
+        if (other.gameObject.tag == "Player" && doorPuzzle && openDoor)
         {
-            Debug.Log("THE DOOR IS CLOSING LOLLO COGLIONE");
+
+            StartCoroutine(DoorOpeningCO());
+        }
+        if (other.gameObject.tag == "Player" && doorPuzzle && closeDoor)
+        {
             StartCoroutine(DoorClosingCO());
         }
 
-        if (other.gameObject.tag == "Player" && isPuzzle1)
+        if (other.gameObject.tag == "Player" || other.gameObject.tag == "ActivatorTrigger" && moveObject)
         {
             StartCoroutine(ObjectMovingCO());
         }
 
+        if (other.gameObject.tag == "Player" && rotate)
+        {
+            StartCoroutine(RotateMe(Vector3.up * degrees, 5));
+        }
+
     }
 
-
+    void OnTriggerStay(Collider other)
+    {
+        if (other.gameObject.tag == "Player" && keepRotating)
+        {
+            other.transform.SetParent(this.gameObject.transform);
+        }
+        //if (other.gameObject.tag == "Player")
+        //{
+        //    other.transform.SetParent(this.gameObject.transform);
+        //}
+    }
+    void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.tag == "Player")
+        {
+            other.transform.parent = null;
+        }
+    }
 }
