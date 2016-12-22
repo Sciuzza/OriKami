@@ -41,6 +41,7 @@ public class Puzzles : MonoBehaviour
 
     // di quanto si muove l'oggetto  x designer
     public float distance;
+    public float movingSpeed = 0f;
 
     // x regolare la velocità di rotazione 
     public float rotationSpeed;
@@ -130,7 +131,7 @@ public class Puzzles : MonoBehaviour
         else if (moveObject && moveUp)
         {
             startPosUpObject = goUp.transform.position;
-            endPosUpObject = goUp.transform.position + goUp.transform.up * distance;
+            endPosUpObject = goUp.transform.position + goUp.transform.up * distance ;
         }
         else if (moveObject && moveDown)
         {
@@ -227,21 +228,21 @@ public class Puzzles : MonoBehaviour
 
             if (moveUp)
             {
-                goUp.transform.position = Vector3.Lerp(startPosUpObject, endPosUpObject, leftPerc);
+                goUp.transform.position = Vector3.Lerp(startPosUpObject, endPosUpObject, leftPerc*movingSpeed);
             }
             else if (moveDown)
             {
-                goDown.transform.position = Vector3.Lerp(startDownObject, endDownObject, rightPerc);
+                goDown.transform.position = Vector3.Lerp(startDownObject, endDownObject, rightPerc * movingSpeed);
             }
 
             else if (moveRight)
             {
 
-                goRight.transform.position = Vector3.Lerp(startRightObject, endRightObject, leftPerc);
+                goRight.transform.position = Vector3.Lerp(startRightObject, endRightObject, leftPerc * movingSpeed);
             }
             else if (moveLeft)
             {
-                goLeft.transform.position = Vector3.Lerp(startLeftObject, endLeftObject, rightPerc);
+                goLeft.transform.position = Vector3.Lerp(startLeftObject, endLeftObject, rightPerc * movingSpeed);
             }
 
             yield return null;
