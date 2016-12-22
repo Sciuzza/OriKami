@@ -4,36 +4,23 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using UnityEngine.Events;
 
-[RequireComponent(typeof(Button))]
+[System.Serializable]
+public class AudioRepository
+{
+    public string AudioCatName;
+    public AudioSource AudioSourceRef;
+    public AudioClip[] PossibleSounds;
+}
+
+
 public class SoundManager : MonoBehaviour {
 
-    public AudioClip sound;
-
-    private Button buttons { get { return GetComponent<Button>(); } }
-    public AudioSource source { get { return GetComponent<AudioSource>(); } }
-    
-    
-
-    void Start()
+   public AudioRepository[] PersistendAudio;
+  
+   public void PlaySound(int catIndex, int clipIndex)
     {
-     
-        
-        //gameObject.AddComponent<AudioSource>();
-        source.clip = sound;
-        source.playOnAwake = false;
-
-        buttons.onClick.AddListener(() => PlaySound());
-        
-       
-
+        this.PersistendAudio[catIndex].AudioSourceRef.clip = this.PersistendAudio[catIndex].PossibleSounds[clipIndex];
+        this.PersistendAudio[catIndex].AudioSourceRef.Play();
     }
 
-    void PlaySound()
-    {
-        source.PlayOneShot(sound);
-    }
-    void Awake()
-    {
-       // this.GetComponent<GameController>().initializer.AddListener();
-    }
 }
