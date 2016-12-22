@@ -78,8 +78,10 @@ public class MenuManager : MonoBehaviour
         Application.Quit();
     }
 
-   
-
+    public void PlayNewGameSound()
+    {
+        GameObject.FindGameObjectWithTag("Game Controller").GetComponent<SoundManager>().PlaySound(1,1);
+    }
     #endregion
 
     #region Level Selection Handler

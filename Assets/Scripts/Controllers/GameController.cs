@@ -3,7 +3,10 @@ using System.Collections;
 using UnityEngine.Events;
 
 public class GameController : MonoBehaviour
+    
+
 {
+    public Camera cameraRef;
     #region Private Variables
     private GameObject player; 
     #endregion
@@ -22,7 +25,9 @@ public class GameController : MonoBehaviour
     #region Do not Destroy Behaviour
     void Awake()
     {
+        cameraRef = Camera.main;
         DontDestroyOnLoad(this.gameObject);
+        DontDestroyOnLoad(cameraRef.gameObject);
     }
     #endregion
 
