@@ -6,6 +6,8 @@ using UnityEngine.Events;
 
 public class MenuManager : MonoBehaviour
 {
+
+
     #region Public Variables
     public event_int switchSceneRequestByInt;
     public event_string switchSceneRequestByName; 
@@ -44,7 +46,7 @@ public class MenuManager : MonoBehaviour
     }
 
     #region Main Menu Handler
-    private void InitializingMainMenuPanel()
+    public void InitializingMainMenuPanel()
     {
         mainMenuPanel = GameObject.FindGameObjectWithTag("Menu Panel");
 
@@ -55,8 +57,6 @@ public class MenuManager : MonoBehaviour
         newGame = mmButtonRef[0];
         levelSel = mmButtonRef[1];
         quitGame = mmButtonRef[2];
-
-
 
         newGame.onClick.AddListener(InvokingNewGame);
         levelSel.onClick.AddListener(InvokingLevelSel);
