@@ -8,6 +8,8 @@ using UnityEngine;
 [System.Serializable]
 public class PlayerEffect
 {
+    public controlStates PlayerControlEffect;
+
     public PlayerReposition PlayerRepositionEffect;
 
     public PlayerMove PlayerMoveEffect;
