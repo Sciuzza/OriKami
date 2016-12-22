@@ -131,7 +131,7 @@ public class Puzzles : MonoBehaviour
         else if (moveObject && moveUp)
         {
             startPosUpObject = goUp.transform.position;
-            endPosUpObject = goUp.transform.position + goUp.transform.up * distance ;
+            endPosUpObject = goUp.transform.position + goUp.transform.up * distance;
         }
         else if (moveObject && moveDown)
         {
@@ -228,7 +228,7 @@ public class Puzzles : MonoBehaviour
 
             if (moveUp)
             {
-                goUp.transform.position = Vector3.Lerp(startPosUpObject, endPosUpObject, leftPerc*movingSpeed);
+                goUp.transform.position = Vector3.Lerp(startPosUpObject, endPosUpObject, leftPerc * movingSpeed);
             }
             else if (moveDown)
             {
@@ -263,24 +263,39 @@ public class Puzzles : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag == "Player" || other.gameObject.tag == "ActivatorTrigger" && generateObject)
+        if (other.gameObject.tag == "Player" && generateObject)
         {
             if (generatedObject != null)
             {
                 Instantiate(generatedObject);
                 generateObject = false;
             }
-           
+
+        }
+        if (other.gameObject.tag == "ActivatorTrigger" && generateObject) //Attenzione l'oggetto DEVE Avere RigidBody !!!!!
+        {
+            Debug.Log("TOCCATO");
+            Instantiate(generatedObject);
+            generateObject = false;
+
         }
 
-        if (other.gameObject.tag == "Player" || other.gameObject.tag == "ActivatorTrigger" && disableObject)
+        if (other.gameObject.tag == "Player" && disableObject)
         {
             if (disabledObject != null)
             {
                 disabledObject.gameObject.SetActive(false);
                 disableObject = false;
             }
-            
+
+        }
+        if (other.gameObject.tag == "ActivatorTrigger" && disableObject)
+        {
+            if (disabledObject != null)
+            {
+                disabledObject.gameObject.SetActive(false);
+                disableObject = false;
+            }
         }
 
         if (other.gameObject.tag == "Player" && doorPuzzle && openDoor)
@@ -293,7 +308,7 @@ public class Puzzles : MonoBehaviour
             StartCoroutine(DoorClosingCO());
         }
 
-        if (other.gameObject.tag == "Player" || other.gameObject.tag == "ActivatorTrigger" && moveObject)
+        if (other.gameObject.tag == "Player" && moveObject)
         {
             StartCoroutine(ObjectMovingCO());
         }
