@@ -77,6 +77,9 @@ public class MenuManager : MonoBehaviour
     {
         Application.Quit();
     }
+
+   
+
     #endregion
 
     #region Level Selection Handler
