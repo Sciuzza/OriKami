@@ -17,9 +17,16 @@ public class GameLoader : MonoBehaviour
     #region Sending the Scene Initialization Order
     void Start()
     {
-        GameController gcTempLink = gbTempLink.GetComponent<GameController>();
-        Debug.Log("Game Loader");
-        gcTempLink.InitializingScene();
+        if (this.gbTempLink != null)
+        {
+            GameController gcTempLink = gbTempLink.GetComponent<GameController>();
+            Debug.Log("Game Loader");
+            gcTempLink.InitializingScene();
+        }
+        else
+        {
+            Debug.Log("Game Brain Missing");
+        }
     } 
     #endregion
 
