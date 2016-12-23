@@ -322,4 +322,10 @@ public class StoryLineInstance : MonoBehaviour
 
     #endregion
 
+
+    public void Initialization()
+    {
+        Debug.Log("Here");
+    }
+
 }
