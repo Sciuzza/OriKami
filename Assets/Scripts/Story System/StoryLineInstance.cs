@@ -233,7 +233,6 @@ public class EvEffects
 }
 #endregion
 
-
 #region Sub Story and Storyline Classes
 
 [System.Serializable]
@@ -251,12 +250,7 @@ public class ItemDependencies
     public int ItemValue;
 }
 
-
-
-
 #endregion
-
-
 
 #region Story Element
 
@@ -265,7 +259,8 @@ public class StoryEvent
 {
     public string EventName;
     public Events EventEnumName;
-  
+    public buttonsJoy PlayerInputJoy;
+    public buttonsPc PlayerInputPc;
 
     public EvEffects Effects;
 }
