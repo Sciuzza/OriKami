@@ -58,6 +58,8 @@ public class MenuManager : MonoBehaviour
         levelSel = mmButtonRef[1];
         quitGame = mmButtonRef[2];
 
+
+        this.newGame.onClick.AddListener(this.PlayNewGameSound);
         newGame.onClick.AddListener(InvokingNewGame);
         levelSel.onClick.AddListener(InvokingLevelSel);
         quitGame.onClick.AddListener(QuitGame);
@@ -80,7 +82,7 @@ public class MenuManager : MonoBehaviour
 
     public void PlayNewGameSound()
     {
-        GameObject.FindGameObjectWithTag("Game Controller").GetComponent<SoundManager>().PlaySound(1,1);
+        GameObject.FindGameObjectWithTag("GameController").GetComponent<SoundManager>().PlaySound(1,0);
     }
     #endregion
 

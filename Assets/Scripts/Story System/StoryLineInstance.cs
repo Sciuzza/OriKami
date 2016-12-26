@@ -5,25 +5,7 @@ using UnityEngine;
 
 #region Enum Types
 
-public enum EnvActionable
-{
-    Trigger,
 
-    EndOfPreviousStoryEvent,
-
-    EndOfPreviousStory,
-
-    none
-}
-
-public enum PlayerActionable
-{
-    Input,
-
-    Auto,
-
-    none
-}
 
 public enum Stories
 {
@@ -33,7 +15,7 @@ public enum Stories
 
     Story3,
 
-    none
+    None
 }
 
 public enum Events
@@ -44,7 +26,7 @@ public enum Events
 
     Event3,
 
-    none
+    None
 }
 
 public enum Storylines
@@ -55,27 +37,38 @@ public enum Storylines
 
     StoryLine3,
 
-    none
+    None
 }
 
 public enum Movies
 {
-    movie1,
+    Movie1,
 
-    movie2,
+    Movie2,
 
-    movie3,
+    Movie3,
 
-    none
+    None
 }
+
+public enum ItemType
+{
+    Item1,
+
+    Item2,
+
+    Item3
+}
+
 #endregion
+
+#region Effect Classes
 
 #region Player Effect Classes
 
 [System.Serializable]
 public class PlayerEffect
 {
-    public controlStates PlayerControlEffect;
 
     public PlayerReposition PlayerRepositionEffect;
 
@@ -121,7 +114,7 @@ public class CameraMove
 #region Environment Npc Effects
 
 [System.Serializable]
-public class EnvEffect
+public class EnvironmentEffect
 {
     public ObjectActivation ObjActiEffect;
     public ObjectMoving ObjMovEffect;
@@ -131,6 +124,8 @@ public class EnvEffect
 public class ObjectActivation
 {
     public GameObject GbRef;
+    public bool Timed;
+    public float Time;
     public bool Dialogue;
     public string DialogueText;
 }
@@ -156,9 +151,9 @@ public class UiEffect
 public class UiObjectActivation
 {
     public GameObject GbRef;
-
+    public bool Timed;
+    public float Time;
     public bool Dialogue;
-
     public string DialogueText;
 }
 
@@ -182,7 +177,7 @@ public class SoundEffect
 [System.Serializable]
 public class PersistentSound
 {
-    public GameObject GbRef;
+    public bool Active;
     public int SoundCategory;
     public int SoundIndex;
 }
@@ -191,6 +186,7 @@ public class PersistentSound
 public class NormalSound
 {
     public GameObject GbRef;
+    public int SoundIndex;
 }
 #endregion
 
@@ -213,44 +209,60 @@ public class MovieEffect
 }
 #endregion
 
-#region Story Element
+
+[System.Serializable]
+public class EvEffects
+{
+    public PlayerEffect PlaEffect;
+    public CameraEffect CamEffect;
+    public List<EnvironmentEffect> EnvEffect;
+    public List<UiEffect> UiEffect;
+    public List<SoundEffect> SoundEffect;
+    public List<AnimationEffect> AniEffect;
+    public MovieEffect MovieEffect;
+}
+#endregion
+
+
+#region Sub Story and Storyline Classes
 
 [System.Serializable]
 public class GenTriggerConditions
 {
-    public EnvActionable HowEnvActionable;
     public BoxCollider TriggerRef;
-    public PlayerActionable HowPlaActionable;
     public buttonsJoy PlayerInputJoy;
     public buttonsPc PlayerInputPc;
 }
 
 [System.Serializable]
-public class SlTriggerConditions
+public class ItemDependencies
 {
-    public Storylines StoryLineDep;
-    public bool StoryLineCompleted;
-    public Stories StoryDep;
-    public bool SingleStoryCompleted;
-    public Events EventDep;
-    public bool SingleStoryEventCompleted;
+    public ItemType ItemDep;
+    public int ItemValue;
 }
+
+
+[System.Serializable]
+public class StoryDependencies
+{
+    public List<Storylines> StoryLineDep;
+    public List<Stories> StoryDep;
+}
+
+#endregion
+
+
+
+#region Story Element
 
 [System.Serializable]
 public class StoryEvent
 {
     public string EventName;
     public Events EventEnumName;
-    public bool Completed;
-    public bool Repeatable;
-    public GenTriggerConditions GenTriggerCond;
-    public PlayerEffect PlayerEffects;
-    public CameraEffect CameraEffects;
-    public List<EnvEffect> EnvEffects;
-    public List<UiEffect> UiEffects;
-    public List<SoundEffect> SoundEffects;
-    public List<AnimationEffect> AnimationEffects;
-    public MovieEffect VideoToPlay;
+  
+
+    public EvEffects Effects;
 }
 
 [System.Serializable]
@@ -259,8 +271,23 @@ public class SingleStory
     public string StoryName;
     public Stories StoryEnumName;
     public bool Completed;
-    public bool Repeatable;
-    public GenTriggerConditions GenTriggerCond;
+    public bool Active;
+    public bool AutoComplete;
+
+
+    public GenTriggerConditions GenAccessCond;
+    public List<ItemDependencies> ItemAccessCondition;
+
+
+
+    public controlStates PlayerControlEffect;
+
+    public StoryDependencies WhatCompletesOnActivation;
+    public StoryDependencies WhatActivesOnActivation;
+
+    public StoryDependencies WhatCompletesOnCompletion;
+    public StoryDependencies WhatActivesOnCompletion;
+
     public StoryEvent[] Events;
 }
 
@@ -270,9 +297,11 @@ public class StoryLine
     public string StoryLineName;
     public Storylines StoryEnumName;
     public bool Completed;
-    public bool Repeatable;
-    public GenTriggerConditions GenTriggerCond;
-    public SlTriggerConditions[] StoryTriggerCond;
+   
+
+    public StoryDependencies WhatCompletesOnCompletion;
+    public StoryDependencies WhatActivesOnCompletion;
+
     public SingleStory[] Stories;
 }
 
@@ -326,6 +355,13 @@ public class StoryLineInstance : MonoBehaviour
     public void Initialization()
     {
         Debug.Log("Here");
+        this.CheckSlGenTriggerConditions();
+    }
+
+
+    private void CheckSlGenTriggerConditions()
+    {
+        
     }
 
 }
