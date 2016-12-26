@@ -163,6 +163,7 @@ public class UiObjectActivation
     public GameObject GbRef;
     public bool Timed;
     public float Time;
+    public float FadingTime;
     public bool Dialogue;
     public string DialogueText;
 }
