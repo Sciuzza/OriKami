@@ -57,12 +57,17 @@ public class MenuManager : MonoBehaviour
         newGame = mmButtonRef[0];
         levelSel = mmButtonRef[1];
         quitGame = mmButtonRef[2];
+        
 
-
-        this.newGame.onClick.AddListener(this.PlayNewGameSound);
         newGame.onClick.AddListener(InvokingNewGame);
+        newGame.onClick.AddListener(PlayNewGameSound);
+        levelSel.onClick.AddListener(PlayNewGameSound);
         levelSel.onClick.AddListener(InvokingLevelSel);
         quitGame.onClick.AddListener(QuitGame);
+    }
+    public void Onhover()
+    {
+        PlayNewGameSound();
     }
 
     private void InvokingNewGame()
@@ -83,6 +88,11 @@ public class MenuManager : MonoBehaviour
     public void PlayNewGameSound()
     {
         GameObject.FindGameObjectWithTag("GameController").GetComponent<SoundManager>().PlaySound(1,0);
+    }
+
+    public void PlayBackSound()
+    {
+        GameObject.FindGameObjectWithTag("GameController").GetComponent<SoundManager>().PlaySound(1, 1);
     }
     #endregion
 
@@ -113,6 +123,7 @@ public class MenuManager : MonoBehaviour
         dolphinsV.onClick.AddListener(InvokingDolphinsV);
         route4.onClick.AddListener(InvokingRoute4);
         back.onClick.AddListener(InvokingMainMenu);
+        back.onClick.AddListener(PlayBackSound);
     }
 
     private void InvokingRoute1()
