@@ -294,7 +294,7 @@ public class SingleStory
 
  
 
-    public StoryEvent[] Events;
+    public List<StoryEvent> Events;
 }
 
 [System.Serializable]
@@ -309,7 +309,10 @@ public class StoryLine
     public List<Stories> StoryCompleteOnCompletion;
     public List<Stories> StoryActiveOnCompletion;
 
-    public SingleStory[] Stories;
+
+    public TextAsset DialoguesSource;
+
+    public List<SingleStory> Stories;
 }
 
 #endregion
@@ -322,44 +325,50 @@ public class StoryLineInstance : MonoBehaviour
 
     #region Validate Algorithm
 
-    /* 
-       public void OnValidate()
-       {
-           foreach (var t in this.Stories)
-           {
-               if (!t.IsAQuest)
-               {
-                   t.QuestName = quests.none;
-                   t.QuestPhase = questPhase.none;
-               }
-    
-               if (!t.InputActionable)
-               {
-                   t.PlayerInputJoy = buttonsJoy.none;
-                   t.PlayerInputPc = buttonsPc.none;
-               }
-    
-    
-               foreach (var storyEvent in t.Events)
-               {
-                   if (storyEvent.PlayerEffects.PlayerControlEffect == controlStates.totalControl)
-                   {
-                       storyEvent.PlayerEffects.PlayerRepositionEffect.GbRef = this.gameObject;
-                       storyEvent.PlayerEffects.PlayerMoveEffect.LerpSpeed = float.NaN;
-                   }
-                   else
-                   {
-                       storyEvent.PlayerEffects.PlayerRepositionEffect.GbRef = null;
-                   }
-               }
-           }
-       }
-       */
+    public string[] textLines;
 
-    #endregion
+    public void OnValidate()
+    {
+        // Use this for initialization
+  
+
+        if (this.CurrentStoryLine.DialoguesSource != null)
+        {
+            textLines = (this.CurrentStoryLine.DialoguesSource.text.Split('\n'));
+        }
+
+        var count = 0;
+
+        foreach (var t in this.CurrentStoryLine.Stories)
+        {
+            foreach (var t1 in t.Events)
+            {
+                foreach (var t2 in t1.Effects.EnvEffect)
+                {
+                    if (t2.ObjActiEffect.Dialogue && count < this.textLines.Length)
+                    {
+                        t2.ObjActiEffect.DialogueText = this.textLines[count];
+                        count++;
+                    }
+                }
+
+                foreach (var t2 in t1.Effects.UiEffect)
+                {
+                    if (t2.ObjActiEffect.Dialogue && count < this.textLines.Length)
+                    {
+                        t2.ObjActiEffect.DialogueText = this.textLines[count];
+                        count++;
+                    }
+                }
+            }
+        }
+    }
 
 
-    public void Initialization()
+#endregion
+
+
+public void Initialization()
     {
         Debug.Log("Here");
         this.CheckSlGenTriggerConditions();
