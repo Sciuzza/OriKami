@@ -21,10 +21,14 @@ public class QuestsManager : MonoBehaviour
     {
         var storyLineTempRepo = GameObject.FindGameObjectsWithTag("StoryLine");
 
-        foreach (GameObject t in storyLineTempRepo)
+        if (storyLineTempRepo == null) return;
+
+        foreach (var t in storyLineTempRepo)
         {
-            if (this.StoryLineRepo.Find(x => x.StoryEnumName == t.GetComponent<StoryLineInstance>().CurrentStoryLine.StoryEnumName) == null)
-                this.StoryLineRepo.Add(t.GetComponent<StoryLineInstance>().CurrentStoryLine);
+            if (
+                this.StoryLineRepo.Find(
+                    x => x.StoryEnumName == t.GetComponent<StoryLineInstance>().CurrentStoryLine.StoryEnumName)
+                == null) this.StoryLineRepo.Add(t.GetComponent<StoryLineInstance>().CurrentStoryLine);
         }
     }
 
