@@ -242,12 +242,7 @@ public class ItemDependencies
 }
 
 
-[System.Serializable]
-public class StoryDependencies
-{
-    public List<Storylines> StoryLineDep;
-    public List<Stories> StoryDep;
-}
+
 
 #endregion
 
@@ -282,11 +277,16 @@ public class SingleStory
 
     public controlStates PlayerControlEffect;
 
-    public StoryDependencies WhatCompletesOnActivation;
-    public StoryDependencies WhatActivesOnActivation;
 
-    public StoryDependencies WhatCompletesOnCompletion;
-    public StoryDependencies WhatActivesOnCompletion;
+    public List<Storylines> StoryLineCompleteOnActivation;
+    public List<Stories> StoryCompleteOnActivation;
+    public List<Stories> StoryActiveOnActivation;
+
+    public List<Storylines> StoryLineCompleteOnCompletion;
+    public List<Stories> StoryCompleteOnCompletion;
+    public List<Stories> StoryActiveOnCompletion;
+
+ 
 
     public StoryEvent[] Events;
 }
@@ -297,10 +297,11 @@ public class StoryLine
     public string StoryLineName;
     public Storylines StoryEnumName;
     public bool Completed;
-   
 
-    public StoryDependencies WhatCompletesOnCompletion;
-    public StoryDependencies WhatActivesOnCompletion;
+
+    public List<Storylines> StoryLineCompleteOnCompletion;
+    public List<Stories> StoryCompleteOnCompletion;
+    public List<Stories> StoryActiveOnCompletion;
 
     public SingleStory[] Stories;
 }
