@@ -73,6 +73,8 @@ public class PlayerEffect
     public PlayerReposition PlayerRepositionEffect;
 
     public PlayerMove PlayerMoveEffect;
+
+    public PlayerReward PlayerReward;
 }
 
 [System.Serializable]
@@ -87,6 +89,14 @@ public class PlayerMove
     public GameObject GbRef;
 
     public float LerpSpeed;
+}
+
+[System.Serializable]
+public class PlayerReward
+{
+    [Tooltip("Standard Form, Frog Form, Armadillo Form, Dragon Form, Dolphin Form")]
+    public string FormName;
+
 }
 
 #endregion Player Effect Classes
