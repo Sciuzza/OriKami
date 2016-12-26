@@ -4,8 +4,8 @@ using System.Collections;
 #region Structs
 
 #region Input Structs
-public enum buttonsJoy {A, B, Y, X, LT, RT, LB, RB };
-public enum buttonsPc {Q, E, R, F, Z, V, C, Space, N1, N2, N3, N4 };
+public enum buttonsJoy {A, B, Y, X, LT, RT, LB, RB , none};
+public enum buttonsPc {Q, E, R, F, Z, V, C, Space, N1, N2, N3, N4 , none};
 
 [System.Serializable]
 public struct standardInputsJ

@@ -111,6 +111,8 @@ public class EnvInputs : MonoBehaviour
                 break;
             case "Camera Control":
                 break;
+            case "StoryLine": envTrigger.gameObject.GetComponent<StoryLineInstance>().Initialization();
+                break;
 
         }
 
