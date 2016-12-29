@@ -107,7 +107,8 @@ public class PlayerReward
 public class CameraEffect
 {
     public CameraMove CameraMoveEffect;
-
+    public bool BackToPreviousPosition;
+    public bool BackToPreStoryPosition;
 }
 
 [System.Serializable]
@@ -127,6 +128,7 @@ public class CameraMove
 public class EnvironmentEffect
 {
     public ObjectActivation ObjActiEffect;
+    public ObjectDeActivation ObjDeActiEffect;
     public ObjectMoving ObjMovEffect;
 }
 
@@ -141,9 +143,18 @@ public class ObjectActivation
 }
 
 [System.Serializable]
-public class ObjectMoving
+public class ObjectDeActivation
 {
     public GameObject GbRef;
+    public bool Timed;
+    public float Time;
+}
+
+[System.Serializable]
+public class ObjectMoving
+{
+    public GameObject GbTarget;
+    public GameObject GbToMove;
     public float LerpSpeed;
 }
 
@@ -169,9 +180,18 @@ public class UiObjectActivation
 }
 
 [System.Serializable]
-public class UiObjectMoving
+public class UiObjectDeActivation
 {
     public GameObject GbRef;
+    public bool Timed;
+    public float Time;
+}
+
+[System.Serializable]
+public class UiObjectMoving
+{
+    public GameObject GbTarget;
+    public GameObject GbToMove;
     public float LerpSpeed;
 }
 
@@ -240,6 +260,7 @@ public class EvEffects
 public class GenTriggerConditions
 {
     public BoxCollider TriggerRef;
+    public SphereCollider STriggerRef;
     public buttonsJoy PlayerInputJoy;
     public buttonsPc PlayerInputPc;
 }
@@ -292,9 +313,9 @@ public class SingleStory
     public List<Stories> StoryCompleteOnCompletion;
     public List<Stories> StoryActiveOnCompletion;
 
- 
 
-    public List<StoryEvent> Events;
+    public StoryEvent[] Events;
+    //public List<StoryEvent> Events;
 }
 
 [System.Serializable]
@@ -312,7 +333,10 @@ public class StoryLine
 
     public TextAsset DialoguesSource;
 
-    public List<SingleStory> Stories;
+
+    public SingleStory[] Stories;
+
+   // public List<SingleStory> Stories;
 }
 
 #endregion
@@ -325,7 +349,7 @@ public class StoryLineInstance : MonoBehaviour
 
     #region Validate Algorithm
 
-    public string[] textLines;
+    public string[] TextLines;
 
     public void OnValidate()
     {
@@ -334,7 +358,7 @@ public class StoryLineInstance : MonoBehaviour
 
         if (this.CurrentStoryLine.DialoguesSource != null)
         {
-            textLines = (this.CurrentStoryLine.DialoguesSource.text.Split('\n'));
+            this.TextLines = (this.CurrentStoryLine.DialoguesSource.text.Split('\n'));
         }
 
         var count = 0;
@@ -345,18 +369,18 @@ public class StoryLineInstance : MonoBehaviour
             {
                 foreach (var t2 in t1.Effects.EnvEffect)
                 {
-                    if (t2.ObjActiEffect.Dialogue && count < this.textLines.Length)
+                    if (t2.ObjActiEffect.Dialogue && count < this.TextLines.Length)
                     {
-                        t2.ObjActiEffect.DialogueText = this.textLines[count];
+                        t2.ObjActiEffect.DialogueText = this.TextLines[count];
                         count++;
                     }
                 }
 
                 foreach (var t2 in t1.Effects.UiEffect)
                 {
-                    if (t2.ObjActiEffect.Dialogue && count < this.textLines.Length)
+                    if (t2.ObjActiEffect.Dialogue && count < this.TextLines.Length)
                     {
-                        t2.ObjActiEffect.DialogueText = this.textLines[count];
+                        t2.ObjActiEffect.DialogueText = this.TextLines[count];
                         count++;
                     }
                 }
