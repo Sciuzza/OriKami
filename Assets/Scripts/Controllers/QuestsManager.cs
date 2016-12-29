@@ -2,6 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 
+using JetBrains.Annotations;
+
 public class QuestsManager : MonoBehaviour
 {
 
@@ -13,7 +15,7 @@ public class QuestsManager : MonoBehaviour
         GameController gcLink = this.GetComponent<GameController>();
 
         gcLink.gpInitializer.AddListener(this.InitializingStoryLines);
-       
+
     }
 
 
@@ -32,5 +34,20 @@ public class QuestsManager : MonoBehaviour
         }
     }
 
-   
+    public void AddToRepository(StoryLine currentSlTemp)
+    {
+
+
+        if (this.StoryLineRepo.Find(x => x == currentSlTemp) == null && 
+            this.StoryLineRepo.Find(x => x.StoryLineName == currentSlTemp.StoryLineName) == null &&
+            currentSlTemp.StoryLineName == currentSlTemp.StoryEnumName.ToString())
+            this.StoryLineRepo.Add(currentSlTemp);
+
+
+        
+
+
+    }
+
+
 }

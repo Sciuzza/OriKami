@@ -176,6 +176,7 @@ public class UiObjectActivation
     public float Time;
     public float FadingTime;
     public bool Dialogue;
+    public string WhoIsTalking;
     public string DialogueText;
 }
 
@@ -314,8 +315,8 @@ public class SingleStory
     public List<Stories> StoryActiveOnCompletion;
 
 
-    public StoryEvent[] Events;
-    //public List<StoryEvent> Events;
+    //public StoryEvent[] Events;
+    public List<StoryEvent> Events;
 }
 
 [System.Serializable]
@@ -334,9 +335,9 @@ public class StoryLine
     public TextAsset DialoguesSource;
 
 
-    public SingleStory[] Stories;
+   // public SingleStory[] Stories;
 
-   // public List<SingleStory> Stories;
+    public List<SingleStory> Stories;
 }
 
 #endregion
@@ -386,6 +387,19 @@ public class StoryLineInstance : MonoBehaviour
                 }
             }
         }
+
+        /*
+        if (this.CurrentStoryLine.Stories1.Count == 0)
+        this.CurrentStoryLine.Stories1.AddRange(this.CurrentStoryLine.Stories);
+
+        foreach (var t in this.CurrentStoryLine.Stories1)
+        {
+            if (t.Events1.Count == 0)
+                t.Events1.AddRange(t.Events);
+        }
+        */
+        GameObject.FindGameObjectWithTag("GameController").GetComponent<QuestsManager>().AddToRepository(this.CurrentStoryLine);
+
     }
 
 
