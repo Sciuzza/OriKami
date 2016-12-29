@@ -65,10 +65,10 @@ public class MenuManager : MonoBehaviour
         levelSel.onClick.AddListener(InvokingLevelSel);
         quitGame.onClick.AddListener(QuitGame);
     }
-    public void Onhover()
-    {
-        PlayNewGameSound();
-    }
+    //public void Onhover()
+    //{
+    //    PlayNewGameSound();
+    //}
 
     private void InvokingNewGame()
     {
@@ -91,6 +91,11 @@ public class MenuManager : MonoBehaviour
     }
 
     public void PlayBackSound()
+    {
+        GameObject.FindGameObjectWithTag("GameController").GetComponent<SoundManager>().PlaySound(1, 2);
+    }
+
+    public void SelectedButton()
     {
         GameObject.FindGameObjectWithTag("GameController").GetComponent<SoundManager>().PlaySound(1, 1);
     }
@@ -116,12 +121,19 @@ public class MenuManager : MonoBehaviour
 
 
         route1.onClick.AddListener(InvokingRoute1);
+        route1.onClick.AddListener(PlayNewGameSound);
         frogsV.onClick.AddListener(InvokingFrogsV);
+        frogsV.onClick.AddListener(PlayNewGameSound);
         route2.onClick.AddListener(InvokingRoute2);
+        route2.onClick.AddListener(PlayNewGameSound);
         armaV.onClick.AddListener(InvokingArmaV);
+        armaV.onClick.AddListener(PlayNewGameSound);
         route3.onClick.AddListener(InvokingRoute3);
+        route3.onClick.AddListener(PlayNewGameSound);
         dolphinsV.onClick.AddListener(InvokingDolphinsV);
+        dolphinsV.onClick.AddListener(PlayNewGameSound);
         route4.onClick.AddListener(InvokingRoute4);
+        route4.onClick.AddListener(PlayNewGameSound);
         back.onClick.AddListener(InvokingMainMenu);
         back.onClick.AddListener(PlayBackSound);
     }
