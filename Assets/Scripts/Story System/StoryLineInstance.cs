@@ -128,6 +128,7 @@ public class CameraMove
 public class EnvironmentEffect
 {
     public ObjectActivation ObjActiEffect;
+    public Baloon BaloonEffect;
     public ObjectDeActivation ObjDeActiEffect;
     public ObjectMoving ObjMovEffect;
 }
@@ -138,8 +139,13 @@ public class ObjectActivation
     public GameObject GbRef;
     public bool Timed;
     public float Time;
-    public bool Dialogue;
-    public string DialogueText;
+}
+
+[System.Serializable]
+public class Baloon
+{
+    public GameObject GbRefRikiLogic;
+    public float BaloonSpeed;
 }
 
 [System.Serializable]
@@ -165,6 +171,7 @@ public class ObjectMoving
 public class UiEffect
 {
     public UiObjectActivation ObjActiEffect;
+    public UiDialogue UiDialogueEffect;
     public UiObjectMoving ObjMovEffect;
 }
 
@@ -175,11 +182,23 @@ public class UiObjectActivation
     public bool Timed;
     public float Time;
     public float FadingTime;
-    public bool Dialogue;
-    public string WhoIsTalking;
-    public string DialogueText;
+
 }
 
+[System.Serializable]
+public class UiDialogue
+{
+    public TextAsset DialogueRef;
+    public List<DialogueStructDebug> DialogueDebug;
+}
+
+[System.Serializable]
+public class DialogueStructDebug
+{
+    public string WhoIsTalking;
+    public string LabelPos;
+    public string WhatIsSaying;
+}
 [System.Serializable]
 public class UiObjectDeActivation
 {
@@ -332,7 +351,7 @@ public class StoryLine
     public List<Stories> StoryActiveOnCompletion;
 
 
-    public TextAsset DialoguesSource;
+   
 
 
    // public SingleStory[] Stories;
@@ -350,54 +369,11 @@ public class StoryLineInstance : MonoBehaviour
 
     #region Validate Algorithm
 
-    public string[] TextLines;
+   
 
     public void OnValidate()
     {
-        // Use this for initialization
-  
 
-        if (this.CurrentStoryLine.DialoguesSource != null)
-        {
-            this.TextLines = (this.CurrentStoryLine.DialoguesSource.text.Split('\n'));
-        }
-
-        var count = 0;
-
-        foreach (var t in this.CurrentStoryLine.Stories)
-        {
-            foreach (var t1 in t.Events)
-            {
-                foreach (var t2 in t1.Effects.EnvEffect)
-                {
-                    if (t2.ObjActiEffect.Dialogue && count < this.TextLines.Length)
-                    {
-                        t2.ObjActiEffect.DialogueText = this.TextLines[count];
-                        count++;
-                    }
-                }
-
-                foreach (var t2 in t1.Effects.UiEffect)
-                {
-                    if (t2.ObjActiEffect.Dialogue && count < this.TextLines.Length)
-                    {
-                        t2.ObjActiEffect.DialogueText = this.TextLines[count];
-                        count++;
-                    }
-                }
-            }
-        }
-
-        /*
-        if (this.CurrentStoryLine.Stories1.Count == 0)
-        this.CurrentStoryLine.Stories1.AddRange(this.CurrentStoryLine.Stories);
-
-        foreach (var t in this.CurrentStoryLine.Stories1)
-        {
-            if (t.Events1.Count == 0)
-                t.Events1.AddRange(t.Events);
-        }
-        */
         GameObject.FindGameObjectWithTag("GameController").GetComponent<QuestsManager>().AddToRepository(this.CurrentStoryLine);
 
     }
@@ -419,3 +395,55 @@ public void Initialization()
     }
 
 }
+
+
+
+
+
+
+
+/*
+if (this.CurrentStoryLine.DialoguesSource != null)
+{
+  this.TextLines = (this.CurrentStoryLine.DialoguesSource.text.Split('\n'));
+}
+
+
+
+var count = 0;
+
+
+foreach (var t in this.CurrentStoryLine.Stories)
+{
+  foreach (var t1 in t.Events)
+  {
+      foreach (var t2 in t1.Effects.EnvEffect)
+      {
+          if (t2.ObjActiEffect.Dialogue && count < this.TextLines.Length)
+          {
+              t2.ObjActiEffect.DialogueText = this.TextLines[count];
+              count++;
+          }
+      }
+
+      foreach (var t2 in t1.Effects.UiEffect)
+      {
+          if (t2.ObjActiEffect.Dialogue && count < this.TextLines.Length)
+          {
+              t2.ObjActiEffect.DialogueText = this.TextLines[count];
+              count++;
+          }
+      }
+  }
+}
+*/
+/*
+if (this.CurrentStoryLine.Stories1.Count == 0)
+this.CurrentStoryLine.Stories1.AddRange(this.CurrentStoryLine.Stories);
+
+foreach (var t in this.CurrentStoryLine.Stories1)
+{
+    if (t.Events1.Count == 0)
+        t.Events1.AddRange(t.Events);
+}
+*/
