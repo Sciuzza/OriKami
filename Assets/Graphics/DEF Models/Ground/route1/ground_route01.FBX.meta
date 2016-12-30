@@ -1,15 +1,33 @@
 fileFormatVersion: 2
-guid: 690389c4f7c84034cb7ad581c7d8d065
-timeCreated: 1482831402
+guid: 385d873049ca6ad46a9b370197cdf579
+timeCreated: 1483112890
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
   fileIDToRecycleName:
-    100000: //RootNode
-    400000: //RootNode
-    2300000: //RootNode
-    3300000: //RootNode
-    4300000: ground
+    100000: ground_copritorta
+    100002: ground_erba
+    100004: ground_erba_basipiccole
+    100006: //RootNode
+    100008: ground_terra
+    400000: ground_copritorta
+    400002: ground_erba
+    400004: ground_erba_basipiccole
+    400006: //RootNode
+    400008: ground_terra
+    2300000: ground_copritorta
+    2300002: ground_erba
+    2300004: ground_erba_basipiccole
+    2300006: ground_terra
+    3300000: ground_copritorta
+    3300002: ground_erba
+    3300004: ground_erba_basipiccole
+    3300006: ground_terra
+    4300000: ground_terra
+    4300002: ground_erba
+    4300004: ground_erba_basipiccole
+    4300006: ground_copritorta
+    9500000: //RootNode
   materials:
     importMaterials: 1
     materialName: 0
@@ -68,7 +86,7 @@ ModelImporter:
     rootMotionBoneName: 
     hasTranslationDoF: 0
   lastHumanDescriptionAvatarSource: {instanceID: 0}
-  animationType: 0
+  animationType: 2
   humanoidOversampling: 1
   additionalBone: 0
   userData: 

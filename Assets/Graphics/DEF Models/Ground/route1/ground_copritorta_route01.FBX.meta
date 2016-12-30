@@ -1,67 +1,15 @@
 fileFormatVersion: 2
-guid: 81d3bf2bcb184fc40ac6bb5620fc3bba
-timeCreated: 1483023978
+guid: 378db72fda7eaa44a868eb0e562f613b
+timeCreated: 1483114651
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
   fileIDToRecycleName:
-    100000: fiume_acqua_01
-    100002: fiume_acqua_02
-    100004: fiume_acqua_03
-    100006: fiume_acqua_04
-    100008: fiume_acqua_05
-    100010: fiume_acqua_06
-    100012: fiume_acqua_07
-    100014: fiume_acqua_08
-    100016: fiume_acqua_09
-    100018: fiume_acqua_amico
-    100020: fiume_letto
-    100022: //RootNode
-    400000: fiume_acqua_01
-    400002: fiume_acqua_02
-    400004: fiume_acqua_03
-    400006: fiume_acqua_04
-    400008: fiume_acqua_05
-    400010: fiume_acqua_06
-    400012: fiume_acqua_07
-    400014: fiume_acqua_08
-    400016: fiume_acqua_09
-    400018: fiume_acqua_amico
-    400020: fiume_letto
-    400022: //RootNode
-    2300000: fiume_acqua_01
-    2300002: fiume_acqua_02
-    2300004: fiume_acqua_03
-    2300006: fiume_acqua_04
-    2300008: fiume_acqua_05
-    2300010: fiume_acqua_06
-    2300012: fiume_acqua_07
-    2300014: fiume_acqua_08
-    2300016: fiume_acqua_09
-    2300018: fiume_acqua_amico
-    2300020: fiume_letto
-    3300000: fiume_acqua_01
-    3300002: fiume_acqua_02
-    3300004: fiume_acqua_03
-    3300006: fiume_acqua_04
-    3300008: fiume_acqua_05
-    3300010: fiume_acqua_06
-    3300012: fiume_acqua_07
-    3300014: fiume_acqua_08
-    3300016: fiume_acqua_09
-    3300018: fiume_acqua_amico
-    3300020: fiume_letto
-    4300000: fiume_letto
-    4300002: fiume_acqua_amico
-    4300004: fiume_acqua_01
-    4300006: fiume_acqua_03
-    4300008: fiume_acqua_04
-    4300010: fiume_acqua_05
-    4300012: fiume_acqua_02
-    4300014: fiume_acqua_06
-    4300016: fiume_acqua_07
-    4300018: fiume_acqua_08
-    4300020: fiume_acqua_09
+    100000: //RootNode
+    400000: //RootNode
+    2300000: //RootNode
+    3300000: //RootNode
+    4300000: ground_copritorta
     9500000: //RootNode
   materials:
     importMaterials: 1
