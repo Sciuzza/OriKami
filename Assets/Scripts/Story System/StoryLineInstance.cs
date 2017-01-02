@@ -1,5 +1,9 @@
 ﻿using System.Collections.Generic;
 
+using UnityEditor;
+
+using UnityEditorInternal;
+
 using UnityEngine;
 
 
@@ -107,8 +111,9 @@ public class PlayerReward
 public class CameraEffect
 {
     public CameraMove CameraMoveEffect;
-    public bool BackToPreviousPosition;
-    public bool BackToPreStoryPosition;
+    public CameraShake CameraShakeEffect;
+    public float BtpLerpSpeed;
+    public float BtsLerpSpeed;
 }
 
 [System.Serializable]
@@ -118,8 +123,12 @@ public class CameraMove
     public float LerpSpeed;
 }
 
-
-
+[System.Serializable]
+public class CameraShake
+{
+    public float ShakingPower;
+    public float ShakingDuration;
+}
 #endregion Player Effect Classes
 
 #region Environment Npc Effects
@@ -172,6 +181,7 @@ public class UiEffect
 {
     public UiObjectActivation ObjActiEffect;
     public UiDialogue UiDialogueEffect;
+    public UiObjectDeActivation ObjDeActiEffect;
     public UiObjectMoving ObjMovEffect;
 }
 
@@ -304,6 +314,8 @@ public class StoryEvent
     public buttonsJoy PlayerInputJoy;
     public buttonsPc PlayerInputPc;
 
+    public float EventEndDelay;
+
     public EvEffects Effects;
 }
 
@@ -316,14 +328,10 @@ public class SingleStory
     public bool Active;
     public bool AutoComplete;
 
-
     public GenTriggerConditions GenAccessCond;
     public List<ItemDependencies> ItemAccessCondition;
 
-
-
     public controlStates PlayerControlEffect;
-
 
     public List<Storylines> StoryLineCompleteOnActivation;
     public List<Stories> StoryCompleteOnActivation;
@@ -333,9 +341,14 @@ public class SingleStory
     public List<Stories> StoryCompleteOnCompletion;
     public List<Stories> StoryActiveOnCompletion;
 
-
-    //public StoryEvent[] Events;
     public List<StoryEvent> Events;
+
+    //public static List<StoryEvent> Events1;
+
+    //[System.Serializable]
+   // public ReorderableList reorderableList = new ReorderableList(Events1, (typeof(StoryEvent)),true, true, true, true);
+
+ 
 }
 
 [System.Serializable]
@@ -367,20 +380,10 @@ public class StoryLineInstance : MonoBehaviour
 
     public StoryLine CurrentStoryLine;
 
-    #region Validate Algorithm
-
-
-
     public void OnValidate()
     {
-
         GameObject.FindGameObjectWithTag("GameController").GetComponent<QuestsManager>().AddToRepository(this.CurrentStoryLine);
-
     }
-
-
-    #endregion
-
 
     public void Initialization()
     {
@@ -388,60 +391,9 @@ public class StoryLineInstance : MonoBehaviour
         this.CheckSlGenTriggerConditions();
     }
 
-  
     private void CheckSlGenTriggerConditions()
     {
     }
+
+   
 }
-
-
-
-
-
-
-
-/*
-if (this.CurrentStoryLine.DialoguesSource != null)
-{
-  this.TextLines = (this.CurrentStoryLine.DialoguesSource.text.Split('\n'));
-}
-
-
-
-var count = 0;
-
-
-foreach (var t in this.CurrentStoryLine.Stories)
-{
-  foreach (var t1 in t.Events)
-  {
-      foreach (var t2 in t1.Effects.EnvEffect)
-      {
-          if (t2.ObjActiEffect.Dialogue && count < this.TextLines.Length)
-          {
-              t2.ObjActiEffect.DialogueText = this.TextLines[count];
-              count++;
-          }
-      }
-
-      foreach (var t2 in t1.Effects.UiEffect)
-      {
-          if (t2.ObjActiEffect.Dialogue && count < this.TextLines.Length)
-          {
-              t2.ObjActiEffect.DialogueText = this.TextLines[count];
-              count++;
-          }
-      }
-  }
-}
-*/
-/*
-if (this.CurrentStoryLine.Stories1.Count == 0)
-this.CurrentStoryLine.Stories1.AddRange(this.CurrentStoryLine.Stories);
-
-foreach (var t in this.CurrentStoryLine.Stories1)
-{
-    if (t.Events1.Count == 0)
-        t.Events1.AddRange(t.Events);
-}
-*/
