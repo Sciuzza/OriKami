@@ -79,6 +79,10 @@ public class PlayerEffect
     public PlayerMove PlayerMoveEffect;
 
     public PlayerReward PlayerReward;
+
+    public PlayerSee PlayerSeeEffect;
+
+    public float PushingBackPower;
 }
 
 [System.Serializable]
@@ -93,6 +97,16 @@ public class PlayerMove
     public GameObject GbRef;
 
     public float LerpSpeed;
+}
+
+[System.Serializable]
+public class PlayerSee
+{
+    [Tooltip("Standard Form, Frog Form, Armadillo Form, Dragon Form, Dolphin Form")]
+    public GameObject GbRef;
+
+    public float LerpSpeed;
+
 }
 
 [System.Serializable]
@@ -155,6 +169,8 @@ public class Baloon
 {
     public GameObject GbRefRikiLogic;
     public float BaloonSpeed;
+    public int StartLine;
+    public int EndLine;
 }
 
 [System.Serializable]
