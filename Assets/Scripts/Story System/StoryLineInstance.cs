@@ -351,10 +351,10 @@ public class StoryLine
     public List<Stories> StoryActiveOnCompletion;
 
 
-   
 
 
-   // public SingleStory[] Stories;
+
+    // public SingleStory[] Stories;
 
     public List<SingleStory> Stories;
 }
@@ -369,7 +369,7 @@ public class StoryLineInstance : MonoBehaviour
 
     #region Validate Algorithm
 
-   
+
 
     public void OnValidate()
     {
@@ -379,21 +379,19 @@ public class StoryLineInstance : MonoBehaviour
     }
 
 
-#endregion
+    #endregion
 
 
-public void Initialization()
+    public void Initialization()
     {
         Debug.Log("Here");
         this.CheckSlGenTriggerConditions();
     }
 
-
+  
     private void CheckSlGenTriggerConditions()
     {
-        
     }
-
 }
 
 
