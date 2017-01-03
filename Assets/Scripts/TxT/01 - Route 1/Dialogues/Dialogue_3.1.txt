@@ -1,1 +1,2 @@
-K: Did you hear that? There’s a village a little farther! / Maybe we’ll find someone able to help you there!
+Koi/Left/Did you hear that? There’s a village a little farther! /n Maybe we’ll find someone able to help you there!
+Iki/Right/...
