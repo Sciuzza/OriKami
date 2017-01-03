@@ -1,29 +1,15 @@
 ﻿using System.Collections.Generic;
 
+using UnityEditor;
+
+using UnityEditorInternal;
+
 using UnityEngine;
 
 
 #region Enum Types
 
-public enum EnvActionable
-{
-    Trigger,
 
-    EndOfPreviousStoryEvent,
-
-    EndOfPreviousStory,
-
-    none
-}
-
-public enum PlayerActionable
-{
-    Input,
-
-    Auto,
-
-    none
-}
 
 public enum Stories
 {
@@ -33,7 +19,7 @@ public enum Stories
 
     Story3,
 
-    none
+    None
 }
 
 public enum Events
@@ -44,7 +30,7 @@ public enum Events
 
     Event3,
 
-    none
+    None
 }
 
 public enum Storylines
@@ -55,31 +41,48 @@ public enum Storylines
 
     StoryLine3,
 
-    none
+    None
 }
 
 public enum Movies
 {
-    movie1,
+    Movie1,
 
-    movie2,
+    Movie2,
 
-    movie3,
+    Movie3,
 
-    none
+    None
 }
+
+public enum ItemType
+{
+    Item1,
+
+    Item2,
+
+    Item3
+}
+
 #endregion
+
+#region Effect Classes
 
 #region Player Effect Classes
 
 [System.Serializable]
 public class PlayerEffect
 {
-    public controlStates PlayerControlEffect;
 
     public PlayerReposition PlayerRepositionEffect;
 
     public PlayerMove PlayerMoveEffect;
+
+    public PlayerReward PlayerReward;
+
+    public PlayerSee PlayerSeeEffect;
+
+    public float PushingBackPower;
 }
 
 [System.Serializable]
@@ -96,6 +99,24 @@ public class PlayerMove
     public float LerpSpeed;
 }
 
+[System.Serializable]
+public class PlayerSee
+{
+    [Tooltip("Standard Form, Frog Form, Armadillo Form, Dragon Form, Dolphin Form")]
+    public GameObject GbRef;
+
+    public float LerpSpeed;
+
+}
+
+[System.Serializable]
+public class PlayerReward
+{
+    [Tooltip("Standard Form, Frog Form, Armadillo Form, Dragon Form, Dolphin Form")]
+    public string FormName;
+
+}
+
 #endregion Player Effect Classes
 
 #region Camera Effect Classes
@@ -104,7 +125,9 @@ public class PlayerMove
 public class CameraEffect
 {
     public CameraMove CameraMoveEffect;
-
+    public CameraShake CameraShakeEffect;
+    public float BtpLerpSpeed;
+    public float BtsLerpSpeed;
 }
 
 [System.Serializable]
@@ -114,16 +137,22 @@ public class CameraMove
     public float LerpSpeed;
 }
 
-
-
+[System.Serializable]
+public class CameraShake
+{
+    public float ShakingPower;
+    public float ShakingDuration;
+}
 #endregion Player Effect Classes
 
 #region Environment Npc Effects
 
 [System.Serializable]
-public class EnvEffect
+public class EnvironmentEffect
 {
     public ObjectActivation ObjActiEffect;
+    public Baloon BaloonEffect;
+    public ObjectDeActivation ObjDeActiEffect;
     public ObjectMoving ObjMovEffect;
 }
 
@@ -131,14 +160,32 @@ public class EnvEffect
 public class ObjectActivation
 {
     public GameObject GbRef;
-    public bool Dialogue;
-    public string DialogueText;
+    public bool Timed;
+    public float Time;
+}
+
+[System.Serializable]
+public class Baloon
+{
+    public GameObject GbRefRikiLogic;
+    public float BaloonSpeed;
+    public int StartLine;
+    public int EndLine;
+}
+
+[System.Serializable]
+public class ObjectDeActivation
+{
+    public GameObject GbRef;
+    public bool Timed;
+    public float Time;
 }
 
 [System.Serializable]
 public class ObjectMoving
 {
-    public GameObject GbRef;
+    public GameObject GbTarget;
+    public GameObject GbToMove;
     public float LerpSpeed;
 }
 
@@ -149,6 +196,8 @@ public class ObjectMoving
 public class UiEffect
 {
     public UiObjectActivation ObjActiEffect;
+    public UiDialogue UiDialogueEffect;
+    public UiObjectDeActivation ObjDeActiEffect;
     public UiObjectMoving ObjMovEffect;
 }
 
@@ -156,16 +205,39 @@ public class UiEffect
 public class UiObjectActivation
 {
     public GameObject GbRef;
+    public bool Timed;
+    public float Time;
+    public float FadingTime;
 
-    public bool Dialogue;
+}
 
-    public string DialogueText;
+[System.Serializable]
+public class UiDialogue
+{
+    public TextAsset DialogueRef;
+    public List<DialogueStructDebug> DialogueDebug;
+}
+
+[System.Serializable]
+public class DialogueStructDebug
+{
+    public string WhoIsTalking;
+    public string LabelPos;
+    public string WhatIsSaying;
+}
+[System.Serializable]
+public class UiObjectDeActivation
+{
+    public GameObject GbRef;
+    public bool Timed;
+    public float Time;
 }
 
 [System.Serializable]
 public class UiObjectMoving
 {
-    public GameObject GbRef;
+    public GameObject GbTarget;
+    public GameObject GbToMove;
     public float LerpSpeed;
 }
 
@@ -182,7 +254,7 @@ public class SoundEffect
 [System.Serializable]
 public class PersistentSound
 {
-    public GameObject GbRef;
+    public bool Active;
     public int SoundCategory;
     public int SoundIndex;
 }
@@ -191,6 +263,7 @@ public class PersistentSound
 public class NormalSound
 {
     public GameObject GbRef;
+    public int SoundIndex;
 }
 #endregion
 
@@ -213,44 +286,53 @@ public class MovieEffect
 }
 #endregion
 
-#region Story Element
+
+[System.Serializable]
+public class EvEffects
+{
+    public PlayerEffect PlaEffect;
+    public CameraEffect CamEffect;
+    public List<EnvironmentEffect> EnvEffect;
+    public List<UiEffect> UiEffect;
+    public List<SoundEffect> SoundEffect;
+    public List<AnimationEffect> AniEffect;
+    public MovieEffect MovieEffect;
+}
+#endregion
+
+#region Sub Story and Storyline Classes
 
 [System.Serializable]
 public class GenTriggerConditions
 {
-    public EnvActionable HowEnvActionable;
     public BoxCollider TriggerRef;
-    public PlayerActionable HowPlaActionable;
+    public SphereCollider STriggerRef;
     public buttonsJoy PlayerInputJoy;
     public buttonsPc PlayerInputPc;
 }
 
 [System.Serializable]
-public class SlTriggerConditions
+public class ItemDependencies
 {
-    public Storylines StoryLineDep;
-    public bool StoryLineCompleted;
-    public Stories StoryDep;
-    public bool SingleStoryCompleted;
-    public Events EventDep;
-    public bool SingleStoryEventCompleted;
+    public ItemType ItemDep;
+    public int ItemValue;
 }
+
+#endregion
+
+#region Story Element
 
 [System.Serializable]
 public class StoryEvent
 {
     public string EventName;
     public Events EventEnumName;
-    public bool Completed;
-    public bool Repeatable;
-    public GenTriggerConditions GenTriggerCond;
-    public PlayerEffect PlayerEffects;
-    public CameraEffect CameraEffects;
-    public List<EnvEffect> EnvEffects;
-    public List<UiEffect> UiEffects;
-    public List<SoundEffect> SoundEffects;
-    public List<AnimationEffect> AnimationEffects;
-    public MovieEffect VideoToPlay;
+    public buttonsJoy PlayerInputJoy;
+    public buttonsPc PlayerInputPc;
+
+    public float EventEndDelay;
+
+    public EvEffects Effects;
 }
 
 [System.Serializable]
@@ -259,9 +341,30 @@ public class SingleStory
     public string StoryName;
     public Stories StoryEnumName;
     public bool Completed;
-    public bool Repeatable;
-    public GenTriggerConditions GenTriggerCond;
-    public StoryEvent[] Events;
+    public bool Active;
+    public bool AutoComplete;
+
+    public GenTriggerConditions GenAccessCond;
+    public List<ItemDependencies> ItemAccessCondition;
+
+    public controlStates PlayerControlEffect;
+
+    public List<Storylines> StoryLineCompleteOnActivation;
+    public List<Stories> StoryCompleteOnActivation;
+    public List<Stories> StoryActiveOnActivation;
+
+    public List<Storylines> StoryLineCompleteOnCompletion;
+    public List<Stories> StoryCompleteOnCompletion;
+    public List<Stories> StoryActiveOnCompletion;
+
+    public List<StoryEvent> Events;
+
+    //public static List<StoryEvent> Events1;
+
+    //[System.Serializable]
+   // public ReorderableList reorderableList = new ReorderableList(Events1, (typeof(StoryEvent)),true, true, true, true);
+
+ 
 }
 
 [System.Serializable]
@@ -270,10 +373,19 @@ public class StoryLine
     public string StoryLineName;
     public Storylines StoryEnumName;
     public bool Completed;
-    public bool Repeatable;
-    public GenTriggerConditions GenTriggerCond;
-    public SlTriggerConditions[] StoryTriggerCond;
-    public SingleStory[] Stories;
+
+
+    public List<Storylines> StoryLineCompleteOnCompletion;
+    public List<Stories> StoryCompleteOnCompletion;
+    public List<Stories> StoryActiveOnCompletion;
+
+
+
+
+
+    // public SingleStory[] Stories;
+
+    public List<SingleStory> Stories;
 }
 
 #endregion
@@ -284,48 +396,20 @@ public class StoryLineInstance : MonoBehaviour
 
     public StoryLine CurrentStoryLine;
 
-    #region Validate Algorithm
-
-    /* 
-       public void OnValidate()
-       {
-           foreach (var t in this.Stories)
-           {
-               if (!t.IsAQuest)
-               {
-                   t.QuestName = quests.none;
-                   t.QuestPhase = questPhase.none;
-               }
-    
-               if (!t.InputActionable)
-               {
-                   t.PlayerInputJoy = buttonsJoy.none;
-                   t.PlayerInputPc = buttonsPc.none;
-               }
-    
-    
-               foreach (var storyEvent in t.Events)
-               {
-                   if (storyEvent.PlayerEffects.PlayerControlEffect == controlStates.totalControl)
-                   {
-                       storyEvent.PlayerEffects.PlayerRepositionEffect.GbRef = this.gameObject;
-                       storyEvent.PlayerEffects.PlayerMoveEffect.LerpSpeed = float.NaN;
-                   }
-                   else
-                   {
-                       storyEvent.PlayerEffects.PlayerRepositionEffect.GbRef = null;
-                   }
-               }
-           }
-       }
-       */
-
-    #endregion
-
+    public void OnValidate()
+    {
+        GameObject.FindGameObjectWithTag("GameController").GetComponent<QuestsManager>().AddToRepository(this.CurrentStoryLine);
+    }
 
     public void Initialization()
     {
         Debug.Log("Here");
+        this.CheckSlGenTriggerConditions();
     }
 
+    private void CheckSlGenTriggerConditions()
+    {
+    }
+
+   
 }

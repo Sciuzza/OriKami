@@ -1,0 +1,124 @@
+fileFormatVersion: 2
+guid: a43fea1feb93b3c45a22d40c475a0266
+timeCreated: 1483112890
+licenseType: Free
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: fiume_acqua_01
+    100002: fiume_acqua_02
+    100004: fiume_acqua_03
+    100006: fiume_acqua_04
+    100008: fiume_acqua_05
+    100010: fiume_acqua_06
+    100012: fiume_acqua_07
+    100014: fiume_acqua_08
+    100016: fiume_acqua_09
+    100018: fiume_letto
+    100020: //RootNode
+    400000: fiume_acqua_01
+    400002: fiume_acqua_02
+    400004: fiume_acqua_03
+    400006: fiume_acqua_04
+    400008: fiume_acqua_05
+    400010: fiume_acqua_06
+    400012: fiume_acqua_07
+    400014: fiume_acqua_08
+    400016: fiume_acqua_09
+    400018: fiume_letto
+    400020: //RootNode
+    2300000: fiume_acqua_01
+    2300002: fiume_acqua_02
+    2300004: fiume_acqua_03
+    2300006: fiume_acqua_04
+    2300008: fiume_acqua_05
+    2300010: fiume_acqua_06
+    2300012: fiume_acqua_07
+    2300014: fiume_acqua_08
+    2300016: fiume_acqua_09
+    2300018: fiume_letto
+    3300000: fiume_acqua_01
+    3300002: fiume_acqua_02
+    3300004: fiume_acqua_03
+    3300006: fiume_acqua_04
+    3300008: fiume_acqua_05
+    3300010: fiume_acqua_06
+    3300012: fiume_acqua_07
+    3300014: fiume_acqua_08
+    3300016: fiume_acqua_09
+    3300018: fiume_letto
+    4300000: fiume_letto
+    4300002: fiume_acqua_01
+    4300004: fiume_acqua_03
+    4300006: fiume_acqua_04
+    4300008: fiume_acqua_05
+    4300010: fiume_acqua_02
+    4300012: fiume_acqua_06
+    4300014: fiume_acqua_07
+    4300016: fiume_acqua_08
+    4300018: fiume_acqua_09
+    9500000: //RootNode
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

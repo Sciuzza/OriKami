@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: dbf70702b4336ed4f87b0405e531d27e
-timeCreated: 1480431984
+guid: 6054103a8cb0e5b41a77ce8f91e8af4e
+timeCreated: 1483355615
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
@@ -9,7 +9,7 @@ ModelImporter:
     400000: //RootNode
     2300000: //RootNode
     3300000: //RootNode
-    4300000: emperess
+    4300000: Frog
   materials:
     importMaterials: 1
     materialName: 0

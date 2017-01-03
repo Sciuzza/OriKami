@@ -1,4 +1,1 @@
-K: Oh! Right!
-	You’ve arrived!
-	Good luck with your research, and goodbye!
-I: ...
+Koi/Left/Oh! Right! You’ve arrived!

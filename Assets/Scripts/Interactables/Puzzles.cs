@@ -31,6 +31,7 @@ public class Puzzles : MonoBehaviour
 
     // x rotazione continua  
     public bool keepRotating;
+    public bool targetKeepRotating;
 
     // x raotione in gradi
     public bool rotate;
@@ -326,6 +327,11 @@ public class Puzzles : MonoBehaviour
         {
             other.transform.SetParent(this.gameObject.transform);
         }
+
+        if (other.gameObject.tag=="Player" && targetKeepRotating)
+        {
+            keep_Rotating.transform.Rotate(Vector3.up * (rotationSpeed * Time.deltaTime));
+        }
         //if (other.gameObject.tag == "Player")
         //{
         //    other.transform.SetParent(this.gameObject.transform);
@@ -337,5 +343,6 @@ public class Puzzles : MonoBehaviour
         {
             other.transform.parent = null;
         }
+              
     }
 }

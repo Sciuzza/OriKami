@@ -7,7 +7,6 @@ using UnityEngine.Events;
 public class MenuManager : MonoBehaviour
 {
 
-
     #region Public Variables
     public event_int switchSceneRequestByInt;
     public event_string switchSceneRequestByName; 
