@@ -95,6 +95,12 @@ public class event_vector3_float : UnityEvent<Vector3, float>
 public class event_float : UnityEvent<float>
 {
 }
+
+[System.Serializable]
+public class event_cs : UnityEvent<controlStates>
+{
+    
+}
 #endregion
 
 public class FSMChecker : MonoBehaviour
