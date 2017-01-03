@@ -100,15 +100,30 @@ public class PlayerInputs : MonoBehaviour
             JumpSound();
         }
         else if (toFrogPressed())
+        {
             genAbiRequest.Invoke(abilties.toFrog);
+            FormSound();
+        }
         else if (toArmaPressed())
+        {
             genAbiRequest.Invoke(abilties.toArma);
+            FormSound();
+        }
         else if (toCranePressed())
+        {
             genAbiRequest.Invoke(abilties.toCrane);
+            FormSound();
+        }
         else if (toDolpPressed())
+        {
             genAbiRequest.Invoke(abilties.toDolp);
+            FormSound();
+        }
         else if (toStdPressed())
+        {
             genAbiRequest.Invoke(abilties.toStd);
+            FormSound();
+        }
         else if (rollPressed())
         {
             genAbiRequest.Invoke(abilties.roll);
@@ -118,7 +133,7 @@ public class PlayerInputs : MonoBehaviour
         {
             rollStopped.Invoke();
             StopRollingSound();
-           
+
         }
         else if (VFissurePressed())
             genAbiRequest.Invoke(abilties.VFissure);
@@ -142,6 +157,11 @@ public class PlayerInputs : MonoBehaviour
     {
         GameObject.FindGameObjectWithTag("GameController").GetComponent<SoundManager>().StopSound(0, 0);
     }
+    public void FormSound()
+    {
+        GameObject.FindGameObjectWithTag("GameController").GetComponent<SoundManager>().PlaySound(1, 4);
+    }
+
     #endregion
 
     #region Jump Input
