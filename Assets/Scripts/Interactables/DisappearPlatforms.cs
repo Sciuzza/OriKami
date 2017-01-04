@@ -6,7 +6,8 @@ namespace Orikami
 
     public class DisappearPlatforms : MonoBehaviour
     {
-
+        public bool DisablePlatforms;
+        public bool TimedPlatforms;
         public BoxCollider platformCollider;
         public MeshRenderer PlatformMesh;
         public float smoothing = 1f;
@@ -32,7 +33,12 @@ namespace Orikami
 
         void OnTriggerEnter(Collider other)
         {
-            if (other.gameObject.tag == "Player")
+            if (other.gameObject.tag == "Player" && TimedPlatforms)
+            {
+                StartCoroutine(MyCoroutine());
+            }
+
+            if (other.gameObject.tag == "Player" && DisablePlatforms)
             {
                 StartCoroutine(MyCoroutine());
             }
@@ -41,12 +47,12 @@ namespace Orikami
         void OnTriggerExit(Collider other)
         {
 
-            if (other.gameObject.tag == "Player")
+            if (other.gameObject.tag == "Player" && TimedPlatforms)
             {
                 StartCoroutine(MyCoroutineExit());
             }
 
-        }
+        }    
 
     }
 }
