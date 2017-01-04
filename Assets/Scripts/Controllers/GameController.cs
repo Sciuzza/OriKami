@@ -12,12 +12,7 @@ public class GameController : MonoBehaviour
     #endregion
 
     #region Event Variables
-    [System.Serializable]
-    public class gbEvent : UnityEvent<GameObject>
-    {
-    }
-
-    public gbEvent gpInitializer, gameSettingsChanged;
+    public event_Gb gpInitializer, gameSettingsChanged;
 
     public UnityEvent ngpInitializer;
     #endregion

@@ -97,9 +97,14 @@ public class event_float : UnityEvent<float>
 }
 
 [System.Serializable]
-public class event_cs : UnityEvent<controlStates>
+public class event_bool : UnityEvent<bool>
 {
-    
+
+}
+
+[System.Serializable]
+public class event_Gb : UnityEvent<GameObject>
+{
 }
 #endregion
 
@@ -133,6 +138,8 @@ public class FSMChecker : MonoBehaviour
     private VFissure vfLink;
     private string vFissureEntrance;
     private bool dying = false;
+
+    private controlStates previousClState;
     #endregion
 
     #region Events
@@ -144,7 +151,9 @@ public class FSMChecker : MonoBehaviour
     public event_string_string_listGb formChanged;
     public event_vector3_string_ps moveUsed;
     public event_ps phStateChanged;
-    public event_pl plStateChanged; 
+    public event_pl plStateChanged;
+    public event_Gb switchingCameraControlToOFF;
+    public UnityEvent switchingCameraControlToOn;
     #endregion
 
     #region Initialization Methods
@@ -169,6 +178,8 @@ public class FSMChecker : MonoBehaviour
         enInputsTempLink.psChanged.AddListener(ChangingPHStates);
         enInputsTempLink.vFissureRequestOn.AddListener(AddingVFissureAvailability);
         enInputsTempLink.vFissureRequestOff.AddListener(RemovingVFissureAvailability);
+        enInputsTempLink.cameraOffRequest.AddListener(this.ChangingCameraToOff);
+        enInputsTempLink.cameraOnRequest.AddListener(this.ChangingCameraToOn);
 
         FSMExecutor fsmExeTempLink = this.gameObject.GetComponent<FSMExecutor>();
 
@@ -288,7 +299,7 @@ public class FSMChecker : MonoBehaviour
                     formChanged.Invoke(cPlayerState.currentForm, cPlayerState.previousForm, cPlayerState.forms);
                     if (cPlayerState.previousForm == "Dragon Form")
                         stopGlideLogic.Invoke();
-                     SettingCapsuleCollider(0.15f, 1);
+                    SettingCapsuleCollider(0.15f, 1);
                     break;
                 case abilties.toFrog:
                     cPlayerState.previousForm = cPlayerState.currentForm;
@@ -301,7 +312,7 @@ public class FSMChecker : MonoBehaviour
                     formChanged.Invoke(cPlayerState.currentForm, cPlayerState.previousForm, cPlayerState.forms);
                     if (cPlayerState.previousForm == "Dragon Form")
                         stopGlideLogic.Invoke();
-                     SettingCapsuleCollider(0.15f, 0.7f);
+                    SettingCapsuleCollider(0.15f, 0.7f);
                     break;
                 case abilties.toCrane:
                     cPlayerState.previousForm = cPlayerState.currentForm;
@@ -663,7 +674,7 @@ public class FSMChecker : MonoBehaviour
         AddAbility(abilties.menu);
 
         AddAbility(abilties.toStd);
-       
+
         HandlingAbiDiscovered();
 
         if (cPlayerState.currentPhState == physicStates.onGround)
@@ -1380,6 +1391,59 @@ public class FSMChecker : MonoBehaviour
     {
         ccLink.radius = rad;
         ccLink.height = height;
+    }
+
+    private void ChangingCameraToOff(GameObject CameraDir)
+    {
+        
+        switch (this.cPlayerState.currentClState)
+        {
+            case controlStates.noGenAbi:
+                this.cPlayerState.currentClState = controlStates.noCameraAndGenAbi;
+                this.switchingCameraControlToOFF.Invoke(CameraDir);
+                break;
+            case controlStates.noMove:
+                this.cPlayerState.currentClState = controlStates.noCamAndMove;
+                this.switchingCameraControlToOFF.Invoke(CameraDir);
+                break;
+            case controlStates.noMoveAndGenAbi:
+                this.cPlayerState.currentClState = controlStates.noControl;
+                this.switchingCameraControlToOFF.Invoke(CameraDir);
+                break;
+            case controlStates.totalControl:
+                this.cPlayerState.currentClState = controlStates.noCamera;
+                this.switchingCameraControlToOFF.Invoke(CameraDir);
+                break;
+            default:
+                Debug.Log("Camera Already Off");
+                break;
+        }
+    }
+
+    private void ChangingCameraToOn()
+    {
+        switch (this.cPlayerState.currentClState)
+        {
+            case controlStates.noCameraAndGenAbi:
+                this.cPlayerState.currentClState = controlStates.noGenAbi;
+                this.switchingCameraControlToOn.Invoke();
+                break;
+            case controlStates.noCamAndMove:
+                this.cPlayerState.currentClState = controlStates.noMove;
+                this.switchingCameraControlToOn.Invoke();
+                break;
+            case controlStates.noControl:
+                this.cPlayerState.currentClState = controlStates.noMoveAndGenAbi;
+                this.switchingCameraControlToOn.Invoke();
+                break;
+            case controlStates.noCamera:
+                this.cPlayerState.currentClState = controlStates.totalControl;
+                this.switchingCameraControlToOn.Invoke();
+                break;
+            default:
+                Debug.Log("Camera Already On");
+                break;
+        }
     }
 
     private void HandlingAbiDiscovered()

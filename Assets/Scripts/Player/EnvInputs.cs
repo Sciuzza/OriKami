@@ -12,8 +12,8 @@ public class EnvInputs : MonoBehaviour
     #region Events
     public event_vfscript_string vFissureRequestOn;
     public event_ps psChanged;
-    public UnityEvent vFissureRequestOff, playerIsDead;
-    public event_cs csChanged;
+    public UnityEvent vFissureRequestOff, playerIsDead, cameraOnRequest;
+    public event_Gb cameraOffRequest;
     #endregion
 
     #region Taking References
@@ -111,7 +111,7 @@ public class EnvInputs : MonoBehaviour
                 playerIsDead.Invoke();
                 break;
             case "Camera Control":
-                this.csChanged.Invoke(controlStates.noCamera);
+                this.cameraOffRequest.Invoke(envTrigger.gameObject.GetComponentInChildren<CameraDirRef>().CameraDirRefObj);
                 break;
             case "StoryLine": envTrigger.gameObject.GetComponent<StoryLineInstance>().Initialization();
                 break;
@@ -143,6 +143,7 @@ public class EnvInputs : MonoBehaviour
                 onWaterFlag = false;
                 break;
             case "Camera Control":
+                this.cameraOnRequest.Invoke();
                 break;
         }
     } 
