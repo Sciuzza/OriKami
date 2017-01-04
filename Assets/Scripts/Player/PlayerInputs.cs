@@ -147,19 +147,19 @@ public class PlayerInputs : MonoBehaviour
     #region SoundAbilities
     public void JumpSound()
     {
-        GameObject.FindGameObjectWithTag("GameController").GetComponent<SoundManager>().PlaySound(1, 3);
+        GameObject.FindGameObjectWithTag("Player").GetComponent<SoundManager>().PlaySound(0, 0);
     }
     public void RollingSound()
     {
-        GameObject.FindGameObjectWithTag("GameController").GetComponent<SoundManager>().PlaySound(0, 0);
+        GameObject.FindGameObjectWithTag("Player").GetComponent<SoundManager>().PlaySound(1, 0);
     }
     public void StopRollingSound()
     {
-        GameObject.FindGameObjectWithTag("GameController").GetComponent<SoundManager>().StopSound(0, 0);
+        GameObject.FindGameObjectWithTag("Player").GetComponent<SoundManager>().StopSound(1, 0);
     }
     public void FormSound()
     {
-        GameObject.FindGameObjectWithTag("GameController").GetComponent<SoundManager>().PlaySound(1, 4);
+        GameObject.FindGameObjectWithTag("Player").GetComponent<SoundManager>().PlaySound(0, 1);
     }
 
     #endregion
