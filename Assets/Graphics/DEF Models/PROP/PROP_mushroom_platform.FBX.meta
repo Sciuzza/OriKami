@@ -1,15 +1,22 @@
 fileFormatVersion: 2
-guid: 1bb30d4c37a5f9045a73ff9c82725418
-timeCreated: 1483524492
+guid: ad286ba8dcccfec4a842414400462436
+timeCreated: 1483612022
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
   fileIDToRecycleName:
-    100000: //RootNode
-    400000: //RootNode
-    2300000: //RootNode
-    3300000: //RootNode
-    4300000: ground02
+    100000: gambo_fungo
+    100002: //RootNode
+    100004: testa_fungo
+    400000: gambo_fungo
+    400002: //RootNode
+    400004: testa_fungo
+    2300000: gambo_fungo
+    2300002: testa_fungo
+    3300000: gambo_fungo
+    3300002: testa_fungo
+    4300000: testa_fungo
+    4300002: gambo_fungo
   materials:
     importMaterials: 1
     materialName: 0
