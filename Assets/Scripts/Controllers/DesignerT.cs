@@ -307,7 +307,7 @@ public class DesignerT : MonoBehaviour
 
         CameraManager cmTempLink = this.GetComponent<CameraManager>();
 
-        cmTempLink.currentPlCameraSettings = GestioneCamera;
+        cmTempLink.CurrentPlCameraSettings = GestioneCamera;
 
 
         FSMChecker fsmTempLink = player.GetComponent<FSMChecker>();
