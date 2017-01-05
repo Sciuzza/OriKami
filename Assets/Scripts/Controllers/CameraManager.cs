@@ -111,17 +111,16 @@ public class CameraManager : MonoBehaviour
             this.tempRotLookAt.LookAt(this.playerTransform.position);
 
 
-            this.camTransform.position = Vector3.Slerp(this.camTransform.position, this.playerTransform.position + rotation * dir, 2f * Time.deltaTime);
 
-            
+           
+            this.camTransform.position = Vector3.Lerp(this.camTransform.position, this.tempRotLookAt.position, 6f * Time.deltaTime);
 
-            this.camTransform.rotation = Quaternion.Slerp(
-                this.camTransform.rotation,
-                this.tempRotLookAt.rotation,
-                4f * Time.deltaTime);
+            this.camTransform.rotation = Quaternion.Slerp(this.camTransform.rotation, this.tempRotLookAt.rotation, 6f * Time.deltaTime);
 
 
-            //this.camTransform.LookAt(this.playerTransform.position);
+
+
+            // this.camTransform.LookAt(this.playerTransform.position);
 
 
         }
@@ -147,8 +146,8 @@ public class CameraManager : MonoBehaviour
 
         while (!this.CameraPlayerControl && !posReached)
         {
-            this.camTransform.rotation = Quaternion.Slerp(this.camTransform.rotation, targetRotation, 4 * Time.deltaTime);
-            this.camTransform.position = Vector3.Slerp(this.camTransform.position, targetPosition, 2 * Time.deltaTime);
+            this.camTransform.position = Vector3.Lerp(this.camTransform.position, targetPosition, 2f * Time.deltaTime);
+            this.camTransform.rotation = Quaternion.Slerp(this.camTransform.rotation, targetRotation, 2f * Time.deltaTime);
 
             if (Quaternion.Angle(this.camTransform.rotation, targetRotation) < 0.1f
                 && ((this.camTransform.position - targetPosition).sqrMagnitude < 0.1f)) posReached = true;
