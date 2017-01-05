@@ -1,15 +1,47 @@
 fileFormatVersion: 2
-guid: c75dca85cb3d2ad4ea59002ed4e2df8f
-timeCreated: 1483544143
+guid: d66ad50293e79214abaf44c808c7caef
+timeCreated: 1483555888
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
   fileIDToRecycleName:
-    100000: //RootNode
-    400000: //RootNode
-    2300000: //RootNode
-    3300000: //RootNode
-    4300000: river_solido
+    100000: ground
+    100002: //RootNode
+    100004: river1_solido
+    100006: river2_solido
+    100008: river3_solido
+    100010: river4_solido
+    100012: river_letto
+    100014: river_piano
+    400000: ground
+    400002: //RootNode
+    400004: river1_solido
+    400006: river2_solido
+    400008: river3_solido
+    400010: river4_solido
+    400012: river_letto
+    400014: river_piano
+    2300000: ground
+    2300002: river1_solido
+    2300004: river2_solido
+    2300006: river3_solido
+    2300008: river4_solido
+    2300010: river_letto
+    2300012: river_piano
+    3300000: ground
+    3300002: river1_solido
+    3300004: river2_solido
+    3300006: river3_solido
+    3300008: river4_solido
+    3300010: river_letto
+    3300012: river_piano
+    4300000: ground
+    4300002: river_piano
+    4300004: river_letto
+    4300006: river1_solido
+    4300008: river2_solido
+    4300010: river3_solido
+    4300012: river4_solido
   materials:
     importMaterials: 1
     materialName: 0
