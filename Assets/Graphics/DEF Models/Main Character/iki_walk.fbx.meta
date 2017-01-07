@@ -1,38 +1,40 @@
 fileFormatVersion: 2
-guid: 71f570e66cffc8e42b5bf314c440455f
-timeCreated: 1482326205
+guid: 124834bf46bd3a24db76f4d8b98a1edb
+timeCreated: 1483724958
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
   fileIDToRecycleName:
-    100000: Bone027
-    100002: Bone028
-    100004: Bone029
-    100006: Bone030
-    100008: Bone031
-    100010: Bone032
-    100012: Bone033
-    100014: Bone041
-    100016: Carp_01
-    100018: connectBone003
-    100020: Dummy003
-    100022: //RootNode
-    400000: Bone027
-    400002: Bone028
-    400004: Bone029
-    400006: Bone030
-    400008: Bone031
-    400010: Bone032
-    400012: Bone033
-    400014: Bone041
-    400016: Carp_01
-    400018: connectBone003
-    400020: Dummy003
-    400022: //RootNode
-    4300000: Carp_01
-    7400000: Take 001
+    100000: anca_dx
+    100002: anca_sx
+    100004: bacino
+    100006: collo
+    100008: ginocchio_dx
+    100010: ginocchio_sx
+    100012: Iki:Box001
+    100014: //RootNode
+    100016: punta_dx
+    100018: punta_sx
+    100020: spina
+    100022: spina2
+    100024: testa
+    400000: anca_dx
+    400002: anca_sx
+    400004: bacino
+    400006: collo
+    400008: ginocchio_dx
+    400010: ginocchio_sx
+    400012: Iki:Box001
+    400014: //RootNode
+    400016: punta_dx
+    400018: punta_sx
+    400020: spina
+    400022: spina2
+    400024: testa
+    4300000: Iki:Box001
+    7400000: Iki Walk
     9500000: //RootNode
-    13700000: Carp_01
+    13700000: Iki:Box001
   materials:
     importMaterials: 1
     materialName: 0
@@ -47,7 +49,7 @@ ModelImporter:
     animationImportWarnings: 
     animationRetargetingWarnings: 
     animationDoRetargetingWarnings: 0
-    animationCompression: 0
+    animationCompression: 1
     animationRotationError: 0.5
     animationPositionError: 0.5
     animationScaleError: 0.5
@@ -55,9 +57,9 @@ ModelImporter:
     extraExposedTransformPaths: []
     clipAnimations:
     - serializedVersion: 16
-      name: Take 001
+      name: Iki Walk
       takeName: Take 001
-      firstFrame: 0
+      firstFrame: 1
       lastFrame: 25
       wrapMode: 0
       orientationOffsetY: 0
@@ -81,31 +83,33 @@ ModelImporter:
       transformMask:
       - path: 
         weight: 1
-      - path: Carp_01
+      - path: bacino
         weight: 1
-      - path: Dummy003
+      - path: bacino/anca_dx
         weight: 1
-      - path: Dummy003/Bone028
-        weight: 0
-      - path: Dummy003/Bone028/Bone027
+      - path: bacino/anca_dx/ginocchio_dx
         weight: 1
-      - path: Dummy003/Bone028/Bone027/Bone033
+      - path: bacino/anca_dx/ginocchio_dx/punta_dx
         weight: 1
-      - path: Dummy003/Bone028/Bone027/Bone033/Bone029
+      - path: bacino/anca_sx
         weight: 1
-      - path: Dummy003/Bone028/Bone027/Bone033/Bone029/connectBone003
+      - path: bacino/anca_sx/ginocchio_sx
         weight: 1
-      - path: Dummy003/Bone028/Bone027/Bone033/Bone029/connectBone003/Bone030
+      - path: bacino/anca_sx/ginocchio_sx/punta_sx
         weight: 1
-      - path: Dummy003/Bone028/Bone027/Bone033/Bone029/connectBone003/Bone030/Bone031
+      - path: bacino/spina
         weight: 1
-      - path: Dummy003/Bone028/Bone027/Bone033/Bone029/connectBone003/Bone030/Bone031/Bone032
+      - path: bacino/spina/spina2
         weight: 1
-      - path: Dummy003/Bone028/Bone027/Bone033/Bone029/connectBone003/Bone030/Bone031/Bone032/Bone041
+      - path: bacino/spina/spina2/collo
+        weight: 1
+      - path: bacino/spina/spina2/collo/testa
+        weight: 1
+      - path: Iki:Box001
         weight: 1
       maskType: 0
       maskSource: {instanceID: 0}
-      additiveReferencePoseFrame: 0
+      additiveReferencePoseFrame: 1
     isReadable: 1
   meshes:
     lODScreenPercentages: []

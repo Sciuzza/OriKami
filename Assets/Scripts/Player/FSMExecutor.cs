@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System;
+
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.Events;
@@ -54,25 +56,42 @@ public class FSMExecutor : MonoBehaviour
 
     }
 
-    private void ApplyingMoveAbiEffect(Vector3 moveDirInput, string currentForm, physicStates currentPHState)
+    private void ApplyingMoveAbiEffect(Vector3 moveDirInput, string currentForm, physicStates currentPHState, List<GameObject> forms)
     {
 
         switch (currentForm)
         {
             case ("Standard Form"):
 
-                switch (currentPHState)
+
+                var aniTemp = forms[0].GetComponent<Animator>();
+
+                var tolerance = 0.1;
+                aniTemp.SetBool("Stand Still", Math.Abs(moveDirInput.sqrMagnitude) < tolerance);
+
+                if (!aniTemp.GetBool("Stand Still"))
                 {
-                    case physicStates.onAir:
-                        moveSelected.Invoke(moveDirInput, generalValues.moveInAir);
-                        break;
-                    case physicStates.onWater:
-                        moveSelected.Invoke(moveDirInput, generalValues.moveInWater);
-                        break;
-                    case physicStates.onGround:
-                        moveSelected.Invoke(moveDirInput, currentMoveValues.standMove.moveSpeed);
-                        break;
+                    switch (currentPHState)
+                    {
+                        case physicStates.onAir:
+                            this.moveSelected.Invoke(moveDirInput, this.generalValues.moveInAir);
+                            aniTemp.SetFloat("Moving", Mathf.InverseLerp(0, (float)Math.Pow(this.currentMoveValues.standMove.moveSpeed, 2), (moveDirInput * this.generalValues.moveInAir).sqrMagnitude));
+                            break;
+                        case physicStates.onWater:
+                            this.moveSelected.Invoke(moveDirInput, this.generalValues.moveInWater);
+                            aniTemp.SetFloat("Moving", Mathf.InverseLerp(0, (float)Math.Pow(this.currentMoveValues.standMove.moveSpeed, 2), (moveDirInput * this.generalValues.moveInWater).sqrMagnitude));
+                            break;
+                        case physicStates.onGround:
+                            this.moveSelected.Invoke(moveDirInput, this.currentMoveValues.standMove.moveSpeed);
+                            aniTemp.SetFloat("Moving", Mathf.InverseLerp(0, (float)Math.Pow(this.currentMoveValues.standMove.moveSpeed, 2), (moveDirInput * this.currentMoveValues.standMove.moveSpeed).sqrMagnitude));
+                            break;
+                    }
                 }
+                else
+                {
+                    aniTemp.SetFloat("Moving", 0);
+                }
+                aniTemp.speed = Math.Abs(moveDirInput.sqrMagnitude) > tolerance ? aniTemp.GetFloat("Moving") : 1;
 
                 break;
             case ("Frog Form"):
@@ -173,7 +192,7 @@ public class FSMExecutor : MonoBehaviour
 
         }
 
-    } 
+    }
     #endregion
 
     #region Special Animation Ability Handler Methods
@@ -524,6 +543,6 @@ public class FSMExecutor : MonoBehaviour
         vFissureAniOn = false;
         vFissureAniEnded.Invoke();
         ccTempLink.radius = radius;
-    } 
+    }
     #endregion
 }

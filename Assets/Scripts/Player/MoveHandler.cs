@@ -109,10 +109,11 @@ public class MoveHandler : MonoBehaviour
 
     private void HandlingRot(Vector3 inputDir, float rotSpeed)
     {
-
-        Quaternion rotation = Quaternion.LookRotation(inputDir, Vector3.up);
-        this.transform.rotation = Quaternion.Slerp(this.transform.rotation, rotation, Time.deltaTime * rotSpeed);
-
+        if (inputDir.sqrMagnitude != 0)
+        {
+            Quaternion rotation = Quaternion.LookRotation(inputDir, Vector3.up);
+            this.transform.rotation = Quaternion.Slerp(this.transform.rotation, rotation, Time.deltaTime * rotSpeed);
+        }
     }
 
     private void HandlingSpecialRot(Vector3 inputDir, float rotSpeed)

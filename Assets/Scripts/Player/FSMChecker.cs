@@ -62,7 +62,7 @@ public class event_string_string_listGb : UnityEvent<string, string, List<GameOb
 }
 
 [System.Serializable]
-public class event_vector3_string_ps : UnityEvent<Vector3, string, physicStates>
+public class event_vector3_string_ps_listgb : UnityEvent<Vector3, string, physicStates, List<GameObject>>
 {
 }
 
@@ -149,7 +149,7 @@ public class FSMChecker : MonoBehaviour
     public event_abi_string genAbiUsed;
     public event_vector3_ps rotationUsed;
     public event_string_string_listGb formChanged;
-    public event_vector3_string_ps moveUsed;
+    public event_vector3_string_ps_listgb moveUsed;
     public event_ps phStateChanged;
     public event_pl plStateChanged;
     public event_Gb switchingCameraControlToOFF;
@@ -235,7 +235,7 @@ public class FSMChecker : MonoBehaviour
             {
 
                 case abilties.move:
-                    moveUsed.Invoke(abiDir, cPlayerState.currentForm, cPlayerState.currentPhState);
+                    moveUsed.Invoke(abiDir, cPlayerState.currentForm, cPlayerState.currentPhState, this.cPlayerState.forms);
                     break;
                 case abilties.rotate:
                     rotationUsed.Invoke(abiDir, cPlayerState.currentPlState);
@@ -264,7 +264,7 @@ public class FSMChecker : MonoBehaviour
                     break;
                 case abilties.roll:
                     cPlayerState.currentPlState = playerStates.rolling;
-                    cPlayerState.currentClState = controlStates.noMove;
+                    //cPlayerState.currentClState = controlStates.noMove;
                     UpdatingAbilityList();
                     genAbiUsed.Invoke(abiReceived, cPlayerState.currentForm);
                     break;
@@ -850,7 +850,9 @@ public class FSMChecker : MonoBehaviour
         cPlayerState.currentAbilities.Clear();
         cPlayerState.currentAbilities.TrimExcess();
 
+        if (this.cPlayerState.currentPlState != playerStates.rolling)
         AddAbility(abilties.move);
+
         AddAbility(abilties.rotate);
         AddAbility(abilties.cameraMove);
 
@@ -880,7 +882,9 @@ public class FSMChecker : MonoBehaviour
         cPlayerState.currentAbilities.Clear();
         cPlayerState.currentAbilities.TrimExcess();
 
-        AddAbility(abilties.move);
+        if (this.cPlayerState.currentPlState != playerStates.rolling)
+            AddAbility(abilties.move);
+
         AddAbility(abilties.rotate);
 
 
@@ -941,7 +945,9 @@ public class FSMChecker : MonoBehaviour
         cPlayerState.currentAbilities.Clear();
         cPlayerState.currentAbilities.TrimExcess();
 
-        AddAbility(abilties.move);
+        if (this.cPlayerState.currentPlState != playerStates.rolling)
+            AddAbility(abilties.move);
+
         AddAbility(abilties.rotate);
         AddAbility(abilties.cameraMove);
 
@@ -998,7 +1004,9 @@ public class FSMChecker : MonoBehaviour
         cPlayerState.currentAbilities.Clear();
         cPlayerState.currentAbilities.TrimExcess();
 
-        AddAbility(abilties.move);
+        if (this.cPlayerState.currentPlState != playerStates.rolling)
+            AddAbility(abilties.move);
+
         AddAbility(abilties.rotate);
 
 
@@ -1382,7 +1390,7 @@ public class FSMChecker : MonoBehaviour
     private void EnablingMove()
     {
         cPlayerState.currentPlState = playerStates.standingStill;
-        cPlayerState.currentClState = controlStates.totalControl;
+        //cPlayerState.currentClState = controlStates.totalControl;
         UpdatingAbilityList();
         stoppingRollLogic.Invoke();
     }

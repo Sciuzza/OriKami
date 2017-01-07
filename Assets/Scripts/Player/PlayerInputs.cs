@@ -32,7 +32,7 @@ public class PlayerInputs : MonoBehaviour
         FSMChecker fsmCheckerTempLink = this.GetComponent<FSMChecker>();
 
         fsmCheckerTempLink.formChangedInp.AddListener(UpdatingCurrentFormInputs);
-    } 
+    }
     #endregion
 
     #region Player Inputs Handler
@@ -53,11 +53,10 @@ public class PlayerInputs : MonoBehaviour
         MoveInput();
 
 
-        if (moveDirection.sqrMagnitude != 0)
-        {
-            dirAbiRequest.Invoke(abilties.move, moveDirection);
-            dirAbiRequest.Invoke(abilties.rotate, moveDirection);
-        }
+
+        dirAbiRequest.Invoke(abilties.move, moveDirection);
+        dirAbiRequest.Invoke(abilties.rotate, moveDirection);
+
 
         dirAbiRequest.Invoke(abilties.moveOnRoll, moveDirection);
 
@@ -69,6 +68,7 @@ public class PlayerInputs : MonoBehaviour
         moveDirection.x = Input.GetAxis("LJHor") + Input.GetAxis("Horizontal");
         moveDirection.z = -Input.GetAxis("LJVer") + Input.GetAxis("Vertical");
 
+        
         if (Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0)
         {
             if (moveDirection.x < 0)
@@ -80,13 +80,18 @@ public class PlayerInputs : MonoBehaviour
                 moveDirection.z = -1f;
             else if (moveDirection.z > 0)
                 moveDirection.z = 1f;
+
+            moveDirection = Vector3.ClampMagnitude(moveDirection, 1f);
         }
+
+       
 
         moveDirection = Vector3.ClampMagnitude(moveDirection, 1f);
 
+        
 
-        Quaternion inputRotation = Quaternion.LookRotation(Vector3.ProjectOnPlane(Camera.main.transform.forward, Vector3.up), Vector3.up);
-        moveDirection = inputRotation * moveDirection;
+        var inputRotation = Quaternion.LookRotation(Vector3.ProjectOnPlane(Camera.main.transform.forward, Vector3.up), Vector3.up);
+        this.moveDirection = inputRotation * this.moveDirection;
 
     }
     #endregion
