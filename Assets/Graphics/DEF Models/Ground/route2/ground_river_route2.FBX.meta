@@ -1,47 +1,52 @@
 fileFormatVersion: 2
-guid: 663bc83c36fa59140bae87020b9e590d
-timeCreated: 1483608387
+guid: 5fdafd5adecd44347ac930bfb42f66ba
+timeCreated: 1483725872
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
   fileIDToRecycleName:
     100000: ground
-    100002: //RootNode
-    100004: river1_solido
-    100006: river2_solido
-    100008: river3_solido
-    100010: river4_solido
-    100012: river_letto
-    100014: river_piano
+    100002: ground_erba
+    100004: ground_fiume
+    100006: //RootNode
+    100008: river1_solido
+    100010: river2_solido
+    100012: river3_solido
+    100014: river4_solido
+    100016: river_letto
     400000: ground
-    400002: //RootNode
-    400004: river1_solido
-    400006: river2_solido
-    400008: river3_solido
-    400010: river4_solido
-    400012: river_letto
-    400014: river_piano
+    400002: ground_erba
+    400004: ground_fiume
+    400006: //RootNode
+    400008: river1_solido
+    400010: river2_solido
+    400012: river3_solido
+    400014: river4_solido
+    400016: river_letto
     2300000: ground
-    2300002: river1_solido
-    2300004: river2_solido
-    2300006: river3_solido
-    2300008: river4_solido
-    2300010: river_letto
-    2300012: river_piano
+    2300002: ground_erba
+    2300004: ground_fiume
+    2300006: river1_solido
+    2300008: river2_solido
+    2300010: river3_solido
+    2300012: river4_solido
+    2300014: river_letto
     3300000: ground
-    3300002: river1_solido
-    3300004: river2_solido
-    3300006: river3_solido
-    3300008: river4_solido
-    3300010: river_letto
-    3300012: river_piano
+    3300002: ground_erba
+    3300004: ground_fiume
+    3300006: river1_solido
+    3300008: river2_solido
+    3300010: river3_solido
+    3300012: river4_solido
+    3300014: river_letto
     4300000: ground
-    4300002: river_piano
-    4300004: river_letto
-    4300006: river1_solido
-    4300008: river2_solido
-    4300010: river3_solido
-    4300012: river4_solido
+    4300002: river_letto
+    4300004: river1_solido
+    4300006: river2_solido
+    4300008: river3_solido
+    4300010: river4_solido
+    4300012: ground_erba
+    4300014: ground_fiume
   materials:
     importMaterials: 1
     materialName: 0
