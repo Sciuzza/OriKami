@@ -95,6 +95,12 @@ public class event_vector3_float : UnityEvent<Vector3, float>
 public class event_float : UnityEvent<float>
 {
 }
+
+[System.Serializable]
+public class event_cs : UnityEvent<controlStates>
+{
+    
+}
 #endregion
 
 public class FSMChecker : MonoBehaviour
@@ -105,6 +111,7 @@ public class FSMChecker : MonoBehaviour
     #endregion
 
     #region Private Variables
+    public SaveSystem save;
     [System.Serializable]
     public struct playerCState
     {
@@ -1471,7 +1478,13 @@ public class FSMChecker : MonoBehaviour
     void OnTriggerEnter(Collider deathZone)
     {
         if (deathZone.gameObject.tag == "Death")
-            deathRequest.Invoke();
+        {
+            Debug.Log("Morto");
+            save.LoadState();
+            // deathRequest.Invoke();
+
+        }
+
     }
 
     private IEnumerator Drowning()
