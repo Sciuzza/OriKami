@@ -95,21 +95,46 @@ public class PlayerInputs : MonoBehaviour
     private void genAbiInputs()
     {
         if (jumpPressed())
+        {
             genAbiRequest.Invoke(abilties.jump);
+            JumpSound();
+        }
         else if (toFrogPressed())
+        {
             genAbiRequest.Invoke(abilties.toFrog);
+            FormSound();
+        }
         else if (toArmaPressed())
+        {
             genAbiRequest.Invoke(abilties.toArma);
+            FormSound();
+        }
         else if (toCranePressed())
+        {
             genAbiRequest.Invoke(abilties.toCrane);
+            FormSound();
+        }
         else if (toDolpPressed())
+        {
             genAbiRequest.Invoke(abilties.toDolp);
+            FormSound();
+        }
         else if (toStdPressed())
+        {
             genAbiRequest.Invoke(abilties.toStd);
+            FormSound();
+        }
         else if (rollPressed())
+        {
             genAbiRequest.Invoke(abilties.roll);
+            RollingSound();
+        }
         else if (rollReleased())
+        {
             rollStopped.Invoke();
+            StopRollingSound();
+
+        }
         else if (VFissurePressed())
             genAbiRequest.Invoke(abilties.VFissure);
         else if (HFissurePressed())
@@ -119,7 +144,25 @@ public class PlayerInputs : MonoBehaviour
 
 
     }
+    #region SoundAbilities
+    public void JumpSound()
+    {
+        GameObject.FindGameObjectWithTag("Player").GetComponent<SoundManager>().PlaySound(0, 0);
+    }
+    public void RollingSound()
+    {
+        GameObject.FindGameObjectWithTag("Player").GetComponent<SoundManager>().PlaySound(1, 0);
+    }
+    public void StopRollingSound()
+    {
+        GameObject.FindGameObjectWithTag("Player").GetComponent<SoundManager>().StopSound(1, 0);
+    }
+    public void FormSound()
+    {
+        GameObject.FindGameObjectWithTag("Player").GetComponent<SoundManager>().PlaySound(0, 1);
+    }
 
+    #endregion
 
     #region Jump Input
     private bool jumpPressed()

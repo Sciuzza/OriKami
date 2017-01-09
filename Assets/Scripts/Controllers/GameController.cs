@@ -7,6 +7,7 @@ public class GameController : MonoBehaviour
 
 {
     public Camera cameraRef;
+  
     #region Private Variables
     private GameObject player; 
     #endregion
@@ -28,6 +29,7 @@ public class GameController : MonoBehaviour
         cameraRef = Camera.main;
         DontDestroyOnLoad(this.gameObject);
         DontDestroyOnLoad(cameraRef.gameObject);
+        
     }
     #endregion
 

@@ -13,6 +13,7 @@ public class EnvInputs : MonoBehaviour
     public event_vfscript_string vFissureRequestOn;
     public event_ps psChanged;
     public UnityEvent vFissureRequestOff, playerIsDead;
+    public event_cs csChanged;
     #endregion
 
     #region Taking References
@@ -110,6 +111,7 @@ public class EnvInputs : MonoBehaviour
                 playerIsDead.Invoke();
                 break;
             case "Camera Control":
+                this.csChanged.Invoke(controlStates.noCamera);
                 break;
             case "StoryLine": envTrigger.gameObject.GetComponent<StoryLineInstance>().Initialization();
                 break;
