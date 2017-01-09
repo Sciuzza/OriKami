@@ -1479,8 +1479,10 @@ public class FSMChecker : MonoBehaviour
     {
         if (deathZone.gameObject.tag == "Death")
         {
-           // deathRequest.Invoke();
-            save.LoadState();         
+            Debug.Log("Morto");
+            save.LoadState();
+            // deathRequest.Invoke();
+
         }
 
     }

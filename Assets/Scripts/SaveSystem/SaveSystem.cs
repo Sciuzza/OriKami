@@ -20,13 +20,13 @@ public class SaveSystem : MonoBehaviour
         FileStream file = File.Create(Application.persistentDataPath + "/PlayerData.dat");
 
         PlayerData data = new PlayerData();
-        data.posx = Player.transform.position.x;
-        data.posy = Player.transform.position.y;
-        data.posz = Player.transform.position.z;
+        data.posx = transform.position.x;
+        data.posy = transform.position.y;
+        data.posz = transform.position.z;
 
-        data.rotx = Player.transform.eulerAngles.x;
-        data.roty = Player.transform.eulerAngles.y;
-        data.rotz = Player.transform.eulerAngles.z;
+        data.rotx = transform.eulerAngles.x;
+        data.roty = transform.eulerAngles.y;
+        data.rotz = transform.eulerAngles.z;
 
         bf.Serialize(file, data);
         file.Close();
@@ -42,8 +42,8 @@ public class SaveSystem : MonoBehaviour
             PlayerData data = (PlayerData)bf.Deserialize(file);
             file.Close();
 
-            Player.transform.position = new Vector3 (data.posx, data.posy, data.posz);
-            Player.transform.rotation = Quaternion.Euler(data.rotx, data.roty, data.rotz);
+            transform.position = new Vector3 (data.posx, data.posy, data.posz);
+            transform.rotation = Quaternion.Euler(data.rotx, data.roty, data.rotz);
         }
 
     }

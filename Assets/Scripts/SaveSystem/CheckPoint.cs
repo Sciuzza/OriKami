@@ -3,24 +3,35 @@ using System.Collections;
 
 public class CheckPoint : MonoBehaviour {
 
-    SaveSystem save;
+    public Transform spawnPoint;
 
-    void Awake()
-    {
-        save = new SaveSystem();
-    }
 
-    void OnTriggerEnter(Collider other)
+    // public SaveSystem save;
+
+    //void OnTriggerEnter(Collider other)
+    //{
+    //    if (other.gameObject.tag == "Player")
+    //    {
+    //        Debug.Log("Save Trigger");
+    //        save.SaveState();
+    //    }
+    //}
+
+  
+
+    void OnTriggerEnter(Collider col)
     {
-        if (other.gameObject.tag == "Player")
+        if (col.gameObject.tag == "Player")
+
         {
-            Debug.Log("Save Trigger");
-            save.SaveState();
+            Debug.Log("Dentro");
+            spawnPoint.position = new Vector3(transform.position.x, transform.position.y, transform.position.z);
+
         }
+
+
+
     }
-
-
-
 
 
 
