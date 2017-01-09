@@ -23,4 +23,10 @@ public class SoundManager : MonoBehaviour {
         this.PersistendAudio[catIndex].AudioSourceRef.Play();
     }
 
+   public void StopSound(int catIndex, int clipIndex)
+    {
+        this.PersistendAudio[catIndex].AudioSourceRef.clip = this.PersistendAudio[catIndex].PossibleSounds[clipIndex];
+        this.PersistendAudio[catIndex].AudioSourceRef.Stop();
+    }
+
 }
