@@ -58,7 +58,6 @@ public class GameController : MonoBehaviour
         if (player == null)
         {
             Debug.LogWarning("Missing Player in Scene");
-            Debug.Log(SceneManager.GetActiveScene().buildIndex);
             return false;
         }
         else

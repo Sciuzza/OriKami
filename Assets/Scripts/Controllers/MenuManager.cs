@@ -14,6 +14,7 @@ public class MenuManager : MonoBehaviour
     public event_int switchSceneRequestByInt;
     public event_string switchSceneRequestByName;
 
+    public event_int_int soundRequest;
     public UnityEvent prova;
     #endregion
 
@@ -27,7 +28,7 @@ public class MenuManager : MonoBehaviour
     private Image progressBar;
 
     private EventSystem esLink;
-    
+
     #endregion
 
     #region Taking References and linking Events
@@ -41,6 +42,8 @@ public class MenuManager : MonoBehaviour
         SceneController scTempLink = this.GetComponent<SceneController>();
 
         scTempLink.ProgressUpdateRequest.AddListener(this.UpdatingProgressBar);
+
+
     }
     #endregion
 
@@ -74,57 +77,50 @@ public class MenuManager : MonoBehaviour
 
         mmListButtonRef.AddRange(mmButtonRef);
 
-
         this.newGame = mmListButtonRef.Find(x => x.gameObject.name == "New Game");
         this.continueB = mmListButtonRef.Find(x => x.gameObject.name == "Continue");
         this.legends = mmListButtonRef.Find(x => x.gameObject.name == "Legends' Journal");
         this.options = mmListButtonRef.Find(x => x.gameObject.name == "Options");
         this.exit = mmListButtonRef.Find(x => x.gameObject.name == "Exit");
 
+        
         this.newGame.onClick.AddListener(PlayNewGameSound);
         this.newGame.onClick.AddListener(InvokingNewGame);
         this.continueB.onClick.AddListener(PlayNewGameSound);
         this.continueB.onClick.AddListener(InvokingLevelSel);
         this.exit.onClick.AddListener(QuitGame);
 
-
-     
-        //this.esLink = EventSystem.current;
+    
 
 
+         EventSystem.current.SetSelectedGameObject(this.newGame.gameObject);
+       
 
-        //BaseEventData ciccio = new BaseEventData(this.esLink);
-
-        //Debug.Log(ciccio.selectedObject); 
-
-
-        //this.esLink.SetSelectedGameObject(this.continueB.gameObject);
-
-        //Debug.Log(this.esLink.currentSelectedGameObject.name);
+         //StartCoroutine(this.MouseFix());
     }
-    //public void Onhover()
-    //{
-    //    PlayNewGameSound();
-    //}
-    GameObject lastselect;
-    void Start()
+
+
+    private IEnumerator MouseFix()
     {
-        lastselect = new GameObject();
-    }
-    // Update is called once per frame
-    void Update()
-    {
-        if (EventSystem.current.currentSelectedGameObject == null)
+        GameObject lastselect = new GameObject();
+        while (true)
         {
-            EventSystem.current.SetSelectedGameObject(lastselect);
-        }
-        else
-        {
-            lastselect = EventSystem.current.currentSelectedGameObject;
+            if (EventSystem.current.currentSelectedGameObject == null)
+            {
+                //GameObject.FindGameObjectWithTag("GameController").GetComponent<SoundManager>().PlaySound(1, 1);
+                EventSystem.current.SetSelectedGameObject(lastselect);
+            }
+            else
+            {
+                //GameObject.FindGameObjectWithTag("GameController").GetComponent<SoundManager>().PlaySound(1, 1);
+                lastselect = EventSystem.current.currentSelectedGameObject;
+            }
+
+            yield return null;
         }
     }
 
-private void InvokingNewGame()
+    private void InvokingNewGame()
     {
         switchSceneRequestByInt.Invoke(3);
     }
@@ -141,7 +137,7 @@ private void InvokingNewGame()
 
     public void PlayNewGameSound()
     {
-        GameObject.FindGameObjectWithTag("GameController").GetComponent<SoundManager>().PlaySound(1,0);
+        GameObject.FindGameObjectWithTag("GameController").GetComponent<SoundManager>().PlaySound(1, 0);
     }
 
     public void PlayBackSound()
@@ -149,16 +145,12 @@ private void InvokingNewGame()
         GameObject.FindGameObjectWithTag("GameController").GetComponent<SoundManager>().PlaySound(1, 2);
     }
 
-    public void SelectedButton(BaseEventData eventData)
-    {
-        GameObject.FindGameObjectWithTag("GameController").GetComponent<SoundManager>().PlaySound(1, 1);
-        eventData.selectedObject.GetComponentInChildren<Text>().fontSize = 30;
-    }
+ 
 
-    public void DeSelectedButton(BaseEventData eventData)
-    {
-        eventData.selectedObject.GetComponentInChildren<Text>().fontSize = 25;
-    }
+
+
+ 
+  
     #endregion
 
     #region Level Selection Handler

@@ -106,6 +106,12 @@ public class event_bool : UnityEvent<bool>
 public class event_Gb : UnityEvent<GameObject>
 {
 }
+
+[System.Serializable]
+public class event_int_int : UnityEvent<int, int>
+{
+    
+}
 #endregion
 
 public class FSMChecker : MonoBehaviour
