@@ -2,19 +2,18 @@
 using System.Collections;
 using UnityEngine.SceneManagement;
 
-public class MoveToNextLevel : MonoBehaviour {
+public class MoveToNextLevel : MonoBehaviour
+{
 
-    public void NextLevel()
-    {
-        //For completed levels !
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
-    }
+    public event_string SceneChangeRequest;
+
+    public string SceneName;
 
     void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.tag == "Player")
         {
-            NextLevel();
+            this.SceneChangeRequest.Invoke(this.SceneName);
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 
 public class MoveHandler : MonoBehaviour
 {
@@ -11,12 +12,14 @@ public class MoveHandler : MonoBehaviour
     #endregion
 
     #region Private Variables
-    private Vector3 finalMove = new Vector3(0, 0, 0), rollImpulse = new Vector3(0, 0, 0), rollDir;
+    private Vector3 finalMove = new Vector3(0, -1, 0), rollImpulse = new Vector3(0, 0, 0), rollDir;
     private float rollStrength;
     private bool rolling = false, gliding = false;
     private CharacterController ccLink;
     private float verticalVelocity = 0.0f;
     private CollisionFlags flags;
+
+   
     #endregion
 
     #region Events
@@ -44,10 +47,14 @@ public class MoveHandler : MonoBehaviour
         fsmCheckTempLink.enableGlideLogic.AddListener(SettingGlideGravity);
         fsmCheckTempLink.stopGlideLogic.AddListener(SettingNormalGravity);
 
+      
+
+
     }
     #endregion
 
     #region Move and Rotation Handling Methods
+    /*
     void Update()
     {
 
@@ -100,6 +107,70 @@ public class MoveHandler : MonoBehaviour
             roofHit = true;
             verticalVelocity = 0;
         }
+    }
+    */
+    
+    public IEnumerator MoveHandlerUpdate()
+    {
+        while (this.ccLink != null)
+        {
+            float timeTakeThisFrame = Time.deltaTime;
+
+            if (rolling)
+            {
+                finalMove = Vector3.Slerp(finalMove.normalized, rollDir.normalized, timeTakeThisFrame);
+
+                float height = finalMove.y;
+
+                finalMove.y = 0;
+
+                if ((ccLink.collisionFlags & CollisionFlags.Below) != 0)
+                    this.transform.rotation = Quaternion.LookRotation(finalMove, Vector3.up);
+
+                finalMove.y = height;
+
+                finalMove *= rollStrength;
+
+
+            }
+
+
+
+            finalMove *= timeTakeThisFrame;
+
+            if (!gliding)
+                verticalVelocity += gravityStr * timeTakeThisFrame;
+            else
+                verticalVelocity = -1;
+
+            finalMove.y = verticalVelocity * timeTakeThisFrame;
+
+            flags = ccLink.Move(finalMove);
+
+            if ((flags & CollisionFlags.Below) != 0)
+            {
+                if (verticalVelocity <= -hitImpactVel)
+                    deathRequest.Invoke();
+                else
+                    verticalVelocity = -3f;
+
+                if (roofHit)
+                    roofHit = false;
+            }
+            else if ((flags & CollisionFlags.Above) != 0 && !roofHit)
+            {
+                roofHit = true;
+                verticalVelocity = 0;
+            }
+
+            yield return null;
+        }
+    }
+
+
+    private void StoppingCoroutines()
+    {
+        this.StopCoroutine(this.MoveHandlerUpdate());
     }
 
     private void HandlingMove(Vector3 inputDir, float moveSpeed)

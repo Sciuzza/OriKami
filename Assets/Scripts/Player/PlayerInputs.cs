@@ -36,6 +36,7 @@ public class PlayerInputs : MonoBehaviour
     #endregion
 
     #region Player Inputs Handler
+    
     private void Update()
     {
 
@@ -44,6 +45,19 @@ public class PlayerInputs : MonoBehaviour
         ExtraInputsHandler();
 
     }
+    /*
+    public IEnumerator PlayerInputUpdate()
+    {
+        while (true)
+        {
+            MovingInputHandler();
+            genAbiInputs();
+            ExtraInputsHandler();
+
+            yield return null;
+        }
+    }
+    */
 
     #region Move Input
     private void MovingInputHandler()

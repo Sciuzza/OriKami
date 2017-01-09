@@ -1,9 +1,24 @@
 ﻿using UnityEngine;
 using System.Collections;
+
+using UnityEngine.Events;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class SceneController : MonoBehaviour
 {
+
+    public event_float ProgressUpdateRequest;
+     
+    public GameObject GameLoader;
+
+    public float standardLoadingTime;
+
+    private string sceneToLoad;
+
+    
+
+    private AsyncOperation loadingStatus;
     #region Taking References and linking Events
     void Awake()
     {
@@ -11,13 +26,26 @@ public class SceneController : MonoBehaviour
 
         mmTempLink.switchSceneRequestByInt.AddListener(LoadingScenebyIndex);
         mmTempLink.switchSceneRequestByName.AddListener(LoadingScenebyName);
+        mmTempLink.prova.AddListener(this.NgpInitializer);
 
         GameController gcTempLink = this.GetComponent<GameController>();
 
         gcTempLink.gpInitializer.AddListener(GamePlayInitialization);
+        //gcTempLink.ngpInitializer.AddListener(NgpInitializer);
 
     }
 
+    #endregion
+
+    #region Game Starter Una Tantum Initialization
+    private void Start()
+    {
+        if (SceneManager.GetActiveScene().buildIndex == 0)
+            SceneManager.LoadScene(1);
+    }
+    #endregion
+
+    #region Gameplay Intialization
     private void GamePlayInitialization(GameObject player)
     {
         FSMChecker fsmTempLink = player.GetComponent<FSMChecker>();
@@ -34,18 +62,68 @@ public class SceneController : MonoBehaviour
         plTempLink.previousSceneRequest.AddListener(LoadingPreviousScene);
         plTempLink.resettingSceneRequest.AddListener(ResettingCurrentScene);
 
+        var changeLevTempLink = GameObject.FindGameObjectsWithTag("ChangeScene");
+
+        foreach (var t in changeLevTempLink)
+        {
+            t.GetComponent<MoveToNextLevel>().SceneChangeRequest.AddListener(this.ChangingScenehandler);
+        }
+
+
     }
     #endregion
 
-    #region Game Starter Una Tantum Initialization
-    void Start()
+    #region No Gameplay Initialization
+
+    private void NgpInitializer()
     {
-        if (SceneManager.GetActiveScene().buildIndex == 0)
-            SceneManager.LoadScene(1);
+        if (SceneManager.GetActiveScene().buildIndex == 11) StartCoroutine(LoadingNewScene(this.sceneToLoad));
+    }
+
+    private IEnumerator LoadingNewScene(string sceneToLoad)
+    {
+
+        this.loadingStatus = SceneManager.LoadSceneAsync(sceneToLoad, LoadSceneMode.Additive);
+        this.loadingStatus.allowSceneActivation = false;
+
+        var ciccioRef = SceneManager.GetSceneByName(sceneToLoad);
+        var loadingRef = SceneManager.GetSceneByName("LoadingScreen");
+
+        float timer = 0;
+
+
+
+        while (timer <= this.standardLoadingTime || this.loadingStatus.progress < 0.9f)
+        {
+            timer += Time.deltaTime;
+            this.ProgressUpdateRequest.Invoke(Mathf.InverseLerp(0, this.standardLoadingTime, timer));
+
+            yield return null;
+        }
+
+        this.loadingStatus.allowSceneActivation = true;
+
+        while (!this.loadingStatus.isDone)
+        {
+            //this.ProgressUpdateRequest.Invoke(this.loadingStatus.progress);
+            yield return null;
+        }
+            
+
+        Debug.Log("GamePlay Scene Loaded");
+
+        //loadingStatus.allowSceneActivation = true;
+        SceneManager.SetActiveScene(ciccioRef);
+        SceneManager.UnloadScene(loadingRef);
+
+        Instantiate(this.GameLoader);
+
+        //SceneManager.LoadScene(sceneToLoad);
+
     }
     #endregion
 
-    #region Scene Switch Handler Methods
+    #region Scene Switch GeneraL Methods
     private void LoadingScenebyName(string sceneName)
     {
         SceneManager.LoadScene(sceneName);
@@ -69,6 +147,30 @@ public class SceneController : MonoBehaviour
     private void ResettingCurrentScene()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-    } 
+    }
+
+    private void ChangingScenehandler(string sceneName)
+    {
+        var sceneIndex = SceneManager.GetSceneByName(sceneName).buildIndex;
+
+
+        if (sceneIndex > 0 && sceneIndex < 3)
+        {
+
+            this.LoadingScenebyName(sceneName);
+        }
+        else if (sceneName == "LoadingScreen")
+        {
+            Debug.LogWarning(
+                "You Cannot load Loading Screen directly, please change the scene name with the a gameplay or menu scene");
+        }
+        else
+        {
+            this.sceneToLoad = sceneName;
+            SceneManager.LoadScene("LoadingScreen");
+        }
+    }
+
     #endregion
+
 }

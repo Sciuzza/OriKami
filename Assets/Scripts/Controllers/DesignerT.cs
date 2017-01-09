@@ -325,9 +325,14 @@ public class DesignerT : MonoBehaviour
         playerInputsTempLink.currentInputs = GestioneInputs;
 
 
-        Physics.gravity = -GeneralTweaks.globalGravity * Vector3.up;
+        
     } 
     #endregion
+
+    private void OnValidate()
+    {
+        Physics.gravity = -GeneralTweaks.globalGravity * Vector3.up;
+    }
 }
 
 

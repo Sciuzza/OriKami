@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 
 public class GameController : MonoBehaviour
     
@@ -41,6 +42,7 @@ public class GameController : MonoBehaviour
         {
             Debug.Log("Initializer Invoked Once");
             gpInitializer.Invoke(player);
+            StartCoroutine(this.player.GetComponent<MoveHandler>().MoveHandlerUpdate());
 
         }
         else
@@ -56,6 +58,7 @@ public class GameController : MonoBehaviour
         if (player == null)
         {
             Debug.LogWarning("Missing Player in Scene");
+            Debug.Log(SceneManager.GetActiveScene().buildIndex);
             return false;
         }
         else

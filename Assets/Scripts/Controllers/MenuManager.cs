@@ -1,23 +1,33 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
+
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using UnityEngine.Events;
+using UnityEngine.EventSystems;
 
 public class MenuManager : MonoBehaviour
 {
 
     #region Public Variables
     public event_int switchSceneRequestByInt;
-    public event_string switchSceneRequestByName; 
+    public event_string switchSceneRequestByName;
+
+    public UnityEvent prova;
     #endregion
 
     #region Private Variables
     private GameObject mainMenuPanel;
-    private Button newGame, levelSel, quitGame;
+    private Button newGame, continueB, legends, options, exit;
 
     private GameObject levelSelPanel;
-    private Button route1, frogsV, route2, armaV, route3, dolphinsV, route4, back; 
+    private Button route1, frogsV, route2, armaV, route3, dolphinsV, route4, back;
+
+    private Image progressBar;
+
+    private EventSystem esLink;
+    
     #endregion
 
     #region Taking References and linking Events
@@ -27,6 +37,10 @@ public class MenuManager : MonoBehaviour
 
         gcTempLink.ngpInitializer.AddListener(InitializingNgpScene);
         gcTempLink.gpInitializer.AddListener(InitializingGpScene);
+
+        SceneController scTempLink = this.GetComponent<SceneController>();
+
+        scTempLink.ProgressUpdateRequest.AddListener(this.UpdatingProgressBar);
     }
     #endregion
 
@@ -41,6 +55,9 @@ public class MenuManager : MonoBehaviour
             case 2:
                 InitializingLevelSelection();
                 break;
+            case 11:
+                this.InitializingLoadingScreen();
+                break;
         }
     }
 
@@ -49,27 +66,65 @@ public class MenuManager : MonoBehaviour
     {
         mainMenuPanel = GameObject.FindGameObjectWithTag("Menu Panel");
 
-        Button[] mmButtonRef = new Button[3];
+        Button[] mmButtonRef = new Button[5];
 
         mmButtonRef = mainMenuPanel.GetComponentsInChildren<Button>();
 
-        newGame = mmButtonRef[0];
-        levelSel = mmButtonRef[1];
-        quitGame = mmButtonRef[2];
-        
+        List<Button> mmListButtonRef = new List<Button>();
 
-        newGame.onClick.AddListener(InvokingNewGame);
-        newGame.onClick.AddListener(PlayNewGameSound);
-        levelSel.onClick.AddListener(PlayNewGameSound);
-        levelSel.onClick.AddListener(InvokingLevelSel);
-        quitGame.onClick.AddListener(QuitGame);
+        mmListButtonRef.AddRange(mmButtonRef);
+
+
+        this.newGame = mmListButtonRef.Find(x => x.gameObject.name == "New Game");
+        this.continueB = mmListButtonRef.Find(x => x.gameObject.name == "Continue");
+        this.legends = mmListButtonRef.Find(x => x.gameObject.name == "Legends' Journal");
+        this.options = mmListButtonRef.Find(x => x.gameObject.name == "Options");
+        this.exit = mmListButtonRef.Find(x => x.gameObject.name == "Exit");
+
+        this.newGame.onClick.AddListener(PlayNewGameSound);
+        this.newGame.onClick.AddListener(InvokingNewGame);
+        this.continueB.onClick.AddListener(PlayNewGameSound);
+        this.continueB.onClick.AddListener(InvokingLevelSel);
+        this.exit.onClick.AddListener(QuitGame);
+
+
+     
+        //this.esLink = EventSystem.current;
+
+
+
+        //BaseEventData ciccio = new BaseEventData(this.esLink);
+
+        //Debug.Log(ciccio.selectedObject); 
+
+
+        //this.esLink.SetSelectedGameObject(this.continueB.gameObject);
+
+        //Debug.Log(this.esLink.currentSelectedGameObject.name);
     }
     //public void Onhover()
     //{
     //    PlayNewGameSound();
     //}
+    GameObject lastselect;
+    void Start()
+    {
+        lastselect = new GameObject();
+    }
+    // Update is called once per frame
+    void Update()
+    {
+        if (EventSystem.current.currentSelectedGameObject == null)
+        {
+            EventSystem.current.SetSelectedGameObject(lastselect);
+        }
+        else
+        {
+            lastselect = EventSystem.current.currentSelectedGameObject;
+        }
+    }
 
-    private void InvokingNewGame()
+private void InvokingNewGame()
     {
         switchSceneRequestByInt.Invoke(3);
     }
@@ -94,9 +149,15 @@ public class MenuManager : MonoBehaviour
         GameObject.FindGameObjectWithTag("GameController").GetComponent<SoundManager>().PlaySound(1, 2);
     }
 
-    public void SelectedButton()
+    public void SelectedButton(BaseEventData eventData)
     {
         GameObject.FindGameObjectWithTag("GameController").GetComponent<SoundManager>().PlaySound(1, 1);
+        eventData.selectedObject.GetComponentInChildren<Text>().fontSize = 30;
+    }
+
+    public void DeSelectedButton(BaseEventData eventData)
+    {
+        eventData.selectedObject.GetComponentInChildren<Text>().fontSize = 25;
     }
     #endregion
 
@@ -184,6 +245,19 @@ public class MenuManager : MonoBehaviour
     {
 
     }
-    #endregion 
+    #endregion
+
+    #region Loading Screen Handler
+    private void InitializingLoadingScreen()
+    {
+        this.progressBar = GameObject.FindGameObjectWithTag("ProgressBar").GetComponent<Image>();
+        this.prova.Invoke();
+    }
+
+    private void UpdatingProgressBar(float value)
+    {
+        this.progressBar.fillAmount = value;
+    }
+    #endregion
     #endregion
 }
