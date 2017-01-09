@@ -111,6 +111,7 @@ public class FSMChecker : MonoBehaviour
     #endregion
 
     #region Private Variables
+    public SaveSystem save;
     [System.Serializable]
     public struct playerCState
     {
@@ -1477,7 +1478,11 @@ public class FSMChecker : MonoBehaviour
     void OnTriggerEnter(Collider deathZone)
     {
         if (deathZone.gameObject.tag == "Death")
-            deathRequest.Invoke();
+        {
+           // deathRequest.Invoke();
+            save.LoadState();         
+        }
+
     }
 
     private IEnumerator Drowning()

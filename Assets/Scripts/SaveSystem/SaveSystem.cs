@@ -3,8 +3,15 @@ using System.Collections;
 using System;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
+using UnityEngine.Events;
+using System.Collections.Generic;
 
-public class SaveSystem : MonoBehaviour {
+public class SaveSystem : MonoBehaviour
+{
+
+    public Transform Player;
+    
+
 
     public void SaveState()
     {
@@ -13,39 +20,35 @@ public class SaveSystem : MonoBehaviour {
         FileStream file = File.Create(Application.persistentDataPath + "/PlayerData.dat");
 
         PlayerData data = new PlayerData();
-        data.posx = transform.position.x;
-        data.posy = transform.position.y;
-        data.posz = transform.position.z;
+        data.posx = Player.transform.position.x;
+        data.posy = Player.transform.position.y;
+        data.posz = Player.transform.position.z;
 
-        data.rotx = transform.eulerAngles.x;
-        data.roty = transform.eulerAngles.y;
-        data.rotz = transform.eulerAngles.z;
+        data.rotx = Player.transform.eulerAngles.x;
+        data.roty = Player.transform.eulerAngles.y;
+        data.rotz = Player.transform.eulerAngles.z;
 
-        bf.Serialize(file, data); 
+        bf.Serialize(file, data);
+        file.Close();
 
-        //PlayerPrefs.SetFloat("PosX", transform.position.x);
-        //PlayerPrefs.SetFloat("PosY", transform.position.y);
-        //PlayerPrefs.SetFloat("PosZ", transform.position.z);
-
-        //PlayerPrefs.SetFloat("RotX", transform.eulerAngles.x);
-        //PlayerPrefs.SetFloat("RotY", transform.eulerAngles.y);
-        //PlayerPrefs.SetFloat("RotZ", transform.eulerAngles.z);
     }
 
     public void LoadState()
     {
-        //float x = PlayerPrefs.GetFloat("PosX");
-        //float y = PlayerPrefs.GetFloat("PosY");
-        //float z = PlayerPrefs.GetFloat("PosZ");
+        if (File.Exists(Application.persistentDataPath + "/PlayerData.dat"))
+        {
+            BinaryFormatter bf = new BinaryFormatter();
+            FileStream file = File.Open(Application.persistentDataPath + "/PlayerData.dat", FileMode.Open);
+            PlayerData data = (PlayerData)bf.Deserialize(file);
+            file.Close();
 
-        //float rx = PlayerPrefs.GetFloat("RotX");
-        //float ry = PlayerPrefs.GetFloat("RotY");
-        //float rz = PlayerPrefs.GetFloat("RotZ");
+            Player.transform.position = new Vector3 (data.posx, data.posy, data.posz);
+            Player.transform.rotation = Quaternion.Euler(data.rotx, data.roty, data.rotz);
+        }
 
-        //transform.position = new Vector3(x, y, z);
-        //transform.rotation = Quaternion.Euler(rx, ry, rz);
     }
-	
+
+   
 }
 
 [Serializable]
