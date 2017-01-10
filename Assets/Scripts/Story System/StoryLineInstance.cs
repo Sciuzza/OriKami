@@ -395,12 +395,12 @@ public class StoryLineInstance : MonoBehaviour
 {
 
     public StoryLine CurrentStoryLine;
-
+    /*
     public void OnValidate()
     {
         GameObject.FindGameObjectWithTag("GameController").GetComponent<QuestsManager>().AddToRepository(this.CurrentStoryLine);
     }
-
+    */
     public void Initialization()
     {
         Debug.Log("Here");
