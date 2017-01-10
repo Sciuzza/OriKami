@@ -15,7 +15,6 @@ public class MenuManager : MonoBehaviour
     public event_string switchSceneRequestByName;
 
     public event_int_int soundRequest;
-    public UnityEvent prova;
     #endregion
 
     #region Private Variables
@@ -29,6 +28,11 @@ public class MenuManager : MonoBehaviour
 
     private EventSystem esLink;
 
+    #endregion
+
+    #region Public variables
+    public UnityEvent loadingSceneRequest;
+    public event_string changingSceneRequest;
     #endregion
 
     #region Taking References and linking Events
@@ -93,36 +97,13 @@ public class MenuManager : MonoBehaviour
     
 
 
-         EventSystem.current.SetSelectedGameObject(this.newGame.gameObject);
+         //EventSystem.current.SetSelectedGameObject(this.newGame.gameObject);
        
-
-         //StartCoroutine(this.MouseFix());
-    }
-
-
-    private IEnumerator MouseFix()
-    {
-        GameObject lastselect = new GameObject();
-        while (true)
-        {
-            if (EventSystem.current.currentSelectedGameObject == null)
-            {
-                //GameObject.FindGameObjectWithTag("GameController").GetComponent<SoundManager>().PlaySound(1, 1);
-                EventSystem.current.SetSelectedGameObject(lastselect);
-            }
-            else
-            {
-                //GameObject.FindGameObjectWithTag("GameController").GetComponent<SoundManager>().PlaySound(1, 1);
-                lastselect = EventSystem.current.currentSelectedGameObject;
-            }
-
-            yield return null;
-        }
     }
 
     private void InvokingNewGame()
     {
-        switchSceneRequestByInt.Invoke(3);
+        changingSceneRequest.Invoke("Route 1");
     }
 
     private void InvokingLevelSel()
@@ -243,7 +224,7 @@ public class MenuManager : MonoBehaviour
     private void InitializingLoadingScreen()
     {
         this.progressBar = GameObject.FindGameObjectWithTag("ProgressBar").GetComponent<Image>();
-        this.prova.Invoke();
+        this.loadingSceneRequest.Invoke();
     }
 
     private void UpdatingProgressBar(float value)

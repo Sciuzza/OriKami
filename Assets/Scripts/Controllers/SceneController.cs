@@ -16,9 +16,8 @@ public class SceneController : MonoBehaviour
 
     private string sceneToLoad;
 
-    
-
     private AsyncOperation loadingStatus;
+
     #region Taking References and linking Events
     void Awake()
     {
@@ -26,7 +25,8 @@ public class SceneController : MonoBehaviour
 
         mmTempLink.switchSceneRequestByInt.AddListener(LoadingScenebyIndex);
         mmTempLink.switchSceneRequestByName.AddListener(LoadingScenebyName);
-        mmTempLink.prova.AddListener(this.NgpInitializer);
+        mmTempLink.loadingSceneRequest.AddListener(this.NgpInitializer);
+        mmTempLink.changingSceneRequest.AddListener(ChangingScenehandler);
 
         GameController gcTempLink = this.GetComponent<GameController>();
 
