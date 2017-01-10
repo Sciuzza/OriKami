@@ -99,7 +99,7 @@ public class event_float : UnityEvent<float>
 [System.Serializable]
 public class event_cs : UnityEvent<controlStates>
 {
-    
+
 }
 #endregion
 
@@ -111,7 +111,7 @@ public class FSMChecker : MonoBehaviour
     #endregion
 
     #region Private Variables
-    public SaveSystem save;
+    private PlayerInputs playerTemp;
     [System.Serializable]
     public struct playerCState
     {
@@ -134,6 +134,9 @@ public class FSMChecker : MonoBehaviour
     private VFissure vfLink;
     private string vFissureEntrance;
     private bool dying = false;
+    private bool isGlidingSound = false;
+    private bool isRollingSound = false;
+    private bool isWalkingSound = false;
     #endregion
 
     #region Events
@@ -145,7 +148,7 @@ public class FSMChecker : MonoBehaviour
     public event_string_string_listGb formChanged;
     public event_vector3_string_ps moveUsed;
     public event_ps phStateChanged;
-    public event_pl plStateChanged; 
+    public event_pl plStateChanged;
     #endregion
 
     #region Initialization Methods
@@ -289,7 +292,7 @@ public class FSMChecker : MonoBehaviour
                     formChanged.Invoke(cPlayerState.currentForm, cPlayerState.previousForm, cPlayerState.forms);
                     if (cPlayerState.previousForm == "Dragon Form")
                         stopGlideLogic.Invoke();
-                     SettingCapsuleCollider(0.15f, 1);
+                    SettingCapsuleCollider(0.15f, 1);
                     break;
                 case abilties.toFrog:
                     cPlayerState.previousForm = cPlayerState.currentForm;
@@ -302,7 +305,7 @@ public class FSMChecker : MonoBehaviour
                     formChanged.Invoke(cPlayerState.currentForm, cPlayerState.previousForm, cPlayerState.forms);
                     if (cPlayerState.previousForm == "Dragon Form")
                         stopGlideLogic.Invoke();
-                     SettingCapsuleCollider(0.15f, 0.7f);
+                    SettingCapsuleCollider(0.15f, 0.7f);
                     break;
                 case abilties.toCrane:
                     cPlayerState.previousForm = cPlayerState.currentForm;
@@ -664,7 +667,7 @@ public class FSMChecker : MonoBehaviour
         AddAbility(abilties.menu);
 
         AddAbility(abilties.toStd);
-       
+
         HandlingAbiDiscovered();
 
         if (cPlayerState.currentPhState == physicStates.onGround)
@@ -1472,6 +1475,48 @@ public class FSMChecker : MonoBehaviour
         }
 
         #endregion
+        #region SoundForms
+        if (cPlayerState.currentForm == "Dragon Form" && cPlayerState.currentPhState == physicStates.onAir && !isGlidingSound)
+        {       
+            this.GetComponent<PlayerInputs>().CraneGlide();
+            isGlidingSound = true;
+        }
+        else if ((cPlayerState.currentForm != "Dragon Form" || cPlayerState.currentPhState != physicStates.onAir) && isGlidingSound)
+        {         
+            this.GetComponent<PlayerInputs>().StopCraneGlide();
+            isGlidingSound = false;
+        }
+
+        if (cPlayerState.currentForm == "Armadillo Form" && cPlayerState.currentPhState == physicStates.onGround && this.GetComponent<PlayerInputs>().rollPressed() && !isRollingSound )
+        {
+             this.GetComponent<PlayerInputs>().RollingSound();                                   
+            isRollingSound = true;
+        }
+        else if (cPlayerState.currentForm == "Armadillo Form" && cPlayerState.currentPhState == physicStates.onGround && this.GetComponent<PlayerInputs>().rollReleased()&& isRollingSound)
+        {           
+            this.GetComponent<PlayerInputs>().StopRollingSound();
+            isRollingSound = false;
+        }
+        else if ((cPlayerState.currentForm!="Armadillo Form" || cPlayerState.currentPhState != physicStates.onGround) &&isRollingSound)
+        {
+            this.GetComponent<PlayerInputs>().StopRollingSound();
+            isRollingSound = false;
+        }
+
+        //if ((cPlayerState.currentForm == "Standard Form" || cPlayerState.currentForm == "Armadillo Form") && cPlayerState.currentPhState == physicStates.onGround && cPlayerState.currentPlState == playerStates.moving &&!isWalkingSound)
+        //{
+        //    this.GetComponent<PlayerInputs>().StandardWalk();
+        //    isWalkingSound = true;
+        //}
+        //else if ((cPlayerState.currentForm != "Standard Form" || cPlayerState.currentForm != "Armadillo Form") || cPlayerState.currentPhState != physicStates.onGround || cPlayerState.currentPlState != playerStates.moving && isWalkingSound)
+        //{
+        //    this.GetComponent<PlayerInputs>().StopStandardWalk();
+        //    isWalkingSound = false;
+        //}
+
+
+        #endregion
+
 
     }
 
@@ -1480,7 +1525,7 @@ public class FSMChecker : MonoBehaviour
         if (deathZone.gameObject.tag == "Death")
         {
             Debug.Log("Morto");
-            save.LoadState();
+            //save.LoadState();
             // deathRequest.Invoke();
 
         }

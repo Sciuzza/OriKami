@@ -127,12 +127,11 @@ public class PlayerInputs : MonoBehaviour
         else if (rollPressed())
         {
             genAbiRequest.Invoke(abilties.roll);
-            RollingSound();
+            
         }
         else if (rollReleased())
         {
             rollStopped.Invoke();
-            StopRollingSound();
 
         }
         else if (VFissurePressed())
@@ -151,6 +150,7 @@ public class PlayerInputs : MonoBehaviour
     }
     public void RollingSound()
     {
+
         GameObject.FindGameObjectWithTag("Player").GetComponent<SoundManager>().PlaySound(1, 0);
     }
     public void StopRollingSound()
@@ -160,6 +160,30 @@ public class PlayerInputs : MonoBehaviour
     public void FormSound()
     {
         GameObject.FindGameObjectWithTag("Player").GetComponent<SoundManager>().PlaySound(0, 1);
+    }
+    public void CraneGlide()
+    {
+        GameObject.FindGameObjectWithTag("Player").GetComponent<SoundManager>().PlaySound(1, 1);
+    }
+    public void StopCraneGlide()
+    {
+        GameObject.FindGameObjectWithTag("Player").GetComponent<SoundManager>().StopSound(1, 1);
+    }
+    public void StandardWalk()
+    {
+        GameObject.FindGameObjectWithTag("Player").GetComponent<SoundManager>().PlaySound(1, 2);
+    }
+    public void StopStandardWalk()
+    {
+        GameObject.FindGameObjectWithTag("Player").GetComponent<SoundManager>().StopSound(1, 2);
+    }
+    public void FrogWalk()
+    {
+        GameObject.FindGameObjectWithTag("Player").GetComponent<SoundManager>().PlaySound(1, 3);
+    }
+    public void StopFrogWalk()
+    {
+        GameObject.FindGameObjectWithTag("Player").GetComponent<SoundManager>().StopSound(1, 3);
     }
 
     #endregion
@@ -1549,7 +1573,7 @@ public class PlayerInputs : MonoBehaviour
     #endregion
 
     #region Roll Input
-    private bool rollPressed()
+   public bool rollPressed()
     {
         if (cForm == currentForm.arma)
             return armaRollInput();
@@ -1609,7 +1633,7 @@ public class PlayerInputs : MonoBehaviour
             return false;
     }
 
-    private bool rollReleased()
+    public bool rollReleased()
     {
         if (cForm == currentForm.arma)
             return armaRollRInput();
