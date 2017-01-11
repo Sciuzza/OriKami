@@ -110,7 +110,7 @@ public class event_Gb : UnityEvent<GameObject>
 [System.Serializable]
 public class event_int_int : UnityEvent<int, int>
 {
-    
+
 }
 #endregion
 
@@ -122,6 +122,7 @@ public class FSMChecker : MonoBehaviour
     #endregion
 
     #region Private Variables
+    private PlayerInputs playerTemp;
     [System.Serializable]
     public struct playerCState
     {
@@ -144,8 +145,14 @@ public class FSMChecker : MonoBehaviour
     private VFissure vfLink;
     private string vFissureEntrance;
     private bool dying = false;
+<<<<<<< HEAD
 
     private controlStates previousClState;
+=======
+    private bool isGlidingSound = false;
+    private bool isRollingSound = false;
+    private bool isWalkingSound = false;
+>>>>>>> Designers_Hub_New
     #endregion
 
     #region Events
@@ -158,8 +165,11 @@ public class FSMChecker : MonoBehaviour
     public event_vector3_string_ps_listgb moveUsed;
     public event_ps phStateChanged;
     public event_pl plStateChanged;
+<<<<<<< HEAD
     public event_Gb switchingCameraControlToOFF;
     public UnityEvent switchingCameraControlToOn;
+=======
+>>>>>>> Designers_Hub_New
     #endregion
 
     #region Initialization Methods
@@ -1549,13 +1559,61 @@ public class FSMChecker : MonoBehaviour
         }
 
         #endregion
+        #region SoundForms
+        if (cPlayerState.currentForm == "Dragon Form" && cPlayerState.currentPhState == physicStates.onAir && !isGlidingSound)
+        {       
+            this.GetComponent<PlayerInputs>().CraneGlide();
+            isGlidingSound = true;
+        }
+        else if ((cPlayerState.currentForm != "Dragon Form" || cPlayerState.currentPhState != physicStates.onAir) && isGlidingSound)
+        {         
+            this.GetComponent<PlayerInputs>().StopCraneGlide();
+            isGlidingSound = false;
+        }
+
+        if (cPlayerState.currentForm == "Armadillo Form" && cPlayerState.currentPhState == physicStates.onGround && this.GetComponent<PlayerInputs>().rollPressed() && !isRollingSound )
+        {
+             this.GetComponent<PlayerInputs>().RollingSound();                                   
+            isRollingSound = true;
+        }
+        else if (cPlayerState.currentForm == "Armadillo Form" && cPlayerState.currentPhState == physicStates.onGround && this.GetComponent<PlayerInputs>().rollReleased()&& isRollingSound)
+        {           
+            this.GetComponent<PlayerInputs>().StopRollingSound();
+            isRollingSound = false;
+        }
+        else if ((cPlayerState.currentForm!="Armadillo Form" || cPlayerState.currentPhState != physicStates.onGround) &&isRollingSound)
+        {
+            this.GetComponent<PlayerInputs>().StopRollingSound();
+            isRollingSound = false;
+        }
+
+        //if ((cPlayerState.currentForm == "Standard Form" || cPlayerState.currentForm == "Armadillo Form") && cPlayerState.currentPhState == physicStates.onGround && cPlayerState.currentPlState == playerStates.moving &&!isWalkingSound)
+        //{
+        //    this.GetComponent<PlayerInputs>().StandardWalk();
+        //    isWalkingSound = true;
+        //}
+        //else if ((cPlayerState.currentForm != "Standard Form" || cPlayerState.currentForm != "Armadillo Form") || cPlayerState.currentPhState != physicStates.onGround || cPlayerState.currentPlState != playerStates.moving && isWalkingSound)
+        //{
+        //    this.GetComponent<PlayerInputs>().StopStandardWalk();
+        //    isWalkingSound = false;
+        //}
+
+
+        #endregion
+
 
     }
 
     void OnTriggerEnter(Collider deathZone)
     {
         if (deathZone.gameObject.tag == "Death")
-            deathRequest.Invoke();
+        {
+            Debug.Log("Morto");
+            //save.LoadState();
+            // deathRequest.Invoke();
+
+        }
+
     }
 
     private IEnumerator Drowning()

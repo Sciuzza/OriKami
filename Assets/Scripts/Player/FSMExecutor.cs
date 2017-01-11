@@ -7,6 +7,8 @@ using UnityEngine.Events;
 
 public class FSMExecutor : MonoBehaviour
 {
+    PlayerInputs playerref;
+   
     #region Public Variables
     [HideInInspector]
     public moveValues currentMoveValues;
@@ -14,7 +16,7 @@ public class FSMExecutor : MonoBehaviour
     [HideInInspector]
     public generalTweaks generalValues;
     #endregion
-
+    
     #region Events
     public event_vector3_float moveSelected, rotSelected, specialRotSelected;
     public event_float jumpSelected, rollSelected;
@@ -179,6 +181,7 @@ public class FSMExecutor : MonoBehaviour
         {
 
             case playerStates.flying:
+                
             case playerStates.movingBlock:
                 rotSelected.Invoke(abiDirInput, generalValues.rotateSpeed / 3);
                 break;
@@ -440,7 +443,7 @@ public class FSMExecutor : MonoBehaviour
     {
 
         CharacterController ccTempLink = this.gameObject.GetComponent<CharacterController>();
-
+       
         float radius = ccTempLink.radius;
 
         ccTempLink.radius = 0;
