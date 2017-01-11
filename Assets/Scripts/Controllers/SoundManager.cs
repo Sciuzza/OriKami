@@ -31,6 +31,8 @@ public class SoundManager : MonoBehaviour
 
     private void Awake()
     {
+        if (this.gameObject.tag != "GameController") return;
+
         GameController gcTempLink = this.GetComponent<GameController>();
 
         gcTempLink.ngpInitializer.AddListener(this.EnablingAudioSources);
