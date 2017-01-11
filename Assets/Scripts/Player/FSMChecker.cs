@@ -145,14 +145,12 @@ public class FSMChecker : MonoBehaviour
     private VFissure vfLink;
     private string vFissureEntrance;
     private bool dying = false;
-<<<<<<< HEAD
 
     private controlStates previousClState;
-=======
+
     private bool isGlidingSound = false;
     private bool isRollingSound = false;
     private bool isWalkingSound = false;
->>>>>>> Designers_Hub_New
     #endregion
 
     #region Events
@@ -165,11 +163,9 @@ public class FSMChecker : MonoBehaviour
     public event_vector3_string_ps_listgb moveUsed;
     public event_ps phStateChanged;
     public event_pl plStateChanged;
-<<<<<<< HEAD
     public event_Gb switchingCameraControlToOFF;
     public UnityEvent switchingCameraControlToOn;
-=======
->>>>>>> Designers_Hub_New
+
     #endregion
 
     #region Initialization Methods
