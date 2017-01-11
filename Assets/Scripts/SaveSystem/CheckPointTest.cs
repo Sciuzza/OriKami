@@ -4,7 +4,9 @@ using System.Collections;
 public class CheckPointTest : MonoBehaviour {
 
     public SaveSystem save;
-    public bool saveGame, loadGame; 
+    public GameObject Player;
+    public Transform SpawnPoint;
+    public bool saveGame, loadGame, spawn;
 
 
     void OnTriggerEnter(Collider other)
@@ -19,6 +21,12 @@ public class CheckPointTest : MonoBehaviour {
         {
             Debug.Log("Sono Morto");
             save.LoadState();
+        }
+
+        if (other.gameObject.tag == "Player" && spawn)
+        {
+            Debug.Log("Sono Respawno");
+            Player.transform.position = SpawnPoint.position;
         }
     }
 

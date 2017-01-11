@@ -111,7 +111,7 @@ public class FSMChecker : MonoBehaviour
     #endregion
 
     #region Private Variables
-    public SaveSystem save;
+    
     [System.Serializable]
     public struct playerCState
     {
@@ -1480,8 +1480,8 @@ public class FSMChecker : MonoBehaviour
         if (deathZone.gameObject.tag == "Death")
         {
             Debug.Log("Morto");
-            save.LoadState();
-            // deathRequest.Invoke();
+          
+            deathRequest.Invoke();
 
         }
 
