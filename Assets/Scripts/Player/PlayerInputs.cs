@@ -17,6 +17,10 @@ public class PlayerInputs : MonoBehaviour
     private enum currentForm { std, frog, crane, arma, dolphin };
 
     private currentForm cForm = currentForm.std;
+
+    private bool storyModeInput = false;
+    private buttonsJoy storyJoyInput = buttonsJoy.none;
+    private buttonsPc storyPcInput = buttonsPc.none;
     #endregion
 
     #region Events
@@ -32,6 +36,10 @@ public class PlayerInputs : MonoBehaviour
         FSMChecker fsmCheckerTempLink = this.GetComponent<FSMChecker>();
 
         fsmCheckerTempLink.formChangedInp.AddListener(UpdatingCurrentFormInputs);
+
+        StoryLineInstance slTempLink = GameObject.FindGameObjectWithTag("StoryLine").GetComponent<StoryLineInstance>();
+
+        slTempLink.activateStoryInputRequest.AddListener(SettingStoryInputs);
     }
     #endregion
 
@@ -43,21 +51,9 @@ public class PlayerInputs : MonoBehaviour
         MovingInputHandler();
         genAbiInputs();
         ExtraInputsHandler();
+        StoryInputsHandler();
 
     }
-    /*
-    public IEnumerator PlayerInputUpdate()
-    {
-        while (true)
-        {
-            MovingInputHandler();
-            genAbiInputs();
-            ExtraInputsHandler();
-
-            yield return null;
-        }
-    }
-    */
 
     #region Move Input
     private void MovingInputHandler()
@@ -1919,6 +1915,62 @@ public class PlayerInputs : MonoBehaviour
             resettingSceneRequest.Invoke();
     }
     #endregion
+
+    private void StoryInputsHandler()
+    {
+        if (StoryInputPressed())
+            Debug.Log("Da Inserire Evento");
+    }
+
+    private bool StoryInputPressed()
+    {
+        if (storyModeInput)
+        {
+            if (storyJoyInput.ToString() != "LT" &&
+         storyJoyInput.ToString() != "RT")
+            {
+                if (Input.GetButtonDown(storyJoyInput.ToString()))
+                    return true;
+                else
+                    return false;
+            }
+            else
+            {
+                if (storyJoyInput.ToString() == "LT")
+                {
+                    if (Input.GetAxis("LRT") > 0 && !switchCooldown)
+                    {
+                        switchCooldown = true;
+                        StartCoroutine(SwitchingCooldown());
+                        return true;
+                    }
+                    else
+                        return false;
+                }
+                else
+                {
+                    if (Input.GetAxis("LRT") < 0 && !switchCooldown)
+                    {
+                        switchCooldown = true;
+                        StartCoroutine(SwitchingCooldown());
+                        return true;
+                    }
+                    else
+                        return false;
+                }
+            }
+        }
+        else
+            return false;
+    }
+
+    private void SettingStoryInputs(buttonsJoy joyInput, buttonsPc pcInput)
+    {
+        storyJoyInput = joyInput;
+        storyPcInput = pcInput;
+
+        storyModeInput = true;
+    }
 
     #region General Methods
 

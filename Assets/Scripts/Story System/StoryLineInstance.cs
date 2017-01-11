@@ -401,15 +401,68 @@ public class StoryLineInstance : MonoBehaviour
         GameObject.FindGameObjectWithTag("GameController").GetComponent<QuestsManager>().AddToRepository(this.CurrentStoryLine);
     }
     */
-    public void Initialization()
+
+    public event_joy_pc activateStoryInputRequest;
+
+    private GameObject player;
+
+    private void Awake()
     {
-        Debug.Log("Here");
-        this.CheckSlGenTriggerConditions();
+
+        player = GameObject.FindGameObjectWithTag("Player");
+
+        EnvInputs envTempLink = player.GetComponent<EnvInputs>();
+
+        envTempLink.storyActivationRequest.AddListener(InitializationByTrigger);
+
     }
 
-    private void CheckSlGenTriggerConditions()
+    private void InitializationByTrigger(Collider trigger)
     {
+        Debug.Log(trigger.name);
+
+        SingleStory storyToFind = new SingleStory(); 
+
+        foreach(var story in CurrentStoryLine.Stories)
+        {
+            if ((story.GenAccessCond.STriggerRef == trigger || story.GenAccessCond.TriggerRef == trigger) && story.Active)
+            {
+                storyToFind = story;
+                break;
+            }
+        }
+        if (storyToFind != null)
+        {
+            Debug.Log(storyToFind.StoryName);
+            CheckStoryLivingConditions(storyToFind);
+
+        }
+        else
+            Debug.Log("No Story is accessible through this Trigger " + trigger.name);
     }
 
-   
+    
+
+    private void CheckStoryLivingConditions(SingleStory storyToEvaluate)
+    {
+        if (storyToEvaluate.Completed) return;
+        if (storyToEvaluate.ItemAccessCondition.Count == 0) return;
+
+        foreach(var item in storyToEvaluate.ItemAccessCondition)
+        {
+            // control logic achievement system based
+        }
+
+        if (storyToEvaluate.GenAccessCond.PlayerInputJoy != buttonsJoy.none && storyToEvaluate.GenAccessCond.PlayerInputPc != buttonsPc.none)
+        {
+            activateStoryInputRequest.Invoke(storyToEvaluate.GenAccessCond.PlayerInputJoy, storyToEvaluate.GenAccessCond.PlayerInputPc);
+        }
+        else
+            LivingStory(storyToEvaluate);
+    }
+
+    private void LivingStory(SingleStory storyToLive)
+    {
+        Debug.Log("Living Story Started for the story " + storyToLive.StoryName);
+    }
 }

@@ -110,7 +110,16 @@ public class event_Gb : UnityEvent<GameObject>
 [System.Serializable]
 public class event_int_int : UnityEvent<int, int>
 {
+}
 
+[System.Serializable]
+public class event_collider : UnityEvent<Collider>
+{
+}
+
+[System.Serializable]
+public class event_joy_pc : UnityEvent<buttonsJoy, buttonsPc>
+{
 }
 #endregion
 
