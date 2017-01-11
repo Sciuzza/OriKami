@@ -122,7 +122,11 @@ public class FSMChecker : MonoBehaviour
     #endregion
 
     #region Private Variables
+<<<<<<< HEAD
     private PlayerInputs playerTemp;
+=======
+    
+>>>>>>> Riki_Hub_Coglione
     [System.Serializable]
     public struct playerCState
     {
@@ -1605,8 +1609,13 @@ public class FSMChecker : MonoBehaviour
         if (deathZone.gameObject.tag == "Death")
         {
             Debug.Log("Morto");
+<<<<<<< HEAD
             //save.LoadState();
             // deathRequest.Invoke();
+=======
+          
+            deathRequest.Invoke();
+>>>>>>> Riki_Hub_Coglione
 
         }
 
