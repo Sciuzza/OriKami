@@ -208,8 +208,8 @@ public class FSMChecker : MonoBehaviour
 
         fsmExeTempLink.vFissureAniEnded.AddListener(VFissureAniEndEffects);
 
-
-
+        //StoryLineInstance slTempLink ? GameObject.FindGameObjectWithTag("StoryLine").GetComponent<StoryLineInstance>() : null;
+       
     }
 
     void Start()
@@ -1541,7 +1541,6 @@ public class FSMChecker : MonoBehaviour
             StartCoroutine(Drowning());
         }
 
-
         #region Cheat Code 
 
         if (Input.GetKeyDown(KeyCode.Y))
@@ -1566,6 +1565,7 @@ public class FSMChecker : MonoBehaviour
         }
 
         #endregion
+
         #region SoundForms
         if (cPlayerState.currentForm == "Dragon Form" && cPlayerState.currentPhState == physicStates.onAir && !isGlidingSound)
         {       

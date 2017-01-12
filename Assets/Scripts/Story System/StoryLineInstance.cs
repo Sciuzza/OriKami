@@ -5,7 +5,12 @@ using UnityEditor;
 using UnityEditorInternal;
 
 using UnityEngine;
+using System;
 
+
+using System.Collections;
+
+using UnityEngine.Events;
 
 #region Enum Types
 
@@ -362,9 +367,9 @@ public class SingleStory
     //public static List<StoryEvent> Events1;
 
     //[System.Serializable]
-   // public ReorderableList reorderableList = new ReorderableList(Events1, (typeof(StoryEvent)),true, true, true, true);
+    // public ReorderableList reorderableList = new ReorderableList(Events1, (typeof(StoryEvent)),true, true, true, true);
 
- 
+
 }
 
 [System.Serializable]
@@ -399,12 +404,14 @@ public class StoryLineInstance : MonoBehaviour
     #endregion
 
     #region Events
-    public event_joy_pc activateStoryInputRequest; 
+    public event_joy_pc activateStoryInputRequest;
+    public event_string formUnlockRequest;
     #endregion
 
     #region Private Variables
     private GameObject player;
     private SingleStory storySelected;
+    private int eventIndex = 0;
     #endregion
 
     #region Taking References and Linking Events
@@ -419,7 +426,7 @@ public class StoryLineInstance : MonoBehaviour
 
         PlayerInputs plTempLink = player.GetComponent<PlayerInputs>();
 
-        plTempLink.storyLivingRequest.AddListener(LivingStory);
+        plTempLink.storyLivingRequest.AddListener(StartingStoryEventByInput);
 
     }
     #endregion
@@ -461,29 +468,139 @@ public class StoryLineInstance : MonoBehaviour
     private void CheckStoryLivingConditions()
     {
         if (storySelected.Completed) return;
-        if (storySelected.ItemAccessCondition.Count == 0) return;
+        
 
         foreach (var item in storySelected.ItemAccessCondition)
         {
             // control logic achievement system based
         }
 
-        if (storySelected.GenAccessCond.PlayerInputJoy != buttonsJoy.none && storySelected.GenAccessCond.PlayerInputPc != buttonsPc.none)
-        {
+        if (IsNeededInput(storySelected.GenAccessCond.PlayerInputJoy, storySelected.GenAccessCond.PlayerInputPc))
             activateStoryInputRequest.Invoke(storySelected.GenAccessCond.PlayerInputJoy, storySelected.GenAccessCond.PlayerInputPc);
-        }
-        else
-            LivingStory();
-    } 
-    #endregion
 
-    //Start the Story
-    private void LivingStory()
-    {
-        Debug.Log("Living Story Started for the story " + storySelected.StoryName);
+        else if (IsNeededInput(storySelected.Events[0].PlayerInputJoy, storySelected.Events[0].PlayerInputPc))
+            activateStoryInputRequest.Invoke(storySelected.Events[0].PlayerInputJoy, storySelected.Events[0].PlayerInputPc);
+
+        else
+            LivingStoryEvent(eventIndex);
     }
 
 
+    #endregion
+
+    private void StartingStoryEventByInput()
+    {
+        LivingStoryEvent(eventIndex);
+    }
+
+    //Start the Story
+    private void LivingStoryEvent(int eventIndex)
+    {
+        Debug.Log("Living Story Started for the story " + storySelected.StoryName);
+
+        PlayerEffectsHandler();
+
+      
+       
+    }
+
+    private bool IsNeededInput(buttonsJoy joyInput, buttonsPc pcInput)
+    {
+        if (joyInput != buttonsJoy.none && pcInput != buttonsPc.none)
+            return true;
+        else
+            return false;
+    }
+
+    private void PlayerEffectsHandler()
+    {
+        PlayerEffect plaEffectsToEvaluate = storySelected.Events[eventIndex].Effects.PlaEffect;
+
+        if (plaEffectsToEvaluate.PlayerRepositionEffect.GbRef != null)
+        {
+            PlayPlayerRepoEffect(plaEffectsToEvaluate.PlayerRepositionEffect);
+
+            if (plaEffectsToEvaluate.PlayerReward.FormName != " ")
+                PlayPlayerRewardEffect(plaEffectsToEvaluate.PlayerReward);
+        }
+        else if (plaEffectsToEvaluate.PlayerMoveEffect.GbRef != null)
+        {
+            PlayPlayerMoveEffect(plaEffectsToEvaluate.PlayerMoveEffect);
+
+            if (plaEffectsToEvaluate.PlayerReward.FormName != " ")
+                PlayPlayerRewardEffect(plaEffectsToEvaluate.PlayerReward);
+        }
+        else if (plaEffectsToEvaluate.PlayerSeeEffect.GbRef != null)
+        {
+            PlayPlayerSeeEffect(plaEffectsToEvaluate.PlayerSeeEffect);
+
+            if (plaEffectsToEvaluate.PlayerReward.FormName != " ")
+                PlayPlayerRewardEffect(plaEffectsToEvaluate.PlayerReward);
+        }
+        else if (plaEffectsToEvaluate.PushingBackPower != 0)
+        {
+            PlayPlayerPushingBackEffect(plaEffectsToEvaluate.PushingBackPower);
+
+            if (plaEffectsToEvaluate.PlayerReward.FormName != " ")
+                PlayPlayerRewardEffect(plaEffectsToEvaluate.PlayerReward);
+        }
+        else
+        {
+            if (plaEffectsToEvaluate.PlayerReward.FormName != " ")
+                PlayPlayerRewardEffect(plaEffectsToEvaluate.PlayerReward);
+        }
+    }
+
+    private void PlayPlayerRepoEffect(PlayerReposition effectToPlay)
+    {
+        player.GetComponent<CharacterController>().enabled = false;
+        player.transform.position = effectToPlay.GbRef.transform.position;
+        player.GetComponent<CharacterController>().enabled = true;
+    }
+
+    private void PlayPlayerMoveEffect(PlayerMove effectToPlay)
+    {
+        player.GetComponent<CharacterController>().enabled = false;
+        StartCoroutine(MovingObject(player, effectToPlay.GbRef, effectToPlay.LerpSpeed));
+    }
+
+
+    private void PlayPlayerRewardEffect(PlayerReward effectToPlay)
+    {
+        formUnlockRequest.Invoke(effectToPlay.FormName);
+    }
+
+    private void PlayPlayerSeeEffect(PlayerSee effectToPlay)
+    {
+
+    }
+
+    private void PlayPlayerPushingBackEffect(float pushingBackPower)
+    {
+
+    }
+
+    private IEnumerator MovingObject(GameObject objToMove, GameObject whereToMove, float lerpSpeed)
+    {
+        var targetRotation = whereToMove.transform.rotation;
+        var targetPosition = whereToMove.transform.position;
+
+        var posReached = false;
+
+        while (!posReached)
+        {
+            objToMove.transform.position = Vector3.Lerp(objToMove.transform.position, targetPosition, lerpSpeed * Time.deltaTime);
+            objToMove.transform.rotation = Quaternion.Slerp(objToMove.transform.rotation, targetRotation, lerpSpeed * Time.deltaTime);
+
+            if (Quaternion.Angle(objToMove.transform.rotation, targetRotation) < 0.1f
+                && ((objToMove.transform.position - targetPosition).sqrMagnitude < 0.1f)) posReached = true;
+
+            yield return null;
+        }
+
+        if(objToMove.CompareTag("Player"))
+            player.GetComponent<CharacterController>().enabled = true;
+    } 
 
 
     /*
