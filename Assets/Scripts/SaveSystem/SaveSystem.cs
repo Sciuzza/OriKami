@@ -8,9 +8,19 @@ using System.Collections.Generic;
 
 public class SaveSystem : MonoBehaviour
 {
-
     public Transform Player;
-    
+
+    void Awake()
+    {
+        GameController gcTempLink = this.GetComponent<GameController>();
+        gcTempLink.gpInitializer.AddListener(GameplayInitialization);
+    }
+
+    private void GameplayInitialization(GameObject player)
+    {
+        FSMChecker fsmCheckerTempLink = player.GetComponent<FSMChecker>();
+        fsmCheckerTempLink.deathRequest.AddListener(LoadState);
+    }
 
 
     public void SaveState()
@@ -42,13 +52,11 @@ public class SaveSystem : MonoBehaviour
             PlayerData data = (PlayerData)bf.Deserialize(file);
             file.Close();
 
-            Player.transform.position = new Vector3 (data.posx, data.posy, data.posz);
+            Player.transform.position = new Vector3(data.posx, data.posy, data.posz);
             Player.transform.rotation = Quaternion.Euler(data.rotx, data.roty, data.rotz);
         }
 
     }
-
-   
 }
 
 [Serializable]
