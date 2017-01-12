@@ -394,18 +394,20 @@ public class StoryLine
 public class StoryLineInstance : MonoBehaviour
 {
 
+    #region Public Variables
     public StoryLine CurrentStoryLine;
-    /*
-    public void OnValidate()
-    {
-        GameObject.FindGameObjectWithTag("GameController").GetComponent<QuestsManager>().AddToRepository(this.CurrentStoryLine);
-    }
-    */
+    #endregion
 
-    public event_joy_pc activateStoryInputRequest;
+    #region Events
+    public event_joy_pc activateStoryInputRequest; 
+    #endregion
 
+    #region Private Variables
     private GameObject player;
+    private SingleStory storySelected;
+    #endregion
 
+    #region Taking References and Linking Events
     private void Awake()
     {
 
@@ -415,54 +417,79 @@ public class StoryLineInstance : MonoBehaviour
 
         envTempLink.storyActivationRequest.AddListener(InitializationByTrigger);
 
-    }
+        PlayerInputs plTempLink = player.GetComponent<PlayerInputs>();
 
+        plTempLink.storyLivingRequest.AddListener(LivingStory);
+
+    }
+    #endregion
+
+    #region Story Check Access Condition Methods
+    // Check Completed , Active and Relation Conditions
     private void InitializationByTrigger(Collider trigger)
     {
         Debug.Log(trigger.name);
 
-        SingleStory storyToFind = new SingleStory(); 
+        if (storySelected != null)
+            storySelected = null;
 
-        foreach(var story in CurrentStoryLine.Stories)
+        if (CurrentStoryLine.Completed)
+        {
+            Debug.Log("Storyline already Completed");
+            return;
+        }
+
+        foreach (var story in CurrentStoryLine.Stories)
         {
             if ((story.GenAccessCond.STriggerRef == trigger || story.GenAccessCond.TriggerRef == trigger) && story.Active)
             {
-                storyToFind = story;
+                storySelected = story;
                 break;
             }
         }
-        if (storyToFind != null)
+        if (storySelected != null)
         {
-            Debug.Log(storyToFind.StoryName);
-            CheckStoryLivingConditions(storyToFind);
+            Debug.Log(storySelected.StoryName);
+            CheckStoryLivingConditions();
 
         }
         else
             Debug.Log("No Story is accessible through this Trigger " + trigger.name);
     }
 
-    
-
-    private void CheckStoryLivingConditions(SingleStory storyToEvaluate)
+    // Check all the other Access conditions
+    private void CheckStoryLivingConditions()
     {
-        if (storyToEvaluate.Completed) return;
-        if (storyToEvaluate.ItemAccessCondition.Count == 0) return;
+        if (storySelected.Completed) return;
+        if (storySelected.ItemAccessCondition.Count == 0) return;
 
-        foreach(var item in storyToEvaluate.ItemAccessCondition)
+        foreach (var item in storySelected.ItemAccessCondition)
         {
             // control logic achievement system based
         }
 
-        if (storyToEvaluate.GenAccessCond.PlayerInputJoy != buttonsJoy.none && storyToEvaluate.GenAccessCond.PlayerInputPc != buttonsPc.none)
+        if (storySelected.GenAccessCond.PlayerInputJoy != buttonsJoy.none && storySelected.GenAccessCond.PlayerInputPc != buttonsPc.none)
         {
-            activateStoryInputRequest.Invoke(storyToEvaluate.GenAccessCond.PlayerInputJoy, storyToEvaluate.GenAccessCond.PlayerInputPc);
+            activateStoryInputRequest.Invoke(storySelected.GenAccessCond.PlayerInputJoy, storySelected.GenAccessCond.PlayerInputPc);
         }
         else
-            LivingStory(storyToEvaluate);
+            LivingStory();
+    } 
+    #endregion
+
+    //Start the Story
+    private void LivingStory()
+    {
+        Debug.Log("Living Story Started for the story " + storySelected.StoryName);
     }
 
-    private void LivingStory(SingleStory storyToLive)
-    {
-        Debug.Log("Living Story Started for the story " + storyToLive.StoryName);
-    }
+
+
+
+    /*
+   public void OnValidate()
+   {
+       GameObject.FindGameObjectWithTag("GameController").GetComponent<QuestsManager>().AddToRepository(this.CurrentStoryLine);
+   }
+   */
 }
