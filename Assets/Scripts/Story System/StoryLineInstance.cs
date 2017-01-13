@@ -1,20 +1,10 @@
-﻿using System.Collections.Generic;
-
-using UnityEditor;
-
-using UnityEditorInternal;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 
 using UnityEngine;
-using System;
-
-
-using System.Collections;
-
-using UnityEngine.Events;
 
 #region Enum Types
-
-
 
 public enum Stories
 {
@@ -69,519 +59,574 @@ public enum ItemType
     Item3
 }
 
-#endregion
+#endregion Enum Types
 
 #region Effect Classes
 
 #region Player Effect Classes
 
-[System.Serializable]
+[Serializable]
 public class PlayerEffect
 {
+    public PlayerMove PlayerMoveEffect;
 
     public PlayerReposition PlayerRepositionEffect;
-
-    public PlayerMove PlayerMoveEffect;
 
     public PlayerReward PlayerReward;
 
     public PlayerSee PlayerSeeEffect;
 
-    public float PushingBackPower;
+    public PlayerPushBack PushingBackEffect;
 }
 
-[System.Serializable]
+[Serializable]
 public class PlayerReposition
 {
+    public bool End;
+
     public GameObject GbRef;
 }
 
-[System.Serializable]
+[Serializable]
 public class PlayerMove
 {
+    public bool End;
+
     public GameObject GbRef;
 
     public float LerpSpeed;
 }
 
-[System.Serializable]
+[Serializable]
 public class PlayerSee
 {
+    public bool End;
+
     [Tooltip("Standard Form, Frog Form, Armadillo Form, Dragon Form, Dolphin Form")]
     public GameObject GbRef;
 
     public float LerpSpeed;
-
 }
 
-[System.Serializable]
+[Serializable]
 public class PlayerReward
 {
+    public bool End;
+
     [Tooltip("Standard Form, Frog Form, Armadillo Form, Dragon Form, Dolphin Form")]
     public string FormName;
+}
 
+[Serializable]
+public class PlayerPushBack
+{
+    public bool End;
+
+    public float PushingBackPower;
+
+    public float LerpSpeed;
 }
 
 #endregion Player Effect Classes
 
 #region Camera Effect Classes
 
-[System.Serializable]
+[Serializable]
 public class CameraEffect
 {
-    public CameraMove CameraMoveEffect;
-    public CameraShake CameraShakeEffect;
     public float BtpLerpSpeed;
+
     public float BtsLerpSpeed;
+
+    public CameraMove CameraMoveEffect;
+
+    public CameraShake CameraShakeEffect;
 }
 
-[System.Serializable]
+[Serializable]
 public class CameraMove
 {
     public GameObject GbRef;
+
     public float LerpSpeed;
 }
 
-[System.Serializable]
+[Serializable]
 public class CameraShake
 {
-    public float ShakingPower;
     public float ShakingDuration;
+
+    public float ShakingPower;
 }
-#endregion Player Effect Classes
+
+#endregion Camera Effect Classes
 
 #region Environment Npc Effects
 
-[System.Serializable]
+[Serializable]
 public class EnvironmentEffect
 {
-    public ObjectActivation ObjActiEffect;
     public Baloon BaloonEffect;
+
+    public ObjectActivation ObjActiEffect;
+
     public ObjectDeActivation ObjDeActiEffect;
+
     public ObjectMoving ObjMovEffect;
 }
 
-[System.Serializable]
+[Serializable]
 public class ObjectActivation
 {
     public GameObject GbRef;
-    public bool Timed;
+
     public float Time;
+
+    public bool Timed;
 }
 
-[System.Serializable]
+[Serializable]
 public class Baloon
 {
-    public GameObject GbRefRikiLogic;
     public float BaloonSpeed;
-    public int StartLine;
+
     public int EndLine;
+
+    public GameObject GbRefRikiLogic;
+
+    public int StartLine;
 }
 
-[System.Serializable]
+[Serializable]
 public class ObjectDeActivation
 {
     public GameObject GbRef;
-    public bool Timed;
+
     public float Time;
+
+    public bool Timed;
 }
 
-[System.Serializable]
+[Serializable]
 public class ObjectMoving
 {
     public GameObject GbTarget;
+
     public GameObject GbToMove;
+
     public float LerpSpeed;
 }
 
-#endregion
+#endregion Environment Npc Effects
 
 #region Ui Effect
-[System.Serializable]
+
+[Serializable]
 public class UiEffect
 {
     public UiObjectActivation ObjActiEffect;
-    public UiDialogue UiDialogueEffect;
+
     public UiObjectDeActivation ObjDeActiEffect;
+
     public UiObjectMoving ObjMovEffect;
+
+    public UiDialogue UiDialogueEffect;
 }
 
-[System.Serializable]
+[Serializable]
 public class UiObjectActivation
 {
-    public GameObject GbRef;
-    public bool Timed;
-    public float Time;
     public float FadingTime;
 
+    public GameObject GbRef;
+
+    public float Time;
+
+    public bool Timed;
 }
 
-[System.Serializable]
+[Serializable]
 public class UiDialogue
 {
-    public TextAsset DialogueRef;
     public List<DialogueStructDebug> DialogueDebug;
+
+    public TextAsset DialogueRef;
 }
 
-[System.Serializable]
+[Serializable]
 public class DialogueStructDebug
 {
-    public string WhoIsTalking;
     public string LabelPos;
+
     public string WhatIsSaying;
+
+    public string WhoIsTalking;
 }
-[System.Serializable]
+
+[Serializable]
 public class UiObjectDeActivation
 {
     public GameObject GbRef;
-    public bool Timed;
+
     public float Time;
+
+    public bool Timed;
 }
 
-[System.Serializable]
+[Serializable]
 public class UiObjectMoving
 {
     public GameObject GbTarget;
+
     public GameObject GbToMove;
+
     public float LerpSpeed;
 }
 
-#endregion
+#endregion Ui Effect
 
 #region Sound Effect
-[System.Serializable]
+
+[Serializable]
 public class SoundEffect
 {
-    public PersistentSound PerSoundEffect;
     public NormalSound NormSoundEffect;
+
+    public PersistentSound PerSoundEffect;
 }
 
-[System.Serializable]
+[Serializable]
 public class PersistentSound
 {
     public bool Active;
+
     public int SoundCategory;
+
     public int SoundIndex;
 }
 
-[System.Serializable]
+[Serializable]
 public class NormalSound
 {
     public GameObject GbRef;
+
     public int SoundIndex;
 }
-#endregion
+
+#endregion Sound Effect
 
 #region Animation Effect
-[System.Serializable]
+
+[Serializable]
 public class AnimationEffect
 {
-    public GameObject GbRef;
     public int AnimationIndex;
+
+    public GameObject GbRef;
 }
 
-#endregion
+#endregion Animation Effect
 
 #region Movie Effect
 
-[System.Serializable]
+[Serializable]
 public class MovieEffect
 {
     public Movies MovieName;
 }
-#endregion
 
+#endregion Movie Effect
 
-[System.Serializable]
+[Serializable]
 public class EvEffects
 {
-    public PlayerEffect PlaEffect;
-    public CameraEffect CamEffect;
-    public List<EnvironmentEffect> EnvEffect;
-    public List<UiEffect> UiEffect;
-    public List<SoundEffect> SoundEffect;
     public List<AnimationEffect> AniEffect;
+
+    public CameraEffect CamEffect;
+
+    public List<EnvironmentEffect> EnvEffect;
+
     public MovieEffect MovieEffect;
+
+    public PlayerEffect PlaEffect;
+
+    public List<SoundEffect> SoundEffect;
+
+    public List<UiEffect> UiEffect;
 }
-#endregion
+
+#endregion Effect Classes
 
 #region Sub Story and Storyline Classes
 
-[System.Serializable]
+[Serializable]
 public class GenTriggerConditions
 {
-    public BoxCollider TriggerRef;
-    public SphereCollider STriggerRef;
     public buttonsJoy PlayerInputJoy;
+
     public buttonsPc PlayerInputPc;
+
+    public SphereCollider STriggerRef;
+
+    public BoxCollider TriggerRef;
 }
 
-[System.Serializable]
+[Serializable]
 public class ItemDependencies
 {
     public ItemType ItemDep;
+
     public int ItemValue;
 }
 
-#endregion
+#endregion Sub Story and Storyline Classes
 
 #region Story Element
 
-[System.Serializable]
+[Serializable]
 public class StoryEvent
 {
-    public string EventName;
-    public Events EventEnumName;
-    public buttonsJoy PlayerInputJoy;
-    public buttonsPc PlayerInputPc;
+    public EvEffects Effects;
 
     public float EventEndDelay;
 
-    public EvEffects Effects;
+    public Events EventEnumName;
+
+    public string EventName;
+
+    public buttonsJoy PlayerInputJoy;
+
+    public buttonsPc PlayerInputPc;
 }
 
-[System.Serializable]
+[Serializable]
 public class SingleStory
 {
-    public string StoryName;
-    public Stories StoryEnumName;
-    public bool Completed;
     public bool Active;
+
     public bool AutoComplete;
 
+    public bool Completed;
+
+    public List<StoryEvent> Events;
+
     public GenTriggerConditions GenAccessCond;
+
     public List<ItemDependencies> ItemAccessCondition;
 
     public controlStates PlayerControlEffect;
 
-    public List<Storylines> StoryLineCompleteOnActivation;
-    public List<Stories> StoryCompleteOnActivation;
     public List<Stories> StoryActiveOnActivation;
 
-    public List<Storylines> StoryLineCompleteOnCompletion;
-    public List<Stories> StoryCompleteOnCompletion;
     public List<Stories> StoryActiveOnCompletion;
 
-    public List<StoryEvent> Events;
+    public List<Stories> StoryCompleteOnActivation;
 
-    //public static List<StoryEvent> Events1;
+    public List<Stories> StoryCompleteOnCompletion;
 
-    //[System.Serializable]
+    public Stories StoryEnumName;
+
+    public List<Storylines> StoryLineCompleteOnActivation;
+
+    public List<Storylines> StoryLineCompleteOnCompletion;
+
+    public string StoryName;
+
     // public ReorderableList reorderableList = new ReorderableList(Events1, (typeof(StoryEvent)),true, true, true, true);
 
+    // [System.Serializable]
 
+    // public static List<StoryEvent> Events1;
 }
 
-[System.Serializable]
+[Serializable]
 public class StoryLine
 {
-    public string StoryLineName;
-    public Storylines StoryEnumName;
     public bool Completed;
 
+    // public SingleStory[] Stories;
+    public List<SingleStory> Stories;
 
-    public List<Storylines> StoryLineCompleteOnCompletion;
-    public List<Stories> StoryCompleteOnCompletion;
     public List<Stories> StoryActiveOnCompletion;
 
+    public List<Stories> StoryCompleteOnCompletion;
 
+    public Storylines StoryEnumName;
 
+    public List<Storylines> StoryLineCompleteOnCompletion;
 
-
-    // public SingleStory[] Stories;
-
-    public List<SingleStory> Stories;
+    public string StoryLineName;
 }
 
-#endregion
-
+#endregion Story Element
 
 public class StoryLineInstance : MonoBehaviour
 {
 
-    #region Public Variables
     public StoryLine CurrentStoryLine;
-    #endregion
 
     #region Events
-    public event_joy_pc activateStoryInputRequest;
-    public event_string formUnlockRequest;
+    public event_joy_pc ActivateStoryInputRequest;
+
+    public event_string FormUnlockRequest; 
     #endregion
 
     #region Private Variables
-    private GameObject player;
-    private SingleStory storySelected;
     private int eventIndex = 0;
+
+    private GameObject player;
+
+    private SingleStory storySelected; 
     #endregion
 
     #region Taking References and Linking Events
     private void Awake()
     {
+        this.player = GameObject.FindGameObjectWithTag("Player");
 
-        player = GameObject.FindGameObjectWithTag("Player");
+        var envTempLink = this.player.GetComponent<EnvInputs>();
 
-        EnvInputs envTempLink = player.GetComponent<EnvInputs>();
+        envTempLink.storyActivationRequest.AddListener(this.InitializationByTrigger);
 
-        envTempLink.storyActivationRequest.AddListener(InitializationByTrigger);
+        var plTempLink = this.player.GetComponent<PlayerInputs>();
 
-        PlayerInputs plTempLink = player.GetComponent<PlayerInputs>();
-
-        plTempLink.storyLivingRequest.AddListener(StartingStoryEventByInput);
-
-    }
+        plTempLink.storyLivingRequest.AddListener(this.LivingStoryEvent);
+    } 
     #endregion
 
-    #region Story Check Access Condition Methods
+    #region Check Initial Conditions Methods
+    // Check all the other Access conditions
+    private void CheckStoryLivingConditions()
+    {
+        if (this.storySelected.Completed) return;
+
+        foreach (var item in this.storySelected.ItemAccessCondition)
+        {
+            // control logic achievement system based
+        }
+
+        if (this.IsNeededInput(
+            this.storySelected.GenAccessCond.PlayerInputJoy,
+            this.storySelected.GenAccessCond.PlayerInputPc))
+            this.ActivateStoryInputRequest.Invoke(
+                this.storySelected.GenAccessCond.PlayerInputJoy,
+                this.storySelected.GenAccessCond.PlayerInputPc);
+        else if (this.IsNeededInput(this.storySelected.Events[0].PlayerInputJoy, this.storySelected.Events[0].PlayerInputPc))
+            this.ActivateStoryInputRequest.Invoke(
+                this.storySelected.Events[0].PlayerInputJoy,
+                this.storySelected.Events[0].PlayerInputPc);
+        else this.LivingStoryEvent();
+    }
+
     // Check Completed , Active and Relation Conditions
     private void InitializationByTrigger(Collider trigger)
     {
         Debug.Log(trigger.name);
 
-        if (storySelected != null)
-            storySelected = null;
-
-        if (CurrentStoryLine.Completed)
+        if (this.CurrentStoryLine.Completed)
         {
             Debug.Log("Storyline already Completed");
             return;
         }
 
-        foreach (var story in CurrentStoryLine.Stories)
+        foreach (var story in this.CurrentStoryLine.Stories)
         {
-            if ((story.GenAccessCond.STriggerRef == trigger || story.GenAccessCond.TriggerRef == trigger) && story.Active)
-            {
-                storySelected = story;
-                break;
-            }
-        }
-        if (storySelected != null)
-        {
-            Debug.Log(storySelected.StoryName);
-            CheckStoryLivingConditions();
-
-        }
-        else
-            Debug.Log("No Story is accessible through this Trigger " + trigger.name);
-    }
-
-    // Check all the other Access conditions
-    private void CheckStoryLivingConditions()
-    {
-        if (storySelected.Completed) return;
-        
-
-        foreach (var item in storySelected.ItemAccessCondition)
-        {
-            // control logic achievement system based
+            if ((story.GenAccessCond.STriggerRef != trigger && story.GenAccessCond.TriggerRef != trigger)
+                || !story.Active) continue;
+            this.storySelected = story;
+            break;
         }
 
-        if (IsNeededInput(storySelected.GenAccessCond.PlayerInputJoy, storySelected.GenAccessCond.PlayerInputPc))
-            activateStoryInputRequest.Invoke(storySelected.GenAccessCond.PlayerInputJoy, storySelected.GenAccessCond.PlayerInputPc);
-
-        else if (IsNeededInput(storySelected.Events[0].PlayerInputJoy, storySelected.Events[0].PlayerInputPc))
-            activateStoryInputRequest.Invoke(storySelected.Events[0].PlayerInputJoy, storySelected.Events[0].PlayerInputPc);
-
-        else
-            LivingStoryEvent(eventIndex);
-    }
-
-
-    #endregion
-
-    private void StartingStoryEventByInput()
-    {
-        LivingStoryEvent(eventIndex);
-    }
-
-    //Start the Story
-    private void LivingStoryEvent(int eventIndex)
-    {
-        Debug.Log("Living Story Started for the story " + storySelected.StoryName);
-
-        PlayerEffectsHandler();
-
-      
-       
+        if (this.storySelected != null)
+        {
+            Debug.Log(this.storySelected.StoryName);
+            this.CheckStoryLivingConditions();
+        }
+        else Debug.Log("No Story is accessible through this Trigger " + trigger.name);
     }
 
     private bool IsNeededInput(buttonsJoy joyInput, buttonsPc pcInput)
     {
-        if (joyInput != buttonsJoy.none && pcInput != buttonsPc.none)
-            return true;
-        else
-            return false;
-    }
+        return joyInput != buttonsJoy.none && pcInput != buttonsPc.none;
+    } 
 
+    // Start the Story
+    private void LivingStoryEvent()
+    {
+        Debug.Log("Living Story Started for the story " + this.storySelected.StoryName);
+
+        this.PlayerEffectsHandler();
+    }
+    #endregion
+
+    #region Player Effects Methods
     private void PlayerEffectsHandler()
     {
-        PlayerEffect plaEffectsToEvaluate = storySelected.Events[eventIndex].Effects.PlaEffect;
+        var plaEffectsToEvaluate = this.storySelected.Events[this.eventIndex].Effects.PlaEffect;
 
         if (plaEffectsToEvaluate.PlayerRepositionEffect.GbRef != null)
         {
-            PlayPlayerRepoEffect(plaEffectsToEvaluate.PlayerRepositionEffect);
+            this.PlayPlayerRepoEffect(plaEffectsToEvaluate.PlayerRepositionEffect);
 
-            if (plaEffectsToEvaluate.PlayerReward.FormName != " ")
-                PlayPlayerRewardEffect(plaEffectsToEvaluate.PlayerReward);
+            if (plaEffectsToEvaluate.PlayerReward.FormName != " ") this.PlayPlayerRewardEffect(plaEffectsToEvaluate.PlayerReward);
         }
         else if (plaEffectsToEvaluate.PlayerMoveEffect.GbRef != null)
         {
-            PlayPlayerMoveEffect(plaEffectsToEvaluate.PlayerMoveEffect);
+            this.PlayPlayerMoveEffect(plaEffectsToEvaluate.PlayerMoveEffect);
 
-            if (plaEffectsToEvaluate.PlayerReward.FormName != " ")
-                PlayPlayerRewardEffect(plaEffectsToEvaluate.PlayerReward);
+            if (plaEffectsToEvaluate.PlayerReward.FormName != " ") this.PlayPlayerRewardEffect(plaEffectsToEvaluate.PlayerReward);
         }
         else if (plaEffectsToEvaluate.PlayerSeeEffect.GbRef != null)
         {
-            PlayPlayerSeeEffect(plaEffectsToEvaluate.PlayerSeeEffect);
+            this.PlayPlayerSeeEffect(plaEffectsToEvaluate.PlayerSeeEffect);
 
-            if (plaEffectsToEvaluate.PlayerReward.FormName != " ")
-                PlayPlayerRewardEffect(plaEffectsToEvaluate.PlayerReward);
+            if (plaEffectsToEvaluate.PlayerReward.FormName != " ") this.PlayPlayerRewardEffect(plaEffectsToEvaluate.PlayerReward);
         }
-        else if (plaEffectsToEvaluate.PushingBackPower != 0)
+        else if (plaEffectsToEvaluate.PushingBackEffect.PushingBackPower > 0)
         {
-            PlayPlayerPushingBackEffect(plaEffectsToEvaluate.PushingBackPower);
+            this.PlayPlayerPushingBackEffect(plaEffectsToEvaluate.PushingBackEffect);
 
-            if (plaEffectsToEvaluate.PlayerReward.FormName != " ")
-                PlayPlayerRewardEffect(plaEffectsToEvaluate.PlayerReward);
+            if (plaEffectsToEvaluate.PlayerReward.FormName != " ") this.PlayPlayerRewardEffect(plaEffectsToEvaluate.PlayerReward);
         }
         else
         {
-            if (plaEffectsToEvaluate.PlayerReward.FormName != " ")
-                PlayPlayerRewardEffect(plaEffectsToEvaluate.PlayerReward);
+            if (plaEffectsToEvaluate.PlayerReward.FormName != " ") this.PlayPlayerRewardEffect(plaEffectsToEvaluate.PlayerReward);
         }
     }
 
     private void PlayPlayerRepoEffect(PlayerReposition effectToPlay)
-    {
-        player.GetComponent<CharacterController>().enabled = false;
-        player.transform.position = effectToPlay.GbRef.transform.position;
-        player.GetComponent<CharacterController>().enabled = true;
+    { 
+        this.player.transform.position = effectToPlay.GbRef.transform.position;
+        effectToPlay.End = true;
     }
 
     private void PlayPlayerMoveEffect(PlayerMove effectToPlay)
     {
-        player.GetComponent<CharacterController>().enabled = false;
-        StartCoroutine(MovingObject(player, effectToPlay.GbRef, effectToPlay.LerpSpeed));
+        this.StartCoroutine(this.MovingPlayer(effectToPlay));
     }
-
 
     private void PlayPlayerRewardEffect(PlayerReward effectToPlay)
     {
-        formUnlockRequest.Invoke(effectToPlay.FormName);
+        this.FormUnlockRequest.Invoke(effectToPlay.FormName);
+        effectToPlay.End = true;
     }
 
     private void PlayPlayerSeeEffect(PlayerSee effectToPlay)
     {
-
+        this.StartCoroutine(this.RotatePlayer(effectToPlay));
     }
 
-    private void PlayPlayerPushingBackEffect(float pushingBackPower)
+    private void PlayPlayerPushingBackEffect(PlayerPushBack effectToPlay)
     {
-
+        this.StartCoroutine(this.PushBackPlayer(effectToPlay));
     }
 
-    private IEnumerator MovingObject(GameObject objToMove, GameObject whereToMove, float lerpSpeed)
+    private IEnumerator MovingPlayer(PlayerMove movingPlayerEffect)
     {
+        var whereToMove = movingPlayerEffect.GbRef;
+        var objToMove = this.player;
+        var lerpSpeed = movingPlayerEffect.LerpSpeed;
+
         var targetRotation = whereToMove.transform.rotation;
         var targetPosition = whereToMove.transform.position;
 
@@ -589,8 +634,14 @@ public class StoryLineInstance : MonoBehaviour
 
         while (!posReached)
         {
-            objToMove.transform.position = Vector3.Lerp(objToMove.transform.position, targetPosition, lerpSpeed * Time.deltaTime);
-            objToMove.transform.rotation = Quaternion.Slerp(objToMove.transform.rotation, targetRotation, lerpSpeed * Time.deltaTime);
+            objToMove.transform.position = Vector3.Lerp(
+                objToMove.transform.position,
+                targetPosition,
+                lerpSpeed * Time.deltaTime);
+            objToMove.transform.rotation = Quaternion.Slerp(
+                objToMove.transform.rotation,
+                targetRotation,
+                lerpSpeed * Time.deltaTime);
 
             if (Quaternion.Angle(objToMove.transform.rotation, targetRotation) < 0.1f
                 && ((objToMove.transform.position - targetPosition).sqrMagnitude < 0.1f)) posReached = true;
@@ -598,15 +649,72 @@ public class StoryLineInstance : MonoBehaviour
             yield return null;
         }
 
-        if(objToMove.CompareTag("Player"))
-            player.GetComponent<CharacterController>().enabled = true;
-    } 
+        movingPlayerEffect.End = true;
+    }
 
+    private IEnumerator PushBackPlayer(PlayerPushBack pushBackEffect)
+    {
+        var targetPosition = this.player.transform.position - (this.player.transform.forward * pushBackEffect.PushingBackPower);
+        var objToMove = this.player;
+       
+        var posReached = false;
 
+        while (!posReached)
+        {
+            objToMove.transform.position = Vector3.Lerp(
+                objToMove.transform.position,
+                targetPosition,
+                pushBackEffect.LerpSpeed * Time.deltaTime);
+           
+
+            if ((objToMove.transform.position - targetPosition).sqrMagnitude < 0.1f) posReached = true;
+
+            yield return null;
+        }
+
+        pushBackEffect.End = true;
+
+    }
+
+    private IEnumerator RotatePlayer(PlayerSee rotateEffect)
+    {
+        var objToMove = this.player;
+        var lerpSpeed = rotateEffect.LerpSpeed;
+
+        
+
+        var targetRotation = whereToMove.transform.rotation;
+        var targetPosition = whereToMove.transform.position;
+
+        var posReached = false;
+
+        while (!posReached)
+        {
+            objToMove.transform.position = Vector3.Lerp(
+                objToMove.transform.position,
+                targetPosition,
+                lerpSpeed * Time.deltaTime);
+            objToMove.transform.rotation = Quaternion.Slerp(
+                objToMove.transform.rotation,
+                targetRotation,
+                lerpSpeed * Time.deltaTime);
+
+            if (Quaternion.Angle(objToMove.transform.rotation, targetRotation) < 0.1f
+                && ((objToMove.transform.position - targetPosition).sqrMagnitude < 0.1f)) posReached = true;
+
+            yield return null;
+        }
+
+        movingPlayerEffect.End = true;
+    }
+    #endregion
+
+    #region Edit Mode Methods
     /*
-   public void OnValidate()
-   {
-       GameObject.FindGameObjectWithTag("GameController").GetComponent<QuestsManager>().AddToRepository(this.CurrentStoryLine);
-   }
-   */
+public void OnValidate()
+{
+GameObject.FindGameObjectWithTag("GameController").GetComponent<QuestsManager>().AddToRepository(this.CurrentStoryLine);
+}
+*/ 
+    #endregion
 }

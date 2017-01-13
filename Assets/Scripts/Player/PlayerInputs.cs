@@ -39,7 +39,7 @@ public class PlayerInputs : MonoBehaviour
 
         StoryLineInstance slTempLink = GameObject.FindGameObjectWithTag("StoryLine").GetComponent<StoryLineInstance>();
 
-        slTempLink.activateStoryInputRequest.AddListener(SettingStoryInputs);
+        slTempLink.ActivateStoryInputRequest.AddListener(SettingStoryInputs);
     }
     #endregion
 
