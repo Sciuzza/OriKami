@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-
 using UnityEngine;
+
+using Random = UnityEngine.Random;
 
 #region Enum Types
 
@@ -68,22 +69,17 @@ public enum ItemType
 [Serializable]
 public class PlayerEffect
 {
-    public PlayerMove PlayerMoveEffect;
-
     public PlayerReposition PlayerRepositionEffect;
-
-    public PlayerReward PlayerReward;
-
+    public PlayerMove PlayerMoveEffect;
     public PlayerSee PlayerSeeEffect;
-
     public PlayerPushBack PushingBackEffect;
+    public PlayerReward PlayerReward;
 }
 
 [Serializable]
 public class PlayerReposition
 {
     public bool End;
-
     public GameObject GbRef;
 }
 
@@ -91,9 +87,7 @@ public class PlayerReposition
 public class PlayerMove
 {
     public bool End;
-
     public GameObject GbRef;
-
     public float LerpSpeed;
 }
 
@@ -101,10 +95,16 @@ public class PlayerMove
 public class PlayerSee
 {
     public bool End;
-
     [Tooltip("Standard Form, Frog Form, Armadillo Form, Dragon Form, Dolphin Form")]
     public GameObject GbRef;
+    public float LerpSpeed;
+}
 
+[Serializable]
+public class PlayerPushBack
+{
+    public bool End;
+    public float PushingBackPower;
     public float LerpSpeed;
 }
 
@@ -112,20 +112,10 @@ public class PlayerSee
 public class PlayerReward
 {
     public bool End;
-
     [Tooltip("Standard Form, Frog Form, Armadillo Form, Dragon Form, Dolphin Form")]
     public string FormName;
 }
 
-[Serializable]
-public class PlayerPushBack
-{
-    public bool End;
-
-    public float PushingBackPower;
-
-    public float LerpSpeed;
-}
 
 #endregion Player Effect Classes
 
@@ -134,31 +124,42 @@ public class PlayerPushBack
 [Serializable]
 public class CameraEffect
 {
-    public float BtpLerpSpeed;
-
-    public float BtsLerpSpeed;
-
     public CameraMove CameraMoveEffect;
-
     public CameraShake CameraShakeEffect;
+    public CameraEventRevert CameraErEffect;
+    public CameraStoryRevert CameraSrEffect;
 }
 
 [Serializable]
 public class CameraMove
 {
+    public bool End;
     public GameObject GbRef;
-
     public float LerpSpeed;
 }
 
 [Serializable]
 public class CameraShake
 {
+    public bool End;
     public float ShakingDuration;
-
     public float ShakingPower;
 }
 
+[Serializable]
+public class CameraEventRevert
+{
+    public bool End;
+    public float ErLerpSpeed;
+}
+
+[Serializable]
+public class CameraStoryRevert
+{
+    public bool End;
+    public float SrLerpSpeed;
+
+}
 #endregion Camera Effect Classes
 
 #region Environment Npc Effects
@@ -340,19 +341,13 @@ public class MovieEffect
 [Serializable]
 public class EvEffects
 {
-    public List<AnimationEffect> AniEffect;
-
-    public CameraEffect CamEffect;
-
-    public List<EnvironmentEffect> EnvEffect;
-
-    public MovieEffect MovieEffect;
-
     public PlayerEffect PlaEffect;
-
-    public List<SoundEffect> SoundEffect;
-
+    public CameraEffect CamEffect;
+    public List<EnvironmentEffect> EnvEffect;
     public List<UiEffect> UiEffect;
+    public List<SoundEffect> SoundEffect;
+    public List<AnimationEffect> AniEffect;
+    public MovieEffect MovieEffect;
 }
 
 #endregion Effect Classes
@@ -386,35 +381,36 @@ public class ItemDependencies
 [Serializable]
 public class StoryEvent
 {
-    public EvEffects Effects;
-
-    public float EventEndDelay;
+    public string EventName;
 
     public Events EventEnumName;
-
-    public string EventName;
 
     public buttonsJoy PlayerInputJoy;
 
     public buttonsPc PlayerInputPc;
+
+    public float EventEndDelay;
+
+    public EvEffects Effects;
+
 }
 
 [Serializable]
 public class SingleStory
 {
+    public string StoryName;
+
+    public Stories StoryEnumName;
+
     public bool Active;
 
     public bool AutoComplete;
 
     public bool Completed;
 
-    public List<StoryEvent> Events;
-
     public GenTriggerConditions GenAccessCond;
 
     public List<ItemDependencies> ItemAccessCondition;
-
-    public controlStates PlayerControlEffect;
 
     public List<Stories> StoryActiveOnActivation;
 
@@ -424,13 +420,13 @@ public class SingleStory
 
     public List<Stories> StoryCompleteOnCompletion;
 
-    public Stories StoryEnumName;
-
     public List<Storylines> StoryLineCompleteOnActivation;
 
     public List<Storylines> StoryLineCompleteOnCompletion;
 
-    public string StoryName;
+    public controlStates PlayerControlEffect;
+
+    public List<StoryEvent> Events;
 
     // public ReorderableList reorderableList = new ReorderableList(Events1, (typeof(StoryEvent)),true, true, true, true);
 
@@ -442,20 +438,22 @@ public class SingleStory
 [Serializable]
 public class StoryLine
 {
+    public string StoryLineName;
+
+    public Storylines StoryEnumName;
+
     public bool Completed;
 
     // public SingleStory[] Stories;
-    public List<SingleStory> Stories;
 
     public List<Stories> StoryActiveOnCompletion;
 
     public List<Stories> StoryCompleteOnCompletion;
 
-    public Storylines StoryEnumName;
-
     public List<Storylines> StoryLineCompleteOnCompletion;
 
-    public string StoryLineName;
+    public List<SingleStory> Stories;
+
 }
 
 #endregion Story Element
@@ -468,15 +466,18 @@ public class StoryLineInstance : MonoBehaviour
     #region Events
     public event_joy_pc ActivateStoryInputRequest;
 
-    public event_string FormUnlockRequest; 
+    public event_string FormUnlockRequest;
+
+    public event_cs ChangeControlStateRequest;
     #endregion
 
     #region Private Variables
     private int eventIndex = 0;
-
     private GameObject player;
+    private SingleStory storySelected;
 
-    private SingleStory storySelected; 
+    private Vector3 camLastPos = new Vector3(0, 0, 0);
+    private Quaternion camLastRot = new Quaternion(0, 0, 0, 0);
     #endregion
 
     #region Taking References and Linking Events
@@ -491,7 +492,7 @@ public class StoryLineInstance : MonoBehaviour
         var plTempLink = this.player.GetComponent<PlayerInputs>();
 
         plTempLink.storyLivingRequest.AddListener(this.LivingStoryEvent);
-    } 
+    }
     #endregion
 
     #region Check Initial Conditions Methods
@@ -548,14 +549,19 @@ public class StoryLineInstance : MonoBehaviour
     private bool IsNeededInput(buttonsJoy joyInput, buttonsPc pcInput)
     {
         return joyInput != buttonsJoy.none && pcInput != buttonsPc.none;
-    } 
+    }
 
     // Start the Story
     private void LivingStoryEvent()
     {
         Debug.Log("Living Story Started for the story " + this.storySelected.StoryName);
 
+        this.camLastPos = Camera.main.transform.position;
+        this.camLastRot = Camera.main.transform.rotation;
+
+        this.ChangeControlStateRequest.Invoke(this.storySelected.PlayerControlEffect);
         this.PlayerEffectsHandler();
+        this.CameraEffectsHandler();
     }
     #endregion
 
@@ -595,7 +601,7 @@ public class StoryLineInstance : MonoBehaviour
     }
 
     private void PlayPlayerRepoEffect(PlayerReposition effectToPlay)
-    { 
+    {
         this.player.transform.position = effectToPlay.GbRef.transform.position;
         effectToPlay.End = true;
     }
@@ -643,8 +649,14 @@ public class StoryLineInstance : MonoBehaviour
                 targetRotation,
                 lerpSpeed * Time.deltaTime);
 
+
+            var targetPosYFixed = targetPosition;
+
+
+            targetPosYFixed.y = this.player.transform.position.y;
+
             if (Quaternion.Angle(objToMove.transform.rotation, targetRotation) < 0.1f
-                && ((objToMove.transform.position - targetPosition).sqrMagnitude < 0.1f)) posReached = true;
+                && ((objToMove.transform.position - targetPosYFixed).sqrMagnitude < 0.1f)) posReached = true;
 
             yield return null;
         }
@@ -656,7 +668,7 @@ public class StoryLineInstance : MonoBehaviour
     {
         var targetPosition = this.player.transform.position - (this.player.transform.forward * pushBackEffect.PushingBackPower);
         var objToMove = this.player;
-       
+
         var posReached = false;
 
         while (!posReached)
@@ -665,7 +677,7 @@ public class StoryLineInstance : MonoBehaviour
                 objToMove.transform.position,
                 targetPosition,
                 pushBackEffect.LerpSpeed * Time.deltaTime);
-           
+
 
             if ((objToMove.transform.position - targetPosition).sqrMagnitude < 0.1f) posReached = true;
 
@@ -681,7 +693,78 @@ public class StoryLineInstance : MonoBehaviour
         var objToMove = this.player;
         var lerpSpeed = rotateEffect.LerpSpeed;
 
-        
+        var tempObj = new GameObject("temp");
+        tempObj.transform.position = this.player.transform.position;
+        tempObj.transform.rotation = this.player.transform.rotation;
+
+        tempObj.transform.LookAt(rotateEffect.GbRef.transform);
+
+        var targetRotation = tempObj.transform.rotation;
+
+
+        var posReached = false;
+
+        while (!posReached)
+        {
+
+            objToMove.transform.rotation = Quaternion.Slerp(
+                objToMove.transform.rotation,
+                targetRotation,
+                lerpSpeed * Time.deltaTime);
+
+            if (Quaternion.Angle(objToMove.transform.rotation, targetRotation) < 0.1f) posReached = true;
+
+            yield return null;
+        }
+
+        rotateEffect.End = true;
+        DestroyObject(tempObj);
+    }
+    #endregion
+
+    #region Camera Effects Methods
+
+    private void CameraEffectsHandler()
+    {
+        var camEffectsToEvaluate = this.storySelected.Events[this.eventIndex].Effects.CamEffect;
+
+        if (camEffectsToEvaluate.CameraMoveEffect.GbRef != null)
+            this.PlayCameraMoveEffect(camEffectsToEvaluate.CameraMoveEffect);
+        else if (camEffectsToEvaluate.CameraShakeEffect.ShakingPower > 0)
+            this.PlayCameraShakeEffect(camEffectsToEvaluate.CameraShakeEffect);
+        else if (camEffectsToEvaluate.CameraErEffect.ErLerpSpeed > 0)
+            this.PlayCameraErEffect(camEffectsToEvaluate.CameraErEffect);
+        else if (camEffectsToEvaluate.CameraSrEffect.SrLerpSpeed > 0)
+            this.PlayCameraSrEffect(camEffectsToEvaluate.CameraSrEffect);
+
+
+    }
+
+    private void PlayCameraMoveEffect(CameraMove effectToPlay)
+    {
+        this.StartCoroutine(this.MovingStoryCamera(effectToPlay));
+    }
+
+    private void PlayCameraShakeEffect(CameraShake effectToPlay)
+    {
+        this.StartCoroutine(this.ShakingStoryCamera(effectToPlay));
+    }
+
+    private void PlayCameraErEffect(CameraEventRevert effectToPlay)
+    {
+
+    }
+
+    private void PlayCameraSrEffect(CameraStoryRevert effectToPlay)
+    {
+
+    }
+
+    private IEnumerator MovingStoryCamera(CameraMove movingCameraEffect)
+    {
+        var whereToMove = movingCameraEffect.GbRef;
+        var objToMove = Camera.main;
+        var lerpSpeed = movingCameraEffect.LerpSpeed;
 
         var targetRotation = whereToMove.transform.rotation;
         var targetPosition = whereToMove.transform.position;
@@ -699,13 +782,41 @@ public class StoryLineInstance : MonoBehaviour
                 targetRotation,
                 lerpSpeed * Time.deltaTime);
 
+
+            var targetPosYFixed = targetPosition;
+
+
+            targetPosYFixed.y = this.player.transform.position.y;
+
             if (Quaternion.Angle(objToMove.transform.rotation, targetRotation) < 0.1f
-                && ((objToMove.transform.position - targetPosition).sqrMagnitude < 0.1f)) posReached = true;
+                && ((objToMove.transform.position - targetPosYFixed).sqrMagnitude < 0.1f)) posReached = true;
 
             yield return null;
         }
 
-        movingPlayerEffect.End = true;
+        movingCameraEffect.End = true;
+    }
+
+    private IEnumerator ShakingStoryCamera(CameraShake shakingCameraEffect)
+    {
+
+        var timer = 0.0f;
+
+        while (shakingCameraEffect.ShakingDuration > timer)
+        {
+            var rotationAmount = Random.insideUnitSphere * shakingCameraEffect.ShakingPower;
+            rotationAmount.z = 0;
+
+
+            timer += Time.deltaTime;
+
+            Camera.main.transform.rotation = Quaternion.Lerp(Camera.main.transform.rotation, Camera.main.transform.rotation * Quaternion.Euler(rotationAmount), Time.deltaTime * 5);
+
+
+            yield return null;
+        }
+
+        shakingCameraEffect.End = true;
     }
     #endregion
 
@@ -715,6 +826,6 @@ public void OnValidate()
 {
 GameObject.FindGameObjectWithTag("GameController").GetComponent<QuestsManager>().AddToRepository(this.CurrentStoryLine);
 }
-*/ 
+*/
     #endregion
 }
