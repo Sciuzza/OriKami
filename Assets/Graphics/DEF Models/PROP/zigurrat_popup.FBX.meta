@@ -1,0 +1,133 @@
+fileFormatVersion: 2
+guid: 2523874c3d048964f924696ec489c48e
+timeCreated: 1484297913
+licenseType: Free
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: //RootNode
+    100002: zigurratpopup01_acqua
+    100004: zigurratpopup01_base
+    100006: zigurratpopup01_letto
+    100008: zigurratpopup201
+    100010: zigurratpopup202
+    100012: zigurratpopup203
+    100014: zigurratpopup301
+    100016: zigurratpopup302
+    100018: zigurratpopup303
+    100020: zigurratpopup401
+    100022: zigurratpopup402
+    100024: zigurratpopup403
+    400000: //RootNode
+    400002: zigurratpopup01_acqua
+    400004: zigurratpopup01_base
+    400006: zigurratpopup01_letto
+    400008: zigurratpopup201
+    400010: zigurratpopup202
+    400012: zigurratpopup203
+    400014: zigurratpopup301
+    400016: zigurratpopup302
+    400018: zigurratpopup303
+    400020: zigurratpopup401
+    400022: zigurratpopup402
+    400024: zigurratpopup403
+    2300000: zigurratpopup01_acqua
+    2300002: zigurratpopup01_base
+    2300004: zigurratpopup01_letto
+    2300006: zigurratpopup201
+    2300008: zigurratpopup202
+    2300010: zigurratpopup203
+    2300012: zigurratpopup301
+    2300014: zigurratpopup302
+    2300016: zigurratpopup303
+    2300018: zigurratpopup401
+    2300020: zigurratpopup402
+    2300022: zigurratpopup403
+    3300000: zigurratpopup01_acqua
+    3300002: zigurratpopup01_base
+    3300004: zigurratpopup01_letto
+    3300006: zigurratpopup201
+    3300008: zigurratpopup202
+    3300010: zigurratpopup203
+    3300012: zigurratpopup301
+    3300014: zigurratpopup302
+    3300016: zigurratpopup303
+    3300018: zigurratpopup401
+    3300020: zigurratpopup402
+    3300022: zigurratpopup403
+    4300000: zigurratpopup01_base
+    4300002: zigurratpopup01_letto
+    4300004: zigurratpopup01_acqua
+    4300006: zigurratpopup201
+    4300008: zigurratpopup202
+    4300010: zigurratpopup203
+    4300012: zigurratpopup301
+    4300014: zigurratpopup302
+    4300016: zigurratpopup303
+    4300018: zigurratpopup401
+    4300020: zigurratpopup402
+    4300022: zigurratpopup403
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
