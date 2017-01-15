@@ -1,9 +1,16 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class CheckPointTest : MonoBehaviour {
+public class CheckPointTest : MonoBehaviour
+{
 
-    public SaveSystem save;
+    void Awake()
+    {
+       save = GameObject.FindGameObjectWithTag("GameController").GetComponent<SaveSystem>();
+
+    }
+
+    SaveSystem save;
     public GameObject Player;
     public bool saveGame, loadGame;
 
@@ -15,7 +22,7 @@ public class CheckPointTest : MonoBehaviour {
             save.SaveState();
         }
 
-        if (other.gameObject.tag == "Player" &&  loadGame)
+        if (other.gameObject.tag == "Player" && loadGame)
         {
             Debug.Log("Loading....");
             save.LoadState();

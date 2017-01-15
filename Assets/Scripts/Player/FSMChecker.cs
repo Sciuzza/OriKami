@@ -141,7 +141,7 @@ public class FSMChecker : MonoBehaviour
     }
 
     [SerializeField]
-    playerCState cPlayerState;
+    public playerCState cPlayerState;
 
     private CharacterController ccLink;
     private VFissure vfLink;
