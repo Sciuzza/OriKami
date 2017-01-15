@@ -49,19 +49,13 @@ public class SceneController : MonoBehaviour
     private void GamePlayInitialization(GameObject player)
     {
         FSMChecker fsmTempLink = player.GetComponent<FSMChecker>();
-<<<<<<< HEAD
-        //fsmTempLink.deathRequest.AddListener(ResettingCurrentScene);
 
-        MoveHandler mhTempLink = player.GetComponent<MoveHandler>();
-
-        //mhTempLink.deathRequest.AddListener(ResettingCurrentScene);
-=======
       //  fsmTempLink.deathRequest.AddListener(ResettingCurrentScene);
 
         MoveHandler mhTempLink = player.GetComponent<MoveHandler>();
 
      //   mhTempLink.deathRequest.AddListener(ResettingCurrentScene);
->>>>>>> Designers_Hub_New
+
 
         PlayerInputs plTempLink = player.GetComponent<PlayerInputs>();
 

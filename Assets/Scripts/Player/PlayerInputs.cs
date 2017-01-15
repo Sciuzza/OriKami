@@ -37,9 +37,16 @@ public class PlayerInputs : MonoBehaviour
 
         fsmCheckerTempLink.formChangedInp.AddListener(UpdatingCurrentFormInputs);
 
-        StoryLineInstance slTempLink = GameObject.FindGameObjectWithTag("StoryLine").GetComponent<StoryLineInstance>();
+        GameObject storyLineCheck = GameObject.FindGameObjectWithTag("StoryLine");
 
-        slTempLink.ActivateStoryInputRequest.AddListener(SettingStoryInputs);
+        if (storyLineCheck != null)
+        {
+
+            StoryLineInstance slTempLink =
+                GameObject.FindGameObjectWithTag("StoryLine").GetComponent<StoryLineInstance>();
+
+            slTempLink.ActivateStoryInputRequest.AddListener(SettingStoryInputs);
+        }
     }
     #endregion
 

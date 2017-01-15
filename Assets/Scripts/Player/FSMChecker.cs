@@ -213,14 +213,20 @@ public class FSMChecker : MonoBehaviour
 
         fsmExeTempLink.vFissureAniEnded.AddListener(VFissureAniEndEffects);
 
-        StoryLineInstance slTempLink = GameObject.FindGameObjectWithTag("StoryLine").GetComponent<StoryLineInstance>();
+        GameObject storyLineCheck = GameObject.FindGameObjectWithTag("StoryLine");
 
-        if (slTempLink != null)
+        if (storyLineCheck != null)
         {
-            slTempLink.FormUnlockRequest.AddListener(this.UnlockingAbility);
-            slTempLink.ChangeControlStateRequest.AddListener(this.StoryCsChange);
+
+            StoryLineInstance slTempLink =
+                GameObject.FindGameObjectWithTag("StoryLine").GetComponent<StoryLineInstance>();
+
+            if (slTempLink != null)
+            {
+                slTempLink.FormUnlockRequest.AddListener(this.UnlockingAbility);
+                slTempLink.ChangeControlStateRequest.AddListener(this.StoryCsChange);
+            }
         }
-       
     }
 
     void Start()

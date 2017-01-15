@@ -487,29 +487,6 @@ public class StoryLineInstance : MonoBehaviour
     #endregion
 
     #region Check Initial Conditions Methods
-    // Check all the other Access conditions
-    private void CheckStoryLivingConditions()
-    {
-        if (this.storySelected.Completed) return;
-
-        foreach (var item in this.storySelected.ItemAccessCondition)
-        {
-            // control logic achievement system based
-        }
-
-        if (this.IsNeededInput(
-            this.storySelected.GenAccessCond.PlayerInputJoy,
-            this.storySelected.GenAccessCond.PlayerInputPc))
-            this.ActivateStoryInputRequest.Invoke(
-                this.storySelected.GenAccessCond.PlayerInputJoy,
-                this.storySelected.GenAccessCond.PlayerInputPc);
-        else if (this.IsNeededInput(this.storySelected.Events[0].PlayerInputJoy, this.storySelected.Events[0].PlayerInputPc))
-            this.ActivateStoryInputRequest.Invoke(
-                this.storySelected.Events[0].PlayerInputJoy,
-                this.storySelected.Events[0].PlayerInputPc);
-        else this.LivingStoryEvent();
-    }
-
     // Check Completed , Active and Relation Conditions
     private void InitializationByTrigger(Collider trigger)
     {
@@ -537,6 +514,29 @@ public class StoryLineInstance : MonoBehaviour
         else Debug.Log("No Story is accessible through this Trigger " + trigger.name);
     }
 
+    // Check all the other Access conditions
+    private void CheckStoryLivingConditions()
+    {
+        if (this.storySelected.Completed) return;
+
+        foreach (var item in this.storySelected.ItemAccessCondition)
+        {
+            // control logic achievement system based
+        }
+
+        if (this.IsNeededInput(
+            this.storySelected.GenAccessCond.PlayerInputJoy,
+            this.storySelected.GenAccessCond.PlayerInputPc))
+            this.ActivateStoryInputRequest.Invoke(
+                this.storySelected.GenAccessCond.PlayerInputJoy,
+                this.storySelected.GenAccessCond.PlayerInputPc);
+        else if (this.IsNeededInput(this.storySelected.Events[0].PlayerInputJoy, this.storySelected.Events[0].PlayerInputPc))
+            this.ActivateStoryInputRequest.Invoke(
+                this.storySelected.Events[0].PlayerInputJoy,
+                this.storySelected.Events[0].PlayerInputPc);
+        else this.LivingStoryEvent();
+    }
+
     private bool IsNeededInput(buttonsJoy joyInput, buttonsPc pcInput)
     {
         return joyInput != buttonsJoy.none && pcInput != buttonsPc.none;
@@ -547,6 +547,7 @@ public class StoryLineInstance : MonoBehaviour
     {
         Debug.Log("Living Story Started for the story " + this.storySelected.StoryName);
 
+        /*
         this.camLastPos.Add(Camera.main.transform.position);
         this.camLastRot.Add(Camera.main.transform.rotation);
 
@@ -554,6 +555,7 @@ public class StoryLineInstance : MonoBehaviour
         this.PlayerEffectsHandler();
         this.CameraEffectsHandler();
         this.EnvEffectsHandler();
+        */
     }
     #endregion
 
@@ -947,8 +949,8 @@ public class StoryLineInstance : MonoBehaviour
 
     private void PlayObjActiEffect(ObjectActivation effectToPlay)
     {
-        if (effectToPlay.Time == 0)
-            effectToPlay.GbRef
+       // if (effectToPlay.Time == 0)
+           // effectToPlay.GbRef
 
     }
 
