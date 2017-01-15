@@ -203,7 +203,7 @@ public class ObjectDeActivation
 public class Baloon
 {
     public bool End;
-    public GameObject GbRefRikiLogic;
+    public GameObject NpcRef;
     public float BaloonSpeed;
     public int StartLine;
     public int EndLine;
@@ -547,7 +547,6 @@ public class StoryLineInstance : MonoBehaviour
     {
         Debug.Log("Living Story Started for the story " + this.storySelected.StoryName);
 
-        /*
         this.camLastPos.Add(Camera.main.transform.position);
         this.camLastRot.Add(Camera.main.transform.rotation);
 
@@ -555,7 +554,7 @@ public class StoryLineInstance : MonoBehaviour
         this.PlayerEffectsHandler();
         this.CameraEffectsHandler();
         this.EnvEffectsHandler();
-        */
+
     }
     #endregion
 
@@ -915,31 +914,55 @@ public class StoryLineInstance : MonoBehaviour
         var envEffectToEvaluate = new List<EnvironmentEffect>();
         envEffectToEvaluate.AddRange(this.storySelected.Events[this.eventIndex].Effects.EnvEffect);
 
+        var gbCheckTempRepo = new List<GameObject>();
+
         if (envEffectToEvaluate.Count == 0) return;
         else
         {
             foreach (var envEffect in envEffectToEvaluate)
             {
-                if (envEffect.ObjMovEffect.GbToMove != null &&
-                    envEffect.ObjMovEffect.GbTarget != null)
+                if (envEffect.ObjMovEffect.GbToMove != null && envEffect.ObjMovEffect.GbTarget != null)
+                {
+                    if (!this.IsGameobjectRefUnique(gbCheckTempRepo, envEffect.ObjMovEffect.GbToMove)) continue;
                     this.PlayObjMovingEffect(envEffect.ObjMovEffect);
+                    gbCheckTempRepo.Add(envEffect.ObjMovEffect.GbToMove);
 
-                if (envEffect.ObjActiEffect.GbRef != envEffect.ObjMovEffect.GbToMove &&
-                    envEffect.ObjActiEffect.GbRef != null)
+                }
+
+                if (envEffect.ObjActiEffect.GbRef != null)
+                {
+                    if (!this.IsGameobjectRefUnique(gbCheckTempRepo, envEffect.ObjActiEffect.GbRef)) continue;
                     this.PlayObjActiEffect(envEffect.ObjActiEffect);
+                    gbCheckTempRepo.Add(envEffect.ObjActiEffect.GbRef);
 
-                if (envEffect.ObjDeActiEffect.GbRef != envEffect.ObjActiEffect.GbRef &&
-                    envEffect.ObjDeActiEffect.GbRef != envEffect.ObjMovEffect.GbToMove &&
-                    envEffect.ObjDeActiEffect.GbRef != null)
+                }
+
+                if (envEffect.ObjDeActiEffect.GbRef != null)
+                {
+                    if (!this.IsGameobjectRefUnique(gbCheckTempRepo, envEffect.ObjDeActiEffect.GbRef)) continue;
                     this.PlayObjDeActiEffect(envEffect.ObjDeActiEffect);
+                    gbCheckTempRepo.Add(envEffect.ObjDeActiEffect.GbRef);
 
-                if (envEffect.BaloonEffect.GbRefRikiLogic != envEffect.ObjDeActiEffect.GbRef &&
-                    envEffect.BaloonEffect.GbRefRikiLogic != envEffect.ObjActiEffect.GbRef &&
-                    envEffect.BaloonEffect.GbRefRikiLogic != envEffect.ObjMovEffect.GbToMove &&
-                    envEffect.BaloonEffect.GbRefRikiLogic != null)
+                }
+
+                if (envEffect.BaloonEffect.NpcRef != null)
+                {
+                    if (!this.IsGameobjectRefUnique(gbCheckTempRepo, envEffect.BaloonEffect.NpcRef)) continue;
                     this.PlayBaloonEffect(envEffect.BaloonEffect);
+                    gbCheckTempRepo.Add(envEffect.BaloonEffect.NpcRef);
+                }
             }
         }
+    }
+
+    private bool IsGameobjectRefUnique(List<GameObject> gbRepo, GameObject gbToCheck)
+    {
+        foreach (var el in gbRepo)
+        {
+            if (gbToCheck == el) return false;
+        }
+
+        return true;
     }
 
     private void PlayObjMovingEffect(ObjectMoving effectToPlay)
@@ -949,19 +972,28 @@ public class StoryLineInstance : MonoBehaviour
 
     private void PlayObjActiEffect(ObjectActivation effectToPlay)
     {
-       // if (effectToPlay.Time == 0)
-           // effectToPlay.GbRef
+        if (effectToPlay.Time == 0)
+        {
+            effectToPlay.GbRef.SetActive(true);
+            effectToPlay.End = true;
+        }
+        else this.StartCoroutine(this.TimedActivation(effectToPlay));
 
     }
 
     private void PlayObjDeActiEffect(ObjectDeActivation effectToPlay)
     {
-
+        if (effectToPlay.Time == 0)
+        {
+            effectToPlay.GbRef.SetActive(false);
+            effectToPlay.End = true;
+        }
+        else this.StartCoroutine(this.TimedDeActivation(effectToPlay));
     }
 
     private void PlayBaloonEffect(Baloon effectToPlay)
     {
-
+        this.StartCoroutine(this.BaloonDialogue(effectToPlay));
     }
 
     private IEnumerator MovingObject(ObjectMoving movingObjEffect)
@@ -999,6 +1031,63 @@ public class StoryLineInstance : MonoBehaviour
         }
 
         movingObjEffect.End = true;
+    }
+
+    private IEnumerator TimedActivation(ObjectActivation actiObjEffect)
+    {
+        actiObjEffect.GbRef.SetActive(true);
+
+        var timer = 0.0f;
+
+        while (timer < actiObjEffect.Time)
+        {
+            timer += Time.deltaTime;
+            yield return null;
+        }
+
+        actiObjEffect.GbRef.SetActive(false);
+        actiObjEffect.End = true;
+    }
+
+    private IEnumerator TimedDeActivation(ObjectDeActivation deActiObjEffect)
+    {
+        deActiObjEffect.GbRef.SetActive(false);
+
+        var timer = 0.0f;
+
+        while (timer < deActiObjEffect.Time)
+        {
+            timer += Time.deltaTime;
+            yield return null;
+        }
+
+        deActiObjEffect.GbRef.SetActive(true);
+        deActiObjEffect.End = true;
+    }
+
+    private IEnumerator BaloonDialogue(Baloon baloonEffect)
+    {
+
+        
+
+        var baloonTempLink = baloonEffect.NpcRef.GetComponentInChildren<BaloonBeha>(true);
+
+        var npcTempRef = baloonTempLink.gameObject.transform.parent.gameObject;
+
+        
+
+        string[] sentences = baloonTempLink.TextAssetRef.text.Split('\n');
+        baloonTempLink.gameObject.SetActive(true);
+
+
+        for (var i = baloonEffect.StartLine; i <= baloonEffect.EndLine; i++)
+        {
+            baloonTempLink.TextRef.text = sentences[i];
+            yield return new WaitForSeconds(baloonEffect.BaloonSpeed);
+        }
+
+        baloonTempLink.CanvasRef.gameObject.SetActive(false);
+        baloonEffect.End = true;
     }
     #endregion
 
