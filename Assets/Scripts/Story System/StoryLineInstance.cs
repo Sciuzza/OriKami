@@ -144,6 +144,7 @@ public class CameraShake
     public bool End;
     public float ShakingDuration;
     public float ShakingPower;
+    public float ShakingRoughness;
 }
 
 [Serializable]
@@ -167,57 +168,46 @@ public class CameraStoryRevert
 [Serializable]
 public class EnvironmentEffect
 {
-    public Baloon BaloonEffect;
-
-    public ObjectActivation ObjActiEffect;
-
-    public ObjectDeActivation ObjDeActiEffect;
-
     public ObjectMoving ObjMovEffect;
-}
-
-[Serializable]
-public class ObjectActivation
-{
-    public GameObject GbRef;
-
-    public float Time;
-
-    public bool Timed;
-}
-
-[Serializable]
-public class Baloon
-{
-    public float BaloonSpeed;
-
-    public int EndLine;
-
-    public GameObject GbRefRikiLogic;
-
-    public int StartLine;
-}
-
-[Serializable]
-public class ObjectDeActivation
-{
-    public GameObject GbRef;
-
-    public float Time;
-
-    public bool Timed;
+    public ObjectActivation ObjActiEffect;
+    public ObjectDeActivation ObjDeActiEffect;
+    public Baloon BaloonEffect;
 }
 
 [Serializable]
 public class ObjectMoving
 {
-    public GameObject GbTarget;
-
+    public bool End;
     public GameObject GbToMove;
-
+    public GameObject GbTarget;
     public float LerpSpeed;
 }
 
+[Serializable]
+public class ObjectActivation
+{
+    public bool End;
+    public GameObject GbRef;
+    public float Time;
+}
+
+[Serializable]
+public class ObjectDeActivation
+{
+    public bool End;
+    public GameObject GbRef;
+    public float Time;
+}
+
+[Serializable]
+public class Baloon
+{
+    public bool End;
+    public GameObject GbRefRikiLogic;
+    public float BaloonSpeed;
+    public int StartLine;
+    public int EndLine;
+}
 #endregion Environment Npc Effects
 
 #region Ui Effect
@@ -476,8 +466,9 @@ public class StoryLineInstance : MonoBehaviour
     private GameObject player;
     private SingleStory storySelected;
 
-    private Vector3 camLastPos = new Vector3(0, 0, 0);
-    private Quaternion camLastRot = new Quaternion(0, 0, 0, 0);
+    private List<Vector3> camLastPos = new List<Vector3>();
+    private List<Quaternion> camLastRot = new List<Quaternion>();
+    private int cameraChangeCounter = 0;
     #endregion
 
     #region Taking References and Linking Events
@@ -556,12 +547,13 @@ public class StoryLineInstance : MonoBehaviour
     {
         Debug.Log("Living Story Started for the story " + this.storySelected.StoryName);
 
-        this.camLastPos = Camera.main.transform.position;
-        this.camLastRot = Camera.main.transform.rotation;
+        this.camLastPos.Add(Camera.main.transform.position);
+        this.camLastRot.Add(Camera.main.transform.rotation);
 
         this.ChangeControlStateRequest.Invoke(this.storySelected.PlayerControlEffect);
         this.PlayerEffectsHandler();
         this.CameraEffectsHandler();
+        this.EnvEffectsHandler();
     }
     #endregion
 
@@ -742,6 +734,12 @@ public class StoryLineInstance : MonoBehaviour
 
     private void PlayCameraMoveEffect(CameraMove effectToPlay)
     {
+        this.cameraChangeCounter++;
+        if (this.cameraChangeCounter > 1)
+        {
+            this.camLastPos.Add(Camera.main.transform.position);
+            this.camLastRot.Add(Camera.main.transform.rotation);
+        }
         this.StartCoroutine(this.MovingStoryCamera(effectToPlay));
     }
 
@@ -752,12 +750,12 @@ public class StoryLineInstance : MonoBehaviour
 
     private void PlayCameraErEffect(CameraEventRevert effectToPlay)
     {
-
+        this.StartCoroutine(this.MovingStoryCamera(effectToPlay, this.cameraChangeCounter - 1));
     }
 
     private void PlayCameraSrEffect(CameraStoryRevert effectToPlay)
     {
-
+        this.StartCoroutine(this.MovingStoryCamera(effectToPlay));
     }
 
     private IEnumerator MovingStoryCamera(CameraMove movingCameraEffect)
@@ -797,26 +795,208 @@ public class StoryLineInstance : MonoBehaviour
         movingCameraEffect.End = true;
     }
 
+    private IEnumerator MovingStoryCamera(CameraEventRevert erCameraEffect, int listIndex)
+    {
+
+        var objToMove = Camera.main;
+        var lerpSpeed = erCameraEffect.ErLerpSpeed;
+
+        var targetRotation = Quaternion.identity;
+        var targetPosition = new Vector3();
+
+        if (listIndex >= 0)
+        {
+            targetRotation = this.camLastRot[listIndex];
+            targetPosition = this.camLastPos[listIndex];
+        }
+
+        var posReached = false;
+
+        while (!posReached && listIndex >= 0)
+        {
+            objToMove.transform.position = Vector3.Lerp(
+                objToMove.transform.position,
+                targetPosition,
+                lerpSpeed * Time.deltaTime);
+            objToMove.transform.rotation = Quaternion.Slerp(
+                objToMove.transform.rotation,
+                targetRotation,
+                lerpSpeed * Time.deltaTime);
+
+
+            var targetPosYFixed = targetPosition;
+
+
+            targetPosYFixed.y = this.player.transform.position.y;
+
+            if (Quaternion.Angle(objToMove.transform.rotation, targetRotation) < 0.1f
+                && ((objToMove.transform.position - targetPosYFixed).sqrMagnitude < 0.1f)) posReached = true;
+
+            yield return null;
+        }
+
+        if (listIndex < 0)
+            Debug.Log("Event Revert Effect bad applied");
+
+        erCameraEffect.End = true;
+    }
+
+    private IEnumerator MovingStoryCamera(CameraStoryRevert srCameraEffect)
+    {
+
+        var objToMove = Camera.main;
+        var lerpSpeed = srCameraEffect.SrLerpSpeed;
+
+        var targetRotation = this.camLastRot[0];
+        var targetPosition = this.camLastPos[0];
+
+        var posReached = false;
+
+        while (!posReached)
+        {
+            objToMove.transform.position = Vector3.Lerp(
+                objToMove.transform.position,
+                targetPosition,
+                lerpSpeed * Time.deltaTime);
+            objToMove.transform.rotation = Quaternion.Slerp(
+                objToMove.transform.rotation,
+                targetRotation,
+                lerpSpeed * Time.deltaTime);
+
+
+            var targetPosYFixed = targetPosition;
+
+
+            targetPosYFixed.y = this.player.transform.position.y;
+
+            if (Quaternion.Angle(objToMove.transform.rotation, targetRotation) < 0.1f
+                && ((objToMove.transform.position - targetPosYFixed).sqrMagnitude < 0.1f)) posReached = true;
+
+            yield return null;
+        }
+
+        srCameraEffect.End = true;
+    }
+
     private IEnumerator ShakingStoryCamera(CameraShake shakingCameraEffect)
     {
 
         var timer = 0.0f;
+        var originalCameraRot = Camera.main.transform.rotation;
 
         while (shakingCameraEffect.ShakingDuration > timer)
         {
             var rotationAmount = Random.insideUnitSphere * shakingCameraEffect.ShakingPower;
             rotationAmount.z = 0;
 
+            Camera.main.transform.rotation = Quaternion.Slerp(Camera.main.transform.rotation, Camera.main.transform.rotation * Quaternion.Euler(rotationAmount), Time.deltaTime * shakingCameraEffect.ShakingRoughness);
 
             timer += Time.deltaTime;
 
-            Camera.main.transform.rotation = Quaternion.Lerp(Camera.main.transform.rotation, Camera.main.transform.rotation * Quaternion.Euler(rotationAmount), Time.deltaTime * 5);
+            yield return null;
+        }
 
+        while (Quaternion.Angle(Camera.main.transform.rotation, originalCameraRot) > 0.1f)
+        {
+            Camera.main.transform.rotation = Quaternion.Slerp(Camera.main.transform.rotation, originalCameraRot, Time.deltaTime * shakingCameraEffect.ShakingRoughness);
 
             yield return null;
         }
 
         shakingCameraEffect.End = true;
+    }
+    #endregion
+
+    #region Env Effects Methods
+    private void EnvEffectsHandler()
+    {
+        var envEffectToEvaluate = new List<EnvironmentEffect>();
+        envEffectToEvaluate.AddRange(this.storySelected.Events[this.eventIndex].Effects.EnvEffect);
+
+        if (envEffectToEvaluate.Count == 0) return;
+        else
+        {
+            foreach (var envEffect in envEffectToEvaluate)
+            {
+                if (envEffect.ObjMovEffect.GbToMove != null &&
+                    envEffect.ObjMovEffect.GbTarget != null)
+                    this.PlayObjMovingEffect(envEffect.ObjMovEffect);
+
+                if (envEffect.ObjActiEffect.GbRef != envEffect.ObjMovEffect.GbToMove &&
+                    envEffect.ObjActiEffect.GbRef != null)
+                    this.PlayObjActiEffect(envEffect.ObjActiEffect);
+
+                if (envEffect.ObjDeActiEffect.GbRef != envEffect.ObjActiEffect.GbRef &&
+                    envEffect.ObjDeActiEffect.GbRef != envEffect.ObjMovEffect.GbToMove &&
+                    envEffect.ObjDeActiEffect.GbRef != null)
+                    this.PlayObjDeActiEffect(envEffect.ObjDeActiEffect);
+
+                if (envEffect.BaloonEffect.GbRefRikiLogic != envEffect.ObjDeActiEffect.GbRef &&
+                    envEffect.BaloonEffect.GbRefRikiLogic != envEffect.ObjActiEffect.GbRef &&
+                    envEffect.BaloonEffect.GbRefRikiLogic != envEffect.ObjMovEffect.GbToMove &&
+                    envEffect.BaloonEffect.GbRefRikiLogic != null)
+                    this.PlayBaloonEffect(envEffect.BaloonEffect);
+            }
+        }
+    }
+
+    private void PlayObjMovingEffect(ObjectMoving effectToPlay)
+    {
+        this.StartCoroutine(this.MovingObject(effectToPlay));
+    }
+
+    private void PlayObjActiEffect(ObjectActivation effectToPlay)
+    {
+        if (effectToPlay.Time == 0)
+            effectToPlay.GbRef
+
+    }
+
+    private void PlayObjDeActiEffect(ObjectDeActivation effectToPlay)
+    {
+
+    }
+
+    private void PlayBaloonEffect(Baloon effectToPlay)
+    {
+
+    }
+
+    private IEnumerator MovingObject(ObjectMoving movingObjEffect)
+    {
+        var whereToMove = movingObjEffect.GbTarget;
+        var objToMove = movingObjEffect.GbToMove;
+        var lerpSpeed = movingObjEffect.LerpSpeed;
+
+        var targetRotation = whereToMove.transform.rotation;
+        var targetPosition = whereToMove.transform.position;
+
+        var posReached = false;
+
+        while (!posReached)
+        {
+            objToMove.transform.position = Vector3.Lerp(
+                objToMove.transform.position,
+                targetPosition,
+                lerpSpeed * Time.deltaTime);
+            objToMove.transform.rotation = Quaternion.Slerp(
+                objToMove.transform.rotation,
+                targetRotation,
+                lerpSpeed * Time.deltaTime);
+
+
+            var targetPosYFixed = targetPosition;
+
+
+            targetPosYFixed.y = this.player.transform.position.y;
+
+            if (Quaternion.Angle(objToMove.transform.rotation, targetRotation) < 0.1f
+                && ((objToMove.transform.position - targetPosYFixed).sqrMagnitude < 0.1f)) posReached = true;
+
+            yield return null;
+        }
+
+        movingObjEffect.End = true;
     }
     #endregion
 
