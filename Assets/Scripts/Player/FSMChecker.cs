@@ -458,7 +458,7 @@ public class FSMChecker : MonoBehaviour
     //totalControl, noCamera, noMove, noGenAbi, noCamAndMove, noMoveAndGenAbi, noCameraAndGenAbi, noControl
     // move, rotate, cameraMove, npcInter, menu, jump, roll, moveBlock, VFissure, HFissure, dolpSwimBel, toStd, toFrog, toArma, toCrane, toDolp
 
-    private void UpdatingAbilityList()
+    public void UpdatingAbilityList()
     {
         switch (cPlayerState.currentForm)
         {
@@ -1615,6 +1615,7 @@ public class FSMChecker : MonoBehaviour
             abiUnlocked.dolphinUnlocked = true;
             UpdatingAbilityList();
         }
+
 
         #endregion
 
