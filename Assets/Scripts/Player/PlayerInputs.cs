@@ -24,7 +24,7 @@ public class PlayerInputs : MonoBehaviour
     #endregion
 
     #region Events
-    public UnityEvent rollStopped, nextSceneRequest, previousSceneRequest, resettingSceneRequest;
+    public UnityEvent rollStopped, nextSceneRequest, previousSceneRequest, resettingSceneRequest, storyLivingRequest;
     public event_abi genAbiRequest;
     public event_abi_vector3 dirAbiRequest;
     public event_int mainMenuRequest;
@@ -37,9 +37,16 @@ public class PlayerInputs : MonoBehaviour
 
         fsmCheckerTempLink.formChangedInp.AddListener(UpdatingCurrentFormInputs);
 
-        StoryLineInstance slTempLink = GameObject.FindGameObjectWithTag("StoryLine").GetComponent<StoryLineInstance>();
+        GameObject storyLineCheck = GameObject.FindGameObjectWithTag("StoryLine");
 
-        slTempLink.activateStoryInputRequest.AddListener(SettingStoryInputs);
+        if (storyLineCheck != null)
+        {
+
+            StoryLineInstance slTempLink =
+                GameObject.FindGameObjectWithTag("StoryLine").GetComponent<StoryLineInstance>();
+
+            slTempLink.ActivateStoryInputRequest.AddListener(SettingStoryInputs);
+        }
     }
     #endregion
 
@@ -1916,10 +1923,11 @@ public class PlayerInputs : MonoBehaviour
     }
     #endregion
 
+    #region Story Inputs
     private void StoryInputsHandler()
     {
         if (StoryInputPressed())
-            Debug.Log("Da Inserire Evento");
+            storyLivingRequest.Invoke();
     }
 
     private bool StoryInputPressed()
@@ -1970,7 +1978,8 @@ public class PlayerInputs : MonoBehaviour
         storyPcInput = pcInput;
 
         storyModeInput = true;
-    }
+    } 
+    #endregion
 
     #region General Methods
 

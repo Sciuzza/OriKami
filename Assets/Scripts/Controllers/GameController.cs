@@ -22,7 +22,7 @@ public class GameController : MonoBehaviour
     #region Do not Destroy Behaviour
     void Awake()
     {
-        cameraRef = Camera.main;
+        
         DontDestroyOnLoad(this.gameObject);
         DontDestroyOnLoad(cameraRef.gameObject);
         

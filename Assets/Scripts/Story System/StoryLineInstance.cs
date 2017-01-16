@@ -1,15 +1,11 @@
-﻿using System.Collections.Generic;
-
-using UnityEditor;
-
-using UnityEditorInternal;
-
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
+using Random = UnityEngine.Random;
 
 #region Enum Types
-
-
 
 public enum Stories
 {
@@ -64,230 +60,275 @@ public enum ItemType
     Item3
 }
 
-#endregion
+#endregion Enum Types
 
 #region Effect Classes
 
 #region Player Effect Classes
 
-[System.Serializable]
+[Serializable]
 public class PlayerEffect
 {
-
     public PlayerReposition PlayerRepositionEffect;
-
     public PlayerMove PlayerMoveEffect;
-
-    public PlayerReward PlayerReward;
-
     public PlayerSee PlayerSeeEffect;
-
-    public float PushingBackPower;
+    public PlayerPushBack PushingBackEffect;
+    public PlayerReward PlayerReward;
 }
 
-[System.Serializable]
+[Serializable]
 public class PlayerReposition
 {
+    public bool End;
     public GameObject GbRef;
 }
 
-[System.Serializable]
+[Serializable]
 public class PlayerMove
 {
+    public bool End;
     public GameObject GbRef;
-
     public float LerpSpeed;
 }
 
-[System.Serializable]
+[Serializable]
 public class PlayerSee
 {
+    public bool End;
     [Tooltip("Standard Form, Frog Form, Armadillo Form, Dragon Form, Dolphin Form")]
     public GameObject GbRef;
-
     public float LerpSpeed;
-
 }
 
-[System.Serializable]
+[Serializable]
+public class PlayerPushBack
+{
+    public bool End;
+    public float PushingBackPower;
+    public float LerpSpeed;
+}
+
+[Serializable]
 public class PlayerReward
 {
+    public bool End;
     [Tooltip("Standard Form, Frog Form, Armadillo Form, Dragon Form, Dolphin Form")]
     public string FormName;
-
 }
+
 
 #endregion Player Effect Classes
 
 #region Camera Effect Classes
 
-[System.Serializable]
+[Serializable]
 public class CameraEffect
 {
     public CameraMove CameraMoveEffect;
     public CameraShake CameraShakeEffect;
-    public float BtpLerpSpeed;
-    public float BtsLerpSpeed;
+    public CameraEventRevert CameraErEffect;
+    public CameraStoryRevert CameraSrEffect;
 }
 
-[System.Serializable]
+[Serializable]
 public class CameraMove
 {
+    public bool End;
     public GameObject GbRef;
     public float LerpSpeed;
 }
 
-[System.Serializable]
+[Serializable]
 public class CameraShake
 {
-    public float ShakingPower;
+    public bool End;
     public float ShakingDuration;
+    public float ShakingPower;
+    public float ShakingRoughness;
 }
-#endregion Player Effect Classes
+
+[Serializable]
+public class CameraEventRevert
+{
+    public bool End;
+    public float ErLerpSpeed;
+}
+
+[Serializable]
+public class CameraStoryRevert
+{
+    public bool End;
+    public float SrLerpSpeed;
+
+}
+#endregion Camera Effect Classes
 
 #region Environment Npc Effects
 
-[System.Serializable]
+[Serializable]
 public class EnvironmentEffect
 {
-    public ObjectActivation ObjActiEffect;
-    public Baloon BaloonEffect;
-    public ObjectDeActivation ObjDeActiEffect;
     public ObjectMoving ObjMovEffect;
+    public ObjectActivation ObjActiEffect;
+    public ObjectDeActivation ObjDeActiEffect;
+    public Baloon BaloonEffect;
 }
 
-[System.Serializable]
+[Serializable]
+public class ObjectMoving
+{
+    public bool End;
+    public GameObject GbToMove;
+    public GameObject GbTarget;
+    public float LerpSpeed;
+}
+
+[Serializable]
 public class ObjectActivation
 {
+    public bool End;
     public GameObject GbRef;
-    public bool Timed;
     public float Time;
 }
 
-[System.Serializable]
+[Serializable]
+public class ObjectDeActivation
+{
+    public bool End;
+    public GameObject GbRef;
+    public float Time;
+}
+
+[Serializable]
 public class Baloon
 {
+    public bool End;
     public GameObject GbRefRikiLogic;
     public float BaloonSpeed;
     public int StartLine;
     public int EndLine;
 }
-
-[System.Serializable]
-public class ObjectDeActivation
-{
-    public GameObject GbRef;
-    public bool Timed;
-    public float Time;
-}
-
-[System.Serializable]
-public class ObjectMoving
-{
-    public GameObject GbTarget;
-    public GameObject GbToMove;
-    public float LerpSpeed;
-}
-
-#endregion
+#endregion Environment Npc Effects
 
 #region Ui Effect
-[System.Serializable]
+
+[Serializable]
 public class UiEffect
 {
     public UiObjectActivation ObjActiEffect;
-    public UiDialogue UiDialogueEffect;
+
     public UiObjectDeActivation ObjDeActiEffect;
+
     public UiObjectMoving ObjMovEffect;
+
+    public UiDialogue UiDialogueEffect;
 }
 
-[System.Serializable]
+[Serializable]
 public class UiObjectActivation
 {
-    public GameObject GbRef;
-    public bool Timed;
-    public float Time;
     public float FadingTime;
 
+    public GameObject GbRef;
+
+    public float Time;
+
+    public bool Timed;
 }
 
-[System.Serializable]
+[Serializable]
 public class UiDialogue
 {
-    public TextAsset DialogueRef;
     public List<DialogueStructDebug> DialogueDebug;
+
+    public TextAsset DialogueRef;
 }
 
-[System.Serializable]
+[Serializable]
 public class DialogueStructDebug
 {
-    public string WhoIsTalking;
     public string LabelPos;
+
     public string WhatIsSaying;
+
+    public string WhoIsTalking;
 }
-[System.Serializable]
+
+[Serializable]
 public class UiObjectDeActivation
 {
     public GameObject GbRef;
-    public bool Timed;
+
     public float Time;
+
+    public bool Timed;
 }
 
-[System.Serializable]
+[Serializable]
 public class UiObjectMoving
 {
     public GameObject GbTarget;
+
     public GameObject GbToMove;
+
     public float LerpSpeed;
 }
 
-#endregion
+#endregion Ui Effect
 
 #region Sound Effect
-[System.Serializable]
+
+[Serializable]
 public class SoundEffect
 {
-    public PersistentSound PerSoundEffect;
     public NormalSound NormSoundEffect;
+
+    public PersistentSound PerSoundEffect;
 }
 
-[System.Serializable]
+[Serializable]
 public class PersistentSound
 {
     public bool Active;
+
     public int SoundCategory;
+
     public int SoundIndex;
 }
 
-[System.Serializable]
+[Serializable]
 public class NormalSound
 {
     public GameObject GbRef;
+
     public int SoundIndex;
 }
-#endregion
+
+#endregion Sound Effect
 
 #region Animation Effect
-[System.Serializable]
+
+[Serializable]
 public class AnimationEffect
 {
-    public GameObject GbRef;
     public int AnimationIndex;
+
+    public GameObject GbRef;
 }
 
-#endregion
+#endregion Animation Effect
 
 #region Movie Effect
 
-[System.Serializable]
+[Serializable]
 public class MovieEffect
 {
     public Movies MovieName;
 }
-#endregion
 
+#endregion Movie Effect
 
-[System.Serializable]
+[Serializable]
 public class EvEffects
 {
     public PlayerEffect PlaEffect;
@@ -298,171 +339,675 @@ public class EvEffects
     public List<AnimationEffect> AniEffect;
     public MovieEffect MovieEffect;
 }
-#endregion
+
+#endregion Effect Classes
 
 #region Sub Story and Storyline Classes
 
-[System.Serializable]
+[Serializable]
 public class GenTriggerConditions
 {
-    public BoxCollider TriggerRef;
-    public SphereCollider STriggerRef;
     public buttonsJoy PlayerInputJoy;
+
     public buttonsPc PlayerInputPc;
+
+    public SphereCollider STriggerRef;
+
+    public BoxCollider TriggerRef;
 }
 
-[System.Serializable]
+[Serializable]
 public class ItemDependencies
 {
     public ItemType ItemDep;
+
     public int ItemValue;
 }
 
-#endregion
+#endregion Sub Story and Storyline Classes
 
 #region Story Element
 
-[System.Serializable]
+[Serializable]
 public class StoryEvent
 {
     public string EventName;
+
     public Events EventEnumName;
+
     public buttonsJoy PlayerInputJoy;
+
     public buttonsPc PlayerInputPc;
 
     public float EventEndDelay;
 
     public EvEffects Effects;
+
 }
 
-[System.Serializable]
+[Serializable]
 public class SingleStory
 {
     public string StoryName;
+
     public Stories StoryEnumName;
-    public bool Completed;
+
     public bool Active;
+
     public bool AutoComplete;
 
+    public bool Completed;
+
     public GenTriggerConditions GenAccessCond;
+
     public List<ItemDependencies> ItemAccessCondition;
+
+    public List<Stories> StoryActiveOnActivation;
+
+    public List<Stories> StoryActiveOnCompletion;
+
+    public List<Stories> StoryCompleteOnActivation;
+
+    public List<Stories> StoryCompleteOnCompletion;
+
+    public List<Storylines> StoryLineCompleteOnActivation;
+
+    public List<Storylines> StoryLineCompleteOnCompletion;
 
     public controlStates PlayerControlEffect;
 
-    public List<Storylines> StoryLineCompleteOnActivation;
-    public List<Stories> StoryCompleteOnActivation;
-    public List<Stories> StoryActiveOnActivation;
-
-    public List<Storylines> StoryLineCompleteOnCompletion;
-    public List<Stories> StoryCompleteOnCompletion;
-    public List<Stories> StoryActiveOnCompletion;
-
     public List<StoryEvent> Events;
 
-    //public static List<StoryEvent> Events1;
+    // public ReorderableList reorderableList = new ReorderableList(Events1, (typeof(StoryEvent)),true, true, true, true);
 
-    //[System.Serializable]
-   // public ReorderableList reorderableList = new ReorderableList(Events1, (typeof(StoryEvent)),true, true, true, true);
+    // [System.Serializable]
 
- 
+    // public static List<StoryEvent> Events1;
 }
 
-[System.Serializable]
+[Serializable]
 public class StoryLine
 {
     public string StoryLineName;
+
     public Storylines StoryEnumName;
+
     public bool Completed;
-
-
-    public List<Storylines> StoryLineCompleteOnCompletion;
-    public List<Stories> StoryCompleteOnCompletion;
-    public List<Stories> StoryActiveOnCompletion;
-
-
-
-
 
     // public SingleStory[] Stories;
 
+    public List<Stories> StoryActiveOnCompletion;
+
+    public List<Stories> StoryCompleteOnCompletion;
+
+    public List<Storylines> StoryLineCompleteOnCompletion;
+
     public List<SingleStory> Stories;
+
 }
 
-#endregion
-
+#endregion Story Element
 
 public class StoryLineInstance : MonoBehaviour
 {
 
     public StoryLine CurrentStoryLine;
-    /*
-    public void OnValidate()
-    {
-        GameObject.FindGameObjectWithTag("GameController").GetComponent<QuestsManager>().AddToRepository(this.CurrentStoryLine);
-    }
-    */
 
-    public event_joy_pc activateStoryInputRequest;
+    #region Events
+    public event_joy_pc ActivateStoryInputRequest;
 
+    public event_string FormUnlockRequest;
+
+    public event_cs ChangeControlStateRequest;
+    #endregion
+
+    #region Private Variables
+    private int eventIndex = 0;
     private GameObject player;
+    private SingleStory storySelected;
 
+    private List<Vector3> camLastPos = new List<Vector3>();
+    private List<Quaternion> camLastRot = new List<Quaternion>();
+    private int cameraChangeCounter = 0;
+    #endregion
+
+    #region Taking References and Linking Events
     private void Awake()
     {
+        this.player = GameObject.FindGameObjectWithTag("Player");
 
-        player = GameObject.FindGameObjectWithTag("Player");
+        var envTempLink = this.player.GetComponent<EnvInputs>();
 
-        EnvInputs envTempLink = player.GetComponent<EnvInputs>();
+        envTempLink.storyActivationRequest.AddListener(this.InitializationByTrigger);
 
-        envTempLink.storyActivationRequest.AddListener(InitializationByTrigger);
+        var plTempLink = this.player.GetComponent<PlayerInputs>();
 
+        plTempLink.storyLivingRequest.AddListener(this.LivingStoryEvent);
     }
+    #endregion
 
+    #region Check Initial Conditions Methods
+    // Check Completed , Active and Relation Conditions
     private void InitializationByTrigger(Collider trigger)
     {
         Debug.Log(trigger.name);
 
-        SingleStory storyToFind = new SingleStory(); 
-
-        foreach(var story in CurrentStoryLine.Stories)
+        if (this.CurrentStoryLine.Completed)
         {
-            if ((story.GenAccessCond.STriggerRef == trigger || story.GenAccessCond.TriggerRef == trigger) && story.Active)
-            {
-                storyToFind = story;
-                break;
-            }
+            Debug.Log("Storyline already Completed");
+            return;
         }
-        if (storyToFind != null)
-        {
-            Debug.Log(storyToFind.StoryName);
-            CheckStoryLivingConditions(storyToFind);
 
+        foreach (var story in this.CurrentStoryLine.Stories)
+        {
+            if ((story.GenAccessCond.STriggerRef != trigger && story.GenAccessCond.TriggerRef != trigger)
+                || !story.Active) continue;
+            this.storySelected = story;
+            break;
         }
-        else
-            Debug.Log("No Story is accessible through this Trigger " + trigger.name);
+
+        if (this.storySelected != null)
+        {
+            Debug.Log(this.storySelected.StoryName);
+            this.CheckStoryLivingConditions();
+        }
+        else Debug.Log("No Story is accessible through this Trigger " + trigger.name);
     }
 
-    
-
-    private void CheckStoryLivingConditions(SingleStory storyToEvaluate)
+    // Check all the other Access conditions
+    private void CheckStoryLivingConditions()
     {
-        if (storyToEvaluate.Completed) return;
-        if (storyToEvaluate.ItemAccessCondition.Count == 0) return;
+        if (this.storySelected.Completed) return;
 
-        foreach(var item in storyToEvaluate.ItemAccessCondition)
+        foreach (var item in this.storySelected.ItemAccessCondition)
         {
             // control logic achievement system based
         }
 
-        if (storyToEvaluate.GenAccessCond.PlayerInputJoy != buttonsJoy.none && storyToEvaluate.GenAccessCond.PlayerInputPc != buttonsPc.none)
-        {
-            activateStoryInputRequest.Invoke(storyToEvaluate.GenAccessCond.PlayerInputJoy, storyToEvaluate.GenAccessCond.PlayerInputPc);
-        }
-        else
-            LivingStory(storyToEvaluate);
+        if (this.IsNeededInput(
+            this.storySelected.GenAccessCond.PlayerInputJoy,
+            this.storySelected.GenAccessCond.PlayerInputPc))
+            this.ActivateStoryInputRequest.Invoke(
+                this.storySelected.GenAccessCond.PlayerInputJoy,
+                this.storySelected.GenAccessCond.PlayerInputPc);
+        else if (this.IsNeededInput(this.storySelected.Events[0].PlayerInputJoy, this.storySelected.Events[0].PlayerInputPc))
+            this.ActivateStoryInputRequest.Invoke(
+                this.storySelected.Events[0].PlayerInputJoy,
+                this.storySelected.Events[0].PlayerInputPc);
+        else this.LivingStoryEvent();
     }
 
-    private void LivingStory(SingleStory storyToLive)
+    private bool IsNeededInput(buttonsJoy joyInput, buttonsPc pcInput)
     {
-        Debug.Log("Living Story Started for the story " + storyToLive.StoryName);
+        return joyInput != buttonsJoy.none && pcInput != buttonsPc.none;
     }
+
+    // Start the Story
+    private void LivingStoryEvent()
+    {
+        Debug.Log("Living Story Started for the story " + this.storySelected.StoryName);
+
+        /*
+        this.camLastPos.Add(Camera.main.transform.position);
+        this.camLastRot.Add(Camera.main.transform.rotation);
+
+        this.ChangeControlStateRequest.Invoke(this.storySelected.PlayerControlEffect);
+        this.PlayerEffectsHandler();
+        this.CameraEffectsHandler();
+        this.EnvEffectsHandler();
+        */
+    }
+    #endregion
+
+    #region Player Effects Methods
+    private void PlayerEffectsHandler()
+    {
+        var plaEffectsToEvaluate = this.storySelected.Events[this.eventIndex].Effects.PlaEffect;
+
+        if (plaEffectsToEvaluate.PlayerRepositionEffect.GbRef != null)
+        {
+            this.PlayPlayerRepoEffect(plaEffectsToEvaluate.PlayerRepositionEffect);
+
+            if (plaEffectsToEvaluate.PlayerReward.FormName != " ") this.PlayPlayerRewardEffect(plaEffectsToEvaluate.PlayerReward);
+        }
+        else if (plaEffectsToEvaluate.PlayerMoveEffect.GbRef != null)
+        {
+            this.PlayPlayerMoveEffect(plaEffectsToEvaluate.PlayerMoveEffect);
+
+            if (plaEffectsToEvaluate.PlayerReward.FormName != " ") this.PlayPlayerRewardEffect(plaEffectsToEvaluate.PlayerReward);
+        }
+        else if (plaEffectsToEvaluate.PlayerSeeEffect.GbRef != null)
+        {
+            this.PlayPlayerSeeEffect(plaEffectsToEvaluate.PlayerSeeEffect);
+
+            if (plaEffectsToEvaluate.PlayerReward.FormName != " ") this.PlayPlayerRewardEffect(plaEffectsToEvaluate.PlayerReward);
+        }
+        else if (plaEffectsToEvaluate.PushingBackEffect.PushingBackPower > 0)
+        {
+            this.PlayPlayerPushingBackEffect(plaEffectsToEvaluate.PushingBackEffect);
+
+            if (plaEffectsToEvaluate.PlayerReward.FormName != " ") this.PlayPlayerRewardEffect(plaEffectsToEvaluate.PlayerReward);
+        }
+        else
+        {
+            if (plaEffectsToEvaluate.PlayerReward.FormName != " ") this.PlayPlayerRewardEffect(plaEffectsToEvaluate.PlayerReward);
+        }
+    }
+
+    private void PlayPlayerRepoEffect(PlayerReposition effectToPlay)
+    {
+        this.player.transform.position = effectToPlay.GbRef.transform.position;
+        effectToPlay.End = true;
+    }
+
+    private void PlayPlayerMoveEffect(PlayerMove effectToPlay)
+    {
+        this.StartCoroutine(this.MovingPlayer(effectToPlay));
+    }
+
+    private void PlayPlayerRewardEffect(PlayerReward effectToPlay)
+    {
+        this.FormUnlockRequest.Invoke(effectToPlay.FormName);
+        effectToPlay.End = true;
+    }
+
+    private void PlayPlayerSeeEffect(PlayerSee effectToPlay)
+    {
+        this.StartCoroutine(this.RotatePlayer(effectToPlay));
+    }
+
+    private void PlayPlayerPushingBackEffect(PlayerPushBack effectToPlay)
+    {
+        this.StartCoroutine(this.PushBackPlayer(effectToPlay));
+    }
+
+    private IEnumerator MovingPlayer(PlayerMove movingPlayerEffect)
+    {
+        var whereToMove = movingPlayerEffect.GbRef;
+        var objToMove = this.player;
+        var lerpSpeed = movingPlayerEffect.LerpSpeed;
+
+        var targetRotation = whereToMove.transform.rotation;
+        var targetPosition = whereToMove.transform.position;
+
+        var posReached = false;
+
+        while (!posReached)
+        {
+            objToMove.transform.position = Vector3.Lerp(
+                objToMove.transform.position,
+                targetPosition,
+                lerpSpeed * Time.deltaTime);
+            objToMove.transform.rotation = Quaternion.Slerp(
+                objToMove.transform.rotation,
+                targetRotation,
+                lerpSpeed * Time.deltaTime);
+
+
+            var targetPosYFixed = targetPosition;
+
+
+            targetPosYFixed.y = this.player.transform.position.y;
+
+            if (Quaternion.Angle(objToMove.transform.rotation, targetRotation) < 0.1f
+                && ((objToMove.transform.position - targetPosYFixed).sqrMagnitude < 0.1f)) posReached = true;
+
+            yield return null;
+        }
+
+        movingPlayerEffect.End = true;
+    }
+
+    private IEnumerator PushBackPlayer(PlayerPushBack pushBackEffect)
+    {
+        var targetPosition = this.player.transform.position - (this.player.transform.forward * pushBackEffect.PushingBackPower);
+        var objToMove = this.player;
+
+        var posReached = false;
+
+        while (!posReached)
+        {
+            objToMove.transform.position = Vector3.Lerp(
+                objToMove.transform.position,
+                targetPosition,
+                pushBackEffect.LerpSpeed * Time.deltaTime);
+
+
+            if ((objToMove.transform.position - targetPosition).sqrMagnitude < 0.1f) posReached = true;
+
+            yield return null;
+        }
+
+        pushBackEffect.End = true;
+
+    }
+
+    private IEnumerator RotatePlayer(PlayerSee rotateEffect)
+    {
+        var objToMove = this.player;
+        var lerpSpeed = rotateEffect.LerpSpeed;
+
+        var tempObj = new GameObject("temp");
+        tempObj.transform.position = this.player.transform.position;
+        tempObj.transform.rotation = this.player.transform.rotation;
+
+        tempObj.transform.LookAt(rotateEffect.GbRef.transform);
+
+        var targetRotation = tempObj.transform.rotation;
+
+
+        var posReached = false;
+
+        while (!posReached)
+        {
+
+            objToMove.transform.rotation = Quaternion.Slerp(
+                objToMove.transform.rotation,
+                targetRotation,
+                lerpSpeed * Time.deltaTime);
+
+            if (Quaternion.Angle(objToMove.transform.rotation, targetRotation) < 0.1f) posReached = true;
+
+            yield return null;
+        }
+
+        rotateEffect.End = true;
+        DestroyObject(tempObj);
+    }
+    #endregion
+
+    #region Camera Effects Methods
+
+    private void CameraEffectsHandler()
+    {
+        var camEffectsToEvaluate = this.storySelected.Events[this.eventIndex].Effects.CamEffect;
+
+        if (camEffectsToEvaluate.CameraMoveEffect.GbRef != null)
+            this.PlayCameraMoveEffect(camEffectsToEvaluate.CameraMoveEffect);
+        else if (camEffectsToEvaluate.CameraShakeEffect.ShakingPower > 0)
+            this.PlayCameraShakeEffect(camEffectsToEvaluate.CameraShakeEffect);
+        else if (camEffectsToEvaluate.CameraErEffect.ErLerpSpeed > 0)
+            this.PlayCameraErEffect(camEffectsToEvaluate.CameraErEffect);
+        else if (camEffectsToEvaluate.CameraSrEffect.SrLerpSpeed > 0)
+            this.PlayCameraSrEffect(camEffectsToEvaluate.CameraSrEffect);
+
+
+    }
+
+    private void PlayCameraMoveEffect(CameraMove effectToPlay)
+    {
+        this.cameraChangeCounter++;
+        if (this.cameraChangeCounter > 1)
+        {
+            this.camLastPos.Add(Camera.main.transform.position);
+            this.camLastRot.Add(Camera.main.transform.rotation);
+        }
+        this.StartCoroutine(this.MovingStoryCamera(effectToPlay));
+    }
+
+    private void PlayCameraShakeEffect(CameraShake effectToPlay)
+    {
+        this.StartCoroutine(this.ShakingStoryCamera(effectToPlay));
+    }
+
+    private void PlayCameraErEffect(CameraEventRevert effectToPlay)
+    {
+        this.StartCoroutine(this.MovingStoryCamera(effectToPlay, this.cameraChangeCounter - 1));
+    }
+
+    private void PlayCameraSrEffect(CameraStoryRevert effectToPlay)
+    {
+        this.StartCoroutine(this.MovingStoryCamera(effectToPlay));
+    }
+
+    private IEnumerator MovingStoryCamera(CameraMove movingCameraEffect)
+    {
+        var whereToMove = movingCameraEffect.GbRef;
+        var objToMove = Camera.main;
+        var lerpSpeed = movingCameraEffect.LerpSpeed;
+
+        var targetRotation = whereToMove.transform.rotation;
+        var targetPosition = whereToMove.transform.position;
+
+        var posReached = false;
+
+        while (!posReached)
+        {
+            objToMove.transform.position = Vector3.Lerp(
+                objToMove.transform.position,
+                targetPosition,
+                lerpSpeed * Time.deltaTime);
+            objToMove.transform.rotation = Quaternion.Slerp(
+                objToMove.transform.rotation,
+                targetRotation,
+                lerpSpeed * Time.deltaTime);
+
+
+            var targetPosYFixed = targetPosition;
+
+
+            targetPosYFixed.y = this.player.transform.position.y;
+
+            if (Quaternion.Angle(objToMove.transform.rotation, targetRotation) < 0.1f
+                && ((objToMove.transform.position - targetPosYFixed).sqrMagnitude < 0.1f)) posReached = true;
+
+            yield return null;
+        }
+
+        movingCameraEffect.End = true;
+    }
+
+    private IEnumerator MovingStoryCamera(CameraEventRevert erCameraEffect, int listIndex)
+    {
+
+        var objToMove = Camera.main;
+        var lerpSpeed = erCameraEffect.ErLerpSpeed;
+
+        var targetRotation = Quaternion.identity;
+        var targetPosition = new Vector3();
+
+        if (listIndex >= 0)
+        {
+            targetRotation = this.camLastRot[listIndex];
+            targetPosition = this.camLastPos[listIndex];
+        }
+
+        var posReached = false;
+
+        while (!posReached && listIndex >= 0)
+        {
+            objToMove.transform.position = Vector3.Lerp(
+                objToMove.transform.position,
+                targetPosition,
+                lerpSpeed * Time.deltaTime);
+            objToMove.transform.rotation = Quaternion.Slerp(
+                objToMove.transform.rotation,
+                targetRotation,
+                lerpSpeed * Time.deltaTime);
+
+
+            var targetPosYFixed = targetPosition;
+
+
+            targetPosYFixed.y = this.player.transform.position.y;
+
+            if (Quaternion.Angle(objToMove.transform.rotation, targetRotation) < 0.1f
+                && ((objToMove.transform.position - targetPosYFixed).sqrMagnitude < 0.1f)) posReached = true;
+
+            yield return null;
+        }
+
+        if (listIndex < 0)
+            Debug.Log("Event Revert Effect bad applied");
+
+        erCameraEffect.End = true;
+    }
+
+    private IEnumerator MovingStoryCamera(CameraStoryRevert srCameraEffect)
+    {
+
+        var objToMove = Camera.main;
+        var lerpSpeed = srCameraEffect.SrLerpSpeed;
+
+        var targetRotation = this.camLastRot[0];
+        var targetPosition = this.camLastPos[0];
+
+        var posReached = false;
+
+        while (!posReached)
+        {
+            objToMove.transform.position = Vector3.Lerp(
+                objToMove.transform.position,
+                targetPosition,
+                lerpSpeed * Time.deltaTime);
+            objToMove.transform.rotation = Quaternion.Slerp(
+                objToMove.transform.rotation,
+                targetRotation,
+                lerpSpeed * Time.deltaTime);
+
+
+            var targetPosYFixed = targetPosition;
+
+
+            targetPosYFixed.y = this.player.transform.position.y;
+
+            if (Quaternion.Angle(objToMove.transform.rotation, targetRotation) < 0.1f
+                && ((objToMove.transform.position - targetPosYFixed).sqrMagnitude < 0.1f)) posReached = true;
+
+            yield return null;
+        }
+
+        srCameraEffect.End = true;
+    }
+
+    private IEnumerator ShakingStoryCamera(CameraShake shakingCameraEffect)
+    {
+
+        var timer = 0.0f;
+        var originalCameraRot = Camera.main.transform.rotation;
+
+        while (shakingCameraEffect.ShakingDuration > timer)
+        {
+            var rotationAmount = Random.insideUnitSphere * shakingCameraEffect.ShakingPower;
+            rotationAmount.z = 0;
+
+            Camera.main.transform.rotation = Quaternion.Slerp(Camera.main.transform.rotation, Camera.main.transform.rotation * Quaternion.Euler(rotationAmount), Time.deltaTime * shakingCameraEffect.ShakingRoughness);
+
+            timer += Time.deltaTime;
+
+            yield return null;
+        }
+
+        while (Quaternion.Angle(Camera.main.transform.rotation, originalCameraRot) > 0.1f)
+        {
+            Camera.main.transform.rotation = Quaternion.Slerp(Camera.main.transform.rotation, originalCameraRot, Time.deltaTime * shakingCameraEffect.ShakingRoughness);
+
+            yield return null;
+        }
+
+        shakingCameraEffect.End = true;
+    }
+    #endregion
+
+    #region Env Effects Methods
+    private void EnvEffectsHandler()
+    {
+        var envEffectToEvaluate = new List<EnvironmentEffect>();
+        envEffectToEvaluate.AddRange(this.storySelected.Events[this.eventIndex].Effects.EnvEffect);
+
+        if (envEffectToEvaluate.Count == 0) return;
+        else
+        {
+            foreach (var envEffect in envEffectToEvaluate)
+            {
+                if (envEffect.ObjMovEffect.GbToMove != null &&
+                    envEffect.ObjMovEffect.GbTarget != null)
+                    this.PlayObjMovingEffect(envEffect.ObjMovEffect);
+
+                if (envEffect.ObjActiEffect.GbRef != envEffect.ObjMovEffect.GbToMove &&
+                    envEffect.ObjActiEffect.GbRef != null)
+                    this.PlayObjActiEffect(envEffect.ObjActiEffect);
+
+                if (envEffect.ObjDeActiEffect.GbRef != envEffect.ObjActiEffect.GbRef &&
+                    envEffect.ObjDeActiEffect.GbRef != envEffect.ObjMovEffect.GbToMove &&
+                    envEffect.ObjDeActiEffect.GbRef != null)
+                    this.PlayObjDeActiEffect(envEffect.ObjDeActiEffect);
+
+                if (envEffect.BaloonEffect.GbRefRikiLogic != envEffect.ObjDeActiEffect.GbRef &&
+                    envEffect.BaloonEffect.GbRefRikiLogic != envEffect.ObjActiEffect.GbRef &&
+                    envEffect.BaloonEffect.GbRefRikiLogic != envEffect.ObjMovEffect.GbToMove &&
+                    envEffect.BaloonEffect.GbRefRikiLogic != null)
+                    this.PlayBaloonEffect(envEffect.BaloonEffect);
+            }
+        }
+    }
+
+    private void PlayObjMovingEffect(ObjectMoving effectToPlay)
+    {
+        this.StartCoroutine(this.MovingObject(effectToPlay));
+    }
+
+    private void PlayObjActiEffect(ObjectActivation effectToPlay)
+    {
+       // if (effectToPlay.Time == 0)
+           // effectToPlay.GbRef
+
+    }
+
+    private void PlayObjDeActiEffect(ObjectDeActivation effectToPlay)
+    {
+
+    }
+
+    private void PlayBaloonEffect(Baloon effectToPlay)
+    {
+
+    }
+
+    private IEnumerator MovingObject(ObjectMoving movingObjEffect)
+    {
+        var whereToMove = movingObjEffect.GbTarget;
+        var objToMove = movingObjEffect.GbToMove;
+        var lerpSpeed = movingObjEffect.LerpSpeed;
+
+        var targetRotation = whereToMove.transform.rotation;
+        var targetPosition = whereToMove.transform.position;
+
+        var posReached = false;
+
+        while (!posReached)
+        {
+            objToMove.transform.position = Vector3.Lerp(
+                objToMove.transform.position,
+                targetPosition,
+                lerpSpeed * Time.deltaTime);
+            objToMove.transform.rotation = Quaternion.Slerp(
+                objToMove.transform.rotation,
+                targetRotation,
+                lerpSpeed * Time.deltaTime);
+
+
+            var targetPosYFixed = targetPosition;
+
+
+            targetPosYFixed.y = this.player.transform.position.y;
+
+            if (Quaternion.Angle(objToMove.transform.rotation, targetRotation) < 0.1f
+                && ((objToMove.transform.position - targetPosYFixed).sqrMagnitude < 0.1f)) posReached = true;
+
+            yield return null;
+        }
+
+        movingObjEffect.End = true;
+    }
+    #endregion
+
+    #region Edit Mode Methods
+    /*
+public void OnValidate()
+{
+GameObject.FindGameObjectWithTag("GameController").GetComponent<QuestsManager>().AddToRepository(this.CurrentStoryLine);
+}
+*/
+    #endregion
 }

@@ -5,12 +5,32 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
 using UnityEngine.Events;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 
 public class SaveSystem : MonoBehaviour
 {
-
     public Transform Player;
-    
+
+    void Awake()
+    {
+        GameController gcTempLink = this.GetComponent<GameController>();
+        gcTempLink.gpInitializer.AddListener(GameplayInitialization);
+    }
+
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.K))
+        {
+            SceneManager.LoadScene("Ricky Testing");
+        }
+    }
+
+
+    private void GameplayInitialization(GameObject player)
+    {
+        FSMChecker fsmCheckerTempLink = player.GetComponent<FSMChecker>();
+        fsmCheckerTempLink.deathRequest.AddListener(LoadState);
+    }
 
 
     public void SaveState()
@@ -28,6 +48,9 @@ public class SaveSystem : MonoBehaviour
         data.roty = Player.transform.eulerAngles.y;
         data.rotz = Player.transform.eulerAngles.z;
 
+        data.saveAbilities = new List<abilties>();
+        data.saveAbilities.AddRange(Player.GetComponent<FSMChecker>().cPlayerState.currentAbilities);
+
         bf.Serialize(file, data);
         file.Close();
 
@@ -42,13 +65,13 @@ public class SaveSystem : MonoBehaviour
             PlayerData data = (PlayerData)bf.Deserialize(file);
             file.Close();
 
-            Player.transform.position = new Vector3 (data.posx, data.posy, data.posz);
+            Player.transform.position = new Vector3(data.posx, data.posy, data.posz);
             Player.transform.rotation = Quaternion.Euler(data.rotx, data.roty, data.rotz);
+
+            Player.GetComponent<FSMChecker>().cPlayerState.currentAbilities.AddRange(data.saveAbilities);
         }
 
     }
-
-   
 }
 
 [Serializable]
@@ -61,6 +84,9 @@ class PlayerData
     public float rotx;
     public float roty;
     public float rotz;
+
+    public List<abilties> saveAbilities;
+
 }
 
 

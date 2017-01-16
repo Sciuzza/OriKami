@@ -8,29 +8,20 @@ public class CameraManager : MonoBehaviour
 
     [HideInInspector]
     public CameraPlayer CurrentPlCameraSettings;
-
     public Transform CameraTargetTransform;
-
     public LayerMask Env;
-
     #endregion Public Variables
 
     #region Private Variables
-
     private Transform playerTransform;
     private Transform cameraTransform;
-
     private float currentX;
     private float currentY;
-
     private bool cameraPlayerControl = true;
-
     private RaycastHit hitInfo;
-
     #endregion Private Variables
 
     #region Initializing Camera in Gameplay Scenes
-
     public void SettingPlayerCamera(GameObject player)
     {
         this.cameraTransform = Camera.main.transform;
@@ -41,23 +32,21 @@ public class CameraManager : MonoBehaviour
 
         fsmLink.switchingCameraControlToOFF.AddListener(this.SwitchingCameraControlToOff);
         fsmLink.switchingCameraControlToOn.AddListener(this.SwitchingCameraControlToOn);
+        fsmLink.switchingCameraToStoryRequest.AddListener(this.SwitchingCameraToStoryCamera);
     }
 
     #endregion Initializing Camera in Gameplay Scenes
 
     #region Taking Game Controller Reference and Link the Initializer Event
-
     private void Awake()
     {
         var gcLink = this.GetComponent<GameController>();
 
         gcLink.gpInitializer.AddListener(this.SettingPlayerCamera);
     }
-
     #endregion Taking Game Controller Reference and Link the Initializer Event
 
     #region Camera Player Mouse Zoom
-
     private void Update()
     {
         if (!this.cameraPlayerControl) return;
@@ -97,11 +86,9 @@ public class CameraManager : MonoBehaviour
             this.CurrentPlCameraSettings.distanceMax);
         this.currentY = Mathf.Clamp(this.currentY, this.CurrentPlCameraSettings.yAngleMin, this.CurrentPlCameraSettings.yAngleMax);
     }
-
     #endregion Camera Player Mouse Zoom
 
     #region Camera Follow
-
     private void LateUpdate()
     {
         if (!this.cameraPlayerControl) return;
@@ -115,6 +102,8 @@ public class CameraManager : MonoBehaviour
             this.CameraTargetTransform.position = this.playerTransform.position + (rotation * dir);
             this.CameraTargetTransform.LookAt(this.playerTransform.position);
 
+        
+
             var playerToCameraRay = new Ray(this.playerTransform.position, -this.CameraTargetTransform.forward);
 
             // Debug.DrawRay(this.CameraTargetTransform.position, this.CameraTargetTransform.forward * (this.CurrentPlCameraSettings.currentDistance - this.CurrentPlCameraSettings.distanceMin));
@@ -122,8 +111,11 @@ public class CameraManager : MonoBehaviour
 
             this.cameraTransform.rotation = Quaternion.Slerp(this.cameraTransform.rotation, this.CameraTargetTransform.rotation, 6f * Time.deltaTime);
         }
-    }
 
+       
+
+       
+    }
     #endregion Camera Follow
 
     #region General Methods
@@ -162,5 +154,9 @@ public class CameraManager : MonoBehaviour
         this.StopCoroutine("LerpOnDesignerCamera");
     }
 
+    private void SwitchingCameraToStoryCamera()
+    {
+        this.cameraPlayerControl = false;
+    }
     #endregion General Methods
 }

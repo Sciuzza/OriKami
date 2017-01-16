@@ -121,6 +121,11 @@ public class event_collider : UnityEvent<Collider>
 public class event_joy_pc : UnityEvent<buttonsJoy, buttonsPc>
 {
 }
+
+[System.Serializable]
+public class event_cs : UnityEvent<controlStates>
+{
+}
 #endregion
 
 public class FSMChecker : MonoBehaviour
@@ -150,7 +155,7 @@ public class FSMChecker : MonoBehaviour
     }
 
     [SerializeField]
-    playerCState cPlayerState;
+    public playerCState cPlayerState;
 
     private CharacterController ccLink;
     private VFissure vfLink;
@@ -176,7 +181,7 @@ public class FSMChecker : MonoBehaviour
     public event_pl plStateChanged;
     public event_Gb switchingCameraControlToOFF;
     public UnityEvent switchingCameraControlToOn;
-
+    public UnityEvent switchingCameraToStoryRequest;
     #endregion
 
     #region Initialization Methods
@@ -208,8 +213,20 @@ public class FSMChecker : MonoBehaviour
 
         fsmExeTempLink.vFissureAniEnded.AddListener(VFissureAniEndEffects);
 
+        GameObject storyLineCheck = GameObject.FindGameObjectWithTag("StoryLine");
 
+        if (storyLineCheck != null)
+        {
 
+            StoryLineInstance slTempLink =
+                GameObject.FindGameObjectWithTag("StoryLine").GetComponent<StoryLineInstance>();
+
+            if (slTempLink != null)
+            {
+                slTempLink.FormUnlockRequest.AddListener(this.UnlockingAbility);
+                slTempLink.ChangeControlStateRequest.AddListener(this.StoryCsChange);
+            }
+        }
     }
 
     void Start()
@@ -1529,6 +1546,41 @@ public class FSMChecker : MonoBehaviour
         }
 
     }
+
+    private void UnlockingAbility(string whichAbility)
+    {
+        switch (whichAbility)
+        {
+            case "Frog Form":
+                this.abiUnlocked.frogUnlocked = true;
+                break;
+            case "Dragon Form":
+                this.abiUnlocked.craneUnlocked = true;
+                break;
+            case "Arma Form":
+                this.abiUnlocked.armaUnlocked = true;
+                break;
+            case "Dolphin Form":
+                this.abiUnlocked.dolphinUnlocked = true;
+                break;
+        }
+
+        this.UpdatingAbilityList();
+    }
+
+    private void StoryCsChange(controlStates newCs)
+    {
+        this.previousClState = this.cPlayerState.currentClState;
+        this.cPlayerState.currentClState = newCs;
+        this.UpdatingAbilityList();
+
+        if (this.cPlayerState.currentClState == controlStates.noCamAndMove || 
+            this.cPlayerState.currentClState == controlStates.noCamera ||
+            this.cPlayerState.currentClState == controlStates.noCameraAndGenAbi ||
+            this.cPlayerState.currentClState == controlStates.noControl)
+            this.switchingCameraToStoryRequest.Invoke();
+
+    }
     #endregion
     #endregion
 
@@ -1540,7 +1592,6 @@ public class FSMChecker : MonoBehaviour
             dying = true;
             StartCoroutine(Drowning());
         }
-
 
         #region Cheat Code 
 
@@ -1566,6 +1617,7 @@ public class FSMChecker : MonoBehaviour
         }
 
         #endregion
+
         #region SoundForms
         if (cPlayerState.currentForm == "Dragon Form" && cPlayerState.currentPhState == physicStates.onAir && !isGlidingSound)
         {       
