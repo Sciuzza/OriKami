@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+
 using UnityEngine;
 
 using Random = UnityEngine.Random;
@@ -977,7 +979,10 @@ public class StoryLineInstance : MonoBehaviour
             effectToPlay.GbRef.SetActive(true);
             effectToPlay.End = true;
         }
-        else this.StartCoroutine(this.TimedActivation(effectToPlay));
+        else
+        {
+            this.StartCoroutine(this.TimedActivation(effectToPlay));
+        }
 
     }
 
@@ -988,11 +993,15 @@ public class StoryLineInstance : MonoBehaviour
             effectToPlay.GbRef.SetActive(false);
             effectToPlay.End = true;
         }
-        else this.StartCoroutine(this.TimedDeActivation(effectToPlay));
+        else
+        {
+            this.StartCoroutine(this.TimedDeActivation(effectToPlay));
+        }
     }
 
     private void PlayBaloonEffect(Baloon effectToPlay)
     {
+        this.StartCoroutine(this.BubbleAdjustRot(effectToPlay));
         this.StartCoroutine(this.BaloonDialogue(effectToPlay));
     }
 
@@ -1068,17 +1077,10 @@ public class StoryLineInstance : MonoBehaviour
     private IEnumerator BaloonDialogue(Baloon baloonEffect)
     {
 
-        
-
         var baloonTempLink = baloonEffect.NpcRef.GetComponentInChildren<BaloonBeha>(true);
 
-        var npcTempRef = baloonTempLink.gameObject.transform.parent.gameObject;
-
-        
-
-        string[] sentences = baloonTempLink.TextAssetRef.text.Split('\n');
+        var sentences = baloonTempLink.TextAssetRef.text.Split('\n');
         baloonTempLink.gameObject.SetActive(true);
-
 
         for (var i = baloonEffect.StartLine; i <= baloonEffect.EndLine; i++)
         {
@@ -1088,6 +1090,25 @@ public class StoryLineInstance : MonoBehaviour
 
         baloonTempLink.CanvasRef.gameObject.SetActive(false);
         baloonEffect.End = true;
+    }
+
+    private IEnumerator BubbleAdjustRot(Baloon baloonEffect)
+    {
+        var npcTempRef = baloonEffect.NpcRef;
+
+        var gbTargetTemp = new GameObject();
+        gbTargetTemp.transform.position = npcTempRef.transform.position;
+        gbTargetTemp.transform.rotation = npcTempRef.transform.rotation;
+
+
+        while (!baloonEffect.End)
+        {
+            gbTargetTemp.transform.LookAt(Camera.main.transform);
+            npcTempRef.transform.rotation = Quaternion.Slerp(npcTempRef.transform.rotation, gbTargetTemp.transform.rotation, Time.deltaTime);
+            yield return null;
+        }
+
+       DestroyObject(gbTargetTemp);
     }
     #endregion
 
