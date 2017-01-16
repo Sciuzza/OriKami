@@ -3,16 +3,15 @@ using System.Collections;
 
 public class CheckPointTest : MonoBehaviour
 {
+    SaveSystem save;
+    public GameObject Player;
+    public bool saveGame, loadGame;
 
     void Awake()
     {
        save = GameObject.FindGameObjectWithTag("GameController").GetComponent<SaveSystem>();
 
     }
-
-    SaveSystem save;
-    public GameObject Player;
-    public bool saveGame, loadGame;
 
     void OnTriggerEnter(Collider other)
     {
