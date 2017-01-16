@@ -77,6 +77,11 @@ public class event_abi_string : UnityEvent<abilties, string>
 }
 
 [System.Serializable]
+public class event_abi_string_listGb : UnityEvent<abilties, string, List<GameObject>>
+{
+}
+
+[System.Serializable]
 public class event_pl : UnityEvent<playerStates>
 {
 }
@@ -126,6 +131,11 @@ public class event_joy_pc : UnityEvent<buttonsJoy, buttonsPc>
 public class event_cs : UnityEvent<controlStates>
 {
 }
+
+[System.Serializable]
+public class event_vector3 : UnityEvent<Vector3>
+{
+}
 #endregion
 
 public class FSMChecker : MonoBehaviour
@@ -173,7 +183,7 @@ public class FSMChecker : MonoBehaviour
     public event_string formChangedInp;
     public event_vfscript_string vFissureUsed;
     public UnityEvent stoppingRollLogic, enableGlideLogic, stopGlideLogic, deathRequest;
-    public event_abi_string genAbiUsed;
+    public event_abi_string_listGb genAbiUsed;
     public event_vector3_ps rotationUsed;
     public event_string_string_listGb formChanged;
     public event_vector3_string_ps_listgb moveUsed;
@@ -298,7 +308,7 @@ public class FSMChecker : MonoBehaviour
             {
 
                 case abilties.jump:
-                    genAbiUsed.Invoke(abiReceived, cPlayerState.currentForm);
+                    genAbiUsed.Invoke(abiReceived, cPlayerState.currentForm, this.cPlayerState.forms);
                     break;
                 case abilties.cameraMove:
                     break;
@@ -306,7 +316,7 @@ public class FSMChecker : MonoBehaviour
                     cPlayerState.currentPlState = playerStates.rolling;
                     //cPlayerState.currentClState = controlStates.noMove;
                     UpdatingAbilityList();
-                    genAbiUsed.Invoke(abiReceived, cPlayerState.currentForm);
+                    genAbiUsed.Invoke(abiReceived, cPlayerState.currentForm, this.cPlayerState.forms);
                     break;
                 case abilties.moveBlock:
                     break;

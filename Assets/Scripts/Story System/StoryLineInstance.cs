@@ -1,67 +1,48 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-
 using UnityEngine;
-
 using Random = UnityEngine.Random;
 
 #region Enum Types
-
 public enum Stories
 {
     Story1,
-
     Story2,
-
     Story3,
-
     None
 }
 
 public enum Events
 {
     Event1,
-
     Event2,
-
     Event3,
-
     None
 }
 
 public enum Storylines
 {
     StoryLine1,
-
     StoryLine2,
-
     StoryLine3,
-
     None
 }
 
 public enum Movies
 {
     Movie1,
-
     Movie2,
-
     Movie3,
-
     None
 }
 
 public enum ItemType
 {
     Item1,
-
     Item2,
-
     Item3
 }
-
 #endregion Enum Types
 
 #region Effect Classes
@@ -117,8 +98,6 @@ public class PlayerReward
     [Tooltip("Standard Form, Frog Form, Armadillo Form, Dragon Form, Dolphin Form")]
     public string FormName;
 }
-
-
 #endregion Player Effect Classes
 
 #region Camera Effect Classes
@@ -161,7 +140,6 @@ public class CameraStoryRevert
 {
     public bool End;
     public float SrLerpSpeed;
-
 }
 #endregion Camera Effect Classes
 
@@ -350,11 +328,8 @@ public class EvEffects
 public class GenTriggerConditions
 {
     public buttonsJoy PlayerInputJoy;
-
     public buttonsPc PlayerInputPc;
-
     public SphereCollider STriggerRef;
-
     public BoxCollider TriggerRef;
 }
 
@@ -362,10 +337,8 @@ public class GenTriggerConditions
 public class ItemDependencies
 {
     public ItemType ItemDep;
-
     public int ItemValue;
 }
-
 #endregion Sub Story and Storyline Classes
 
 #region Story Element
@@ -374,85 +347,54 @@ public class ItemDependencies
 public class StoryEvent
 {
     public string EventName;
-
     public Events EventEnumName;
-
     public buttonsJoy PlayerInputJoy;
-
     public buttonsPc PlayerInputPc;
-
     public float EventEndDelay;
-
     public EvEffects Effects;
-
 }
 
 [Serializable]
 public class SingleStory
 {
     public string StoryName;
-
     public Stories StoryEnumName;
-
     public bool Active;
-
     public bool AutoComplete;
-
     public bool Completed;
 
     public GenTriggerConditions GenAccessCond;
-
     public List<ItemDependencies> ItemAccessCondition;
 
     public List<Stories> StoryActiveOnActivation;
-
     public List<Stories> StoryActiveOnCompletion;
-
     public List<Stories> StoryCompleteOnActivation;
-
     public List<Stories> StoryCompleteOnCompletion;
-
     public List<Storylines> StoryLineCompleteOnActivation;
-
     public List<Storylines> StoryLineCompleteOnCompletion;
 
     public controlStates PlayerControlEffect;
 
     public List<StoryEvent> Events;
-
-    // public ReorderableList reorderableList = new ReorderableList(Events1, (typeof(StoryEvent)),true, true, true, true);
-
-    // [System.Serializable]
-
-    // public static List<StoryEvent> Events1;
 }
 
 [Serializable]
 public class StoryLine
 {
     public string StoryLineName;
-
     public Storylines StoryEnumName;
-
     public bool Completed;
 
-    // public SingleStory[] Stories;
-
     public List<Stories> StoryActiveOnCompletion;
-
     public List<Stories> StoryCompleteOnCompletion;
-
     public List<Storylines> StoryLineCompleteOnCompletion;
 
     public List<SingleStory> Stories;
-
 }
-
 #endregion Story Element
 
 public class StoryLineInstance : MonoBehaviour
 {
-
     public StoryLine CurrentStoryLine;
 
     #region Events
@@ -470,7 +412,7 @@ public class StoryLineInstance : MonoBehaviour
 
     private List<Vector3> camLastPos = new List<Vector3>();
     private List<Quaternion> camLastRot = new List<Quaternion>();
-    private int cameraChangeCounter = 0;
+    private int cameraChangeCounter;
     #endregion
 
     #region Taking References and Linking Events
@@ -503,7 +445,11 @@ public class StoryLineInstance : MonoBehaviour
         foreach (var story in this.CurrentStoryLine.Stories)
         {
             if ((story.GenAccessCond.STriggerRef != trigger && story.GenAccessCond.TriggerRef != trigger)
-                || !story.Active) continue;
+                || !story.Active)
+            {
+                continue;
+            }
+
             this.storySelected = story;
             break;
         }
@@ -513,30 +459,45 @@ public class StoryLineInstance : MonoBehaviour
             Debug.Log(this.storySelected.StoryName);
             this.CheckStoryLivingConditions();
         }
-        else Debug.Log("No Story is accessible through this Trigger " + trigger.name);
+        else
+        {
+            Debug.Log("No Story is accessible through this Trigger " + trigger.name);
+        }
     }
 
     // Check all the other Access conditions
     private void CheckStoryLivingConditions()
     {
-        if (this.storySelected.Completed) return;
+        if (this.storySelected.Completed)
+        {
+            return;
+        }
 
+        /*
         foreach (var item in this.storySelected.ItemAccessCondition)
         {
             // control logic achievement system based
         }
+        */
 
         if (this.IsNeededInput(
-            this.storySelected.GenAccessCond.PlayerInputJoy,
-            this.storySelected.GenAccessCond.PlayerInputPc))
+             this.storySelected.GenAccessCond.PlayerInputJoy,
+             this.storySelected.GenAccessCond.PlayerInputPc))
+        {
             this.ActivateStoryInputRequest.Invoke(
-                this.storySelected.GenAccessCond.PlayerInputJoy,
-                this.storySelected.GenAccessCond.PlayerInputPc);
+             this.storySelected.GenAccessCond.PlayerInputJoy,
+             this.storySelected.GenAccessCond.PlayerInputPc);
+        }
         else if (this.IsNeededInput(this.storySelected.Events[0].PlayerInputJoy, this.storySelected.Events[0].PlayerInputPc))
+        {
             this.ActivateStoryInputRequest.Invoke(
-                this.storySelected.Events[0].PlayerInputJoy,
-                this.storySelected.Events[0].PlayerInputPc);
-        else this.LivingStoryEvent();
+             this.storySelected.Events[0].PlayerInputJoy,
+             this.storySelected.Events[0].PlayerInputPc);
+        }
+        else
+        {
+            this.LivingStoryEvent();
+        }
     }
 
     private bool IsNeededInput(buttonsJoy joyInput, buttonsPc pcInput)
@@ -556,7 +517,6 @@ public class StoryLineInstance : MonoBehaviour
         this.PlayerEffectsHandler();
         this.CameraEffectsHandler();
         this.EnvEffectsHandler();
-
     }
     #endregion
 
@@ -569,29 +529,44 @@ public class StoryLineInstance : MonoBehaviour
         {
             this.PlayPlayerRepoEffect(plaEffectsToEvaluate.PlayerRepositionEffect);
 
-            if (plaEffectsToEvaluate.PlayerReward.FormName != " ") this.PlayPlayerRewardEffect(plaEffectsToEvaluate.PlayerReward);
+            if (plaEffectsToEvaluate.PlayerReward.FormName != " ")
+            {
+                this.PlayPlayerRewardEffect(plaEffectsToEvaluate.PlayerReward);
+            }
         }
         else if (plaEffectsToEvaluate.PlayerMoveEffect.GbRef != null)
         {
             this.PlayPlayerMoveEffect(plaEffectsToEvaluate.PlayerMoveEffect);
 
-            if (plaEffectsToEvaluate.PlayerReward.FormName != " ") this.PlayPlayerRewardEffect(plaEffectsToEvaluate.PlayerReward);
+            if (plaEffectsToEvaluate.PlayerReward.FormName != " ")
+            {
+                this.PlayPlayerRewardEffect(plaEffectsToEvaluate.PlayerReward);
+            }
         }
         else if (plaEffectsToEvaluate.PlayerSeeEffect.GbRef != null)
         {
             this.PlayPlayerSeeEffect(plaEffectsToEvaluate.PlayerSeeEffect);
 
-            if (plaEffectsToEvaluate.PlayerReward.FormName != " ") this.PlayPlayerRewardEffect(plaEffectsToEvaluate.PlayerReward);
+            if (plaEffectsToEvaluate.PlayerReward.FormName != " ")
+            {
+                this.PlayPlayerRewardEffect(plaEffectsToEvaluate.PlayerReward);
+            }
         }
         else if (plaEffectsToEvaluate.PushingBackEffect.PushingBackPower > 0)
         {
             this.PlayPlayerPushingBackEffect(plaEffectsToEvaluate.PushingBackEffect);
 
-            if (plaEffectsToEvaluate.PlayerReward.FormName != " ") this.PlayPlayerRewardEffect(plaEffectsToEvaluate.PlayerReward);
+            if (plaEffectsToEvaluate.PlayerReward.FormName != " ")
+            {
+                this.PlayPlayerRewardEffect(plaEffectsToEvaluate.PlayerReward);
+            }
         }
         else
         {
-            if (plaEffectsToEvaluate.PlayerReward.FormName != " ") this.PlayPlayerRewardEffect(plaEffectsToEvaluate.PlayerReward);
+            if (plaEffectsToEvaluate.PlayerReward.FormName != " ")
+            {
+                this.PlayPlayerRewardEffect(plaEffectsToEvaluate.PlayerReward);
+            }
         }
     }
 
@@ -644,14 +619,15 @@ public class StoryLineInstance : MonoBehaviour
                 targetRotation,
                 lerpSpeed * Time.deltaTime);
 
-
             var targetPosYFixed = targetPosition;
-
 
             targetPosYFixed.y = this.player.transform.position.y;
 
             if (Quaternion.Angle(objToMove.transform.rotation, targetRotation) < 0.1f
-                && ((objToMove.transform.position - targetPosYFixed).sqrMagnitude < 0.1f)) posReached = true;
+                && ((objToMove.transform.position - targetPosYFixed).sqrMagnitude < 0.1f))
+            {
+                posReached = true;
+            }
 
             yield return null;
         }
@@ -673,14 +649,15 @@ public class StoryLineInstance : MonoBehaviour
                 targetPosition,
                 pushBackEffect.LerpSpeed * Time.deltaTime);
 
-
-            if ((objToMove.transform.position - targetPosition).sqrMagnitude < 0.1f) posReached = true;
+            if ((objToMove.transform.position - targetPosition).sqrMagnitude < 0.1f)
+            {
+                posReached = true;
+            }
 
             yield return null;
         }
 
         pushBackEffect.End = true;
-
     }
 
     private IEnumerator RotatePlayer(PlayerSee rotateEffect)
@@ -696,18 +673,19 @@ public class StoryLineInstance : MonoBehaviour
 
         var targetRotation = tempObj.transform.rotation;
 
-
         var posReached = false;
 
         while (!posReached)
         {
-
             objToMove.transform.rotation = Quaternion.Slerp(
                 objToMove.transform.rotation,
                 targetRotation,
                 lerpSpeed * Time.deltaTime);
 
-            if (Quaternion.Angle(objToMove.transform.rotation, targetRotation) < 0.1f) posReached = true;
+            if (Quaternion.Angle(objToMove.transform.rotation, targetRotation) < 0.1f)
+            {
+                posReached = true;
+            }
 
             yield return null;
         }
@@ -724,15 +702,21 @@ public class StoryLineInstance : MonoBehaviour
         var camEffectsToEvaluate = this.storySelected.Events[this.eventIndex].Effects.CamEffect;
 
         if (camEffectsToEvaluate.CameraMoveEffect.GbRef != null)
+        {
             this.PlayCameraMoveEffect(camEffectsToEvaluate.CameraMoveEffect);
+        }
         else if (camEffectsToEvaluate.CameraShakeEffect.ShakingPower > 0)
+        {
             this.PlayCameraShakeEffect(camEffectsToEvaluate.CameraShakeEffect);
+        }
         else if (camEffectsToEvaluate.CameraErEffect.ErLerpSpeed > 0)
+        {
             this.PlayCameraErEffect(camEffectsToEvaluate.CameraErEffect);
+        }
         else if (camEffectsToEvaluate.CameraSrEffect.SrLerpSpeed > 0)
+        {
             this.PlayCameraSrEffect(camEffectsToEvaluate.CameraSrEffect);
-
-
+        }
     }
 
     private void PlayCameraMoveEffect(CameraMove effectToPlay)
@@ -743,6 +727,7 @@ public class StoryLineInstance : MonoBehaviour
             this.camLastPos.Add(Camera.main.transform.position);
             this.camLastRot.Add(Camera.main.transform.rotation);
         }
+
         this.StartCoroutine(this.MovingStoryCamera(effectToPlay));
     }
 
@@ -783,14 +768,15 @@ public class StoryLineInstance : MonoBehaviour
                 targetRotation,
                 lerpSpeed * Time.deltaTime);
 
-
             var targetPosYFixed = targetPosition;
-
 
             targetPosYFixed.y = this.player.transform.position.y;
 
             if (Quaternion.Angle(objToMove.transform.rotation, targetRotation) < 0.1f
-                && ((objToMove.transform.position - targetPosYFixed).sqrMagnitude < 0.1f)) posReached = true;
+                && ((objToMove.transform.position - targetPosYFixed).sqrMagnitude < 0.1f))
+            {
+                posReached = true;
+            }
 
             yield return null;
         }
@@ -800,7 +786,6 @@ public class StoryLineInstance : MonoBehaviour
 
     private IEnumerator MovingStoryCamera(CameraEventRevert erCameraEffect, int listIndex)
     {
-
         var objToMove = Camera.main;
         var lerpSpeed = erCameraEffect.ErLerpSpeed;
 
@@ -826,27 +811,29 @@ public class StoryLineInstance : MonoBehaviour
                 targetRotation,
                 lerpSpeed * Time.deltaTime);
 
-
             var targetPosYFixed = targetPosition;
-
 
             targetPosYFixed.y = this.player.transform.position.y;
 
             if (Quaternion.Angle(objToMove.transform.rotation, targetRotation) < 0.1f
-                && ((objToMove.transform.position - targetPosYFixed).sqrMagnitude < 0.1f)) posReached = true;
+                && ((objToMove.transform.position - targetPosYFixed).sqrMagnitude < 0.1f))
+            {
+                posReached = true;
+            }
 
             yield return null;
         }
 
         if (listIndex < 0)
+        {
             Debug.Log("Event Revert Effect bad applied");
+        }
 
         erCameraEffect.End = true;
     }
 
     private IEnumerator MovingStoryCamera(CameraStoryRevert srCameraEffect)
     {
-
         var objToMove = Camera.main;
         var lerpSpeed = srCameraEffect.SrLerpSpeed;
 
@@ -866,14 +853,15 @@ public class StoryLineInstance : MonoBehaviour
                 targetRotation,
                 lerpSpeed * Time.deltaTime);
 
-
             var targetPosYFixed = targetPosition;
-
 
             targetPosYFixed.y = this.player.transform.position.y;
 
             if (Quaternion.Angle(objToMove.transform.rotation, targetRotation) < 0.1f
-                && ((objToMove.transform.position - targetPosYFixed).sqrMagnitude < 0.1f)) posReached = true;
+                && ((objToMove.transform.position - targetPosYFixed).sqrMagnitude < 0.1f))
+            {
+                posReached = true;
+            }
 
             yield return null;
         }
@@ -883,7 +871,6 @@ public class StoryLineInstance : MonoBehaviour
 
     private IEnumerator ShakingStoryCamera(CameraShake shakingCameraEffect)
     {
-
         var timer = 0.0f;
         var originalCameraRot = Camera.main.transform.rotation;
 
@@ -918,38 +905,53 @@ public class StoryLineInstance : MonoBehaviour
 
         var gbCheckTempRepo = new List<GameObject>();
 
-        if (envEffectToEvaluate.Count == 0) return;
+        if (envEffectToEvaluate.Count == 0)
+        {
+        }
         else
         {
             foreach (var envEffect in envEffectToEvaluate)
             {
                 if (envEffect.ObjMovEffect.GbToMove != null && envEffect.ObjMovEffect.GbTarget != null)
                 {
-                    if (!this.IsGameobjectRefUnique(gbCheckTempRepo, envEffect.ObjMovEffect.GbToMove)) continue;
+                    if (!this.IsGameobjectRefUnique(gbCheckTempRepo, envEffect.ObjMovEffect.GbToMove))
+                    {
+                        continue;
+                    }
+
                     this.PlayObjMovingEffect(envEffect.ObjMovEffect);
                     gbCheckTempRepo.Add(envEffect.ObjMovEffect.GbToMove);
-
                 }
 
                 if (envEffect.ObjActiEffect.GbRef != null)
                 {
-                    if (!this.IsGameobjectRefUnique(gbCheckTempRepo, envEffect.ObjActiEffect.GbRef)) continue;
+                    if (!this.IsGameobjectRefUnique(gbCheckTempRepo, envEffect.ObjActiEffect.GbRef))
+                    {
+                        continue;
+                    }
+
                     this.PlayObjActiEffect(envEffect.ObjActiEffect);
                     gbCheckTempRepo.Add(envEffect.ObjActiEffect.GbRef);
-
                 }
 
                 if (envEffect.ObjDeActiEffect.GbRef != null)
                 {
-                    if (!this.IsGameobjectRefUnique(gbCheckTempRepo, envEffect.ObjDeActiEffect.GbRef)) continue;
+                    if (!this.IsGameobjectRefUnique(gbCheckTempRepo, envEffect.ObjDeActiEffect.GbRef))
+                    {
+                        continue;
+                    }
+
                     this.PlayObjDeActiEffect(envEffect.ObjDeActiEffect);
                     gbCheckTempRepo.Add(envEffect.ObjDeActiEffect.GbRef);
-
                 }
 
                 if (envEffect.BaloonEffect.NpcRef != null)
                 {
-                    if (!this.IsGameobjectRefUnique(gbCheckTempRepo, envEffect.BaloonEffect.NpcRef)) continue;
+                    if (!this.IsGameobjectRefUnique(gbCheckTempRepo, envEffect.BaloonEffect.NpcRef))
+                    {
+                        continue;
+                    }
+
                     this.PlayBaloonEffect(envEffect.BaloonEffect);
                     gbCheckTempRepo.Add(envEffect.BaloonEffect.NpcRef);
                 }
@@ -961,7 +963,10 @@ public class StoryLineInstance : MonoBehaviour
     {
         foreach (var el in gbRepo)
         {
-            if (gbToCheck == el) return false;
+            if (gbToCheck == el)
+            {
+                return false;
+            }
         }
 
         return true;
@@ -983,7 +988,6 @@ public class StoryLineInstance : MonoBehaviour
         {
             this.StartCoroutine(this.TimedActivation(effectToPlay));
         }
-
     }
 
     private void PlayObjDeActiEffect(ObjectDeActivation effectToPlay)
@@ -1027,14 +1031,15 @@ public class StoryLineInstance : MonoBehaviour
                 targetRotation,
                 lerpSpeed * Time.deltaTime);
 
-
             var targetPosYFixed = targetPosition;
-
 
             targetPosYFixed.y = this.player.transform.position.y;
 
             if (Quaternion.Angle(objToMove.transform.rotation, targetRotation) < 0.1f
-                && ((objToMove.transform.position - targetPosYFixed).sqrMagnitude < 0.1f)) posReached = true;
+                && ((objToMove.transform.position - targetPosYFixed).sqrMagnitude < 0.1f))
+            {
+                posReached = true;
+            }
 
             yield return null;
         }
@@ -1076,7 +1081,6 @@ public class StoryLineInstance : MonoBehaviour
 
     private IEnumerator BaloonDialogue(Baloon baloonEffect)
     {
-
         var baloonTempLink = baloonEffect.NpcRef.GetComponentInChildren<BaloonBeha>(true);
 
         var sentences = baloonTempLink.TextAssetRef.text.Split('\n');
@@ -1100,7 +1104,6 @@ public class StoryLineInstance : MonoBehaviour
         gbTargetTemp.transform.position = npcTempRef.transform.position;
         gbTargetTemp.transform.rotation = npcTempRef.transform.rotation;
 
-
         while (!baloonEffect.End)
         {
             gbTargetTemp.transform.LookAt(Camera.main.transform);
@@ -1108,7 +1111,7 @@ public class StoryLineInstance : MonoBehaviour
             yield return null;
         }
 
-       DestroyObject(gbTargetTemp);
+        DestroyObject(gbTargetTemp);
     }
     #endregion
 

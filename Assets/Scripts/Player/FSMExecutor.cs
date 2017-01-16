@@ -24,6 +24,11 @@ public class FSMExecutor : MonoBehaviour
     public UnityEvent vFissureAniEnded;
     #endregion
 
+    #region Private Variables
+
+    private Vector3 finalMoveDirTemp;
+    #endregion
+
     #region Taking References and linking Events
     void Awake()
     {
@@ -35,7 +40,9 @@ public class FSMExecutor : MonoBehaviour
         fsmCheckerTempLink.rotationUsed.AddListener(ApplyingRotationEffect);
         fsmCheckerTempLink.vFissureUsed.AddListener(ApplyingSpecialAniAbi);
 
+        MoveHandler moveHandTempLink = this.gameObject.GetComponent<MoveHandler>();
 
+        moveHandTempLink.UpdatedFinalMoveRequest.AddListener(this.TakingFinalMoveUpdated);
     }
     #endregion
 
@@ -95,6 +102,8 @@ public class FSMExecutor : MonoBehaviour
                 }
                 aniTemp.speed = Math.Abs(moveDirInput.sqrMagnitude) > tolerance ? aniTemp.GetFloat("Moving") : 1;
 
+
+
                 break;
             case ("Frog Form"):
 
@@ -136,10 +145,10 @@ public class FSMExecutor : MonoBehaviour
                 switch (currentPHState)
                 {
                     case physicStates.onAir:
-                        moveSelected.Invoke(moveDirInput, generalValues.moveInAir);
+                        this.moveSelected.Invoke(moveDirInput, this.generalValues.moveInAir);
                         break;
                     case physicStates.onWater:
-                        moveSelected.Invoke(moveDirInput, currentMoveValues.dolphinMove.swimSpeed);
+                        moveSelected.Invoke(moveDirInput, this.currentMoveValues.dolphinMove.swimSpeed);
                         break;
                 }
 
@@ -148,7 +157,12 @@ public class FSMExecutor : MonoBehaviour
         }
     }
 
-    private void ApplyingAbilityEffect(abilties abiUsed, string currentForm)
+    private void TakingFinalMoveUpdated(Vector3 currentMove)
+    {
+        this.finalMoveDirTemp = currentMove;
+    }
+
+    private void ApplyingAbilityEffect(abilties abiUsed, string currentForm, List<GameObject> forms)
     {
         switch (abiUsed)
         {
@@ -157,6 +171,8 @@ public class FSMExecutor : MonoBehaviour
                 switch (currentForm)
                 {
                     case ("Standard Form"):
+                        var aniTemp = forms[0].GetComponent<Animator>();
+                        aniTemp.SetBool("IsJump", true);
                         jumpSelected.Invoke(currentMoveValues.standMove.jumpStrength);
                         break;
                     case ("Frog Form"):
