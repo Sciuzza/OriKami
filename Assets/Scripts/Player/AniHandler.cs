@@ -13,7 +13,9 @@ public class AniHandler : MonoBehaviour {
 
     #region Private Variables
 
-    private Vector3 finalMoveDirTemp;
+    private float ikiNormalSpeed, ikiInAirSpeed, ikiInWaterSpeed;
+    private Vector3 finalMoveDirTemp, moveinputTemp;
+    private GameObject currentForm;
     #endregion
 
     #region Taking References and linking Events

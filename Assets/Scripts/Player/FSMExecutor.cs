@@ -7,8 +7,11 @@ using UnityEngine.Events;
 
 public class FSMExecutor : MonoBehaviour
 {
-    PlayerInputs playerref;
-   
+    #region Private Constants
+    private const float Tolerance = 0.1f;
+    #endregion
+
+
     #region Public Variables
     [HideInInspector]
     public moveValues currentMoveValues;
@@ -16,7 +19,7 @@ public class FSMExecutor : MonoBehaviour
     [HideInInspector]
     public generalTweaks generalValues;
     #endregion
-    
+
     #region Events
     public event_vector3_float moveSelected, rotSelected, specialRotSelected;
     public event_float jumpSelected, rollSelected;
@@ -25,24 +28,30 @@ public class FSMExecutor : MonoBehaviour
     #endregion
 
     #region Private Variables
+    PlayerInputs playerref;
 
+    //Animator Manager variables
     private Vector3 finalMoveDirTemp;
+    private List<bool> delayFlagRefFix = new List<bool>();
+    private Animator animatorLink;
     #endregion
 
     #region Taking References and linking Events
     void Awake()
     {
-        FSMChecker fsmCheckerTempLink = this.gameObject.GetComponent<FSMChecker>();
+        var fsmCheckerTempLink = this.gameObject.GetComponent<FSMChecker>();
 
-        fsmCheckerTempLink.formChanged.AddListener(ApplyingFormEffect);
-        fsmCheckerTempLink.moveUsed.AddListener(ApplyingMoveAbiEffect);
-        fsmCheckerTempLink.genAbiUsed.AddListener(ApplyingAbilityEffect);
-        fsmCheckerTempLink.rotationUsed.AddListener(ApplyingRotationEffect);
-        fsmCheckerTempLink.vFissureUsed.AddListener(ApplyingSpecialAniAbi);
+        fsmCheckerTempLink.formChanged.AddListener(this.ApplyingFormEffect);
+        fsmCheckerTempLink.moveUsed.AddListener(this.ApplyingMoveAbiEffect);
+        fsmCheckerTempLink.genAbiUsed.AddListener(this.ApplyingAbilityEffect);
+        fsmCheckerTempLink.rotationUsed.AddListener(this.ApplyingRotationEffect);
+        fsmCheckerTempLink.vFissureUsed.AddListener(this.ApplyingSpecialAniAbi);
 
-        MoveHandler moveHandTempLink = this.gameObject.GetComponent<MoveHandler>();
+        var moveHandTempLink = this.gameObject.GetComponent<MoveHandler>();
 
         moveHandTempLink.UpdatedFinalMoveRequest.AddListener(this.TakingFinalMoveUpdated);
+
+        this.delayFlagRefFix.Add(true);
     }
     #endregion
 
@@ -70,42 +79,57 @@ public class FSMExecutor : MonoBehaviour
 
         switch (currentForm)
         {
-            case ("Standard Form"):
+            case "Standard Form":
 
 
-                var aniTemp = forms[0].GetComponent<Animator>();
+                this.animatorLink = forms[0].GetComponent<Animator>();
 
-                var tolerance = 0.1;
-                aniTemp.SetBool("Stand Still", Math.Abs(moveDirInput.sqrMagnitude) < tolerance);
+                this.animatorLink.SetFloat("VerticalMove", this.finalMoveDirTemp.normalized.y);
 
-                if (!aniTemp.GetBool("Stand Still"))
+                if (this.animatorLink.GetFloat("VerticalMove") == 0 && !this.animatorLink.GetBool("Ground"))
                 {
-                    switch (currentPHState)
-                    {
-                        case physicStates.onAir:
-                            this.moveSelected.Invoke(moveDirInput, this.generalValues.moveInAir);
-                            aniTemp.SetFloat("Moving", Mathf.InverseLerp(0, (float)Math.Pow(this.currentMoveValues.standMove.moveSpeed, 2), (moveDirInput * this.generalValues.moveInAir).sqrMagnitude));
-                            break;
-                        case physicStates.onWater:
+                    this.animatorLink.SetBool("Ground", true);
+                    this.animatorLink.SetTrigger("Landing");
+                    this.StartCoroutine(this.EnablingVariableSpeed(this.delayFlagRefFix));
+                }
+                else if (this.animatorLink.GetFloat("VerticalMove") != 0 && this.animatorLink.GetBool("Ground"))
+                {
+                    this.animatorLink.SetBool("Ground", false);
+                    this.delayFlagRefFix[0] = false;
+                }
+
+                switch (currentPHState)
+                {
+                    case physicStates.onAir:
+                        this.moveSelected.Invoke(moveDirInput, this.generalValues.moveInAir);
+                        break;
+                    case physicStates.onWater:
+                        if (Math.Abs(moveDirInput.sqrMagnitude) > Tolerance)
+                        {
                             this.moveSelected.Invoke(moveDirInput, this.generalValues.moveInWater);
-                            aniTemp.SetFloat("Moving", Mathf.InverseLerp(0, (float)Math.Pow(this.currentMoveValues.standMove.moveSpeed, 2), (moveDirInput * this.generalValues.moveInWater).sqrMagnitude));
-                            break;
-                        case physicStates.onGround:
+                        }
+                        this.animatorLink.SetFloat("Moving", Mathf.InverseLerp(0, (float)Math.Pow(this.currentMoveValues.standMove.moveSpeed, 2), (moveDirInput * this.generalValues.moveInWater).sqrMagnitude));
+                        break;
+                    case physicStates.onGround:
+                        if (Math.Abs(moveDirInput.sqrMagnitude) > Tolerance)
+                        {
                             this.moveSelected.Invoke(moveDirInput, this.currentMoveValues.standMove.moveSpeed);
-                            aniTemp.SetFloat("Moving", Mathf.InverseLerp(0, (float)Math.Pow(this.currentMoveValues.standMove.moveSpeed, 2), (moveDirInput * this.currentMoveValues.standMove.moveSpeed).sqrMagnitude));
-                            break;
-                    }
+                        }
+                        this.animatorLink.SetFloat("Moving", Mathf.InverseLerp(0, (float)Math.Pow(this.currentMoveValues.standMove.moveSpeed, 2), (moveDirInput * this.currentMoveValues.standMove.moveSpeed).sqrMagnitude));
+                        break;
+                }
+
+                if (this.animatorLink.GetBool("Ground") && this.delayFlagRefFix[0])
+                {
+                    this.animatorLink.speed = Math.Abs(moveDirInput.sqrMagnitude) > Tolerance ? this.animatorLink.GetFloat("Moving") : 1;
                 }
                 else
                 {
-                    aniTemp.SetFloat("Moving", 0);
+                    this.animatorLink.speed = 1;
                 }
-                aniTemp.speed = Math.Abs(moveDirInput.sqrMagnitude) > tolerance ? aniTemp.GetFloat("Moving") : 1;
-
-
 
                 break;
-            case ("Frog Form"):
+            case "Frog Form":
 
                 switch (currentPHState)
                 {
@@ -157,11 +181,6 @@ public class FSMExecutor : MonoBehaviour
         }
     }
 
-    private void TakingFinalMoveUpdated(Vector3 currentMove)
-    {
-        this.finalMoveDirTemp = currentMove;
-    }
-
     private void ApplyingAbilityEffect(abilties abiUsed, string currentForm, List<GameObject> forms)
     {
         switch (abiUsed)
@@ -172,7 +191,7 @@ public class FSMExecutor : MonoBehaviour
                 {
                     case ("Standard Form"):
                         var aniTemp = forms[0].GetComponent<Animator>();
-                        aniTemp.SetBool("IsJump", true);
+                        aniTemp.SetTrigger("Jumping");
                         jumpSelected.Invoke(currentMoveValues.standMove.jumpStrength);
                         break;
                     case ("Frog Form"):
@@ -197,7 +216,7 @@ public class FSMExecutor : MonoBehaviour
         {
 
             case playerStates.flying:
-                
+
             case playerStates.movingBlock:
                 rotSelected.Invoke(abiDirInput, generalValues.rotateSpeed / 3);
                 break;
@@ -459,7 +478,7 @@ public class FSMExecutor : MonoBehaviour
     {
 
         CharacterController ccTempLink = this.gameObject.GetComponent<CharacterController>();
-       
+
         float radius = ccTempLink.radius;
 
         ccTempLink.radius = 0;
@@ -562,6 +581,24 @@ public class FSMExecutor : MonoBehaviour
         vFissureAniOn = false;
         vFissureAniEnded.Invoke();
         ccTempLink.radius = radius;
+    }
+    #endregion
+
+    #region Animator Handler
+    private IEnumerator EnablingVariableSpeed(List<bool> ciccio)
+    {
+        var timer = 0.0f;
+        while (timer < 0.2f)
+        {
+            timer += Time.deltaTime;
+            yield return null;
+        }
+        ciccio[0] = true;
+    }
+
+    private void TakingFinalMoveUpdated(Vector3 currentMove)
+    {
+        this.finalMoveDirTemp = currentMove;
     }
     #endregion
 }

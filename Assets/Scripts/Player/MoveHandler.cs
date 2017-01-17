@@ -107,7 +107,7 @@ public class MoveHandler : MonoBehaviour
             }
 
             this.UpdatedFinalMoveRequest.Invoke(this.finalMove);
-            Debug.Log(this.finalMove.y);
+            //Debug.Log(this.finalMove.y);
 
             yield return null;
         }
