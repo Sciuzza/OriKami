@@ -9,7 +9,7 @@ using UnityEngine.SceneManagement;
 
 public class SaveSystem : MonoBehaviour
 {
-    public Transform Player;
+    private Transform PlayerTempLink;
 
     void Awake()
     {
@@ -30,28 +30,44 @@ public class SaveSystem : MonoBehaviour
     {
         FSMChecker fsmCheckerTempLink = player.GetComponent<FSMChecker>();
         fsmCheckerTempLink.deathRequest.AddListener(LoadState);
+        PlayerTempLink = player.transform;
+
     }
 
 
     public void SaveState()
     {
+        #region Binary Formatter & File Creation
 
         BinaryFormatter bf = new BinaryFormatter();
         FileStream file = File.Create(Application.persistentDataPath + "/PlayerData.dat");
+        #endregion
 
-        PlayerData data = new PlayerData();
-        data.posx = Player.transform.position.x;
-        data.posy = Player.transform.position.y;
-        data.posz = Player.transform.position.z;
+        #region Position & Rotation
+        SensibleData data = new SensibleData();
 
-        data.rotx = Player.transform.eulerAngles.x;
-        data.roty = Player.transform.eulerAngles.y;
-        data.rotz = Player.transform.eulerAngles.z;
+        data.posx = PlayerTempLink.transform.position.x;
+        data.posy = PlayerTempLink.transform.position.y;
+        data.posz = PlayerTempLink.transform.position.z;
 
-        data.saveAbilities = new List<abilties>();
-        data.saveAbilities.AddRange(Player.GetComponent<FSMChecker>().cPlayerState.currentAbilities);
+        data.rotx = PlayerTempLink.transform.eulerAngles.x;
+        data.roty = PlayerTempLink.transform.eulerAngles.y;
+        data.rotz = PlayerTempLink.transform.eulerAngles.z;
+        #endregion
+
+        #region FormSettings
+
+        data.formsUnlocked = new bool[4];
+        FSMChecker fsmTempLink = PlayerTempLink.gameObject.GetComponent<FSMChecker>();
+
+        data.formsUnlocked[0] = fsmTempLink.abiUnlocked.frogUnlocked;
+        data.formsUnlocked[1] = fsmTempLink.abiUnlocked.armaUnlocked;
+        data.formsUnlocked[2] = fsmTempLink.abiUnlocked.craneUnlocked;
+        data.formsUnlocked[3] = fsmTempLink.abiUnlocked.dolphinUnlocked;
+        #endregion
 
         bf.Serialize(file, data);
+
         file.Close();
 
     }
@@ -62,21 +78,41 @@ public class SaveSystem : MonoBehaviour
         {
             BinaryFormatter bf = new BinaryFormatter();
             FileStream file = File.Open(Application.persistentDataPath + "/PlayerData.dat", FileMode.Open);
-            PlayerData data = (PlayerData)bf.Deserialize(file);
+            SensibleData data = (SensibleData)bf.Deserialize(file);     
+
             file.Close();
 
-            Player.transform.position = new Vector3(data.posx, data.posy, data.posz);
-            Player.transform.rotation = Quaternion.Euler(data.rotx, data.roty, data.rotz);
+            PlayerTempLink.transform.position = new Vector3(data.posx, data.posy, data.posz);
+            PlayerTempLink.transform.rotation = Quaternion.Euler(data.rotx, data.roty, data.rotz);
 
-            Player.GetComponent<FSMChecker>().cPlayerState.currentAbilities.AddRange(data.saveAbilities);
+            FSMChecker fsmTempLink = PlayerTempLink.gameObject.GetComponent<FSMChecker>();
+
+            //fsmTempLink.abiUnlocked.frogUnlocked = data.frogUnlocked;
+            //fsmTempLink.abiUnlocked.armaUnlocked = data.armaUnlocked;
+            //fsmTempLink.abiUnlocked.craneUnlocked = data.craneUnlocked;
+            //fsmTempLink.abiUnlocked.dolphinUnlocked = data.dolphinUnlocked;
+
+            fsmTempLink.abiUnlocked.frogUnlocked = data.formsUnlocked[0];
+            fsmTempLink.abiUnlocked.armaUnlocked = data.formsUnlocked[1];
+            fsmTempLink.abiUnlocked.craneUnlocked = data.formsUnlocked[2];
+            fsmTempLink.abiUnlocked.dolphinUnlocked = data.formsUnlocked[3];
+
+            //player.GetComponent<FSMChecker>().abiUnlocked.frogUnlocked = data.frogUnLocked;
+            //player.GetComponent<FSMChecker>().abiUnlocked.armaUnlocked = data.armaUnLocked;
+            //player.GetComponent<FSMChecker>().abiUnlocked.craneUnlocked = data.cranUnLocked;
+            //player.GetComponent<FSMChecker>().abiUnlocked.dolphinUnlocked = data.dolpingUnLocked;
+            PlayerTempLink.GetComponent<FSMChecker>().UpdatingAbilityList();
+
+            // player.GetComponent<FSMChecker>().cPlayerState.currentAbilities.AddRange(data.saveAbilities);
         }
 
     }
 }
 
-[Serializable]
-class PlayerData
+[System.Serializable]
+public class SensibleData
 {
+    #region Position and Rotation
     public float posx;
     public float posy;
     public float posz;
@@ -84,11 +120,28 @@ class PlayerData
     public float rotx;
     public float roty;
     public float rotz;
+    #endregion
 
-    public List<abilties> saveAbilities;
+    //public bool frogUnlocked;
+    //public bool armaUnlocked;
+    //public bool craneUnlocked;
+    //public bool dolphinUnlocked;
+
+    public bool[] formsUnlocked;
+    // public List<abilties> saveAbilities;
+
+    public EnvData[] envObjects;
 
 }
 
+
+[System.Serializable]
+public class EnvData
+{
+    public float[] position;
+    public float[] rotation;
+    public bool isActive;
+}
 
 
 
