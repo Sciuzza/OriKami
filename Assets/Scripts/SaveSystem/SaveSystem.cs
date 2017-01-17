@@ -10,6 +10,7 @@ using UnityEngine.SceneManagement;
 public class SaveSystem : MonoBehaviour
 {
     private Transform PlayerTempLink;
+    private StoryLine storyLineTempLink;
 
     void Awake()
     {
@@ -31,9 +32,9 @@ public class SaveSystem : MonoBehaviour
         FSMChecker fsmCheckerTempLink = player.GetComponent<FSMChecker>();
         fsmCheckerTempLink.deathRequest.AddListener(LoadState);
         PlayerTempLink = player.transform;
+        
 
     }
-
 
     public void SaveState()
     {
@@ -45,6 +46,7 @@ public class SaveSystem : MonoBehaviour
 
         #region Position & Rotation
         SensibleData data = new SensibleData();
+        
 
         data.posx = PlayerTempLink.transform.position.x;
         data.posy = PlayerTempLink.transform.position.y;
@@ -66,8 +68,27 @@ public class SaveSystem : MonoBehaviour
         data.formsUnlocked[3] = fsmTempLink.abiUnlocked.dolphinUnlocked;
         #endregion
 
-        bf.Serialize(file, data);
+        #region QuestSave
+        QuestData questData = new QuestData();
+        StoryLine storyLineTempLink = GameObject.FindGameObjectWithTag("StoryLine").GetComponent<StoryLine>();
 
+        questData.StoryLineName_Save = storyLineTempLink.StoryLineName;
+        questData.StoryEnumName_Save = storyLineTempLink.StoryEnumName;
+        questData.Completed_Save = storyLineTempLink.Completed;
+
+        questData.StoryActiveOnCompletition_Save = storyLineTempLink.StoryActiveOnCompletion;
+        questData.StoryCompleteOnCompletition_Save = storyLineTempLink.StoryCompleteOnCompletion;
+        questData.StoryLineCompleteOnCompletion_Save = storyLineTempLink.StoryLineCompleteOnCompletion;
+
+        questData.Stories_Save = storyLineTempLink.Stories;
+        #endregion
+
+
+
+
+
+        bf.Serialize(file, data);
+        bf.Serialize(file, questData);
         file.Close();
 
     }
@@ -78,30 +99,37 @@ public class SaveSystem : MonoBehaviour
         {
             BinaryFormatter bf = new BinaryFormatter();
             FileStream file = File.Open(Application.persistentDataPath + "/PlayerData.dat", FileMode.Open);
-            SensibleData data = (SensibleData)bf.Deserialize(file);     
-
+            SensibleData data = (SensibleData)bf.Deserialize(file);
+            QuestData questData = (QuestData)bf.Deserialize(file);
+            FSMChecker fsmTempLink = PlayerTempLink.gameObject.GetComponent<FSMChecker>();
+            StoryLine storyLineTempLink = GameObject.FindGameObjectWithTag("StoryLine").GetComponent<StoryLine>();
             file.Close();
 
+            #region LoadPosition&Rotation
             PlayerTempLink.transform.position = new Vector3(data.posx, data.posy, data.posz);
             PlayerTempLink.transform.rotation = Quaternion.Euler(data.rotx, data.roty, data.rotz);
+            #endregion
 
-            FSMChecker fsmTempLink = PlayerTempLink.gameObject.GetComponent<FSMChecker>();
-
-            //fsmTempLink.abiUnlocked.frogUnlocked = data.frogUnlocked;
-            //fsmTempLink.abiUnlocked.armaUnlocked = data.armaUnlocked;
-            //fsmTempLink.abiUnlocked.craneUnlocked = data.craneUnlocked;
-            //fsmTempLink.abiUnlocked.dolphinUnlocked = data.dolphinUnlocked;
-
+            #region LoadUnLockedForms
             fsmTempLink.abiUnlocked.frogUnlocked = data.formsUnlocked[0];
             fsmTempLink.abiUnlocked.armaUnlocked = data.formsUnlocked[1];
             fsmTempLink.abiUnlocked.craneUnlocked = data.formsUnlocked[2];
             fsmTempLink.abiUnlocked.dolphinUnlocked = data.formsUnlocked[3];
-
-            //player.GetComponent<FSMChecker>().abiUnlocked.frogUnlocked = data.frogUnLocked;
-            //player.GetComponent<FSMChecker>().abiUnlocked.armaUnlocked = data.armaUnLocked;
-            //player.GetComponent<FSMChecker>().abiUnlocked.craneUnlocked = data.cranUnLocked;
-            //player.GetComponent<FSMChecker>().abiUnlocked.dolphinUnlocked = data.dolpingUnLocked;
             PlayerTempLink.GetComponent<FSMChecker>().UpdatingAbilityList();
+            #endregion
+
+            #region LoadQuestData
+
+            storyLineTempLink.StoryLineName = questData.StoryLineName_Save;
+            storyLineTempLink.StoryEnumName = questData.StoryEnumName_Save;
+            storyLineTempLink.Completed = questData.Completed_Save;
+
+            storyLineTempLink.StoryActiveOnCompletion = questData.StoryActiveOnCompletition_Save;
+            storyLineTempLink.StoryCompleteOnCompletion = questData.StoryCompleteOnCompletition_Save;
+            storyLineTempLink.StoryLineCompleteOnCompletion = questData.StoryLineCompleteOnCompletion_Save;
+
+            storyLineTempLink.Stories = questData.Stories_Save;
+            #endregion
 
             // player.GetComponent<FSMChecker>().cPlayerState.currentAbilities.AddRange(data.saveAbilities);
         }
@@ -122,10 +150,7 @@ public class SensibleData
     public float rotz;
     #endregion
 
-    //public bool frogUnlocked;
-    //public bool armaUnlocked;
-    //public bool craneUnlocked;
-    //public bool dolphinUnlocked;
+
 
     public bool[] formsUnlocked;
     // public List<abilties> saveAbilities;
@@ -141,6 +166,21 @@ public class EnvData
     public float[] position;
     public float[] rotation;
     public bool isActive;
+}
+
+[System.Serializable]
+public class QuestData
+{
+    public string StoryLineName_Save;
+    public Storylines StoryEnumName_Save;
+    public bool Completed_Save;
+
+    public List<Stories> StoryActiveOnCompletition_Save;
+    public List<Stories> StoryCompleteOnCompletition_Save;
+    public List<Storylines> StoryLineCompleteOnCompletion_Save;
+
+    public List<SingleStory> Stories_Save;
+
 }
 
 
