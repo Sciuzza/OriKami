@@ -508,6 +508,7 @@ public class StoryLineInstance : MonoBehaviour
     // Start the Story
     private void LivingStoryEvent()
     {
+        /*
         Debug.Log("Living Story Started for the story " + this.storySelected.StoryName);
 
         this.camLastPos.Add(Camera.main.transform.position);
@@ -517,6 +518,7 @@ public class StoryLineInstance : MonoBehaviour
         this.PlayerEffectsHandler();
         this.CameraEffectsHandler();
         this.EnvEffectsHandler();
+        */
     }
     #endregion
 
