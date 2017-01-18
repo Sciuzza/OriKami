@@ -508,13 +508,23 @@ public class StoryLineInstance : MonoBehaviour
         
         while (this.eventIndex < this.storySelected.Events.Count)
         {
-
+            Debug.Log("ciao");
             if (this.eventIndex == 0)
             {
                 this.PlayerEffectsHandler();
                 this.CameraEffectsHandler();
                 this.EnvEffectsHandler();
                 this.UiEffectsHandler();
+
+                Debug.Log(this.totalEventEffects);
+                Debug.Log(this.effectCounter);
+
+                if (this.totalEventEffects == 0)
+                {
+                    Debug.Log("ciao");
+                    this.eventIndex++;
+                    continue;
+                }
             }
             else
             {
@@ -530,6 +540,13 @@ public class StoryLineInstance : MonoBehaviour
                         this.CameraEffectsHandler();
                         this.EnvEffectsHandler();
                         this.UiEffectsHandler();
+
+                    if (this.totalEventEffects == 0)
+                    {
+                        Debug.Log("ciao");
+                        this.eventIndex++;
+                        continue;
+                    }
                 }
                 else
                 {
@@ -537,6 +554,13 @@ public class StoryLineInstance : MonoBehaviour
                     this.CameraEffectsHandler();
                     this.EnvEffectsHandler();
                     this.UiEffectsHandler();
+
+                    if (this.totalEventEffects == 0)
+                    {
+                        Debug.Log("ciao");
+                        this.eventIndex++;
+                        continue;
+                    }
                 }
             }
 
@@ -552,7 +576,7 @@ public class StoryLineInstance : MonoBehaviour
         }
 
         this.ApplyingLivingEffects();
-        this.ResettingStoryCommonVariables();
+        //this.ResettingStoryCommonVariables();
     }
 
     private void ResettingEventCommonVariables()
