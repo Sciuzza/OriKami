@@ -28,6 +28,8 @@ public class MenuManager : MonoBehaviour
 
     private EventSystem esLink;
 
+
+    private HudRefRepo gpUiRef;
     #endregion
 
     #region Public variables
@@ -38,17 +40,23 @@ public class MenuManager : MonoBehaviour
     #region Taking References and linking Events
     void Awake()
     {
-        GameController gcTempLink = this.GetComponent<GameController>();
+        var gcTempLink = this.GetComponent<GameController>();
 
-        gcTempLink.ngpInitializer.AddListener(InitializingNgpScene);
-        gcTempLink.gpInitializer.AddListener(InitializingGpScene);
+        gcTempLink.ngpInitializer.AddListener(this.InitializingNgpScene);
+        gcTempLink.gpInitializer.AddListener(this.InitializingGpScene);
 
-        SceneController scTempLink = this.GetComponent<SceneController>();
+        var scTempLink = this.GetComponent<SceneController>();
 
         scTempLink.ProgressUpdateRequest.AddListener(this.UpdatingProgressBar);
 
+        var storyLineCheck = GameObject.FindGameObjectWithTag("StoryLine");
 
+        if (storyLineCheck == null) return;
+        var slTempLink = GameObject.FindGameObjectWithTag("StoryLine").GetComponent<StoryLineInstance>();
+        slTempLink.dialogueRequest.AddListener(this.PoppingOutDialogue);
+        slTempLink.DialogueEndRequest.AddListener(this.ResettingDialogue);
     }
+
     #endregion
 
     #region Menu Handling Methods
@@ -216,8 +224,36 @@ public class MenuManager : MonoBehaviour
     #region Menu In Game Handler
     private void InitializingGpScene(GameObject player)
     {
-
+        this.gpUiRef = GameObject.FindGameObjectWithTag("Gameplay Ui").GetComponent<HudRefRepo>();
     }
+
+    private void PoppingOutDialogue(string name, string label, string sentence)
+    {
+        this.gpUiRef.Dialogue.SetActive(true);
+
+        if (label == "Right")
+        {
+            this.gpUiRef.RightLabel.SetActive(true);
+            this.gpUiRef.LeftLabel.SetActive(false);
+            this.gpUiRef.RightLabelT.text = name;
+        }
+        else
+        {
+            this.gpUiRef.LeftLabel.SetActive(true);
+            this.gpUiRef.RightLabel.SetActive(false);
+            this.gpUiRef.LeftLabelT.text = name;
+        }
+
+        this.gpUiRef.DialogueT.text = sentence;
+    }
+
+    private void ResettingDialogue()
+    {
+        this.gpUiRef.RightLabel.SetActive(false);
+        this.gpUiRef.LeftLabel.SetActive(false);
+        this.gpUiRef.Dialogue.SetActive(false);
+    }
+
     #endregion
 
     #region Loading Screen Handler

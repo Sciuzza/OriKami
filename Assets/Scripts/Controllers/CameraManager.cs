@@ -33,6 +33,7 @@ public class CameraManager : MonoBehaviour
         fsmLink.switchingCameraControlToOFF.AddListener(this.SwitchingCameraControlToOff);
         fsmLink.switchingCameraControlToOn.AddListener(this.SwitchingCameraControlToOn);
         fsmLink.switchingCameraToStoryRequest.AddListener(this.SwitchingCameraToStoryCamera);
+        fsmLink.switchingCameraToPlayer.AddListener(this.SwitchingCameraToPlayer);
     }
 
     #endregion Initializing Camera in Gameplay Scenes
@@ -157,6 +158,11 @@ public class CameraManager : MonoBehaviour
     private void SwitchingCameraToStoryCamera()
     {
         this.cameraPlayerControl = false;
+    }
+
+    private void SwitchingCameraToPlayer()
+    {
+        this.cameraPlayerControl = true;
     }
     #endregion General Methods
 }

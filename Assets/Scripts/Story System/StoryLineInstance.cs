@@ -2,6 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
+
 using Random = UnityEngine.Random;
 
 #region Enum Types
@@ -48,7 +50,6 @@ public enum ItemType
 #region Effect Classes
 
 #region Player Effect Classes
-
 [Serializable]
 public class PlayerEffect
 {
@@ -191,69 +192,48 @@ public class Baloon
 #endregion Environment Npc Effects
 
 #region Ui Effect
-
 [Serializable]
 public class UiEffect
 {
-    public UiObjectActivation ObjActiEffect;
-
-    public UiObjectDeActivation ObjDeActiEffect;
-
     public UiObjectMoving ObjMovEffect;
-
+    public UiObjectActivation ObjActiEffect;
+    public UiObjectDeActivation ObjDeActiEffect;
     public UiDialogue UiDialogueEffect;
+}
+
+[Serializable]
+public class UiObjectMoving
+{
+    public GameObject GbToMove;
+    public GameObject GbTarget;
+    public float LerpSpeed;
 }
 
 [Serializable]
 public class UiObjectActivation
 {
-    public float FadingTime;
-
     public GameObject GbRef;
-
     public float Time;
-
-    public bool Timed;
-}
-
-[Serializable]
-public class UiDialogue
-{
-    public List<DialogueStructDebug> DialogueDebug;
-
-    public TextAsset DialogueRef;
-}
-
-[Serializable]
-public class DialogueStructDebug
-{
-    public string LabelPos;
-
-    public string WhatIsSaying;
-
-    public string WhoIsTalking;
+    public float FadingTime;
 }
 
 [Serializable]
 public class UiObjectDeActivation
 {
     public GameObject GbRef;
-
     public float Time;
-
-    public bool Timed;
+    public float FadingTime;
 }
 
 [Serializable]
-public class UiObjectMoving
+public class UiDialogue
 {
-    public GameObject GbTarget;
-
-    public GameObject GbToMove;
-
-    public float LerpSpeed;
+    public bool End;
+    public TextAsset DialogueRef;
+    public List<string> name;
+    public List<string> label;
+    public List<string> sentence;
 }
-
 #endregion Ui Effect
 
 #region Sound Effect
@@ -399,20 +379,24 @@ public class StoryLineInstance : MonoBehaviour
 
     #region Events
     public event_joy_pc ActivateStoryInputRequest;
-
     public event_string FormUnlockRequest;
-
-    public event_cs ChangeControlStateRequest;
+    public event_cs ChangeControlStateRequest; 
+    public event_string_string_string dialogueRequest;
+    public UnityEvent DialogueEndRequest, StoryExitCsStateRequest;
     #endregion
 
     #region Private Variables
-    private int eventIndex = 0;
     private GameObject player;
-    private SingleStory storySelected;
 
+    // Variables that need to be resetted
+    private int eventIndex = 0;
+    private int effectCounter = 0;
+    private int totalEventEffects = 0;
+    private SingleStory storySelected;
     private List<Vector3> camLastPos = new List<Vector3>();
     private List<Quaternion> camLastRot = new List<Quaternion>();
     private int cameraChangeCounter;
+
     #endregion
 
     #region Taking References and Linking Events
@@ -508,17 +492,92 @@ public class StoryLineInstance : MonoBehaviour
     // Start the Story
     private void LivingStoryEvent()
     {
-        /*
+
         Debug.Log("Living Story Started for the story " + this.storySelected.StoryName);
 
         this.camLastPos.Add(Camera.main.transform.position);
         this.camLastRot.Add(Camera.main.transform.rotation);
 
         this.ChangeControlStateRequest.Invoke(this.storySelected.PlayerControlEffect);
-        this.PlayerEffectsHandler();
-        this.CameraEffectsHandler();
-        this.EnvEffectsHandler();
-        */
+
+        this.StartCoroutine(this.LivingStory());
+    }
+
+    private IEnumerator LivingStory()
+    {
+        
+        while (this.eventIndex < this.storySelected.Events.Count)
+        {
+
+            if (this.eventIndex == 0)
+            {
+                this.PlayerEffectsHandler();
+                this.CameraEffectsHandler();
+                this.EnvEffectsHandler();
+                this.UiEffectsHandler();
+            }
+            else
+            {
+                if (this.storySelected.Events[this.eventIndex].PlayerInputJoy != buttonsJoy.none
+                    && this.storySelected.Events[this.eventIndex].PlayerInputPc != buttonsPc.none)
+                {
+                    while (!Input.GetButtonDown(this.storySelected.Events[this.eventIndex].PlayerInputJoy.ToString())
+                        && !Input.GetButtonDown(this.storySelected.Events[this.eventIndex].PlayerInputPc.ToString()))
+                    {
+                        yield return null;
+                    }
+                        this.PlayerEffectsHandler();
+                        this.CameraEffectsHandler();
+                        this.EnvEffectsHandler();
+                        this.UiEffectsHandler();
+                }
+                else
+                {
+                    this.PlayerEffectsHandler();
+                    this.CameraEffectsHandler();
+                    this.EnvEffectsHandler();
+                    this.UiEffectsHandler();
+                }
+            }
+
+            while (this.effectCounter < this.totalEventEffects)
+            {
+                yield return null;
+            }
+
+            this.eventIndex++;
+            this.ResettingEventCommonVariables(); 
+               
+            yield return null;
+        }
+
+        this.ApplyingLivingEffects();
+        this.ResettingStoryCommonVariables();
+    }
+
+    private void ResettingEventCommonVariables()
+    {
+        this.effectCounter = 0;
+        this.totalEventEffects = 0;
+    }
+
+    private void ResettingStoryCommonVariables()
+    {
+        this.effectCounter = 0;
+        this.totalEventEffects = 0;
+
+        this.eventIndex = 0;
+        this.storySelected = null;
+        this.camLastPos.Clear();
+        this.camLastPos.TrimExcess();
+        this.camLastRot.Clear();
+        this.camLastRot.TrimExcess();
+        this.cameraChangeCounter = 0;
+    }
+
+    private void ApplyingLivingEffects()
+    {
+        this.StoryExitCsStateRequest.Invoke();
     }
     #endregion
 
@@ -529,37 +588,45 @@ public class StoryLineInstance : MonoBehaviour
 
         if (plaEffectsToEvaluate.PlayerRepositionEffect.GbRef != null)
         {
+            this.totalEventEffects++;
             this.PlayPlayerRepoEffect(plaEffectsToEvaluate.PlayerRepositionEffect);
 
             if (plaEffectsToEvaluate.PlayerReward.FormName != " ")
             {
+                this.totalEventEffects++;
                 this.PlayPlayerRewardEffect(plaEffectsToEvaluate.PlayerReward);
             }
         }
         else if (plaEffectsToEvaluate.PlayerMoveEffect.GbRef != null)
         {
+            this.totalEventEffects++;
             this.PlayPlayerMoveEffect(plaEffectsToEvaluate.PlayerMoveEffect);
 
             if (plaEffectsToEvaluate.PlayerReward.FormName != " ")
             {
+                this.totalEventEffects++;
                 this.PlayPlayerRewardEffect(plaEffectsToEvaluate.PlayerReward);
             }
         }
         else if (plaEffectsToEvaluate.PlayerSeeEffect.GbRef != null)
         {
+            this.totalEventEffects++;
             this.PlayPlayerSeeEffect(plaEffectsToEvaluate.PlayerSeeEffect);
 
             if (plaEffectsToEvaluate.PlayerReward.FormName != " ")
             {
+                this.totalEventEffects++;
                 this.PlayPlayerRewardEffect(plaEffectsToEvaluate.PlayerReward);
             }
         }
         else if (plaEffectsToEvaluate.PushingBackEffect.PushingBackPower > 0)
         {
+            this.totalEventEffects++;
             this.PlayPlayerPushingBackEffect(plaEffectsToEvaluate.PushingBackEffect);
 
             if (plaEffectsToEvaluate.PlayerReward.FormName != " ")
             {
+                this.totalEventEffects++;
                 this.PlayPlayerRewardEffect(plaEffectsToEvaluate.PlayerReward);
             }
         }
@@ -567,6 +634,7 @@ public class StoryLineInstance : MonoBehaviour
         {
             if (plaEffectsToEvaluate.PlayerReward.FormName != " ")
             {
+                this.totalEventEffects++;
                 this.PlayPlayerRewardEffect(plaEffectsToEvaluate.PlayerReward);
             }
         }
@@ -576,6 +644,7 @@ public class StoryLineInstance : MonoBehaviour
     {
         this.player.transform.position = effectToPlay.GbRef.transform.position;
         effectToPlay.End = true;
+        this.effectCounter++;
     }
 
     private void PlayPlayerMoveEffect(PlayerMove effectToPlay)
@@ -587,6 +656,7 @@ public class StoryLineInstance : MonoBehaviour
     {
         this.FormUnlockRequest.Invoke(effectToPlay.FormName);
         effectToPlay.End = true;
+        this.effectCounter++;
     }
 
     private void PlayPlayerSeeEffect(PlayerSee effectToPlay)
@@ -635,6 +705,7 @@ public class StoryLineInstance : MonoBehaviour
         }
 
         movingPlayerEffect.End = true;
+        this.effectCounter++;
     }
 
     private IEnumerator PushBackPlayer(PlayerPushBack pushBackEffect)
@@ -660,6 +731,7 @@ public class StoryLineInstance : MonoBehaviour
         }
 
         pushBackEffect.End = true;
+        this.effectCounter++;
     }
 
     private IEnumerator RotatePlayer(PlayerSee rotateEffect)
@@ -693,6 +765,7 @@ public class StoryLineInstance : MonoBehaviour
         }
 
         rotateEffect.End = true;
+        this.effectCounter++;
         DestroyObject(tempObj);
     }
     #endregion
@@ -705,18 +778,22 @@ public class StoryLineInstance : MonoBehaviour
 
         if (camEffectsToEvaluate.CameraMoveEffect.GbRef != null)
         {
+            this.totalEventEffects++;
             this.PlayCameraMoveEffect(camEffectsToEvaluate.CameraMoveEffect);
         }
         else if (camEffectsToEvaluate.CameraShakeEffect.ShakingPower > 0)
         {
+            this.totalEventEffects++;
             this.PlayCameraShakeEffect(camEffectsToEvaluate.CameraShakeEffect);
         }
         else if (camEffectsToEvaluate.CameraErEffect.ErLerpSpeed > 0)
         {
+            this.totalEventEffects++;
             this.PlayCameraErEffect(camEffectsToEvaluate.CameraErEffect);
         }
         else if (camEffectsToEvaluate.CameraSrEffect.SrLerpSpeed > 0)
         {
+            this.totalEventEffects++;
             this.PlayCameraSrEffect(camEffectsToEvaluate.CameraSrEffect);
         }
     }
@@ -770,12 +847,8 @@ public class StoryLineInstance : MonoBehaviour
                 targetRotation,
                 lerpSpeed * Time.deltaTime);
 
-            var targetPosYFixed = targetPosition;
-
-            targetPosYFixed.y = this.player.transform.position.y;
-
             if (Quaternion.Angle(objToMove.transform.rotation, targetRotation) < 0.1f
-                && ((objToMove.transform.position - targetPosYFixed).sqrMagnitude < 0.1f))
+                && ((objToMove.transform.position - targetPosition).sqrMagnitude < 0.1f))
             {
                 posReached = true;
             }
@@ -784,6 +857,7 @@ public class StoryLineInstance : MonoBehaviour
         }
 
         movingCameraEffect.End = true;
+        this.effectCounter++;
     }
 
     private IEnumerator MovingStoryCamera(CameraEventRevert erCameraEffect, int listIndex)
@@ -813,12 +887,8 @@ public class StoryLineInstance : MonoBehaviour
                 targetRotation,
                 lerpSpeed * Time.deltaTime);
 
-            var targetPosYFixed = targetPosition;
-
-            targetPosYFixed.y = this.player.transform.position.y;
-
             if (Quaternion.Angle(objToMove.transform.rotation, targetRotation) < 0.1f
-                && ((objToMove.transform.position - targetPosYFixed).sqrMagnitude < 0.1f))
+                && ((objToMove.transform.position - targetPosition).sqrMagnitude < 0.1f))
             {
                 posReached = true;
             }
@@ -832,6 +902,7 @@ public class StoryLineInstance : MonoBehaviour
         }
 
         erCameraEffect.End = true;
+        this.effectCounter++;
     }
 
     private IEnumerator MovingStoryCamera(CameraStoryRevert srCameraEffect)
@@ -855,12 +926,8 @@ public class StoryLineInstance : MonoBehaviour
                 targetRotation,
                 lerpSpeed * Time.deltaTime);
 
-            var targetPosYFixed = targetPosition;
-
-            targetPosYFixed.y = this.player.transform.position.y;
-
             if (Quaternion.Angle(objToMove.transform.rotation, targetRotation) < 0.1f
-                && ((objToMove.transform.position - targetPosYFixed).sqrMagnitude < 0.1f))
+                && ((objToMove.transform.position - targetPosition).sqrMagnitude < 0.1f))
             {
                 posReached = true;
             }
@@ -869,6 +936,7 @@ public class StoryLineInstance : MonoBehaviour
         }
 
         srCameraEffect.End = true;
+        this.effectCounter++;
     }
 
     private IEnumerator ShakingStoryCamera(CameraShake shakingCameraEffect)
@@ -896,6 +964,7 @@ public class StoryLineInstance : MonoBehaviour
         }
 
         shakingCameraEffect.End = true;
+        this.effectCounter++;
     }
     #endregion
 
@@ -921,6 +990,7 @@ public class StoryLineInstance : MonoBehaviour
                         continue;
                     }
 
+                    this.totalEventEffects++;
                     this.PlayObjMovingEffect(envEffect.ObjMovEffect);
                     gbCheckTempRepo.Add(envEffect.ObjMovEffect.GbToMove);
                 }
@@ -932,6 +1002,7 @@ public class StoryLineInstance : MonoBehaviour
                         continue;
                     }
 
+                    this.totalEventEffects++;
                     this.PlayObjActiEffect(envEffect.ObjActiEffect);
                     gbCheckTempRepo.Add(envEffect.ObjActiEffect.GbRef);
                 }
@@ -943,6 +1014,7 @@ public class StoryLineInstance : MonoBehaviour
                         continue;
                     }
 
+                    this.totalEventEffects++;
                     this.PlayObjDeActiEffect(envEffect.ObjDeActiEffect);
                     gbCheckTempRepo.Add(envEffect.ObjDeActiEffect.GbRef);
                 }
@@ -954,6 +1026,7 @@ public class StoryLineInstance : MonoBehaviour
                         continue;
                     }
 
+                    this.totalEventEffects++;
                     this.PlayBaloonEffect(envEffect.BaloonEffect);
                     gbCheckTempRepo.Add(envEffect.BaloonEffect.NpcRef);
                 }
@@ -985,6 +1058,7 @@ public class StoryLineInstance : MonoBehaviour
         {
             effectToPlay.GbRef.SetActive(true);
             effectToPlay.End = true;
+            this.effectCounter++;
         }
         else
         {
@@ -998,6 +1072,7 @@ public class StoryLineInstance : MonoBehaviour
         {
             effectToPlay.GbRef.SetActive(false);
             effectToPlay.End = true;
+            this.effectCounter++;
         }
         else
         {
@@ -1047,6 +1122,7 @@ public class StoryLineInstance : MonoBehaviour
         }
 
         movingObjEffect.End = true;
+        this.effectCounter++;
     }
 
     private IEnumerator TimedActivation(ObjectActivation actiObjEffect)
@@ -1063,6 +1139,7 @@ public class StoryLineInstance : MonoBehaviour
 
         actiObjEffect.GbRef.SetActive(false);
         actiObjEffect.End = true;
+        this.effectCounter++;
     }
 
     private IEnumerator TimedDeActivation(ObjectDeActivation deActiObjEffect)
@@ -1079,6 +1156,7 @@ public class StoryLineInstance : MonoBehaviour
 
         deActiObjEffect.GbRef.SetActive(true);
         deActiObjEffect.End = true;
+        this.effectCounter++;
     }
 
     private IEnumerator BaloonDialogue(Baloon baloonEffect)
@@ -1096,6 +1174,7 @@ public class StoryLineInstance : MonoBehaviour
 
         baloonTempLink.CanvasRef.gameObject.SetActive(false);
         baloonEffect.End = true;
+        this.effectCounter++;
     }
 
     private IEnumerator BubbleAdjustRot(Baloon baloonEffect)
@@ -1115,6 +1194,158 @@ public class StoryLineInstance : MonoBehaviour
 
         DestroyObject(gbTargetTemp);
     }
+    #endregion
+
+    #region Ui Effects Methods
+    private void UiEffectsHandler()
+    {
+        var uiEffectToEvaluate = new List<UiEffect>();
+        uiEffectToEvaluate.AddRange(this.storySelected.Events[this.eventIndex].Effects.UiEffect);
+
+        var gbCheckTempRepo = new List<GameObject>();
+        var justOneDialogue = false;
+
+        if (uiEffectToEvaluate.Count == 0)
+        {
+        }
+        else
+        {
+            foreach (var uiEffect in uiEffectToEvaluate)
+            {
+                if (uiEffect.ObjMovEffect.GbToMove != null && uiEffect.ObjMovEffect.GbTarget != null)
+                {
+                    if (!this.IsGameobjectRefUnique(gbCheckTempRepo, uiEffect.ObjMovEffect.GbToMove))
+                    {
+                        continue;
+                    }
+
+                    this.totalEventEffects++;
+                    this.PlayUiObjMovingEffect(uiEffect.ObjMovEffect);
+                    gbCheckTempRepo.Add(uiEffect.ObjMovEffect.GbToMove);
+                }
+
+                if (uiEffect.ObjActiEffect.GbRef != null)
+                {
+                    if (!this.IsGameobjectRefUnique(gbCheckTempRepo, uiEffect.ObjActiEffect.GbRef))
+                    {
+                        continue;
+                    }
+
+                    this.totalEventEffects++;
+                    this.PlayUiObjActiEffect(uiEffect.ObjActiEffect);
+                    gbCheckTempRepo.Add(uiEffect.ObjActiEffect.GbRef);
+                }
+
+                if (uiEffect.ObjDeActiEffect.GbRef != null)
+                {
+                    if (!this.IsGameobjectRefUnique(gbCheckTempRepo, uiEffect.ObjDeActiEffect.GbRef))
+                    {
+                        continue;
+                    }
+
+                    this.totalEventEffects++;
+                    this.PlayUiObjDeActiEffect(uiEffect.ObjDeActiEffect);
+                    gbCheckTempRepo.Add(uiEffect.ObjDeActiEffect.GbRef);
+                }
+
+                if (uiEffect.UiDialogueEffect.DialogueRef != null && !justOneDialogue)
+                {
+                    this.totalEventEffects++;
+                    this.PlayDialogueEffect(uiEffect.UiDialogueEffect);
+                    justOneDialogue = true;
+                }
+            }
+        }
+    }
+
+
+    private void PlayUiObjMovingEffect(UiObjectMoving effectToPlay)
+    {
+
+    }
+
+    private void PlayUiObjActiEffect(UiObjectActivation effectToPlay)
+    {
+
+
+    }
+
+    private void PlayUiObjDeActiEffect(UiObjectDeActivation effectToPlay)
+    {
+
+    }
+
+    private void PlayDialogueEffect(UiDialogue effectToPlay)
+    {
+        var delimiters = new char[2] { '/', '\n' };
+        var initialSplit = effectToPlay.DialogueRef.text.Split(delimiters, StringSplitOptions.None);
+
+        if (initialSplit.Length % 3 != 0)
+        {
+            Debug.Log("There's a problem with txt");
+            return;
+        }
+
+        for (var i = 0; i < initialSplit.Length; i += 3)
+        {
+            effectToPlay.name.Add(initialSplit[i]);
+            effectToPlay.label.Add(initialSplit[i + 1]);
+            effectToPlay.sentence.Add(initialSplit[i + 2]);
+        }
+
+        for (var index = 0; index < effectToPlay.sentence.Count; index++)
+        {
+            var tempSubdivision = effectToPlay.sentence[index].Split('*');
+
+            effectToPlay.sentence[index] = null;
+
+            for (int i = 0; i < tempSubdivision.Length; i++)
+            {
+                if (tempSubdivision[i].StartsWith(" "))
+                {
+                    tempSubdivision[i] = tempSubdivision[i].Remove(0, 1);
+                }
+                    
+                effectToPlay.sentence[index] += tempSubdivision[i];
+
+                if (tempSubdivision.Length - i >= 1)
+                {
+                    effectToPlay.sentence[index] += "\n";
+                }
+            }
+        }
+
+
+
+        this.StartCoroutine(this.LivingDialogue(effectToPlay));
+    }
+
+    private IEnumerator LivingDialogue(UiDialogue dialogueEffect)
+    {
+        this.dialogueRequest.Invoke(dialogueEffect.name[0], dialogueEffect.label[0], dialogueEffect.sentence[0]);
+        var counter = 1;
+
+        while (counter < dialogueEffect.name.Count)
+        {
+            if (Input.GetButtonDown(buttonsJoy.X.ToString()) || Input.GetButtonDown(buttonsPc.E.ToString()))
+            {
+                this.dialogueRequest.Invoke(dialogueEffect.name[counter], dialogueEffect.label[counter], dialogueEffect.sentence[counter]);
+                counter++;
+            }
+            yield return null;
+        }
+
+
+        while (!Input.GetButtonDown(buttonsJoy.X.ToString()) && !Input.GetButtonDown(buttonsPc.E.ToString()))
+        {
+            yield return null;
+        }
+
+        this.DialogueEndRequest.Invoke();
+        dialogueEffect.End = true;
+        this.effectCounter++;
+    }
+
     #endregion
 
     #region Edit Mode Methods
