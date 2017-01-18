@@ -508,7 +508,7 @@ public class StoryLineInstance : MonoBehaviour
         
         while (this.eventIndex < this.storySelected.Events.Count)
         {
-            Debug.Log("ciao");
+            Debug.Log(this.eventIndex + " event");
             if (this.eventIndex == 0)
             {
                 this.PlayerEffectsHandler();
@@ -521,7 +521,7 @@ public class StoryLineInstance : MonoBehaviour
 
                 if (this.totalEventEffects == 0)
                 {
-                    Debug.Log("ciao");
+                    Debug.Log("Event index 0 , 0 effects found");
                     this.eventIndex++;
                     continue;
                 }
@@ -541,9 +541,13 @@ public class StoryLineInstance : MonoBehaviour
                         this.EnvEffectsHandler();
                         this.UiEffectsHandler();
 
+
+                    Debug.Log(this.totalEventEffects);
+                    Debug.Log(this.effectCounter);
+
                     if (this.totalEventEffects == 0)
                     {
-                        Debug.Log("ciao");
+                        Debug.Log(this.eventIndex + " 0 effects found");
                         this.eventIndex++;
                         continue;
                     }
@@ -555,9 +559,13 @@ public class StoryLineInstance : MonoBehaviour
                     this.EnvEffectsHandler();
                     this.UiEffectsHandler();
 
+
+                    Debug.Log(this.totalEventEffects);
+                    Debug.Log(this.effectCounter);
+
                     if (this.totalEventEffects == 0)
                     {
-                        Debug.Log("ciao");
+                        Debug.Log(this.eventIndex + " 0 effects found with no input event");
                         this.eventIndex++;
                         continue;
                     }
@@ -576,7 +584,7 @@ public class StoryLineInstance : MonoBehaviour
         }
 
         this.ApplyingLivingEffects();
-        //this.ResettingStoryCommonVariables();
+        this.ResettingStoryCommonVariables();
     }
 
     private void ResettingEventCommonVariables()
