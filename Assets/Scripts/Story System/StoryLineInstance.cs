@@ -354,6 +354,7 @@ public class SingleStory
     public List<Storylines> StoryLineCompleteOnCompletion;
 
     public controlStates PlayerControlEffect;
+    public controlStates EndControlEffect;
 
     public List<StoryEvent> Events;
 }
@@ -380,9 +381,10 @@ public class StoryLineInstance : MonoBehaviour
     #region Events
     public event_joy_pc ActivateStoryInputRequest;
     public event_string FormUnlockRequest;
-    public event_cs ChangeControlStateRequest; 
+    public event_cs ChangeControlStateRequest, StoryExitCsStateRequest; 
     public event_string_string_string dialogueRequest;
-    public UnityEvent DialogueEndRequest, StoryExitCsStateRequest;
+    public UnityEvent DialogueEndRequest;
+    public event_bool IsStoryMode;
     #endregion
 
     #region Private Variables
@@ -498,6 +500,7 @@ public class StoryLineInstance : MonoBehaviour
         this.camLastPos.Add(Camera.main.transform.position);
         this.camLastRot.Add(Camera.main.transform.rotation);
 
+        this.IsStoryMode.Invoke(true);
         this.ChangeControlStateRequest.Invoke(this.storySelected.PlayerControlEffect);
 
         this.StartCoroutine(this.LivingStory());
@@ -579,11 +582,11 @@ public class StoryLineInstance : MonoBehaviour
 
             this.eventIndex++;
             this.ResettingEventCommonVariables(); 
-               
             yield return null;
         }
 
         this.ApplyingLivingEffects();
+        this.IsStoryMode.Invoke(false);   
         this.ResettingStoryCommonVariables();
     }
 
@@ -609,7 +612,7 @@ public class StoryLineInstance : MonoBehaviour
 
     private void ApplyingLivingEffects()
     {
-        this.StoryExitCsStateRequest.Invoke();
+        this.StoryExitCsStateRequest.Invoke(this.storySelected.EndControlEffect);
     }
     #endregion
 
