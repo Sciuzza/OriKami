@@ -13,7 +13,11 @@ public class MoveToNextLevel : MonoBehaviour
     {
         if (other.gameObject.tag == "Player")
         {
+
+            Debug.Log("Sono dentro");
             this.SceneChangeRequest.Invoke(this.SceneName);
+            
+
         }
     }
 }
