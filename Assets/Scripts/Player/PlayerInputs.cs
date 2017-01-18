@@ -1927,7 +1927,10 @@ public class PlayerInputs : MonoBehaviour
     private void StoryInputsHandler()
     {
         if (StoryInputPressed())
+        {
             storyLivingRequest.Invoke();
+            this.storyModeInput = false;
+        }
     }
 
     private bool StoryInputPressed()

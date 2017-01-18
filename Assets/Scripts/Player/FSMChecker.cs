@@ -136,6 +136,11 @@ public class event_cs : UnityEvent<controlStates>
 public class event_vector3 : UnityEvent<Vector3>
 {
 }
+
+[System.Serializable]
+public class event_string_string_string : UnityEvent<string, string, string>
+{
+}
 #endregion
 
 public class FSMChecker : MonoBehaviour
@@ -192,6 +197,7 @@ public class FSMChecker : MonoBehaviour
     public event_Gb switchingCameraControlToOFF;
     public UnityEvent switchingCameraControlToOn;
     public UnityEvent switchingCameraToStoryRequest;
+    public UnityEvent switchingCameraToPlayer;
     #endregion
 
     #region Initialization Methods
@@ -235,6 +241,7 @@ public class FSMChecker : MonoBehaviour
             {
                 slTempLink.FormUnlockRequest.AddListener(this.UnlockingAbility);
                 slTempLink.ChangeControlStateRequest.AddListener(this.StoryCsChange);
+                slTempLink.StoryExitCsStateRequest.AddListener(this.StoryCsExit);
             }
         }
     }
@@ -901,7 +908,7 @@ public class FSMChecker : MonoBehaviour
         cPlayerState.currentAbilities.TrimExcess();
 
         if (this.cPlayerState.currentPlState != playerStates.rolling)
-        AddAbility(abilties.move);
+            AddAbility(abilties.move);
 
         AddAbility(abilties.rotate);
         AddAbility(abilties.cameraMove);
@@ -1453,7 +1460,7 @@ public class FSMChecker : MonoBehaviour
 
     private void ChangingCameraToOff(GameObject CameraDir)
     {
-        
+
         switch (this.cPlayerState.currentClState)
         {
             case controlStates.noGenAbi:
@@ -1584,12 +1591,24 @@ public class FSMChecker : MonoBehaviour
         this.cPlayerState.currentClState = newCs;
         this.UpdatingAbilityList();
 
-        if (this.cPlayerState.currentClState == controlStates.noCamAndMove || 
+        if (this.cPlayerState.currentClState == controlStates.noCamAndMove ||
             this.cPlayerState.currentClState == controlStates.noCamera ||
             this.cPlayerState.currentClState == controlStates.noCameraAndGenAbi ||
             this.cPlayerState.currentClState == controlStates.noControl)
             this.switchingCameraToStoryRequest.Invoke();
 
+    }
+
+    private void StoryCsExit()
+    {
+        this.cPlayerState.currentClState = this.previousClState;
+        this.UpdatingAbilityList();
+
+        if (this.cPlayerState.currentClState != controlStates.noCamAndMove &&
+            this.cPlayerState.currentClState != controlStates.noCamera &&
+            this.cPlayerState.currentClState != controlStates.noCameraAndGenAbi &&
+            this.cPlayerState.currentClState != controlStates.noControl)
+            this.switchingCameraToPlayer.Invoke();
     }
     #endregion
     #endregion
@@ -1631,27 +1650,27 @@ public class FSMChecker : MonoBehaviour
 
         #region SoundForms
         if (cPlayerState.currentForm == "Dragon Form" && cPlayerState.currentPhState == physicStates.onAir && !isGlidingSound)
-        {       
+        {
             this.GetComponent<PlayerInputs>().CraneGlide();
             isGlidingSound = true;
         }
         else if ((cPlayerState.currentForm != "Dragon Form" || cPlayerState.currentPhState != physicStates.onAir) && isGlidingSound)
-        {         
+        {
             this.GetComponent<PlayerInputs>().StopCraneGlide();
             isGlidingSound = false;
         }
 
-        if (cPlayerState.currentForm == "Armadillo Form" && cPlayerState.currentPhState == physicStates.onGround && this.GetComponent<PlayerInputs>().rollPressed() && !isRollingSound )
+        if (cPlayerState.currentForm == "Armadillo Form" && cPlayerState.currentPhState == physicStates.onGround && this.GetComponent<PlayerInputs>().rollPressed() && !isRollingSound)
         {
-             this.GetComponent<PlayerInputs>().RollingSound();                                   
+            this.GetComponent<PlayerInputs>().RollingSound();
             isRollingSound = true;
         }
-        else if (cPlayerState.currentForm == "Armadillo Form" && cPlayerState.currentPhState == physicStates.onGround && this.GetComponent<PlayerInputs>().rollReleased()&& isRollingSound)
-        {           
+        else if (cPlayerState.currentForm == "Armadillo Form" && cPlayerState.currentPhState == physicStates.onGround && this.GetComponent<PlayerInputs>().rollReleased() && isRollingSound)
+        {
             this.GetComponent<PlayerInputs>().StopRollingSound();
             isRollingSound = false;
         }
-        else if ((cPlayerState.currentForm!="Armadillo Form" || cPlayerState.currentPhState != physicStates.onGround) &&isRollingSound)
+        else if ((cPlayerState.currentForm != "Armadillo Form" || cPlayerState.currentPhState != physicStates.onGround) && isRollingSound)
         {
             this.GetComponent<PlayerInputs>().StopRollingSound();
             isRollingSound = false;
@@ -1680,7 +1699,7 @@ public class FSMChecker : MonoBehaviour
         {
             Debug.Log("Morto");
 
-          
+
             deathRequest.Invoke();
 
 
