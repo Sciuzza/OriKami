@@ -376,21 +376,23 @@ public class StoryLine
 
 public class StoryLineInstance : MonoBehaviour
 {
+    #region Public Variables
     public StoryLine CurrentStoryLine;
+	#endregion
 
-    #region Events
-    public event_joy_pc ActivateStoryInputRequest;
+	#region Events
+	public event_joy_pc ActivateStoryInputRequest;
     public event_string FormUnlockRequest;
-    public event_cs ChangeControlStateRequest, StoryExitCsStateRequest; 
-    public event_string_string_string dialogueRequest;
-    public UnityEvent DialogueEndRequest;
+    public event_cs ChangeCsRequest; 
+    public event_string_string_string UiDialogueRequest;
+    public UnityEvent DialogueEnded;
     public event_bool IsStoryMode;
     #endregion
 
     #region Private Variables
     private GameObject player;
 
-    // Variables that need to be resetted
+    // Variables that need to be resetted, placed here and not on related Main Coroutine for Debug Purpose
     private int eventIndex = 0;
     private int effectCounter = 0;
     private int totalEventEffects = 0;
@@ -406,66 +408,60 @@ public class StoryLineInstance : MonoBehaviour
     {
         this.player = GameObject.FindGameObjectWithTag("Player");
 
-        var envTempLink = this.player.GetComponent<EnvInputs>();
-
-        envTempLink.storyActivationRequest.AddListener(this.InitializationByTrigger);
+		var envTempLink = this.player.GetComponent<EnvInputs>();
+        envTempLink.storyActivationRequest.AddListener(this.CheckingAccessAndExistenceConditions);
 
         var plTempLink = this.player.GetComponent<PlayerInputs>();
-
         plTempLink.storyLivingRequest.AddListener(this.LivingStoryEvent);
     }
     #endregion
 
     #region Check Initial Conditions Methods
     // Check Completed , Active and Relation Conditions
-    private void InitializationByTrigger(Collider trigger)
+	private void CheckingAccessAndExistenceConditions(Collider trigger)
     {
-        Debug.Log(trigger.name);
+		GameController.Debugging(trigger.name);
 
         if (this.CurrentStoryLine.Completed)
         {
-            Debug.Log("Storyline already Completed");
+			GameController.Debugging("Storyline already Completed");
             return;
         }
 
         foreach (var story in this.CurrentStoryLine.Stories)
         {
             if ((story.GenAccessCond.STriggerRef != trigger && story.GenAccessCond.TriggerRef != trigger)
-                || !story.Active)
+			    || !story.Active || story.Completed)
             {
                 continue;
             }
 
             this.storySelected = story;
+			GameController.Debugging(this.storySelected.StoryName);
             break;
         }
 
-        if (this.storySelected != null)
-        {
-            Debug.Log(this.storySelected.StoryName);
-            this.CheckStoryLivingConditions();
-        }
-        else
-        {
-            Debug.Log("No Story is accessible through this Trigger " + trigger.name);
-        }
-    }
+		if (this.storySelected != null && CheckItemConditions())
+			this.InitializingStory();
+		else
+			GameController.Debugging("No Story is accessible through this Trigger " + trigger.name);
+	}
 
-    // Check all the other Access conditions
-    private void CheckStoryLivingConditions()
-    {
-        if (this.storySelected.Completed)
-        {
-            return;
-        }
-
-        /*
+	private bool CheckItemConditions()
+	{
+		/*
         foreach (var item in this.storySelected.ItemAccessCondition)
         {
             // control logic achievement system based
         }
-        */
+		*/
 
+		return true;
+	}
+
+    // Check all the other Access conditions
+	private void InitializingStory()
+	{
         if (this.IsNeededInput(
              this.storySelected.GenAccessCond.PlayerInputJoy,
              this.storySelected.GenAccessCond.PlayerInputPc))
@@ -490,178 +486,197 @@ public class StoryLineInstance : MonoBehaviour
     {
         return joyInput != buttonsJoy.none && pcInput != buttonsPc.none;
     }
+	#endregion
 
+    #region Living Story Core
     // Start the Story
     private void LivingStoryEvent()
-    {
+	{
 
-        Debug.Log("Living Story Started for the story " + this.storySelected.StoryName);
+		GameController.Debugging("Living Story Started for the story " + this.storySelected.StoryName);
 
-        this.camLastPos.Add(Camera.main.transform.position);
-        this.camLastRot.Add(Camera.main.transform.rotation);
+		this.camLastPos.Add(Camera.main.transform.position);
+		this.camLastRot.Add(Camera.main.transform.rotation);
 
-        this.IsStoryMode.Invoke(true);
-        this.ChangeControlStateRequest.Invoke(this.storySelected.PlayerControlEffect);
+		this.IsStoryMode.Invoke(true);
+		this.ChangeCsRequest.Invoke(this.storySelected.PlayerControlEffect);
 
-        this.StartCoroutine(this.LivingStory());
-    }
+		this.StartCoroutine(this.LivingStory());
+	}
 
-    private IEnumerator LivingStory()
-    {
-        
-        while (this.eventIndex < this.storySelected.Events.Count)
-        {
-            Debug.Log(this.eventIndex + " event");
-            if (this.eventIndex == 0)
-            {
-                this.PlayerEffectsHandler();
-                this.CameraEffectsHandler();
-                this.EnvEffectsHandler();
-                this.UiEffectsHandler();
+	private IEnumerator LivingStory()
+	{
 
-                Debug.Log(this.totalEventEffects);
-                Debug.Log(this.effectCounter);
+		while (this.eventIndex < this.storySelected.Events.Count)
+		{
+			GameController.Debugging("event", this.eventIndex);
 
-                if (this.totalEventEffects == 0)
-                {
-                    Debug.Log("Event index 0 , 0 effects found");
-                    this.eventIndex++;
-                    continue;
-                }
-            }
-            else
-            {
-                if (this.storySelected.Events[this.eventIndex].PlayerInputJoy != buttonsJoy.none
-                    && this.storySelected.Events[this.eventIndex].PlayerInputPc != buttonsPc.none)
-                {
-                    while (!Input.GetButtonDown(this.storySelected.Events[this.eventIndex].PlayerInputJoy.ToString())
-                        && !Input.GetButtonDown(this.storySelected.Events[this.eventIndex].PlayerInputPc.ToString()))
-                    {
-                        yield return null;
-                    }
-                        this.PlayerEffectsHandler();
-                        this.CameraEffectsHandler();
-                        this.EnvEffectsHandler();
-                        this.UiEffectsHandler();
+			if (this.eventIndex == 0)
+			{
+				this.PlayerEffectsHandler();
+				this.CameraEffectsHandler();
+				this.EnvEffectsHandler();
+				this.UiEffectsHandler();
 
+				GameController.Debugging("Total Events", this.totalEventEffects);
+				GameController.Debugging("Effect Counter", this.effectCounter);
 
-                    Debug.Log(this.totalEventEffects);
-                    Debug.Log(this.effectCounter);
-
-                    if (this.totalEventEffects == 0)
-                    {
-                        Debug.Log(this.eventIndex + " 0 effects found");
-                        this.eventIndex++;
-                        continue;
-                    }
-                }
-                else
-                {
-                    this.PlayerEffectsHandler();
-                    this.CameraEffectsHandler();
-                    this.EnvEffectsHandler();
-                    this.UiEffectsHandler();
+				if (this.totalEventEffects == 0)
+				{
+					GameController.Debugging("Event index 0 , 0 effects found");
+					this.eventIndex++;
+					continue;
+				}
+			}
+			else
+			{
+				if (this.storySelected.Events[this.eventIndex].PlayerInputJoy != buttonsJoy.none
+					&& this.storySelected.Events[this.eventIndex].PlayerInputPc != buttonsPc.none)
+				{
+					while (!Input.GetButtonDown(this.storySelected.Events[this.eventIndex].PlayerInputJoy.ToString())
+						&& !Input.GetButtonDown(this.storySelected.Events[this.eventIndex].PlayerInputPc.ToString()))
+					{
+						yield return null;
+					}
+					this.PlayerEffectsHandler();
+					this.CameraEffectsHandler();
+					this.EnvEffectsHandler();
+					this.UiEffectsHandler();
 
 
-                    Debug.Log(this.totalEventEffects);
-                    Debug.Log(this.effectCounter);
+					GameController.Debugging("Total Events", this.totalEventEffects);
+					GameController.Debugging("Effect Counter", this.effectCounter);
 
-                    if (this.totalEventEffects == 0)
-                    {
-                        Debug.Log(this.eventIndex + " 0 effects found with no input event");
-                        this.eventIndex++;
-                        continue;
-                    }
-                }
-            }
+					if (this.totalEventEffects == 0)
+					{
+						GameController.Debugging("Event index 0 , 0 effects found");
+						this.eventIndex++;
+						continue;
+					}
+				}
+				else
+				{
+					this.PlayerEffectsHandler();
+					this.CameraEffectsHandler();
+					this.EnvEffectsHandler();
+					this.UiEffectsHandler();
 
-            while (this.effectCounter < this.totalEventEffects)
-            {
-                yield return null;
-            }
 
-            this.eventIndex++;
-            this.ResettingEventCommonVariables(); 
-            yield return null;
-        }
+					GameController.Debugging("Total Events", this.totalEventEffects);
+					GameController.Debugging("Effect Counter", this.effectCounter);
 
-        this.ApplyingLivingEffects();
-        this.IsStoryMode.Invoke(false);   
-        this.ResettingStoryCommonVariables();
-    }
+					if (this.totalEventEffects == 0)
+					{
+						GameController.Debugging("Event index 0 , 0 effects found");
+						this.eventIndex++;
+						continue;
+					}
+				}
+			}
 
-    private void ResettingEventCommonVariables()
-    {
-        this.effectCounter = 0;
-        this.totalEventEffects = 0;
-    }
+			while (this.effectCounter < this.totalEventEffects)
+			{
+				yield return null;
+			}
 
-    private void ResettingStoryCommonVariables()
-    {
-        this.effectCounter = 0;
-        this.totalEventEffects = 0;
+			var timer = 0.0f;
 
-        this.eventIndex = 0;
-        this.storySelected = null;
-        this.camLastPos.Clear();
-        this.camLastPos.TrimExcess();
-        this.camLastRot.Clear();
-        this.camLastRot.TrimExcess();
-        this.cameraChangeCounter = 0;
-    }
+			while (timer < this.storySelected.Events[eventIndex].EventEndDelay)
+			{
+				timer += Time.deltaTime;
+				yield return null;
+			}
 
-    private void ApplyingLivingEffects()
-    {
-        this.StoryExitCsStateRequest.Invoke(this.storySelected.EndControlEffect);
-    }
-    #endregion
+			this.eventIndex++;
+			this.ResettingEventCommonVariables();
+			yield return null;
+		}
 
-    #region Player Effects Methods
-    private void PlayerEffectsHandler()
-    {
-        var plaEffectsToEvaluate = this.storySelected.Events[this.eventIndex].Effects.PlaEffect;
+		this.ApplyingLivingEffects();
+		this.IsStoryMode.Invoke(false);
+		this.ResettingStoryCommonVariables();
+	}
 
-        if (plaEffectsToEvaluate.PlayerRepositionEffect.GbRef != null)
+	private void ResettingEventCommonVariables()
+	{
+		this.effectCounter = 0;
+		this.totalEventEffects = 0;
+	}
+
+	private void ResettingStoryCommonVariables()
+	{
+		this.effectCounter = 0;
+		this.totalEventEffects = 0;
+
+		this.eventIndex = 0;
+		this.storySelected = null;
+		this.camLastPos.Clear();
+		this.camLastPos.TrimExcess();
+		this.camLastRot.Clear();
+		this.camLastRot.TrimExcess();
+		this.cameraChangeCounter = 0;
+	}
+
+	private void ApplyingLivingEffects()
+	{
+		this.ChangeCsRequest.Invoke(this.storySelected.EndControlEffect);
+	}
+	#endregion
+
+	#region Player Effects Methods
+	private void PlayerEffectsHandler()
+	{
+		var plaEffectsToEvaluate = this.storySelected.Events[this.eventIndex].Effects.PlaEffect;
+
+		if (plaEffectsToEvaluate.PlayerRepositionEffect.GbRef != null)
+		{
+			this.totalEventEffects++;
+			GameController.Debugging("Player Repo");
+			this.PlayPlayerRepoEffect(plaEffectsToEvaluate.PlayerRepositionEffect);
+
+			if (plaEffectsToEvaluate.PlayerReward.FormName != " ")
+			{
+				this.totalEventEffects++;
+				GameController.Debugging("Player Reward");
+				this.PlayPlayerRewardEffect(plaEffectsToEvaluate.PlayerReward);
+			}
+		}
+		else if (plaEffectsToEvaluate.PlayerMoveEffect.GbRef != null)
+		{
+			this.totalEventEffects++;
+			GameController.Debugging("Player Move");
+			this.PlayPlayerMoveEffect(plaEffectsToEvaluate.PlayerMoveEffect);
+
+			if (plaEffectsToEvaluate.PlayerReward.FormName != " ")
+			{
+				this.totalEventEffects++;
+				GameController.Debugging("Player Reward");
+				this.PlayPlayerRewardEffect(plaEffectsToEvaluate.PlayerReward);
+			}
+		}
+		else if (plaEffectsToEvaluate.PlayerSeeEffect.GbRef != null)
         {
             this.totalEventEffects++;
-            this.PlayPlayerRepoEffect(plaEffectsToEvaluate.PlayerRepositionEffect);
-
-            if (plaEffectsToEvaluate.PlayerReward.FormName != " ")
-            {
-                this.totalEventEffects++;
-                this.PlayPlayerRewardEffect(plaEffectsToEvaluate.PlayerReward);
-            }
-        }
-        else if (plaEffectsToEvaluate.PlayerMoveEffect.GbRef != null)
-        {
-            this.totalEventEffects++;
-            this.PlayPlayerMoveEffect(plaEffectsToEvaluate.PlayerMoveEffect);
-
-            if (plaEffectsToEvaluate.PlayerReward.FormName != " ")
-            {
-                this.totalEventEffects++;
-                this.PlayPlayerRewardEffect(plaEffectsToEvaluate.PlayerReward);
-            }
-        }
-        else if (plaEffectsToEvaluate.PlayerSeeEffect.GbRef != null)
-        {
-            this.totalEventEffects++;
+			GameController.Debugging("Player See");
             this.PlayPlayerSeeEffect(plaEffectsToEvaluate.PlayerSeeEffect);
 
             if (plaEffectsToEvaluate.PlayerReward.FormName != " ")
             {
                 this.totalEventEffects++;
+				GameController.Debugging("Player Reward");
                 this.PlayPlayerRewardEffect(plaEffectsToEvaluate.PlayerReward);
             }
         }
         else if (plaEffectsToEvaluate.PushingBackEffect.PushingBackPower > 0)
         {
             this.totalEventEffects++;
+			GameController.Debugging("Player Pushing Back");
             this.PlayPlayerPushingBackEffect(plaEffectsToEvaluate.PushingBackEffect);
 
             if (plaEffectsToEvaluate.PlayerReward.FormName != " ")
             {
                 this.totalEventEffects++;
+				GameController.Debugging("Player Reward");
                 this.PlayPlayerRewardEffect(plaEffectsToEvaluate.PlayerReward);
             }
         }
@@ -670,6 +685,7 @@ public class StoryLineInstance : MonoBehaviour
             if (plaEffectsToEvaluate.PlayerReward.FormName != " ")
             {
                 this.totalEventEffects++;
+				GameController.Debugging("Player Reward");
                 this.PlayPlayerRewardEffect(plaEffectsToEvaluate.PlayerReward);
             }
         }
@@ -814,21 +830,25 @@ public class StoryLineInstance : MonoBehaviour
         if (camEffectsToEvaluate.CameraMoveEffect.GbRef != null)
         {
             this.totalEventEffects++;
+			GameController.Debugging("Camera Move");
             this.PlayCameraMoveEffect(camEffectsToEvaluate.CameraMoveEffect);
         }
         else if (camEffectsToEvaluate.CameraShakeEffect.ShakingPower > 0)
         {
             this.totalEventEffects++;
+			GameController.Debugging("Camera Shake");
             this.PlayCameraShakeEffect(camEffectsToEvaluate.CameraShakeEffect);
         }
         else if (camEffectsToEvaluate.CameraErEffect.ErLerpSpeed > 0)
         {
             this.totalEventEffects++;
+			GameController.Debugging("Camera ER");
             this.PlayCameraErEffect(camEffectsToEvaluate.CameraErEffect);
         }
         else if (camEffectsToEvaluate.CameraSrEffect.SrLerpSpeed > 0)
         {
             this.totalEventEffects++;
+			GameController.Debugging("Camera SR");
             this.PlayCameraSrEffect(camEffectsToEvaluate.CameraSrEffect);
         }
     }
@@ -1026,6 +1046,7 @@ public class StoryLineInstance : MonoBehaviour
                     }
 
                     this.totalEventEffects++;
+					GameController.Debugging("Object Moving");
                     this.PlayObjMovingEffect(envEffect.ObjMovEffect);
                     gbCheckTempRepo.Add(envEffect.ObjMovEffect.GbToMove);
                 }
@@ -1038,6 +1059,7 @@ public class StoryLineInstance : MonoBehaviour
                     }
 
                     this.totalEventEffects++;
+					GameController.Debugging("Object Activation");
                     this.PlayObjActiEffect(envEffect.ObjActiEffect);
                     gbCheckTempRepo.Add(envEffect.ObjActiEffect.GbRef);
                 }
@@ -1050,6 +1072,7 @@ public class StoryLineInstance : MonoBehaviour
                     }
 
                     this.totalEventEffects++;
+					GameController.Debugging("Object DeActivation");
                     this.PlayObjDeActiEffect(envEffect.ObjDeActiEffect);
                     gbCheckTempRepo.Add(envEffect.ObjDeActiEffect.GbRef);
                 }
@@ -1062,6 +1085,7 @@ public class StoryLineInstance : MonoBehaviour
                     }
 
                     this.totalEventEffects++;
+					GameController.Debugging("Baloon");
                     this.PlayBaloonEffect(envEffect.BaloonEffect);
                     gbCheckTempRepo.Add(envEffect.BaloonEffect.NpcRef);
                 }
@@ -1255,6 +1279,7 @@ public class StoryLineInstance : MonoBehaviour
                     }
 
                     this.totalEventEffects++;
+					GameController.Debugging("Ui Obj Move");
                     this.PlayUiObjMovingEffect(uiEffect.ObjMovEffect);
                     gbCheckTempRepo.Add(uiEffect.ObjMovEffect.GbToMove);
                 }
@@ -1267,6 +1292,7 @@ public class StoryLineInstance : MonoBehaviour
                     }
 
                     this.totalEventEffects++;
+					GameController.Debugging("Ui Obj Acti");
                     this.PlayUiObjActiEffect(uiEffect.ObjActiEffect);
                     gbCheckTempRepo.Add(uiEffect.ObjActiEffect.GbRef);
                 }
@@ -1279,6 +1305,7 @@ public class StoryLineInstance : MonoBehaviour
                     }
 
                     this.totalEventEffects++;
+					GameController.Debugging("Ui Obj DeActi");
                     this.PlayUiObjDeActiEffect(uiEffect.ObjDeActiEffect);
                     gbCheckTempRepo.Add(uiEffect.ObjDeActiEffect.GbRef);
                 }
@@ -1286,6 +1313,7 @@ public class StoryLineInstance : MonoBehaviour
                 if (uiEffect.UiDialogueEffect.DialogueRef != null && !justOneDialogue)
                 {
                     this.totalEventEffects++;
+					GameController.Debugging("Ui Dialogue");
                     this.PlayDialogueEffect(uiEffect.UiDialogueEffect);
                     justOneDialogue = true;
                 }
@@ -1317,7 +1345,7 @@ public class StoryLineInstance : MonoBehaviour
 
         if (initialSplit.Length % 3 != 0)
         {
-            Debug.Log("There's a problem with txt");
+			GameController.Debugging("Txt File lines are not a multiple of 3");
             return;
         }
 
@@ -1350,37 +1378,33 @@ public class StoryLineInstance : MonoBehaviour
             }
         }
 
-
-
         this.StartCoroutine(this.LivingDialogue(effectToPlay));
     }
 
     private IEnumerator LivingDialogue(UiDialogue dialogueEffect)
     {
-        this.dialogueRequest.Invoke(dialogueEffect.name[0], dialogueEffect.label[0], dialogueEffect.sentence[0]);
+        this.UiDialogueRequest.Invoke(dialogueEffect.name[0], dialogueEffect.label[0], dialogueEffect.sentence[0]);
         var counter = 1;
 
         while (counter < dialogueEffect.name.Count)
         {
             if (Input.GetButtonDown(buttonsJoy.X.ToString()) || Input.GetButtonDown(buttonsPc.E.ToString()))
             {
-                this.dialogueRequest.Invoke(dialogueEffect.name[counter], dialogueEffect.label[counter], dialogueEffect.sentence[counter]);
+                this.UiDialogueRequest.Invoke(dialogueEffect.name[counter], dialogueEffect.label[counter], dialogueEffect.sentence[counter]);
                 counter++;
             }
             yield return null;
         }
-
 
         while (!Input.GetButtonDown(buttonsJoy.X.ToString()) && !Input.GetButtonDown(buttonsPc.E.ToString()))
         {
             yield return null;
         }
 
-        this.DialogueEndRequest.Invoke();
+        this.DialogueEnded.Invoke();
         dialogueEffect.End = true;
         this.effectCounter++;
     }
-
     #endregion
 
     #region Edit Mode Methods

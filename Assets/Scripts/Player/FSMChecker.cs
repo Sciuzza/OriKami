@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using UnityEngine.Events;
 using System.Collections.Generic;
@@ -241,13 +241,12 @@ public class FSMChecker : MonoBehaviour
             if (slTempLink != null)
             {
                 slTempLink.FormUnlockRequest.AddListener(this.UnlockingAbility);
-                slTempLink.ChangeControlStateRequest.AddListener(this.StoryCsChange);
-                slTempLink.StoryExitCsStateRequest.AddListener(this.StoryCsExit);
-                slTempLink.IsStoryMode.AddListener(this.SettingStoryMode);
-            }
-        }
-    }
-
+                slTempLink.ChangeCsRequest.AddListener(this.StoryCsChange);
+				slTempLink.IsStoryMode.AddListener(this.SettingStoryMode);
+			}
+		}
+	}
+                
     void Start()
     {
 
@@ -498,9 +497,10 @@ public class FSMChecker : MonoBehaviour
                 break;
         }
     }
+	#endregion
 
-    #region Standard Abilities Handler
-    private void UpdatingStdAbilityList()
+	#region Standard Abilities Handler
+	private void UpdatingStdAbilityList()
     {
         switch (cPlayerState.currentClState)
         {
@@ -1425,197 +1425,196 @@ public class FSMChecker : MonoBehaviour
     }
     #endregion
 
-    #region Generic Ability Handler Methods
+	#region Generic Ability Handler Methods
     private void NoControl()
-    {
-        cPlayerState.currentAbilities.Clear();
-        cPlayerState.currentAbilities.TrimExcess();
-        AddAbility(abilties.menu);
-    }
+	{
+		cPlayerState.currentAbilities.Clear();
+		cPlayerState.currentAbilities.TrimExcess();
+		AddAbility(abilties.menu);
+	}
 
-    private void RemoveAbility(abilties abiToRemove)
-    {
-        if (cPlayerState.currentAbilities.Contains(abiToRemove))
-            cPlayerState.currentAbilities.Remove(abiToRemove);
+	private void RemoveAbility(abilties abiToRemove)
+	{
+		if (cPlayerState.currentAbilities.Contains(abiToRemove))
+			cPlayerState.currentAbilities.Remove(abiToRemove);
 
-    }
+	}
 
-    private void AddAbility(abilties abiToAdd)
-    {
-        if (!cPlayerState.currentAbilities.Contains(abiToAdd))
-            cPlayerState.currentAbilities.Add(abiToAdd);
-    }
+	private void AddAbility(abilties abiToAdd)
+	{
+		if (!cPlayerState.currentAbilities.Contains(abiToAdd))
+			cPlayerState.currentAbilities.Add(abiToAdd);
+	}
 
-    private void EnablingMove()
-    {
-        cPlayerState.currentPlState = playerStates.standingStill;
-        //cPlayerState.currentClState = controlStates.totalControl;
-        UpdatingAbilityList();
-        stoppingRollLogic.Invoke();
-    }
+	private void EnablingMove()
+	{
+		cPlayerState.currentPlState = playerStates.standingStill;
+		//cPlayerState.currentClState = controlStates.totalControl;
+		UpdatingAbilityList();
+		stoppingRollLogic.Invoke();
+	}
 
-    private void SettingCapsuleCollider(float rad, float height)
-    {
-        ccLink.radius = rad;
-        ccLink.height = height;
-    }
+	private void SettingCapsuleCollider(float rad, float height)
+	{
+		ccLink.radius = rad;
+		ccLink.height = height;
+	}
 
-    private void ChangingCameraToOff(GameObject CameraDir)
-    {
+	private void ChangingCameraToOff(GameObject CameraDir)
+	{
 
-        switch (this.cPlayerState.currentClState)
-        {
-            case controlStates.noGenAbi:
-                if (!this.storyMode) this.cPlayerState.currentClState = controlStates.noCameraAndGenAbi;
-                else this.previousClState = controlStates.noCameraAndGenAbi;
-                this.switchingCameraControlToOFF.Invoke(CameraDir);
-                break;
-            case controlStates.noMove:
-                if (!this.storyMode) this.cPlayerState.currentClState = controlStates.noCamAndMove;
-                else this.previousClState = controlStates.noCamAndMove;
-                this.switchingCameraControlToOFF.Invoke(CameraDir);
-                break;
-            case controlStates.noMoveAndGenAbi:
-                if (!this.storyMode) this.cPlayerState.currentClState = controlStates.noControl;
-                else this.previousClState = controlStates.noControl;
-                this.switchingCameraControlToOFF.Invoke(CameraDir);
-                break;
-            case controlStates.totalControl:
-                if (!this.storyMode) this.cPlayerState.currentClState = controlStates.noCamera;
-                else this.previousClState = controlStates.noCamera;
-                this.switchingCameraControlToOFF.Invoke(CameraDir);
-                break;
-            default:
-                Debug.Log("Camera Already Off");
-                break;
-        }
-    }
+		switch (this.cPlayerState.currentClState)
+		{
+			case controlStates.noGenAbi:
+				if (!this.storyMode) this.cPlayerState.currentClState = controlStates.noCameraAndGenAbi;
+				else this.previousClState = controlStates.noCameraAndGenAbi;
+				this.switchingCameraControlToOFF.Invoke(CameraDir);
+				break;
+			case controlStates.noMove:
+				if (!this.storyMode) this.cPlayerState.currentClState = controlStates.noCamAndMove;
+				else this.previousClState = controlStates.noCamAndMove;
+				this.switchingCameraControlToOFF.Invoke(CameraDir);
+				break;
+			case controlStates.noMoveAndGenAbi:
+				if (!this.storyMode) this.cPlayerState.currentClState = controlStates.noControl;
+				else this.previousClState = controlStates.noControl;
+				this.switchingCameraControlToOFF.Invoke(CameraDir);
+				break;
+			case controlStates.totalControl:
+				if (!this.storyMode) this.cPlayerState.currentClState = controlStates.noCamera;
+				else this.previousClState = controlStates.noCamera;
+				this.switchingCameraControlToOFF.Invoke(CameraDir);
+				break;
+			default:
+				Debug.Log("Camera Already Off");
+				break;
+		}
+	}
 
-    private void ChangingCameraToOn()
-    {
-        switch (this.cPlayerState.currentClState)
-        {
-            case controlStates.noCameraAndGenAbi:
-                if (!this.storyMode) this.cPlayerState.currentClState = controlStates.noGenAbi;
-                else this.previousClState = controlStates.noGenAbi;
-                this.switchingCameraControlToOn.Invoke();
-                break;
-            case controlStates.noCamAndMove:
-                if (!this.storyMode) this.cPlayerState.currentClState = controlStates.noMove;
-                else this.previousClState = controlStates.noMove;
-                this.switchingCameraControlToOn.Invoke();
-                break;
-            case controlStates.noControl:
-                if (!this.storyMode) this.cPlayerState.currentClState = controlStates.noMoveAndGenAbi;
-                else this.previousClState = controlStates.noMoveAndGenAbi;
-                this.switchingCameraControlToOn.Invoke();
-                break;
-            case controlStates.noCamera:
-                if (!this.storyMode) this.cPlayerState.currentClState = controlStates.totalControl;
-                else this.previousClState = controlStates.totalControl;
-                this.switchingCameraControlToOn.Invoke();
-                break;
-            default:
-                Debug.Log("Camera Already On");
-                break;
-        }
-    }
+	private void ChangingCameraToOn()
+	{
+		switch (this.cPlayerState.currentClState)
+		{
+			case controlStates.noCameraAndGenAbi:
+				if (!this.storyMode) this.cPlayerState.currentClState = controlStates.noGenAbi;
+				else this.previousClState = controlStates.noGenAbi;
+				this.switchingCameraControlToOn.Invoke();
+				break;
+			case controlStates.noCamAndMove:
+				if (!this.storyMode) this.cPlayerState.currentClState = controlStates.noMove;
+				else this.previousClState = controlStates.noMove;
+				this.switchingCameraControlToOn.Invoke();
+				break;
+			case controlStates.noControl:
+				if (!this.storyMode) this.cPlayerState.currentClState = controlStates.noMoveAndGenAbi;
+				else this.previousClState = controlStates.noMoveAndGenAbi;
+				this.switchingCameraControlToOn.Invoke();
+				break;
+			case controlStates.noCamera:
+				if (!this.storyMode) this.cPlayerState.currentClState = controlStates.totalControl;
+				else this.previousClState = controlStates.totalControl;
+				this.switchingCameraControlToOn.Invoke();
+				break;
+			default:
+				Debug.Log("Camera Already On");
+				break;
+		}
+	}
 
-    private void HandlingAbiDiscovered()
-    {
+	private void HandlingAbiDiscovered()
+	{
 
-        switch (cPlayerState.currentForm)
-        {
+		switch (cPlayerState.currentForm)
+		{
 
-            case "Standard Form":
-                if (abiUnlocked.armaUnlocked)
-                    AddAbility(abilties.toArma);
-                if (abiUnlocked.frogUnlocked)
-                    AddAbility(abilties.toFrog);
-                if (abiUnlocked.craneUnlocked)
-                    AddAbility(abilties.toCrane);
-                if (abiUnlocked.dolphinUnlocked)
-                    AddAbility(abilties.toDolp);
-                break;
-            case "Frog Form":
-                if (abiUnlocked.armaUnlocked)
-                    AddAbility(abilties.toArma);
-                if (abiUnlocked.craneUnlocked)
-                    AddAbility(abilties.toCrane);
-                if (abiUnlocked.dolphinUnlocked)
-                    AddAbility(abilties.toDolp);
-                break;
-            case "Armadillo Form":
-                if (abiUnlocked.frogUnlocked)
-                    AddAbility(abilties.toFrog);
-                if (abiUnlocked.craneUnlocked)
-                    AddAbility(abilties.toCrane);
-                if (abiUnlocked.dolphinUnlocked)
-                    AddAbility(abilties.toDolp);
-                break;
-            case "Dragon Form":
-                if (abiUnlocked.frogUnlocked)
-                    AddAbility(abilties.toFrog);
-                if (abiUnlocked.armaUnlocked)
-                    AddAbility(abilties.toArma);
-                if (abiUnlocked.dolphinUnlocked)
-                    AddAbility(abilties.toDolp);
-                break;
-            case "Dolphin Form":
-                if (abiUnlocked.frogUnlocked)
-                    AddAbility(abilties.toFrog);
-                if (abiUnlocked.armaUnlocked)
-                    AddAbility(abilties.toArma);
-                if (abiUnlocked.craneUnlocked)
-                    AddAbility(abilties.toCrane);
-                break;
+			case "Standard Form":
+				if (abiUnlocked.armaUnlocked)
+					AddAbility(abilties.toArma);
+				if (abiUnlocked.frogUnlocked)
+					AddAbility(abilties.toFrog);
+				if (abiUnlocked.craneUnlocked)
+					AddAbility(abilties.toCrane);
+				if (abiUnlocked.dolphinUnlocked)
+					AddAbility(abilties.toDolp);
+				break;
+			case "Frog Form":
+				if (abiUnlocked.armaUnlocked)
+					AddAbility(abilties.toArma);
+				if (abiUnlocked.craneUnlocked)
+					AddAbility(abilties.toCrane);
+				if (abiUnlocked.dolphinUnlocked)
+					AddAbility(abilties.toDolp);
+				break;
+			case "Armadillo Form":
+				if (abiUnlocked.frogUnlocked)
+					AddAbility(abilties.toFrog);
+				if (abiUnlocked.craneUnlocked)
+					AddAbility(abilties.toCrane);
+				if (abiUnlocked.dolphinUnlocked)
+					AddAbility(abilties.toDolp);
+				break;
+			case "Dragon Form":
+				if (abiUnlocked.frogUnlocked)
+					AddAbility(abilties.toFrog);
+				if (abiUnlocked.armaUnlocked)
+					AddAbility(abilties.toArma);
+				if (abiUnlocked.dolphinUnlocked)
+					AddAbility(abilties.toDolp);
+				break;
+			case "Dolphin Form":
+				if (abiUnlocked.frogUnlocked)
+					AddAbility(abilties.toFrog);
+				if (abiUnlocked.armaUnlocked)
+					AddAbility(abilties.toArma);
+				if (abiUnlocked.craneUnlocked)
+					AddAbility(abilties.toCrane);
+				break;
 
-        }
+		}
 
-    }
+	}
 
-    private void UnlockingAbility(string whichAbility)
-    {
-        switch (whichAbility)
-        {
-            case "Frog Form":
-                this.abiUnlocked.frogUnlocked = true;
-                break;
-            case "Dragon Form":
-                this.abiUnlocked.craneUnlocked = true;
-                break;
-            case "Arma Form":
-                this.abiUnlocked.armaUnlocked = true;
-                break;
-            case "Dolphin Form":
-                this.abiUnlocked.dolphinUnlocked = true;
-                break;
-        }
+	private void UnlockingAbility(string whichAbility)
+	{
+		switch (whichAbility)
+		{
+			case "Frog Form":
+				this.abiUnlocked.frogUnlocked = true;
+				break;
+			case "Dragon Form":
+				this.abiUnlocked.craneUnlocked = true;
+				break;
+			case "Arma Form":
+				this.abiUnlocked.armaUnlocked = true;
+				break;
+			case "Dolphin Form":
+				this.abiUnlocked.dolphinUnlocked = true;
+				break;
+		}
 
-        this.UpdatingAbilityList();
-    }
+		this.UpdatingAbilityList();
+	}
 
-    private void StoryCsChange(controlStates newCs)
-    {
-        this.cPlayerState.currentClState = newCs;
-        this.UpdatingAbilityList();
-    }
+	private void StoryCsChange(controlStates newCs)
+	{
+		this.cPlayerState.currentClState = newCs;
+		this.UpdatingAbilityList();
+	}
 
-    private void StoryCsExit(controlStates exitCs)
-    {
-        this.cPlayerState.currentClState = exitCs;
-        this.UpdatingAbilityList();
-    }
+	private void StoryCsExit(controlStates exitCs)
+	{
+		this.cPlayerState.currentClState = exitCs;
+		this.UpdatingAbilityList();
+	}
 
-    private void SettingStoryMode(bool state)
-    {
-        this.storyMode = state;
-    }
-    #endregion
-    #endregion
+	private void SettingStoryMode(bool state)
+	{
+		this.storyMode = state;
+	}
+	#endregion
 
-    #region Death Conditions Methods
-    void Update()
+	#region Death Conditions Methods
+	void Update()
     {
         if (cPlayerState.currentForm != "Dolphin Form" && cPlayerState.currentPhState == physicStates.onWater && !dying)
         {

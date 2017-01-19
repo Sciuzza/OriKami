@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -53,8 +53,8 @@ public class MenuManager : MonoBehaviour
 
         if (storyLineCheck == null) return;
         var slTempLink = GameObject.FindGameObjectWithTag("StoryLine").GetComponent<StoryLineInstance>();
-        slTempLink.dialogueRequest.AddListener(this.PoppingOutDialogue);
-        slTempLink.DialogueEndRequest.AddListener(this.ResettingDialogue);
+        slTempLink.UiDialogueRequest.AddListener(this.PoppingOutDialogue);
+        slTempLink.DialogueEnded.AddListener(this.ResettingDialogue);
     }
 
     #endregion

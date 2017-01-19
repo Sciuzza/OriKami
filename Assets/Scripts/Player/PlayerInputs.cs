@@ -39,6 +39,7 @@ public class PlayerInputs : MonoBehaviour
 
         GameObject storyLineCheck = GameObject.FindGameObjectWithTag("StoryLine");
 
+
         if (storyLineCheck != null)
         {
 
@@ -1992,33 +1993,32 @@ public class PlayerInputs : MonoBehaviour
         switchCooldown = false;
     }
 
-    private void UpdatingCurrentFormInputs(string currentForm)
-    {
-        switch (currentForm)
-        {
-            case "Standard Form":
-                cForm = PlayerInputs.currentForm.std;
-                StartCoroutine(SwitchingCooldown());
-                break;
-            case "Frog Form":
-                cForm = PlayerInputs.currentForm.frog;
-                StartCoroutine(SwitchingCooldown());
-                break;
-            case "Armadillo Form":
-                cForm = PlayerInputs.currentForm.arma;
-                StartCoroutine(SwitchingCooldown());
-                break;
-            case "Dragon Form":
-                cForm = PlayerInputs.currentForm.crane;
-                StartCoroutine(SwitchingCooldown());
-                break;
-            case "Dolphin Form":
-                cForm = PlayerInputs.currentForm.dolphin;
-                StartCoroutine(SwitchingCooldown());
-                break;
-        }
-    }
-
+	private void UpdatingCurrentFormInputs(string currentForm)
+	{
+		switch (currentForm)
+		{
+			case "Standard Form":
+				cForm = PlayerInputs.currentForm.std;
+				StartCoroutine(SwitchingCooldown());
+				break;
+			case "Frog Form":
+				cForm = PlayerInputs.currentForm.frog;
+				StartCoroutine(SwitchingCooldown());
+				break;
+			case "Armadillo Form":
+				cForm = PlayerInputs.currentForm.arma;
+				StartCoroutine(SwitchingCooldown());
+				break;
+			case "Dragon Form":
+				cForm = PlayerInputs.currentForm.crane;
+				StartCoroutine(SwitchingCooldown());
+				break;
+			case "Dolphin Form":
+				cForm = PlayerInputs.currentForm.dolphin;
+				StartCoroutine(SwitchingCooldown());
+				break;
+		}
+	}
     #endregion 
     #endregion
 }
