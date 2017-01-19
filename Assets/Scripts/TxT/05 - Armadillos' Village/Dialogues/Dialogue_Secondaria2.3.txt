@@ -1,2 +1,2 @@
 Iki/Left/...
-Villager/Right/You’re looking for Maneki, right? /n I’ve often seen him climbing on trees, it seems like he feels safe up there.
+Villager/Right/You’re looking for Maneki, right?*I’ve often seen him climbing on trees, it seems like he feels safe up there.
