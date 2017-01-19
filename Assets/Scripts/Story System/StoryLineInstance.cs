@@ -379,7 +379,7 @@ public class SingleStory
 }
 
 [Serializable]
-public class StoryLine
+public class StoryLine 
 {
     public string StoryLineName;
     public Storylines StoryEnumName;
@@ -408,7 +408,7 @@ public class StoryLineInstance : MonoBehaviour
     #region Private Variables
     private int eventIndex = 0;
     private GameObject player;
-    private SingleStory storySelected;
+    public SingleStory storySelected;
 
     private List<Vector3> camLastPos = new List<Vector3>();
     private List<Quaternion> camLastRot = new List<Quaternion>();

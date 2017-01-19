@@ -10,19 +10,35 @@ using UnityEngine.SceneManagement;
 public class SaveSystem : MonoBehaviour
 {
     private Transform PlayerTempLink;
-    private StoryLine storyLineTempLink;
+
 
     void Awake()
     {
         GameController gcTempLink = this.GetComponent<GameController>();
         gcTempLink.gpInitializer.AddListener(GameplayInitialization);
+
     }
 
     void Update()
     {
+        StoryLineInstance storyLineTempLink = GameObject.FindGameObjectWithTag("StoryLine").GetComponent<StoryLineInstance>();
+        StoryLineInstance singleStoryTempLink = GameObject.FindGameObjectWithTag("StoryLine").GetComponent<StoryLineInstance>();
         if (Input.GetKeyDown(KeyCode.K))
         {
             SceneManager.LoadScene("Ricky Testing");
+        }
+
+        if (Input.GetKeyDown(KeyCode.J))
+        {
+           
+            storyLineTempLink.CurrentStoryLine.Completed = true;
+          
+        }
+        if (Input.GetKeyDown(KeyCode.G))
+        {
+      
+            singleStoryTempLink.storySelected.Active = true;
+            Debug.Log(singleStoryTempLink.storySelected.Active);
         }
     }
 
@@ -32,7 +48,7 @@ public class SaveSystem : MonoBehaviour
         FSMChecker fsmCheckerTempLink = player.GetComponent<FSMChecker>();
         fsmCheckerTempLink.deathRequest.AddListener(LoadState);
         PlayerTempLink = player.transform;
-        
+
 
     }
 
@@ -46,7 +62,7 @@ public class SaveSystem : MonoBehaviour
 
         #region Position & Rotation
         SensibleData data = new SensibleData();
-        
+
 
         data.posx = PlayerTempLink.transform.position.x;
         data.posy = PlayerTempLink.transform.position.y;
@@ -70,22 +86,17 @@ public class SaveSystem : MonoBehaviour
 
         #region QuestSave
         QuestData questData = new QuestData();
-        StoryLine storyLineTempLink = GameObject.FindGameObjectWithTag("StoryLine").GetComponent<StoryLine>();
+        StoryLineInstance storyLineTempLink = GameObject.FindGameObjectWithTag("StoryLine").GetComponent<StoryLineInstance>();
+        StoryLineInstance singleStoryTempLink = GameObject.FindGameObjectWithTag("StoryLine").GetComponent<StoryLineInstance>();
 
-        questData.StoryLineName_Save = storyLineTempLink.StoryLineName;
-        questData.StoryEnumName_Save = storyLineTempLink.StoryEnumName;
-        questData.Completed_Save = storyLineTempLink.Completed;
 
-        questData.StoryActiveOnCompletition_Save = storyLineTempLink.StoryActiveOnCompletion;
-        questData.StoryCompleteOnCompletition_Save = storyLineTempLink.StoryCompleteOnCompletion;
-        questData.StoryLineCompleteOnCompletion_Save = storyLineTempLink.StoryLineCompleteOnCompletion;
+        questData.StoryLine_Completed_Save = storyLineTempLink.CurrentStoryLine.Completed;
+        questData.SingleStory_Active_Save = singleStoryTempLink.storySelected.Active;
+        questData.SingleStory_Completed_Save = singleStoryTempLink.storySelected.Completed;
 
-        questData.Stories_Save = storyLineTempLink.Stories;
+
+
         #endregion
-
-
-
-
 
         bf.Serialize(file, data);
         bf.Serialize(file, questData);
@@ -102,7 +113,8 @@ public class SaveSystem : MonoBehaviour
             SensibleData data = (SensibleData)bf.Deserialize(file);
             QuestData questData = (QuestData)bf.Deserialize(file);
             FSMChecker fsmTempLink = PlayerTempLink.gameObject.GetComponent<FSMChecker>();
-            StoryLine storyLineTempLink = GameObject.FindGameObjectWithTag("StoryLine").GetComponent<StoryLine>();
+            StoryLineInstance storyLineTempLink = GameObject.FindGameObjectWithTag("StoryLine").GetComponent<StoryLineInstance>();
+            StoryLineInstance singleStoryTempLink = GameObject.FindGameObjectWithTag("StoryLine").GetComponent<StoryLineInstance>();
             file.Close();
 
             #region LoadPosition&Rotation
@@ -119,16 +131,9 @@ public class SaveSystem : MonoBehaviour
             #endregion
 
             #region LoadQuestData
-
-            storyLineTempLink.StoryLineName = questData.StoryLineName_Save;
-            storyLineTempLink.StoryEnumName = questData.StoryEnumName_Save;
-            storyLineTempLink.Completed = questData.Completed_Save;
-
-            storyLineTempLink.StoryActiveOnCompletion = questData.StoryActiveOnCompletition_Save;
-            storyLineTempLink.StoryCompleteOnCompletion = questData.StoryCompleteOnCompletition_Save;
-            storyLineTempLink.StoryLineCompleteOnCompletion = questData.StoryLineCompleteOnCompletion_Save;
-
-            storyLineTempLink.Stories = questData.Stories_Save;
+            storyLineTempLink.CurrentStoryLine.Completed = questData.StoryLine_Completed_Save;
+            singleStoryTempLink.storySelected.Active = questData.SingleStory_Active_Save;
+            singleStoryTempLink.storySelected.Completed = questData.SingleStory_Completed_Save;
             #endregion
 
             // player.GetComponent<FSMChecker>().cPlayerState.currentAbilities.AddRange(data.saveAbilities);
@@ -150,8 +155,7 @@ public class SensibleData
     public float rotz;
     #endregion
 
-
-
+    //Array for Forms
     public bool[] formsUnlocked;
     // public List<abilties> saveAbilities;
 
@@ -171,15 +175,10 @@ public class EnvData
 [System.Serializable]
 public class QuestData
 {
-    public string StoryLineName_Save;
-    public Storylines StoryEnumName_Save;
-    public bool Completed_Save;
-
-    public List<Stories> StoryActiveOnCompletition_Save;
-    public List<Stories> StoryCompleteOnCompletition_Save;
-    public List<Storylines> StoryLineCompleteOnCompletion_Save;
-
-    public List<SingleStory> Stories_Save;
+    public bool StoryLine_Completed_Save;
+    public bool SingleStory_Completed_Save;
+    public bool SingleStory_Active_Save;
+    //public List<SingleStory> Stories_Save;
 
 }
 
