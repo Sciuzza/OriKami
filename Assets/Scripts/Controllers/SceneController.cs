@@ -164,7 +164,7 @@ public class SceneController : MonoBehaviour
         else if (sceneName == "LoadingScreen")
         {
             Debug.LogWarning(
-                "You Cannot load Loading Screen directly, please change the scene name with the a gameplay or menu scene");
+                "You Cannot load Loading Screen directly, please change the scene Name with the a gameplay or menu scene");
         }
         else
         {
