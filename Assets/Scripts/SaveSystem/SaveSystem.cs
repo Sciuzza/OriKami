@@ -10,18 +10,22 @@ using UnityEngine.SceneManagement;
 public class SaveSystem : MonoBehaviour
 {
     private Transform PlayerTempLink;
+    int questemp;
 
 
     void Awake()
     {
         GameController gcTempLink = this.GetComponent<GameController>();
         gcTempLink.gpInitializer.AddListener(GameplayInitialization);
+        StoryLineInstance storyLineTempLink = GameObject.FindGameObjectWithTag("StoryLine").GetComponent<StoryLineInstance>();
+        int questemp = storyLineTempLink.CurrentStoryLine.Stories.Count * 2 + 1;
 
     }
 
     void Update()
     {
         StoryLineInstance storyLineTempLink = GameObject.FindGameObjectWithTag("StoryLine").GetComponent<StoryLineInstance>();
+      
         StoryLineInstance singleStoryTempLink = GameObject.FindGameObjectWithTag("StoryLine").GetComponent<StoryLineInstance>();
         if (Input.GetKeyDown(KeyCode.K))
         {
@@ -36,9 +40,12 @@ public class SaveSystem : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.G))
         {
-      
-            singleStoryTempLink.storySelected.Active = true;
-            Debug.Log(singleStoryTempLink.storySelected.Active);
+
+            foreach (var item in storyLineTempLink.CurrentStoryLine.Stories)
+            {
+                item.Active = true;
+                item.Completed = true;
+            }
         }
     }
 
@@ -87,14 +94,20 @@ public class SaveSystem : MonoBehaviour
         #region QuestSave
         QuestData questData = new QuestData();
         StoryLineInstance storyLineTempLink = GameObject.FindGameObjectWithTag("StoryLine").GetComponent<StoryLineInstance>();
-        StoryLineInstance singleStoryTempLink = GameObject.FindGameObjectWithTag("StoryLine").GetComponent<StoryLineInstance>();
-
+      
+     
 
         questData.StoryLine_Completed_Save = storyLineTempLink.CurrentStoryLine.Completed;
-        questData.SingleStory_Active_Save = singleStoryTempLink.storySelected.Active;
-        questData.SingleStory_Completed_Save = singleStoryTempLink.storySelected.Completed;
-
-
+        questemp = storyLineTempLink.CurrentStoryLine.Stories.Count * 2 + 1;
+        bool[] tempSave = new bool[questemp];
+        tempSave[0] = storyLineTempLink.CurrentStoryLine.Completed;
+        int j = 0;
+        for (int i = 1; i < storyLineTempLink.CurrentStoryLine.Stories.Count; i+=2)
+        {
+            tempSave[i] = storyLineTempLink.CurrentStoryLine.Stories[j].Active;
+            tempSave[i + 1] = storyLineTempLink.CurrentStoryLine.Stories[j].Completed;
+            j++;
+        }
 
         #endregion
 
@@ -131,8 +144,11 @@ public class SaveSystem : MonoBehaviour
             #endregion
 
             #region LoadQuestData
+            bool[] loadTemp = new bool[questemp];
+            loadTemp = questData.questdata;
+
             storyLineTempLink.CurrentStoryLine.Completed = questData.StoryLine_Completed_Save;
-            singleStoryTempLink.storySelected.Active = questData.SingleStory_Active_Save;
+           // singleStoryTempLink.CurrentStoryLine.S = questData.SingleStory_Active_Save;
             singleStoryTempLink.storySelected.Completed = questData.SingleStory_Completed_Save;
             #endregion
 
@@ -178,6 +194,8 @@ public class QuestData
     public bool StoryLine_Completed_Save;
     public bool SingleStory_Completed_Save;
     public bool SingleStory_Active_Save;
+    public bool[] questdata;
+    public List<SingleStory> stories_save;
     //public List<SingleStory> Stories_Save;
 
 }
