@@ -12,7 +12,7 @@ public class ButtonStairs : MonoBehaviour
     {
         stairsLinker.SetActive(false);
 
-        GameObject.FindGameObjectWithTag("Player").GetComponent<PlCore>().activateStairs.AddListener(ActivatingStairs);
+      //  GameObject.FindGameObjectWithTag("Player").GetComponent<PlCore>().activateStairs.AddListener(ActivatingStairs);
 
     }
 

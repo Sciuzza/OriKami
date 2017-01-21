@@ -1,51 +1,60 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 
-public class GameController : MonoBehaviour {
-
-    [HideInInspector]
-    public GameObject player;
-
-    [System.Serializable]
-    public class gbEvent : UnityEvent<GameObject>
-    {
-    }
-
+public class GameController : MonoBehaviour
     
 
-    [HideInInspector]
-    public gbEvent initializer, designRunningTweaks;
+{
+    public Camera cameraRef;
+  
+    #region Private Variables
+    private GameObject player; 
+    #endregion
 
-    public UnityEvent currentInputChange;
+    #region Event Variables
+    public event_Gb gpInitializer, gameSettingsChanged;
 
+    public UnityEvent ngpInitializer;
+    #endregion
+
+    #region Do not Destroy Behaviour
     void Awake()
     {
+        
         DontDestroyOnLoad(this.gameObject);
+        DontDestroyOnLoad(cameraRef.gameObject);
         
     }
+    #endregion
 
-    void Start()
-    {
-        if (FindingPlayer())
-        {
-            initializer.Invoke(player);
-            
-        }
-
-      
-    }
-
+    #region In game Design Tweaks
     void Update()
     {
         if (Input.GetKeyDown("k"))
+            gameSettingsChanged.Invoke(player);
+    }
+    #endregion
+
+    #region Initialization Methods
+    public void InitializingScene()
+    {
+        if (FindingPlayer())
         {
-            designRunningTweaks.Invoke(player);
-            currentInputChange.Invoke();
+            Debug.Log("Initializer Invoked Once");
+            gpInitializer.Invoke(player);
+            StartCoroutine(this.player.GetComponent<MoveHandler>().MoveHandlerUpdate());
+
+        }
+        else
+        {
+            Debug.Log("Not on Gameplay Scene");
+            ngpInitializer.Invoke();
         }
     }
 
-    private bool FindingPlayer()
+    public bool FindingPlayer()
     {
         player = GameObject.FindGameObjectWithTag("Player");
         if (player == null)
@@ -55,8 +64,6 @@ public class GameController : MonoBehaviour {
         }
         else
             return true;
-    }
-
-
-    
+    } 
+    #endregion
 }

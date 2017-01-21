@@ -1,0 +1,21 @@
+﻿using UnityEngine;
+using System.Collections;
+
+using UnityEngine.UI;
+
+public class HudRefRepo : MonoBehaviour
+{
+
+    // to handle Collectible value and image
+    public Text CollectibleValue;
+    public Image CollectibleImage;
+
+    // to handle image sources
+    public Image LbForm, RbForm, RtForm, LtForm, CurrentForm;
+
+    // To handle enabling and disabling
+    public GameObject Dialogue, Pause, BlackScreen, LeftLabel, RightLabel;
+
+    // to handle dialogue texts
+    public Text DialogueT, RightLabelT, LeftLabelT;
+}

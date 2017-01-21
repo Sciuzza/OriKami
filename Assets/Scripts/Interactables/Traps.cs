@@ -4,19 +4,20 @@ using UnityEngine.SceneManagement;
 
 public class Traps : MonoBehaviour
 {
+    bool isDirectionRight = true;
+    public bool movingPlatforms;
 
     public float sphereSpeed;
-    float sphereRotation = 30f;
-    Transform targetTr;
+    float sphereRotation = 0f;
+
     public Transform A;
     public Transform B;
+    Transform targetTr;
     Transform rotationSphere;
-    bool isDirectionRight = true;
-        
+
     void Start()
     {
         targetTr = A;
-        
     }
 
 
@@ -55,7 +56,22 @@ public class Traps : MonoBehaviour
         }
     }
 
-    
+    void OnTriggerStay(Collider other)
+    {
+        if (other.gameObject.tag == "Player")
+        {
+            other.transform.SetParent(this.gameObject.transform);
+        }
+    }
+
+    void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.tag == "Player")
+        {
+            other.transform.parent = null;
+        }
+    }
+
 
 
     /*void OnCollisionEnter (Collision coll)
