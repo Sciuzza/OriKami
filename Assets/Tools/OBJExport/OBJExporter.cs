@@ -316,7 +316,7 @@ public class OBJExporter : ScriptableWizard
                 var tImporter = AssetImporter.GetAtPath(assetPath) as TextureImporter;
                 if (tImporter != null)
                 {
-                    tImporter.textureType = TextureImporterType.Default;
+                    tImporter.textureType = TextureImporterType.Image;
 
                     if (!tImporter.isReadable)
                     {

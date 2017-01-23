@@ -1,3 +1,4 @@
+/*
 using System;
 using UnityEngine;
 
@@ -18,8 +19,8 @@ namespace UnityStandardAssets.Characters.ThirdPerson
             agent = GetComponentInChildren<UnityEngine.AI.NavMeshAgent>();
             character = GetComponent<ThirdPersonCharacter>();
 
-	        agent.updateRotation = false;
-	        agent.updatePosition = true;
+            agent.updateRotation = false;
+            agent.updatePosition = true;
         }
 
 
@@ -41,3 +42,4 @@ namespace UnityStandardAssets.Characters.ThirdPerson
         }
     }
 }
+*/
