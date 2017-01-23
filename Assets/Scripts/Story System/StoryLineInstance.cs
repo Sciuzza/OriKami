@@ -360,7 +360,7 @@ public class SingleStory
 }
 
 [Serializable]
-public class StoryLine
+public class StoryLine 
 {
     public string StoryLineName;
     public Storylines StoryEnumName;
@@ -392,11 +392,12 @@ public class StoryLineInstance : MonoBehaviour
     #region Private Variables
     private GameObject player;
 
-    // Variables that need to be resetted, placed here and not on related Main Coroutine for Debug Purpose
+    public SingleStory storySelected;
+
     private int eventIndex;
     private int effectCounter;
     private int totalEventEffects;
-    private SingleStory storySelected;
+   
     private List<Vector3> camLastPos = new List<Vector3>();
     private List<Quaternion> camLastRot = new List<Quaternion>();
     private int cameraChangeCounter;
