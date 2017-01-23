@@ -11,6 +11,8 @@ public class SaveSystem : MonoBehaviour
 {
     private Transform PlayerTempLink;
     int questemp;
+  
+
 
 
     void Awake()
@@ -19,6 +21,7 @@ public class SaveSystem : MonoBehaviour
         gcTempLink.gpInitializer.AddListener(GameplayInitialization);
         StoryLineInstance storyLineTempLink = GameObject.FindGameObjectWithTag("StoryLine").GetComponent<StoryLineInstance>();
         int questemp = storyLineTempLink.CurrentStoryLine.Stories.Count * 2 + 1;
+    
 
     }
 
@@ -99,6 +102,7 @@ public class SaveSystem : MonoBehaviour
 
         questData.StoryLine_Completed_Save = storyLineTempLink.CurrentStoryLine.Completed;
         questemp = storyLineTempLink.CurrentStoryLine.Stories.Count * 2 + 1;
+
         bool[] tempSave = new bool[questemp];
         tempSave[0] = storyLineTempLink.CurrentStoryLine.Completed;
         int j = 0;
@@ -145,12 +149,21 @@ public class SaveSystem : MonoBehaviour
 
             #region LoadQuestData
             bool[] loadTemp = new bool[questemp];
-            loadTemp = questData.questdata;
+            loadTemp = questData.infoQuest; 
+            
+            
+                  
 
             storyLineTempLink.CurrentStoryLine.Completed = questData.StoryLine_Completed_Save;
            // singleStoryTempLink.CurrentStoryLine.S = questData.SingleStory_Active_Save;
             singleStoryTempLink.storySelected.Completed = questData.SingleStory_Completed_Save;
-            #endregion
+
+            storyLineTempLink.CurrentStoryLine.Stories = new List<SingleStory>();
+
+
+    #endregion
+
+ 
 
             // player.GetComponent<FSMChecker>().cPlayerState.currentAbilities.AddRange(data.saveAbilities);
         }
@@ -194,9 +207,9 @@ public class QuestData
     public bool StoryLine_Completed_Save;
     public bool SingleStory_Completed_Save;
     public bool SingleStory_Active_Save;
-    public bool[] questdata;
-    public List<SingleStory> stories_save;
-    //public List<SingleStory> Stories_Save;
+    public bool[] infoQuest;
+    public List<SingleStory>[] stories_save;
+       
 
 }
 
