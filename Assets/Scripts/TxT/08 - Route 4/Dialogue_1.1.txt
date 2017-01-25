@@ -1,0 +1,15 @@
+Iki/Left/. . .
+Koi/Left/You again!? Why on earth do you keep hampering us?*What did we ever do to you?!
+Hibi/Right/. . .
+Iki/Left/. . .
+Koi/Left/Why!? We just want to reach the mountaintop. . . We’re so close. . .
+Iki/Left/. . .
+Hibi/Right/. . .
+Iki/Left/. . .
+Hibi/Right/. . .
+Koi/Left/You can’t speak either. . . Right?*Are you somehow involved with Iki?
+Hibi/Right/. . .
+Koi/Left/You’re both so similar. . . Yet you keep preventing us from proceeding!*It was you every single time, wasn’t you?*Why do you do this? We don’t want to harm you, we don’t even know you!
+Hibi/Right/. . .
+Iki/Left/. . .
+Koi/Left/. . .*Can you at least understand me?
