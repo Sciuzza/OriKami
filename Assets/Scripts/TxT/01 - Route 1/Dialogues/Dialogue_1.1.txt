@@ -1,8 +1,8 @@
-Koi/Left/Nononono don’t cry don’t cry, I got it… You’re lost!*No worries, I’m here to help!
-Koi/Left/No, uhm… Actually, I was here by accident, but I can do something for you!*I’m heading toward the mountaintop, what about coming with me?*If you follow me, you may find someone able to help you.
+Koi/Left/Nononono don’t cry don’t cry, I got it. . . You’re lost!*No worries, I’m here to help!
+Koi/Left/No, uhm. . . Actually, I was here by accident, but I can do something for you!*I’m heading toward the mountaintop, what about coming with me?*If you follow me, you may find someone able to help you.
 Koi/Left/‘Cause, you know, you really look like someone who could use some help.
-Iki/Right/…
+Iki/Right/. . .
 Koi/Left/Can you even understand what I’m saying?
-Iki/Right/…
-Koi/Left/… 
+Iki/Right/. . .
+Koi/Left/. . .
 Koi/Left/I’ll just assume you can, then! Let’s go! 
