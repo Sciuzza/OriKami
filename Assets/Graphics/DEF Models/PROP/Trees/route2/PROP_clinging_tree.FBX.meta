@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: 355690b3c88d3a8459d502e43d575b68
-timeCreated: 1482866670
+guid: b617b3f628f7d1642bba6a0c20af3779
+timeCreated: 1480517986
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
@@ -9,7 +9,7 @@ ModelImporter:
     400000: //RootNode
     2300000: //RootNode
     3300000: //RootNode
-    4300000: Alpha ramo110
+    4300000: tree_clinging001
   materials:
     importMaterials: 1
     materialName: 0
