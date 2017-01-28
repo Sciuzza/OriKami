@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: 6e9ded3095182a24f839e5ce2c2a580d
-timeCreated: 1480517986
+guid: 44a5ff8a759d99441a705f89f98953a0
+timeCreated: 1485353533
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
@@ -9,7 +9,7 @@ ModelImporter:
     400000: //RootNode
     2300000: //RootNode
     3300000: //RootNode
-    4300000: tree_clinging001
+    4300000: lanterna
   materials:
     importMaterials: 1
     materialName: 0
