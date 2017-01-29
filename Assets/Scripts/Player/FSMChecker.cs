@@ -4,8 +4,6 @@ using UnityEngine.Events;
 using System.Collections.Generic;
 
 #region Finite State Machine enum Structure
-
-
 public enum abilties
 {
     move,

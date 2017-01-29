@@ -22,7 +22,7 @@ public class PlayerInputs : MonoBehaviour
     private buttonsJoy storyJoyInput = buttonsJoy.none;
     private buttonsPc storyPcInput = buttonsPc.none;
 
-    private float currentX, currentY, currentDistance;
+    private float currentX, currentY, currentDistance = 6;
 
     private enum CurrentForm
     {

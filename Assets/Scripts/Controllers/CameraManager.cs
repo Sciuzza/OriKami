@@ -53,6 +53,8 @@ public class CameraManager : MonoBehaviour
 
 
         this.currentDistance = this.CurrentPlCameraSettings.currentDistance;
+        this.currentX = 0;
+        this.currentY = 0;
         this.plCamMoving = this.StartCoroutine(this.PlayerCameraMoving());
     }
 
@@ -65,39 +67,19 @@ public class CameraManager : MonoBehaviour
 
         gcLink.gpInitializer.AddListener(this.SettingPlayerCamera);
     }
-
     #endregion Taking Game Controller Reference and Link the Initializer Event
 
-    #region Camera Follow
-    private void Update()
-    {
-        if (this.PlayerCamUpdateCheck())
-            this.plCamMoving = this.StartCoroutine(this.PlayerCameraMoving());
-    }
-
-    private bool PlayerCamUpdateCheck()
-    {
-        if (this.currentCamera != CameraStyle.player) return false;
-        if (this.plCamMoving != null) return false;
-        if (Mathf.Abs((this.currentDistance * this.currentDistance) - (this.cameraTransform.position - this.playerTransform.position).sqrMagnitude) < 0.1f) return false;
-        if (Quaternion.Angle(this.cameraTransform.rotation, this.CameraTargetTransform.rotation) < 0.1f) return false;
-        return true;
-    }
-
+    #region Player Camera Handler
     private void PlayerCameraDirectInput(float xInput, float yInput, float distInput)
     {
         this.currentX = xInput;
         this.currentY = yInput;
         this.currentDistance = distInput;
-
-        if (this.plCamMoving == null) this.plCamMoving = this.StartCoroutine(this.PlayerCameraMoving());
     }
 
     private IEnumerator PlayerCameraMoving()
     {
-        var posReached = false;
-
-        while (!posReached)
+        while (this.currentCamera == CameraStyle.player)
         {
             var dir = new Vector3(0, 0, -this.currentDistance);
             var rotation = Quaternion.Euler(this.currentY, this.currentX, 0);
@@ -105,17 +87,17 @@ public class CameraManager : MonoBehaviour
             this.CameraTargetTransform.position = this.playerTransform.position + (rotation * dir);
             this.CameraTargetTransform.LookAt(this.playerTransform.position);
 
-
-
+            
+            /*
+            if ((this.cameraTransform.position - this.CameraTargetTransform.position).sqrMagnitude < 0.1f
+                && Quaternion.Angle(this.cameraTransform.rotation, this.CameraTargetTransform.rotation) < 0.1f) yield return null;
+    */
             var playerToCameraRay = new Ray(this.playerTransform.position, -this.CameraTargetTransform.forward);
 
             // Debug.DrawRay(this.CameraTargetTransform.position, this.CameraTargetTransform.forward * (this.CurrentPlCameraSettings.currentDistance - this.CurrentPlCameraSettings.distanceMin));
             this.cameraTransform.position = Vector3.Lerp(this.cameraTransform.position, !Physics.Raycast(playerToCameraRay, out this.hitInfo, this.currentDistance, this.Env.value) ? this.CameraTargetTransform.position : this.hitInfo.point, 6f * Time.deltaTime);
 
             this.cameraTransform.rotation = Quaternion.Slerp(this.cameraTransform.rotation, this.CameraTargetTransform.rotation, 6f * Time.deltaTime);
-
-            if ((this.cameraTransform.position - this.CameraTargetTransform.position).sqrMagnitude < 0.1f
-                && Quaternion.Angle(this.cameraTransform.rotation, this.CameraTargetTransform.rotation) < 0.1f) posReached = true;
 
             yield return null;
         }
@@ -189,8 +171,6 @@ public class CameraManager : MonoBehaviour
         else
         {
             Debug.Log("Camera 1 on");
-
-
         }
     }
     #endregion General Methods
