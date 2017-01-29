@@ -11,25 +11,30 @@ public class SaveSystem : MonoBehaviour
 {
     private Transform PlayerTempLink;
     int questemp;
-  
+    private StoryLineInstance slTempLink;
 
 
 
-    void Awake()
+    private void Awake()
     {
-        GameController gcTempLink = this.GetComponent<GameController>();
-        gcTempLink.gpInitializer.AddListener(GameplayInitialization);
-        StoryLineInstance storyLineTempLink = GameObject.FindGameObjectWithTag("StoryLine").GetComponent<StoryLineInstance>();
-        int questemp = storyLineTempLink.CurrentStoryLine.Stories.Count * 2 + 1;
-    
+        var gcTempLink = this.GetComponent<GameController>();
+        gcTempLink.gpInitializer.AddListener(this.GameplayInitialization);
+        var storyLineCheck = GameObject.FindGameObjectWithTag("StoryLine");
 
+
+        if (storyLineCheck != null)
+        {
+            this.slTempLink = storyLineCheck.GetComponent<StoryLineInstance>();
+
+            if (this.slTempLink != null)
+                this.questemp = (this.slTempLink.CurrentStoryLine.Stories.Count * 2) + 1;
+        }
     }
 
-    void Update()
+    private void Update()
     {
-        StoryLineInstance storyLineTempLink = GameObject.FindGameObjectWithTag("StoryLine").GetComponent<StoryLineInstance>();
-      
-        StoryLineInstance singleStoryTempLink = GameObject.FindGameObjectWithTag("StoryLine").GetComponent<StoryLineInstance>();
+        if (this.slTempLink == null) return;
+
         if (Input.GetKeyDown(KeyCode.K))
         {
             SceneManager.LoadScene("Ricky Testing");
@@ -37,14 +42,14 @@ public class SaveSystem : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.J))
         {
-           
-            storyLineTempLink.CurrentStoryLine.Completed = true;
-          
+
+            this.slTempLink.CurrentStoryLine.Completed = true;
+
         }
         if (Input.GetKeyDown(KeyCode.G))
         {
 
-            foreach (var item in storyLineTempLink.CurrentStoryLine.Stories)
+            foreach (var item in this.slTempLink.CurrentStoryLine.Stories)
             {
                 item.Active = true;
                 item.Completed = true;
@@ -97,8 +102,8 @@ public class SaveSystem : MonoBehaviour
         #region QuestSave
         QuestData questData = new QuestData();
         StoryLineInstance storyLineTempLink = GameObject.FindGameObjectWithTag("StoryLine").GetComponent<StoryLineInstance>();
-      
-     
+
+
 
         questData.StoryLine_Completed_Save = storyLineTempLink.CurrentStoryLine.Completed;
         questemp = storyLineTempLink.CurrentStoryLine.Stories.Count * 2 + 1;
@@ -106,7 +111,7 @@ public class SaveSystem : MonoBehaviour
         bool[] tempSave = new bool[questemp];
         tempSave[0] = storyLineTempLink.CurrentStoryLine.Completed;
         int j = 0;
-        for (int i = 1; i < storyLineTempLink.CurrentStoryLine.Stories.Count; i+=2)
+        for (int i = 1; i < storyLineTempLink.CurrentStoryLine.Stories.Count; i += 2)
         {
             tempSave[i] = storyLineTempLink.CurrentStoryLine.Stories[j].Active;
             tempSave[i + 1] = storyLineTempLink.CurrentStoryLine.Stories[j].Completed;
@@ -149,21 +154,21 @@ public class SaveSystem : MonoBehaviour
 
             #region LoadQuestData
             bool[] loadTemp = new bool[questemp];
-            loadTemp = questData.infoQuest; 
-            
-            
-                  
+            loadTemp = questData.infoQuest;
+
+
+
 
             storyLineTempLink.CurrentStoryLine.Completed = questData.StoryLine_Completed_Save;
-           // singleStoryTempLink.CurrentStoryLine.S = questData.SingleStory_Active_Save;
+            // singleStoryTempLink.CurrentStoryLine.S = questData.SingleStory_Active_Save;
             singleStoryTempLink.storySelected.Completed = questData.SingleStory_Completed_Save;
 
             storyLineTempLink.CurrentStoryLine.Stories = new List<SingleStory>();
 
 
-    #endregion
+            #endregion
 
- 
+
 
             // player.GetComponent<FSMChecker>().cPlayerState.currentAbilities.AddRange(data.saveAbilities);
         }
@@ -209,7 +214,7 @@ public class QuestData
     public bool SingleStory_Active_Save;
     public bool[] infoQuest;
     public List<SingleStory>[] stories_save;
-       
+
 
 }
 

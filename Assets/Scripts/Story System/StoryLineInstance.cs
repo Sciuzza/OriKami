@@ -401,7 +401,6 @@ public class StoryLineInstance : MonoBehaviour
     private List<Vector3> camLastPos = new List<Vector3>();
     private List<Quaternion> camLastRot = new List<Quaternion>();
     private int cameraChangeCounter;
-
     #endregion
 
     #region Taking References and Linking Events
@@ -495,13 +494,13 @@ public class StoryLineInstance : MonoBehaviour
     {
         GameController.Debugging("Living Story Started for the story " + this.storySelected.StoryName);
 
-        this.camLastPos.Add(Camera.main.transform.position);
-        this.camLastRot.Add(Camera.main.transform.rotation);
+        //this.camLastPos.Add(Camera.main.transform.position);
+        //this.camLastRot.Add(Camera.main.transform.rotation);
 
-        this.IsStoryMode.Invoke(true);
-        this.ChangeCsRequest.Invoke(this.storySelected.PlayerControlEffect);
+        //this.IsStoryMode.Invoke(true);
+        //this.ChangeCsRequest.Invoke(this.storySelected.PlayerControlEffect);
 
-        this.StartCoroutine(this.LivingStory());
+        //this.StartCoroutine(this.LivingStory());
     }
 
     private IEnumerator LivingStory()
