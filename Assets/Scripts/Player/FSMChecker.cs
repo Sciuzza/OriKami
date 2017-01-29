@@ -8,25 +8,65 @@ using System.Collections.Generic;
 
 public enum abilties
 {
-    move, rotate, cameraMove, npcInter, menu,
-    jump, roll, moveOnRoll, moveBlock, VFissure, HFissure, dolpSwimBel,
-    toStd, toFrog, toArma, toCrane, toDolp
-};
+    move,
+    rotate,
+    cameraMove,
+    npcInter,
+    menu,
+    jump,
+    roll,
+    moveOnRoll,
+    moveBlock,
+    VFissure,
+    HFissure,
+    dolpSwimBel,
+    toStd,
+    toFrog,
+    toArma,
+    toCrane,
+    toDolp
+}
 
-public enum physicStates { onAir, onGround, onWater }
+public enum physicStates
+{
+    onAir,
+    onGround,
+    onWater
+}
 
 public enum playerStates
 {
     standingStill, moving, flying,
     rolling, movingBlock
-};
+}
 
-public enum triggerGenAbiStates { onVFissure, onHFissure, onDolpSwimBel, onMoveBlock, npcTalk, noTrigger };
+public enum triggerGenAbiStates
+{
+    onVFissure,
+    onHFissure,
+    onDolpSwimBel,
+    onMoveBlock,
+    npcTalk,
+    noTrigger
+}
 
-public enum triggerSpecial { cameraLimited, noTrigger };
+public enum triggerSpecial
+{
+    cameraLimited,
+    noTrigger
+}
 
-public enum controlStates { totalControl, noCamera, noMove, noGenAbi, noCamAndMove, noMoveAndGenAbi, noCameraAndGenAbi, noControl };
-
+public enum controlStates
+{
+    totalControl,
+    noCamera,
+    noMove,
+    noGenAbi,
+    noCamAndMove,
+    noMoveAndGenAbi,
+    noCameraAndGenAbi,
+    noControl
+}
 
 #endregion
 
@@ -141,6 +181,11 @@ public class event_vector3 : UnityEvent<Vector3>
 public class event_string_string_string : UnityEvent<string, string, string>
 {
 }
+
+[System.Serializable]
+public class event_float_float_float : UnityEvent<float, float, float>
+{
+}
 #endregion
 
 public class FSMChecker : MonoBehaviour
@@ -199,6 +244,7 @@ public class FSMChecker : MonoBehaviour
     public UnityEvent switchingCameraControlToOn;
     public UnityEvent switchingCameraToStoryRequest;
     public UnityEvent switchingCameraToPlayer;
+    public event_float_float_float plCameraMoveUsed;
     #endregion
 
     #region Initialization Methods
@@ -207,7 +253,7 @@ public class FSMChecker : MonoBehaviour
 
         ccLink = this.gameObject.GetComponent<CharacterController>();
 
-        SettingPlayerInitialState();
+        this.SettingPlayerInitialState();
 
 
 
@@ -217,6 +263,7 @@ public class FSMChecker : MonoBehaviour
         plInputsTempLink.dirAbiRequest.AddListener(CheckingDirAbiRequirements);
         plInputsTempLink.genAbiRequest.AddListener(CheckingAbiRequirements);
         plInputsTempLink.rollStopped.AddListener(EnablingMove);
+        plInputsTempLink.camMoveRequest.AddListener(this.CheckingCamMoveReq);
 
         EnvInputs enInputsTempLink = this.gameObject.GetComponent<EnvInputs>();
 
@@ -310,29 +357,24 @@ public class FSMChecker : MonoBehaviour
     private void CheckingAbiRequirements(abilties abiReceived)
     {
 
-        if (cPlayerState.currentAbilities.Contains(abiReceived))
+        if (this.cPlayerState.currentAbilities.Contains(abiReceived))
         {
             switch (abiReceived)
             {
 
                 case abilties.jump:
-                    genAbiUsed.Invoke(abiReceived, cPlayerState.currentForm, this.cPlayerState.forms);
-                    break;
-                case abilties.cameraMove:
+                    this.genAbiUsed.Invoke(abiReceived, this.cPlayerState.currentForm, this.cPlayerState.forms);
                     break;
                 case abilties.roll:
-                    cPlayerState.currentPlState = playerStates.rolling;
-                    //cPlayerState.currentClState = controlStates.noMove;
-                    UpdatingAbilityList();
-                    genAbiUsed.Invoke(abiReceived, cPlayerState.currentForm, this.cPlayerState.forms);
-                    break;
-                case abilties.moveBlock:
+                    this.cPlayerState.currentPlState = playerStates.rolling;
+                    this.UpdatingAbilityList();
+                    this.genAbiUsed.Invoke(abiReceived, this.cPlayerState.currentForm, this.cPlayerState.forms);
                     break;
                 case abilties.VFissure:
                     Debug.Log("VFissure Pressed");
-                    cPlayerState.currentClState = controlStates.noMoveAndGenAbi;
-                    UpdatingAbilityList();
-                    vFissureUsed.Invoke(vfLink, vFissureEntrance);
+                    this.cPlayerState.currentClState = controlStates.noMoveAndGenAbi;
+                    this.UpdatingAbilityList();
+                    this.vFissureUsed.Invoke(this.vfLink, this.vFissureEntrance);
                     break;
                 case abilties.HFissure:
                     Debug.Log("HFissure Pressed");
@@ -407,19 +449,24 @@ public class FSMChecker : MonoBehaviour
                         stopGlideLogic.Invoke();
                     SettingCapsuleCollider(0.15f, 0.7f);
                     break;
-                case abilties.npcInter:
-                    break;
-                case abilties.menu:
-                    break;
-
-
             }
-
-
         }
         else
             Debug.Log("Requirements not met");
     }
+
+    private void CheckingCamMoveReq(float currentX, float currentY, float currentDistance)
+    {
+        if (this.cPlayerState.currentAbilities.Contains(abilties.cameraMove))
+        {
+            this.plCameraMoveUsed.Invoke(currentX, currentY, currentDistance);
+        }
+        else
+        {
+            GameController.Debugging("Camera Move Not Possible");
+        }
+    }
+
     #endregion
 
     #region Environment Inputs Handler

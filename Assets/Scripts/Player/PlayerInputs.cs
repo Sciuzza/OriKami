@@ -5,7 +5,8 @@ using UnityEngine.Events;
 public class PlayerInputs : MonoBehaviour
 {
     #region Public Variables
-    public inputSettings currentInputs;
+    public inputSettings CurrentInputs;
+    public CameraPlayer CurrentPlCameraSettings;
     #endregion
 
     #region Private Variables
@@ -14,13 +15,24 @@ public class PlayerInputs : MonoBehaviour
     private bool switchCooldown = false;
     private bool isRollPressed = false;
 
-    private enum currentForm { std, frog, crane, arma, dolphin };
 
-    private currentForm cForm = currentForm.std;
+    private CurrentForm cForm = CurrentForm.Std;
 
     private bool storyModeInput = false;
     private buttonsJoy storyJoyInput = buttonsJoy.none;
     private buttonsPc storyPcInput = buttonsPc.none;
+
+    private float currentX, currentY, currentDistance;
+
+    private enum CurrentForm
+    {
+        Std,
+        Frog,
+        Crane,
+        Arma,
+        Dolphin
+    }
+
     #endregion
 
     #region Events
@@ -28,6 +40,7 @@ public class PlayerInputs : MonoBehaviour
     public event_abi genAbiRequest;
     public event_abi_vector3 dirAbiRequest;
     public event_int mainMenuRequest;
+    public event_float_float_float camMoveRequest;
     #endregion
 
     #region Taking References and Linking Events
@@ -52,14 +65,14 @@ public class PlayerInputs : MonoBehaviour
     #endregion
 
     #region Player Inputs Handler
-    
+
     private void Update()
     {
-
-        MovingInputHandler();
-        genAbiInputs();
-        ExtraInputsHandler();
-        StoryInputsHandler();
+        this.MovingInputHandler();
+        this.CameraInputHandler();
+        this.GenAbiInputHandler();
+        this.ExtraInputsHandler();
+        this.StoryInputsHandler();
 
     }
 
@@ -86,7 +99,7 @@ public class PlayerInputs : MonoBehaviour
         moveDirection.x = Input.GetAxis("LJHor") + Input.GetAxis("Horizontal");
         moveDirection.z = -Input.GetAxis("LJVer") + Input.GetAxis("Vertical");
 
-        
+
         if (Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0)
         {
             if (moveDirection.x < 0)
@@ -102,11 +115,11 @@ public class PlayerInputs : MonoBehaviour
             moveDirection = Vector3.ClampMagnitude(moveDirection, 1f);
         }
 
-       
+
 
         moveDirection = Vector3.ClampMagnitude(moveDirection, 1f);
 
-        
+
 
         var inputRotation = Quaternion.LookRotation(Vector3.ProjectOnPlane(Camera.main.transform.forward, Vector3.up), Vector3.up);
         this.moveDirection = inputRotation * this.moveDirection;
@@ -114,8 +127,66 @@ public class PlayerInputs : MonoBehaviour
     }
     #endregion
 
+    #region Camera Input
+    private void CameraInputHandler()
+    {
+        if (this.PcCamInputHandler() || this.JoyCamInputHandler())
+          this.camMoveRequest.Invoke(this.currentX, this.currentY, this.currentDistance);
+    }
+
+    private bool PcCamInputHandler()
+    {
+        // Pc COde
+        if (Input.GetMouseButton(0))
+        {
+            Cursor.visible = false;
+            this.currentX += Input.GetAxis("Mouse X") * this.CurrentPlCameraSettings.sensitivityX;
+            this.currentY -= Input.GetAxis("Mouse Y") * this.CurrentPlCameraSettings.sensitivityY;
+            this.currentDistance -= Input.GetAxis("Mouse ScrollWheel") * this.CurrentPlCameraSettings.sensitivityZoom;
+
+            this.currentDistance = Mathf.Clamp(this.currentDistance, this.CurrentPlCameraSettings.distanceMin, this.CurrentPlCameraSettings.distanceMax);
+            this.currentY = Mathf.Clamp(this.currentY, this.CurrentPlCameraSettings.yAngleMin, this.CurrentPlCameraSettings.yAngleMax);
+
+            return true;
+        }
+        else if (Input.GetMouseButtonUp(0))
+        {
+            Cursor.visible = true;
+
+            return false;
+        }
+        else
+        {
+            return false;
+        }
+
+    }
+
+    private bool JoyCamInputHandler()
+    {
+        // Joy Code
+        if (Input.GetAxis("RJHor") != 0 || Input.GetAxis("RJVer") != 0)
+        {
+            this.currentX += Input.GetAxis("RJHor") * this.CurrentPlCameraSettings.sensitivityX;
+            this.currentY += Input.GetAxis("RJVer") * this.CurrentPlCameraSettings.sensitivityY;
+
+            if (Input.GetButton("CamZjoy"))
+                this.currentDistance += Input.GetAxis("RJVer") * this.CurrentPlCameraSettings.sensitivityZoom;
+
+            this.currentDistance = Mathf.Clamp(this.currentDistance, this.CurrentPlCameraSettings.distanceMin, this.CurrentPlCameraSettings.distanceMax);
+            this.currentY = Mathf.Clamp(this.currentY, this.CurrentPlCameraSettings.yAngleMin, this.CurrentPlCameraSettings.yAngleMax);
+
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    #endregion
+
     #region General Abi Input
-    private void genAbiInputs()
+    private void GenAbiInputHandler()
     {
         if (jumpPressed())
         {
@@ -150,7 +221,7 @@ public class PlayerInputs : MonoBehaviour
         else if (rollPressed())
         {
             genAbiRequest.Invoke(abilties.roll);
-            
+
         }
         else if (rollReleased())
         {
@@ -217,11 +288,11 @@ public class PlayerInputs : MonoBehaviour
 
         switch (cForm)
         {
-            case currentForm.std: return stdJumpInput();
+            case CurrentForm.Std: return stdJumpInput();
 
-            case currentForm.frog: return frogJumpInput();
+            case CurrentForm.Frog: return frogJumpInput();
 
-            case currentForm.dolphin: return dolphJumpInput();
+            case CurrentForm.Dolphin: return dolphJumpInput();
 
         }
 
@@ -241,18 +312,18 @@ public class PlayerInputs : MonoBehaviour
 
     private bool stdJumpJoyI()
     {
-        if (currentInputs.standardInputs.joyInputs.Jump.ToString() != "LT" &&
-         currentInputs.standardInputs.joyInputs.Jump.ToString() != "RT")
+        if (this.CurrentInputs.standardInputs.joyInputs.Jump.ToString() != "LT" &&
+         this.CurrentInputs.standardInputs.joyInputs.Jump.ToString() != "RT")
         {
 
-            if (Input.GetButtonDown(currentInputs.standardInputs.joyInputs.Jump.ToString()))
+            if (Input.GetButtonDown(this.CurrentInputs.standardInputs.joyInputs.Jump.ToString()))
                 return true;
             else
                 return false;
         }
         else
         {
-            if (currentInputs.standardInputs.joyInputs.Jump.ToString() == "LT")
+            if (this.CurrentInputs.standardInputs.joyInputs.Jump.ToString() == "LT")
             {
                 if (Input.GetAxis("LRT") > 0 && !switchCooldown)
                 {
@@ -279,7 +350,7 @@ public class PlayerInputs : MonoBehaviour
 
     private bool stdJumpPcI()
     {
-        if (Input.GetButtonDown(currentInputs.standardInputs.keyInputs.Jump.ToString()))
+        if (Input.GetButtonDown(this.CurrentInputs.standardInputs.keyInputs.Jump.ToString()))
             return true;
         else
             return false;
@@ -295,18 +366,18 @@ public class PlayerInputs : MonoBehaviour
 
     private bool frogJumpJoyI()
     {
-        if (currentInputs.frogInputs.joyInputs.Jump.ToString() != "LT" &&
-        currentInputs.frogInputs.joyInputs.Jump.ToString() != "RT")
+        if (this.CurrentInputs.frogInputs.joyInputs.Jump.ToString() != "LT" &&
+        this.CurrentInputs.frogInputs.joyInputs.Jump.ToString() != "RT")
         {
 
-            if (Input.GetButtonDown(currentInputs.frogInputs.joyInputs.Jump.ToString()))
+            if (Input.GetButtonDown(this.CurrentInputs.frogInputs.joyInputs.Jump.ToString()))
                 return true;
             else
                 return false;
         }
         else
         {
-            if (currentInputs.frogInputs.joyInputs.Jump.ToString() == "LT")
+            if (this.CurrentInputs.frogInputs.joyInputs.Jump.ToString() == "LT")
             {
                 if (Input.GetAxis("LRT") > 0 && !switchCooldown)
                 {
@@ -333,7 +404,7 @@ public class PlayerInputs : MonoBehaviour
 
     private bool frogJumpPcI()
     {
-        if (Input.GetButtonDown(currentInputs.frogInputs.keyInputs.Jump.ToString()))
+        if (Input.GetButtonDown(this.CurrentInputs.frogInputs.keyInputs.Jump.ToString()))
             return true;
         else
             return false;
@@ -349,18 +420,18 @@ public class PlayerInputs : MonoBehaviour
 
     private bool dolphJumpJoyI()
     {
-        if (currentInputs.dolphinInputs.joyInputs.jump.ToString() != "LT" &&
-         currentInputs.dolphinInputs.joyInputs.jump.ToString() != "RT")
+        if (this.CurrentInputs.dolphinInputs.joyInputs.jump.ToString() != "LT" &&
+         this.CurrentInputs.dolphinInputs.joyInputs.jump.ToString() != "RT")
         {
 
-            if (Input.GetButtonDown(currentInputs.dolphinInputs.joyInputs.jump.ToString()))
+            if (Input.GetButtonDown(this.CurrentInputs.dolphinInputs.joyInputs.jump.ToString()))
                 return true;
             else
                 return false;
         }
         else
         {
-            if (currentInputs.dolphinInputs.joyInputs.jump.ToString() == "LT")
+            if (this.CurrentInputs.dolphinInputs.joyInputs.jump.ToString() == "LT")
             {
                 if (Input.GetAxis("LRT") > 0 && !switchCooldown)
                 {
@@ -387,7 +458,7 @@ public class PlayerInputs : MonoBehaviour
 
     private bool dolphJumpPcI()
     {
-        if (Input.GetButtonDown(currentInputs.dolphinInputs.keyInputs.jump.ToString()))
+        if (Input.GetButtonDown(this.CurrentInputs.dolphinInputs.keyInputs.jump.ToString()))
             return true;
         else
             return false;
@@ -400,13 +471,13 @@ public class PlayerInputs : MonoBehaviour
     {
         switch (cForm)
         {
-            case currentForm.std: return toFrogbyStdInput();
+            case CurrentForm.Std: return toFrogbyStdInput();
 
-            case currentForm.crane: return toFrogbyCraneInput();
+            case CurrentForm.Crane: return toFrogbyCraneInput();
 
-            case currentForm.arma: return toFrogbyArmaInput();
+            case CurrentForm.Arma: return toFrogbyArmaInput();
 
-            case currentForm.dolphin: return toFrogbyDolpInput();
+            case CurrentForm.Dolphin: return toFrogbyDolpInput();
 
         }
 
@@ -425,18 +496,18 @@ public class PlayerInputs : MonoBehaviour
 
     private bool toFrogbyStdJoyI()
     {
-        if (currentInputs.standardInputs.joyInputs.toFrog.ToString() != "LT" &&
-         currentInputs.standardInputs.joyInputs.toFrog.ToString() != "RT")
+        if (this.CurrentInputs.standardInputs.joyInputs.toFrog.ToString() != "LT" &&
+         this.CurrentInputs.standardInputs.joyInputs.toFrog.ToString() != "RT")
         {
 
-            if (Input.GetButtonDown(currentInputs.standardInputs.joyInputs.toFrog.ToString()))
+            if (Input.GetButtonDown(this.CurrentInputs.standardInputs.joyInputs.toFrog.ToString()))
                 return true;
             else
                 return false;
         }
         else
         {
-            if (currentInputs.standardInputs.joyInputs.toFrog.ToString() == "LT")
+            if (this.CurrentInputs.standardInputs.joyInputs.toFrog.ToString() == "LT")
             {
                 if (Input.GetAxis("LRT") > 0 && !switchCooldown)
                 {
@@ -463,7 +534,7 @@ public class PlayerInputs : MonoBehaviour
 
     private bool toFrogbyStdPcI()
     {
-        if (Input.GetButtonDown(currentInputs.standardInputs.keyInputs.toFrog.ToString()))
+        if (Input.GetButtonDown(this.CurrentInputs.standardInputs.keyInputs.toFrog.ToString()))
             return true;
         else
             return false;
@@ -480,18 +551,18 @@ public class PlayerInputs : MonoBehaviour
 
     private bool toFrogbyCraneJoyI()
     {
-        if (currentInputs.craneInputs.joyInputs.toFrog.ToString() != "LT" &&
-         currentInputs.craneInputs.joyInputs.toFrog.ToString() != "RT")
+        if (this.CurrentInputs.craneInputs.joyInputs.toFrog.ToString() != "LT" &&
+         this.CurrentInputs.craneInputs.joyInputs.toFrog.ToString() != "RT")
         {
 
-            if (Input.GetButtonDown(currentInputs.craneInputs.joyInputs.toFrog.ToString()))
+            if (Input.GetButtonDown(this.CurrentInputs.craneInputs.joyInputs.toFrog.ToString()))
                 return true;
             else
                 return false;
         }
         else
         {
-            if (currentInputs.craneInputs.joyInputs.toFrog.ToString() == "LT")
+            if (this.CurrentInputs.craneInputs.joyInputs.toFrog.ToString() == "LT")
             {
                 if (Input.GetAxis("LRT") > 0 && !switchCooldown)
                 {
@@ -518,7 +589,7 @@ public class PlayerInputs : MonoBehaviour
 
     private bool toFrogbyCranePcI()
     {
-        if (Input.GetButtonDown(currentInputs.craneInputs.keyInputs.toFrog.ToString()))
+        if (Input.GetButtonDown(this.CurrentInputs.craneInputs.keyInputs.toFrog.ToString()))
             return true;
         else
             return false;
@@ -535,18 +606,18 @@ public class PlayerInputs : MonoBehaviour
 
     private bool toFrogbyArmaJoyI()
     {
-        if (currentInputs.armaInputs.joyInputs.toFrog.ToString() != "LT" &&
-         currentInputs.armaInputs.joyInputs.toFrog.ToString() != "RT")
+        if (this.CurrentInputs.armaInputs.joyInputs.toFrog.ToString() != "LT" &&
+         this.CurrentInputs.armaInputs.joyInputs.toFrog.ToString() != "RT")
         {
 
-            if (Input.GetButtonDown(currentInputs.armaInputs.joyInputs.toFrog.ToString()))
+            if (Input.GetButtonDown(this.CurrentInputs.armaInputs.joyInputs.toFrog.ToString()))
                 return true;
             else
                 return false;
         }
         else
         {
-            if (currentInputs.armaInputs.joyInputs.toFrog.ToString() == "LT")
+            if (this.CurrentInputs.armaInputs.joyInputs.toFrog.ToString() == "LT")
             {
                 if (Input.GetAxis("LRT") > 0 && !switchCooldown)
                 {
@@ -573,7 +644,7 @@ public class PlayerInputs : MonoBehaviour
 
     private bool toFrogbyArmaPcI()
     {
-        if (Input.GetButtonDown(currentInputs.armaInputs.keyInputs.toFrog.ToString()))
+        if (Input.GetButtonDown(this.CurrentInputs.armaInputs.keyInputs.toFrog.ToString()))
             return true;
         else
             return false;
@@ -590,18 +661,18 @@ public class PlayerInputs : MonoBehaviour
 
     private bool toFrogbyDolpJoyI()
     {
-        if (currentInputs.dolphinInputs.joyInputs.toFrog.ToString() != "LT" &&
-         currentInputs.dolphinInputs.joyInputs.toFrog.ToString() != "RT")
+        if (this.CurrentInputs.dolphinInputs.joyInputs.toFrog.ToString() != "LT" &&
+         this.CurrentInputs.dolphinInputs.joyInputs.toFrog.ToString() != "RT")
         {
 
-            if (Input.GetButtonDown(currentInputs.dolphinInputs.joyInputs.toFrog.ToString()))
+            if (Input.GetButtonDown(this.CurrentInputs.dolphinInputs.joyInputs.toFrog.ToString()))
                 return true;
             else
                 return false;
         }
         else
         {
-            if (currentInputs.dolphinInputs.joyInputs.toFrog.ToString() == "LT")
+            if (this.CurrentInputs.dolphinInputs.joyInputs.toFrog.ToString() == "LT")
             {
                 if (Input.GetAxis("LRT") > 0 && !switchCooldown)
                 {
@@ -628,7 +699,7 @@ public class PlayerInputs : MonoBehaviour
 
     private bool toFrogbyDolpPcI()
     {
-        if (Input.GetButtonDown(currentInputs.dolphinInputs.keyInputs.toFrog.ToString()))
+        if (Input.GetButtonDown(this.CurrentInputs.dolphinInputs.keyInputs.toFrog.ToString()))
             return true;
         else
             return false;
@@ -640,13 +711,13 @@ public class PlayerInputs : MonoBehaviour
     {
         switch (cForm)
         {
-            case currentForm.std: return toArmabyStdInput();
+            case CurrentForm.Std: return toArmabyStdInput();
 
-            case currentForm.crane: return toArmabyCraneInput();
+            case CurrentForm.Crane: return toArmabyCraneInput();
 
-            case currentForm.frog: return toArmabyFrogInput();
+            case CurrentForm.Frog: return toArmabyFrogInput();
 
-            case currentForm.dolphin: return toArmabyDolpInput();
+            case CurrentForm.Dolphin: return toArmabyDolpInput();
 
         }
 
@@ -665,18 +736,18 @@ public class PlayerInputs : MonoBehaviour
 
     private bool toArmabyStdJoyI()
     {
-        if (currentInputs.standardInputs.joyInputs.toArma.ToString() != "LT" &&
-       currentInputs.standardInputs.joyInputs.toArma.ToString() != "RT")
+        if (this.CurrentInputs.standardInputs.joyInputs.toArma.ToString() != "LT" &&
+       this.CurrentInputs.standardInputs.joyInputs.toArma.ToString() != "RT")
         {
 
-            if (Input.GetButtonDown(currentInputs.standardInputs.joyInputs.toArma.ToString()))
+            if (Input.GetButtonDown(this.CurrentInputs.standardInputs.joyInputs.toArma.ToString()))
                 return true;
             else
                 return false;
         }
         else
         {
-            if (currentInputs.standardInputs.joyInputs.toArma.ToString() == "LT")
+            if (this.CurrentInputs.standardInputs.joyInputs.toArma.ToString() == "LT")
             {
                 if (Input.GetAxis("LRT") > 0 && !switchCooldown)
                 {
@@ -703,7 +774,7 @@ public class PlayerInputs : MonoBehaviour
 
     private bool toArmabyStdPcI()
     {
-        if (Input.GetButtonDown(currentInputs.standardInputs.keyInputs.toArma.ToString()))
+        if (Input.GetButtonDown(this.CurrentInputs.standardInputs.keyInputs.toArma.ToString()))
             return true;
         else
             return false;
@@ -720,18 +791,18 @@ public class PlayerInputs : MonoBehaviour
 
     private bool toArmabyCraneJoyI()
     {
-        if (currentInputs.craneInputs.joyInputs.toArma.ToString() != "LT" &&
-        currentInputs.craneInputs.joyInputs.toArma.ToString() != "RT")
+        if (this.CurrentInputs.craneInputs.joyInputs.toArma.ToString() != "LT" &&
+        this.CurrentInputs.craneInputs.joyInputs.toArma.ToString() != "RT")
         {
 
-            if (Input.GetButtonDown(currentInputs.craneInputs.joyInputs.toArma.ToString()))
+            if (Input.GetButtonDown(this.CurrentInputs.craneInputs.joyInputs.toArma.ToString()))
                 return true;
             else
                 return false;
         }
         else
         {
-            if (currentInputs.craneInputs.joyInputs.toArma.ToString() == "LT")
+            if (this.CurrentInputs.craneInputs.joyInputs.toArma.ToString() == "LT")
             {
                 if (Input.GetAxis("LRT") > 0 && !switchCooldown)
                 {
@@ -758,7 +829,7 @@ public class PlayerInputs : MonoBehaviour
 
     private bool toArmabyCranePcI()
     {
-        if (Input.GetButtonDown(currentInputs.craneInputs.keyInputs.toArma.ToString()))
+        if (Input.GetButtonDown(this.CurrentInputs.craneInputs.keyInputs.toArma.ToString()))
             return true;
         else
             return false;
@@ -775,18 +846,18 @@ public class PlayerInputs : MonoBehaviour
 
     private bool toArmabyFrogJoyI()
     {
-        if (currentInputs.frogInputs.joyInputs.toArma.ToString() != "LT" &&
-         currentInputs.frogInputs.joyInputs.toArma.ToString() != "RT")
+        if (this.CurrentInputs.frogInputs.joyInputs.toArma.ToString() != "LT" &&
+         this.CurrentInputs.frogInputs.joyInputs.toArma.ToString() != "RT")
         {
 
-            if (Input.GetButtonDown(currentInputs.frogInputs.joyInputs.toArma.ToString()))
+            if (Input.GetButtonDown(this.CurrentInputs.frogInputs.joyInputs.toArma.ToString()))
                 return true;
             else
                 return false;
         }
         else
         {
-            if (currentInputs.frogInputs.joyInputs.toArma.ToString() == "LT")
+            if (this.CurrentInputs.frogInputs.joyInputs.toArma.ToString() == "LT")
             {
                 if (Input.GetAxis("LRT") > 0 && !switchCooldown)
                 {
@@ -813,7 +884,7 @@ public class PlayerInputs : MonoBehaviour
 
     private bool toArmabyFrogPcI()
     {
-        if (Input.GetButtonDown(currentInputs.frogInputs.keyInputs.toArma.ToString()))
+        if (Input.GetButtonDown(this.CurrentInputs.frogInputs.keyInputs.toArma.ToString()))
             return true;
         else
             return false;
@@ -830,18 +901,18 @@ public class PlayerInputs : MonoBehaviour
 
     private bool toArmabyDolpJoyI()
     {
-        if (currentInputs.dolphinInputs.joyInputs.toArma.ToString() != "LT" &&
-        currentInputs.dolphinInputs.joyInputs.toArma.ToString() != "RT")
+        if (this.CurrentInputs.dolphinInputs.joyInputs.toArma.ToString() != "LT" &&
+        this.CurrentInputs.dolphinInputs.joyInputs.toArma.ToString() != "RT")
         {
 
-            if (Input.GetButtonDown(currentInputs.dolphinInputs.joyInputs.toArma.ToString()))
+            if (Input.GetButtonDown(this.CurrentInputs.dolphinInputs.joyInputs.toArma.ToString()))
                 return true;
             else
                 return false;
         }
         else
         {
-            if (currentInputs.dolphinInputs.joyInputs.toArma.ToString() == "LT")
+            if (this.CurrentInputs.dolphinInputs.joyInputs.toArma.ToString() == "LT")
             {
                 if (Input.GetAxis("LRT") > 0 && !switchCooldown)
                 {
@@ -868,7 +939,7 @@ public class PlayerInputs : MonoBehaviour
 
     private bool toArmabyDolpPcI()
     {
-        if (Input.GetButtonDown(currentInputs.dolphinInputs.keyInputs.toArma.ToString()))
+        if (Input.GetButtonDown(this.CurrentInputs.dolphinInputs.keyInputs.toArma.ToString()))
             return true;
         else
             return false;
@@ -880,13 +951,13 @@ public class PlayerInputs : MonoBehaviour
     {
         switch (cForm)
         {
-            case currentForm.std: return toCranebyStdInput();
+            case CurrentForm.Std: return toCranebyStdInput();
 
-            case currentForm.frog: return toCranebyFrogInput();
+            case CurrentForm.Frog: return toCranebyFrogInput();
 
-            case currentForm.arma: return toCranebyArmaInput();
+            case CurrentForm.Arma: return toCranebyArmaInput();
 
-            case currentForm.dolphin: return toCranebyDolpInput();
+            case CurrentForm.Dolphin: return toCranebyDolpInput();
 
         }
 
@@ -905,18 +976,18 @@ public class PlayerInputs : MonoBehaviour
 
     private bool toCranebyStdJoyI()
     {
-        if (currentInputs.standardInputs.joyInputs.toCrane.ToString() != "LT" &&
-        currentInputs.standardInputs.joyInputs.toCrane.ToString() != "RT")
+        if (this.CurrentInputs.standardInputs.joyInputs.toCrane.ToString() != "LT" &&
+        this.CurrentInputs.standardInputs.joyInputs.toCrane.ToString() != "RT")
         {
 
-            if (Input.GetButtonDown(currentInputs.standardInputs.joyInputs.toCrane.ToString()))
+            if (Input.GetButtonDown(this.CurrentInputs.standardInputs.joyInputs.toCrane.ToString()))
                 return true;
             else
                 return false;
         }
         else
         {
-            if (currentInputs.standardInputs.joyInputs.toCrane.ToString() == "LT")
+            if (this.CurrentInputs.standardInputs.joyInputs.toCrane.ToString() == "LT")
             {
                 if (Input.GetAxis("LRT") > 0 && !switchCooldown)
                 {
@@ -943,7 +1014,7 @@ public class PlayerInputs : MonoBehaviour
 
     private bool toCranebyStdPcI()
     {
-        if (Input.GetButtonDown(currentInputs.standardInputs.keyInputs.toCrane.ToString()))
+        if (Input.GetButtonDown(this.CurrentInputs.standardInputs.keyInputs.toCrane.ToString()))
             return true;
         else
             return false;
@@ -960,18 +1031,18 @@ public class PlayerInputs : MonoBehaviour
 
     private bool toCranebyFrogJoyI()
     {
-        if (currentInputs.frogInputs.joyInputs.toCrane.ToString() != "LT" &&
-       currentInputs.frogInputs.joyInputs.toCrane.ToString() != "RT")
+        if (this.CurrentInputs.frogInputs.joyInputs.toCrane.ToString() != "LT" &&
+       this.CurrentInputs.frogInputs.joyInputs.toCrane.ToString() != "RT")
         {
 
-            if (Input.GetButtonDown(currentInputs.frogInputs.joyInputs.toCrane.ToString()))
+            if (Input.GetButtonDown(this.CurrentInputs.frogInputs.joyInputs.toCrane.ToString()))
                 return true;
             else
                 return false;
         }
         else
         {
-            if (currentInputs.frogInputs.joyInputs.toCrane.ToString() == "LT")
+            if (this.CurrentInputs.frogInputs.joyInputs.toCrane.ToString() == "LT")
             {
                 if (Input.GetAxis("LRT") > 0 && !switchCooldown)
                 {
@@ -998,7 +1069,7 @@ public class PlayerInputs : MonoBehaviour
 
     private bool toCranebyFrogPcI()
     {
-        if (Input.GetButtonDown(currentInputs.frogInputs.keyInputs.toCrane.ToString()))
+        if (Input.GetButtonDown(this.CurrentInputs.frogInputs.keyInputs.toCrane.ToString()))
             return true;
         else
             return false;
@@ -1015,18 +1086,18 @@ public class PlayerInputs : MonoBehaviour
 
     private bool toCranebyArmaJoyI()
     {
-        if (currentInputs.armaInputs.joyInputs.toCrane.ToString() != "LT" &&
-        currentInputs.armaInputs.joyInputs.toCrane.ToString() != "RT")
+        if (this.CurrentInputs.armaInputs.joyInputs.toCrane.ToString() != "LT" &&
+        this.CurrentInputs.armaInputs.joyInputs.toCrane.ToString() != "RT")
         {
 
-            if (Input.GetButtonDown(currentInputs.armaInputs.joyInputs.toCrane.ToString()))
+            if (Input.GetButtonDown(this.CurrentInputs.armaInputs.joyInputs.toCrane.ToString()))
                 return true;
             else
                 return false;
         }
         else
         {
-            if (currentInputs.armaInputs.joyInputs.toCrane.ToString() == "LT")
+            if (this.CurrentInputs.armaInputs.joyInputs.toCrane.ToString() == "LT")
             {
                 if (Input.GetAxis("LRT") > 0 && !switchCooldown)
                 {
@@ -1053,7 +1124,7 @@ public class PlayerInputs : MonoBehaviour
 
     private bool toCranebyArmaPcI()
     {
-        if (Input.GetButtonDown(currentInputs.armaInputs.keyInputs.toCrane.ToString()))
+        if (Input.GetButtonDown(this.CurrentInputs.armaInputs.keyInputs.toCrane.ToString()))
             return true;
         else
             return false;
@@ -1070,18 +1141,18 @@ public class PlayerInputs : MonoBehaviour
 
     private bool toCranebyDolpJoyI()
     {
-        if (currentInputs.dolphinInputs.joyInputs.toCrane.ToString() != "LT" &&
-         currentInputs.dolphinInputs.joyInputs.toCrane.ToString() != "RT")
+        if (this.CurrentInputs.dolphinInputs.joyInputs.toCrane.ToString() != "LT" &&
+         this.CurrentInputs.dolphinInputs.joyInputs.toCrane.ToString() != "RT")
         {
 
-            if (Input.GetButtonDown(currentInputs.dolphinInputs.joyInputs.toCrane.ToString()))
+            if (Input.GetButtonDown(this.CurrentInputs.dolphinInputs.joyInputs.toCrane.ToString()))
                 return true;
             else
                 return false;
         }
         else
         {
-            if (currentInputs.dolphinInputs.joyInputs.toCrane.ToString() == "LT")
+            if (this.CurrentInputs.dolphinInputs.joyInputs.toCrane.ToString() == "LT")
             {
                 if (Input.GetAxis("LRT") > 0 && !switchCooldown)
                 {
@@ -1108,7 +1179,7 @@ public class PlayerInputs : MonoBehaviour
 
     private bool toCranebyDolpPcI()
     {
-        if (Input.GetButtonDown(currentInputs.dolphinInputs.keyInputs.toCrane.ToString()))
+        if (Input.GetButtonDown(this.CurrentInputs.dolphinInputs.keyInputs.toCrane.ToString()))
             return true;
         else
             return false;
@@ -1120,13 +1191,13 @@ public class PlayerInputs : MonoBehaviour
     {
         switch (cForm)
         {
-            case currentForm.std: return toDolpbyStdInput();
+            case CurrentForm.Std: return toDolpbyStdInput();
 
-            case currentForm.crane: return toDolpbyCraneInput();
+            case CurrentForm.Crane: return toDolpbyCraneInput();
 
-            case currentForm.arma: return toDolpbyArmaInput();
+            case CurrentForm.Arma: return toDolpbyArmaInput();
 
-            case currentForm.frog: return toDolpbyFrogInput();
+            case CurrentForm.Frog: return toDolpbyFrogInput();
 
         }
 
@@ -1145,18 +1216,18 @@ public class PlayerInputs : MonoBehaviour
 
     private bool toDolpbyStdJoyI()
     {
-        if (currentInputs.standardInputs.joyInputs.toDolphin.ToString() != "LT" &&
-         currentInputs.standardInputs.joyInputs.toDolphin.ToString() != "RT")
+        if (this.CurrentInputs.standardInputs.joyInputs.toDolphin.ToString() != "LT" &&
+         this.CurrentInputs.standardInputs.joyInputs.toDolphin.ToString() != "RT")
         {
 
-            if (Input.GetButtonDown(currentInputs.standardInputs.joyInputs.toDolphin.ToString()))
+            if (Input.GetButtonDown(this.CurrentInputs.standardInputs.joyInputs.toDolphin.ToString()))
                 return true;
             else
                 return false;
         }
         else
         {
-            if (currentInputs.standardInputs.joyInputs.toDolphin.ToString() == "LT")
+            if (this.CurrentInputs.standardInputs.joyInputs.toDolphin.ToString() == "LT")
             {
                 if (Input.GetAxis("LRT") > 0 && !switchCooldown)
                 {
@@ -1183,7 +1254,7 @@ public class PlayerInputs : MonoBehaviour
 
     private bool toDolpbyStdPcI()
     {
-        if (Input.GetButtonDown(currentInputs.standardInputs.keyInputs.toDolphin.ToString()))
+        if (Input.GetButtonDown(this.CurrentInputs.standardInputs.keyInputs.toDolphin.ToString()))
             return true;
         else
             return false;
@@ -1200,18 +1271,18 @@ public class PlayerInputs : MonoBehaviour
 
     private bool toDolpbyCraneJoyI()
     {
-        if (currentInputs.craneInputs.joyInputs.toDolphin.ToString() != "LT" &&
-        currentInputs.craneInputs.joyInputs.toDolphin.ToString() != "RT")
+        if (this.CurrentInputs.craneInputs.joyInputs.toDolphin.ToString() != "LT" &&
+        this.CurrentInputs.craneInputs.joyInputs.toDolphin.ToString() != "RT")
         {
 
-            if (Input.GetButtonDown(currentInputs.craneInputs.joyInputs.toDolphin.ToString()))
+            if (Input.GetButtonDown(this.CurrentInputs.craneInputs.joyInputs.toDolphin.ToString()))
                 return true;
             else
                 return false;
         }
         else
         {
-            if (currentInputs.craneInputs.joyInputs.toDolphin.ToString() == "LT")
+            if (this.CurrentInputs.craneInputs.joyInputs.toDolphin.ToString() == "LT")
             {
                 if (Input.GetAxis("LRT") > 0 && !switchCooldown)
                 {
@@ -1238,7 +1309,7 @@ public class PlayerInputs : MonoBehaviour
 
     private bool toDolpbyCranePcI()
     {
-        if (Input.GetButtonDown(currentInputs.craneInputs.keyInputs.toDolphin.ToString()))
+        if (Input.GetButtonDown(this.CurrentInputs.craneInputs.keyInputs.toDolphin.ToString()))
             return true;
         else
             return false;
@@ -1255,18 +1326,18 @@ public class PlayerInputs : MonoBehaviour
 
     private bool toDolpbyArmaJoyI()
     {
-        if (currentInputs.armaInputs.joyInputs.toDolphin.ToString() != "LT" &&
-         currentInputs.armaInputs.joyInputs.toDolphin.ToString() != "RT")
+        if (this.CurrentInputs.armaInputs.joyInputs.toDolphin.ToString() != "LT" &&
+         this.CurrentInputs.armaInputs.joyInputs.toDolphin.ToString() != "RT")
         {
 
-            if (Input.GetButtonDown(currentInputs.armaInputs.joyInputs.toDolphin.ToString()))
+            if (Input.GetButtonDown(this.CurrentInputs.armaInputs.joyInputs.toDolphin.ToString()))
                 return true;
             else
                 return false;
         }
         else
         {
-            if (currentInputs.armaInputs.joyInputs.toDolphin.ToString() == "LT")
+            if (this.CurrentInputs.armaInputs.joyInputs.toDolphin.ToString() == "LT")
             {
                 if (Input.GetAxis("LRT") > 0 && !switchCooldown)
                 {
@@ -1293,7 +1364,7 @@ public class PlayerInputs : MonoBehaviour
 
     private bool toDolpbyArmaPcI()
     {
-        if (Input.GetButtonDown(currentInputs.armaInputs.keyInputs.toDolphin.ToString()))
+        if (Input.GetButtonDown(this.CurrentInputs.armaInputs.keyInputs.toDolphin.ToString()))
             return true;
         else
             return false;
@@ -1310,18 +1381,18 @@ public class PlayerInputs : MonoBehaviour
 
     private bool toDolpbyFrogJoyI()
     {
-        if (currentInputs.frogInputs.joyInputs.toDolphin.ToString() != "LT" &&
-         currentInputs.frogInputs.joyInputs.toDolphin.ToString() != "RT")
+        if (this.CurrentInputs.frogInputs.joyInputs.toDolphin.ToString() != "LT" &&
+         this.CurrentInputs.frogInputs.joyInputs.toDolphin.ToString() != "RT")
         {
 
-            if (Input.GetButtonDown(currentInputs.frogInputs.joyInputs.toDolphin.ToString()))
+            if (Input.GetButtonDown(this.CurrentInputs.frogInputs.joyInputs.toDolphin.ToString()))
                 return true;
             else
                 return false;
         }
         else
         {
-            if (currentInputs.frogInputs.joyInputs.toDolphin.ToString() == "LT")
+            if (this.CurrentInputs.frogInputs.joyInputs.toDolphin.ToString() == "LT")
             {
                 if (Input.GetAxis("LRT") > 0 && !switchCooldown)
                 {
@@ -1348,7 +1419,7 @@ public class PlayerInputs : MonoBehaviour
 
     private bool toDolpbyFrogPcI()
     {
-        if (Input.GetButtonDown(currentInputs.frogInputs.keyInputs.toDolphin.ToString()))
+        if (Input.GetButtonDown(this.CurrentInputs.frogInputs.keyInputs.toDolphin.ToString()))
             return true;
         else
             return false;
@@ -1360,13 +1431,13 @@ public class PlayerInputs : MonoBehaviour
     {
         switch (cForm)
         {
-            case currentForm.frog: return toStdbyFrogInput();
+            case CurrentForm.Frog: return toStdbyFrogInput();
 
-            case currentForm.crane: return toStdbyCraneInput();
+            case CurrentForm.Crane: return toStdbyCraneInput();
 
-            case currentForm.arma: return toStdbyArmaInput();
+            case CurrentForm.Arma: return toStdbyArmaInput();
 
-            case currentForm.dolphin: return toStdbyDolpInput();
+            case CurrentForm.Dolphin: return toStdbyDolpInput();
 
         }
 
@@ -1385,18 +1456,18 @@ public class PlayerInputs : MonoBehaviour
 
     private bool toStdbyFrogJoyI()
     {
-        if (currentInputs.frogInputs.joyInputs.toStd.ToString() != "LT" &&
-        currentInputs.frogInputs.joyInputs.toStd.ToString() != "RT")
+        if (this.CurrentInputs.frogInputs.joyInputs.toStd.ToString() != "LT" &&
+        this.CurrentInputs.frogInputs.joyInputs.toStd.ToString() != "RT")
         {
 
-            if (Input.GetButtonDown(currentInputs.frogInputs.joyInputs.toStd.ToString()))
+            if (Input.GetButtonDown(this.CurrentInputs.frogInputs.joyInputs.toStd.ToString()))
                 return true;
             else
                 return false;
         }
         else
         {
-            if (currentInputs.frogInputs.joyInputs.toStd.ToString() == "LT")
+            if (this.CurrentInputs.frogInputs.joyInputs.toStd.ToString() == "LT")
             {
                 if (Input.GetAxis("LRT") > 0 && !switchCooldown)
                 {
@@ -1423,7 +1494,7 @@ public class PlayerInputs : MonoBehaviour
 
     private bool toStdbyFrogPcI()
     {
-        if (Input.GetButtonDown(currentInputs.frogInputs.keyInputs.toStd.ToString()))
+        if (Input.GetButtonDown(this.CurrentInputs.frogInputs.keyInputs.toStd.ToString()))
             return true;
         else
             return false;
@@ -1440,18 +1511,18 @@ public class PlayerInputs : MonoBehaviour
 
     private bool toStdbyCraneJoyI()
     {
-        if (currentInputs.craneInputs.joyInputs.toStd.ToString() != "LT" &&
-         currentInputs.craneInputs.joyInputs.toStd.ToString() != "RT")
+        if (this.CurrentInputs.craneInputs.joyInputs.toStd.ToString() != "LT" &&
+         this.CurrentInputs.craneInputs.joyInputs.toStd.ToString() != "RT")
         {
 
-            if (Input.GetButtonDown(currentInputs.craneInputs.joyInputs.toStd.ToString()))
+            if (Input.GetButtonDown(this.CurrentInputs.craneInputs.joyInputs.toStd.ToString()))
                 return true;
             else
                 return false;
         }
         else
         {
-            if (currentInputs.craneInputs.joyInputs.toStd.ToString() == "LT")
+            if (this.CurrentInputs.craneInputs.joyInputs.toStd.ToString() == "LT")
             {
                 if (Input.GetAxis("LRT") > 0 && !switchCooldown)
                 {
@@ -1478,7 +1549,7 @@ public class PlayerInputs : MonoBehaviour
 
     private bool toStdbyCranePcI()
     {
-        if (Input.GetButtonDown(currentInputs.craneInputs.keyInputs.toStd.ToString()))
+        if (Input.GetButtonDown(this.CurrentInputs.craneInputs.keyInputs.toStd.ToString()))
             return true;
         else
             return false;
@@ -1495,18 +1566,18 @@ public class PlayerInputs : MonoBehaviour
 
     private bool toStdbyArmaJoyI()
     {
-        if (currentInputs.armaInputs.joyInputs.toStd.ToString() != "LT" &&
-        currentInputs.armaInputs.joyInputs.toStd.ToString() != "RT")
+        if (this.CurrentInputs.armaInputs.joyInputs.toStd.ToString() != "LT" &&
+        this.CurrentInputs.armaInputs.joyInputs.toStd.ToString() != "RT")
         {
 
-            if (Input.GetButtonDown(currentInputs.armaInputs.joyInputs.toStd.ToString()))
+            if (Input.GetButtonDown(this.CurrentInputs.armaInputs.joyInputs.toStd.ToString()))
                 return true;
             else
                 return false;
         }
         else
         {
-            if (currentInputs.armaInputs.joyInputs.toStd.ToString() == "LT")
+            if (this.CurrentInputs.armaInputs.joyInputs.toStd.ToString() == "LT")
             {
                 if (Input.GetAxis("LRT") > 0 && !switchCooldown)
                 {
@@ -1533,7 +1604,7 @@ public class PlayerInputs : MonoBehaviour
 
     private bool toStdbyArmaPcI()
     {
-        if (Input.GetButtonDown(currentInputs.armaInputs.keyInputs.toStd.ToString()))
+        if (Input.GetButtonDown(this.CurrentInputs.armaInputs.keyInputs.toStd.ToString()))
             return true;
         else
             return false;
@@ -1550,18 +1621,18 @@ public class PlayerInputs : MonoBehaviour
 
     private bool toStdbyDolpJoyI()
     {
-        if (currentInputs.dolphinInputs.joyInputs.toStd.ToString() != "LT" &&
-         currentInputs.dolphinInputs.joyInputs.toStd.ToString() != "RT")
+        if (this.CurrentInputs.dolphinInputs.joyInputs.toStd.ToString() != "LT" &&
+         this.CurrentInputs.dolphinInputs.joyInputs.toStd.ToString() != "RT")
         {
 
-            if (Input.GetButtonDown(currentInputs.dolphinInputs.joyInputs.toStd.ToString()))
+            if (Input.GetButtonDown(this.CurrentInputs.dolphinInputs.joyInputs.toStd.ToString()))
                 return true;
             else
                 return false;
         }
         else
         {
-            if (currentInputs.dolphinInputs.joyInputs.toStd.ToString() == "LT")
+            if (this.CurrentInputs.dolphinInputs.joyInputs.toStd.ToString() == "LT")
             {
                 if (Input.GetAxis("LRT") > 0 && !switchCooldown)
                 {
@@ -1588,7 +1659,7 @@ public class PlayerInputs : MonoBehaviour
 
     private bool toStdbyDolpPcI()
     {
-        if (Input.GetButtonDown(currentInputs.dolphinInputs.keyInputs.toStd.ToString()))
+        if (Input.GetButtonDown(this.CurrentInputs.dolphinInputs.keyInputs.toStd.ToString()))
             return true;
         else
             return false;
@@ -1596,9 +1667,9 @@ public class PlayerInputs : MonoBehaviour
     #endregion
 
     #region Roll Input
-   public bool rollPressed()
+    public bool rollPressed()
     {
-        if (cForm == currentForm.arma)
+        if (cForm == CurrentForm.Arma)
             return armaRollInput();
         else
             return false;
@@ -1614,18 +1685,18 @@ public class PlayerInputs : MonoBehaviour
 
     private bool armaRollJoyI()
     {
-        if (currentInputs.armaInputs.joyInputs.roll.ToString() != "LT" &&
-        currentInputs.armaInputs.joyInputs.roll.ToString() != "RT")
+        if (this.CurrentInputs.armaInputs.joyInputs.roll.ToString() != "LT" &&
+        this.CurrentInputs.armaInputs.joyInputs.roll.ToString() != "RT")
         {
 
-            if (Input.GetButtonDown(currentInputs.armaInputs.joyInputs.roll.ToString()))
+            if (Input.GetButtonDown(this.CurrentInputs.armaInputs.joyInputs.roll.ToString()))
                 return true;
             else
                 return false;
         }
         else
         {
-            if (currentInputs.armaInputs.joyInputs.roll.ToString() == "LT" && !isRollPressed)
+            if (this.CurrentInputs.armaInputs.joyInputs.roll.ToString() == "LT" && !isRollPressed)
             {
                 if (Input.GetAxis("LRT") > 0)
                 {
@@ -1650,7 +1721,7 @@ public class PlayerInputs : MonoBehaviour
 
     private bool armaRollPcI()
     {
-        if (Input.GetButtonDown(currentInputs.armaInputs.keyInputs.roll.ToString()))
+        if (Input.GetButtonDown(this.CurrentInputs.armaInputs.keyInputs.roll.ToString()))
             return true;
         else
             return false;
@@ -1658,7 +1729,7 @@ public class PlayerInputs : MonoBehaviour
 
     public bool rollReleased()
     {
-        if (cForm == currentForm.arma)
+        if (cForm == CurrentForm.Arma)
             return armaRollRInput();
         else
             return false;
@@ -1674,18 +1745,18 @@ public class PlayerInputs : MonoBehaviour
 
     private bool armaRollRJoyI()
     {
-        if (currentInputs.armaInputs.joyInputs.roll.ToString() != "LT" &&
-        currentInputs.armaInputs.joyInputs.roll.ToString() != "RT")
+        if (this.CurrentInputs.armaInputs.joyInputs.roll.ToString() != "LT" &&
+        this.CurrentInputs.armaInputs.joyInputs.roll.ToString() != "RT")
         {
 
-            if (Input.GetButtonUp(currentInputs.armaInputs.joyInputs.roll.ToString()))
+            if (Input.GetButtonUp(this.CurrentInputs.armaInputs.joyInputs.roll.ToString()))
                 return true;
             else
                 return false;
         }
         else
         {
-            if (currentInputs.armaInputs.joyInputs.roll.ToString() == "LT" && isRollPressed)
+            if (this.CurrentInputs.armaInputs.joyInputs.roll.ToString() == "LT" && isRollPressed)
             {
                 if (Input.GetAxis("LRT") == 0)
                 {
@@ -1710,7 +1781,7 @@ public class PlayerInputs : MonoBehaviour
 
     private bool armaRollRPcI()
     {
-        if (Input.GetButtonUp(currentInputs.armaInputs.keyInputs.roll.ToString()))
+        if (Input.GetButtonUp(this.CurrentInputs.armaInputs.keyInputs.roll.ToString()))
             return true;
         else
             return false;
@@ -1720,7 +1791,7 @@ public class PlayerInputs : MonoBehaviour
     #region Vertical Fissure Input
     private bool VFissurePressed()
     {
-        if (cForm == currentForm.std)
+        if (cForm == CurrentForm.Std)
             return StdVFissureInput();
         else
             return false;
@@ -1736,18 +1807,18 @@ public class PlayerInputs : MonoBehaviour
 
     private bool StdVFissureJoyI()
     {
-        if (currentInputs.standardInputs.joyInputs.VerticalFissure.ToString() != "LT" &&
-        currentInputs.standardInputs.joyInputs.VerticalFissure.ToString() != "RT")
+        if (this.CurrentInputs.standardInputs.joyInputs.VerticalFissure.ToString() != "LT" &&
+        this.CurrentInputs.standardInputs.joyInputs.VerticalFissure.ToString() != "RT")
         {
 
-            if (Input.GetButtonDown(currentInputs.standardInputs.joyInputs.VerticalFissure.ToString()))
+            if (Input.GetButtonDown(this.CurrentInputs.standardInputs.joyInputs.VerticalFissure.ToString()))
                 return true;
             else
                 return false;
         }
         else
         {
-            if (currentInputs.standardInputs.joyInputs.VerticalFissure.ToString() == "LT")
+            if (this.CurrentInputs.standardInputs.joyInputs.VerticalFissure.ToString() == "LT")
             {
                 if (Input.GetAxis("LRT") > 0)
                 {
@@ -1774,7 +1845,7 @@ public class PlayerInputs : MonoBehaviour
 
     private bool StdVFissurePcI()
     {
-        if (Input.GetButtonDown(currentInputs.standardInputs.keyInputs.VerticalFissure.ToString()))
+        if (Input.GetButtonDown(this.CurrentInputs.standardInputs.keyInputs.VerticalFissure.ToString()))
             return true;
         else
             return false;
@@ -1784,7 +1855,7 @@ public class PlayerInputs : MonoBehaviour
     #region Horizontal Fissure Input
     private bool HFissurePressed()
     {
-        if (cForm == currentForm.frog)
+        if (cForm == CurrentForm.Frog)
             return StdVFissureInput();
         else
             return false;
@@ -1800,18 +1871,18 @@ public class PlayerInputs : MonoBehaviour
 
     private bool FrogHFissureJoyI()
     {
-        if (currentInputs.frogInputs.joyInputs.HorizontalFissure.ToString() != "LT" &&
-        currentInputs.frogInputs.joyInputs.HorizontalFissure.ToString() != "RT")
+        if (this.CurrentInputs.frogInputs.joyInputs.HorizontalFissure.ToString() != "LT" &&
+        this.CurrentInputs.frogInputs.joyInputs.HorizontalFissure.ToString() != "RT")
         {
 
-            if (Input.GetButtonDown(currentInputs.frogInputs.joyInputs.HorizontalFissure.ToString()))
+            if (Input.GetButtonDown(this.CurrentInputs.frogInputs.joyInputs.HorizontalFissure.ToString()))
                 return true;
             else
                 return false;
         }
         else
         {
-            if (currentInputs.frogInputs.joyInputs.HorizontalFissure.ToString() == "LT")
+            if (this.CurrentInputs.frogInputs.joyInputs.HorizontalFissure.ToString() == "LT")
             {
                 if (Input.GetAxis("LRT") > 0)
                 {
@@ -1838,7 +1909,7 @@ public class PlayerInputs : MonoBehaviour
 
     private bool FrogHFissurePcI()
     {
-        if (Input.GetButtonDown(currentInputs.frogInputs.keyInputs.HorizontalFissure.ToString()))
+        if (Input.GetButtonDown(this.CurrentInputs.frogInputs.keyInputs.HorizontalFissure.ToString()))
             return true;
         else
             return false;
@@ -1848,7 +1919,7 @@ public class PlayerInputs : MonoBehaviour
     #region Dolphin Swim Below Input
     private bool DolpSwimBPressed()
     {
-        if (cForm == currentForm.dolphin)
+        if (cForm == CurrentForm.Dolphin)
             return DolpSwimBInput();
         else
             return false;
@@ -1864,18 +1935,18 @@ public class PlayerInputs : MonoBehaviour
 
     private bool DolpSwimBJoyI()
     {
-        if (currentInputs.dolphinInputs.joyInputs.moveBelow.ToString() != "LT" &&
-        currentInputs.dolphinInputs.joyInputs.moveBelow.ToString() != "RT")
+        if (this.CurrentInputs.dolphinInputs.joyInputs.moveBelow.ToString() != "LT" &&
+        this.CurrentInputs.dolphinInputs.joyInputs.moveBelow.ToString() != "RT")
         {
 
-            if (Input.GetButtonDown(currentInputs.dolphinInputs.joyInputs.moveBelow.ToString()))
+            if (Input.GetButtonDown(this.CurrentInputs.dolphinInputs.joyInputs.moveBelow.ToString()))
                 return true;
             else
                 return false;
         }
         else
         {
-            if (currentInputs.dolphinInputs.joyInputs.moveBelow.ToString() == "LT")
+            if (this.CurrentInputs.dolphinInputs.joyInputs.moveBelow.ToString() == "LT")
             {
                 if (Input.GetAxis("LRT") > 0)
                 {
@@ -1902,7 +1973,7 @@ public class PlayerInputs : MonoBehaviour
 
     private bool DolpSwimBPcI()
     {
-        if (Input.GetButtonDown(currentInputs.dolphinInputs.keyInputs.moveBelow.ToString()))
+        if (Input.GetButtonDown(this.CurrentInputs.dolphinInputs.keyInputs.moveBelow.ToString()))
             return true;
         else
             return false;
@@ -1982,7 +2053,7 @@ public class PlayerInputs : MonoBehaviour
         storyPcInput = pcInput;
 
         storyModeInput = true;
-    } 
+    }
     #endregion
 
     #region General Methods
@@ -1993,32 +2064,32 @@ public class PlayerInputs : MonoBehaviour
         switchCooldown = false;
     }
 
-	private void UpdatingCurrentFormInputs(string currentForm)
-	{
-		switch (currentForm)
-		{
-			case "Standard Form":
-				cForm = PlayerInputs.currentForm.std;
-				StartCoroutine(SwitchingCooldown());
-				break;
-			case "Frog Form":
-				cForm = PlayerInputs.currentForm.frog;
-				StartCoroutine(SwitchingCooldown());
-				break;
-			case "Armadillo Form":
-				cForm = PlayerInputs.currentForm.arma;
-				StartCoroutine(SwitchingCooldown());
-				break;
-			case "Dragon Form":
-				cForm = PlayerInputs.currentForm.crane;
-				StartCoroutine(SwitchingCooldown());
-				break;
-			case "Dolphin Form":
-				cForm = PlayerInputs.currentForm.dolphin;
-				StartCoroutine(SwitchingCooldown());
-				break;
-		}
-	}
+    private void UpdatingCurrentFormInputs(string currentForm)
+    {
+        switch (currentForm)
+        {
+            case "Standard Form":
+                cForm = PlayerInputs.CurrentForm.Std;
+                StartCoroutine(SwitchingCooldown());
+                break;
+            case "Frog Form":
+                cForm = PlayerInputs.CurrentForm.Frog;
+                StartCoroutine(SwitchingCooldown());
+                break;
+            case "Armadillo Form":
+                cForm = PlayerInputs.CurrentForm.Arma;
+                StartCoroutine(SwitchingCooldown());
+                break;
+            case "Dragon Form":
+                cForm = PlayerInputs.CurrentForm.Crane;
+                StartCoroutine(SwitchingCooldown());
+                break;
+            case "Dolphin Form":
+                cForm = PlayerInputs.CurrentForm.Dolphin;
+                StartCoroutine(SwitchingCooldown());
+                break;
+        }
+    }
     #endregion 
     #endregion
 }
