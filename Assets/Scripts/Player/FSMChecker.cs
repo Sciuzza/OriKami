@@ -220,7 +220,9 @@ public class FSMChecker : MonoBehaviour
     private string vFissureEntrance;
     private bool dying = false;
 
-    private controlStates previousClState;
+    // Variables needed to handle Designer Cam Query Situations in Story Mode
+    private bool queryDesCamera;
+    private GameObject queryDesCamGb;
     private bool storyMode;
 
     private bool isGlidingSound = false;
@@ -286,7 +288,8 @@ public class FSMChecker : MonoBehaviour
             if (slTempLink != null)
             {
                 slTempLink.FormUnlockRequest.AddListener(this.UnlockingAbility);
-                slTempLink.ChangeCsRequest.AddListener(this.StoryCsChange);
+                slTempLink.ChangeCsEnterRequest.AddListener(this.StoryCsChange);
+                slTempLink.ChangeCsExitRequest.AddListener(this.StoryCsExit);
                 slTempLink.IsStoryMode.AddListener(this.SettingStoryMode);
             }
         }
@@ -461,7 +464,7 @@ public class FSMChecker : MonoBehaviour
         }
         else
         {
-            GameController.Debugging("Camera Move Not Possible");
+            //GameController.Debugging("Camera Move Not Possible");
         }
     }
 
@@ -1505,67 +1508,6 @@ public class FSMChecker : MonoBehaviour
         ccLink.height = height;
     }
 
-    private void ChangingCameraToOff(GameObject CameraDir)
-    {
-
-        switch (this.cPlayerState.currentClState)
-        {
-            case controlStates.noGenAbi:
-                if (!this.storyMode) this.cPlayerState.currentClState = controlStates.noCameraAndGenAbi;
-                else this.previousClState = controlStates.noCameraAndGenAbi;
-                this.switchingCameraControlToOFF.Invoke(CameraDir);
-                break;
-            case controlStates.noMove:
-                if (!this.storyMode) this.cPlayerState.currentClState = controlStates.noCamAndMove;
-                else this.previousClState = controlStates.noCamAndMove;
-                this.switchingCameraControlToOFF.Invoke(CameraDir);
-                break;
-            case controlStates.noMoveAndGenAbi:
-                if (!this.storyMode) this.cPlayerState.currentClState = controlStates.noControl;
-                else this.previousClState = controlStates.noControl;
-                this.switchingCameraControlToOFF.Invoke(CameraDir);
-                break;
-            case controlStates.totalControl:
-                if (!this.storyMode) this.cPlayerState.currentClState = controlStates.noCamera;
-                else this.previousClState = controlStates.noCamera;
-                this.switchingCameraControlToOFF.Invoke(CameraDir);
-                break;
-            default:
-                Debug.Log("Camera Already Off");
-                break;
-        }
-    }
-
-    private void ChangingCameraToOn()
-    {
-        switch (this.cPlayerState.currentClState)
-        {
-            case controlStates.noCameraAndGenAbi:
-                if (!this.storyMode) this.cPlayerState.currentClState = controlStates.noGenAbi;
-                else this.previousClState = controlStates.noGenAbi;
-                this.switchingCameraControlToOn.Invoke();
-                break;
-            case controlStates.noCamAndMove:
-                if (!this.storyMode) this.cPlayerState.currentClState = controlStates.noMove;
-                else this.previousClState = controlStates.noMove;
-                this.switchingCameraControlToOn.Invoke();
-                break;
-            case controlStates.noControl:
-                if (!this.storyMode) this.cPlayerState.currentClState = controlStates.noMoveAndGenAbi;
-                else this.previousClState = controlStates.noMoveAndGenAbi;
-                this.switchingCameraControlToOn.Invoke();
-                break;
-            case controlStates.noCamera:
-                if (!this.storyMode) this.cPlayerState.currentClState = controlStates.totalControl;
-                else this.previousClState = controlStates.totalControl;
-                this.switchingCameraControlToOn.Invoke();
-                break;
-            default:
-                Debug.Log("Camera Already On");
-                break;
-        }
-    }
-
     private void HandlingAbiDiscovered()
     {
 
@@ -1639,23 +1581,122 @@ public class FSMChecker : MonoBehaviour
 
         this.UpdatingAbilityList();
     }
+    #endregion
 
+    #region Designer Camera Handler
+    private void ChangingCameraToOff(GameObject cameraDir)
+    {
+        if (this.storyMode)
+        {
+            this.queryDesCamera = true;
+            this.queryDesCamGb = cameraDir;
+        }
+        else
+        {
+            switch (this.cPlayerState.currentClState)
+            {
+                case controlStates.noGenAbi:
+                    this.cPlayerState.currentClState = controlStates.noCameraAndGenAbi;
+                    this.UpdatingAbilityList();
+                    this.switchingCameraControlToOFF.Invoke(cameraDir);
+                    break;
+                case controlStates.noMove:
+                    this.cPlayerState.currentClState = controlStates.noCamAndMove;
+                    this.UpdatingAbilityList();
+                    this.switchingCameraControlToOFF.Invoke(cameraDir);
+                    break;
+                case controlStates.noMoveAndGenAbi:
+                    this.cPlayerState.currentClState = controlStates.noControl;
+                    this.UpdatingAbilityList();
+                    this.switchingCameraControlToOFF.Invoke(cameraDir);
+                    break;
+                case controlStates.totalControl:
+                    this.cPlayerState.currentClState = controlStates.noCamera;
+                    this.UpdatingAbilityList();
+                    this.switchingCameraControlToOFF.Invoke(cameraDir);
+                    break;
+                default:
+                    Debug.Log("Camera Already Off");
+                    break;
+            }
+        }
+    }
+
+    private void ChangingCameraToOn()
+    {
+        if (this.storyMode)
+        {
+            this.queryDesCamera = false;
+            this.queryDesCamGb = null;
+        }
+        else
+        {
+            switch (this.cPlayerState.currentClState)
+            {
+                case controlStates.noCameraAndGenAbi:
+                    this.cPlayerState.currentClState = controlStates.noGenAbi;
+                    this.UpdatingAbilityList();
+                    this.switchingCameraControlToOn.Invoke();
+                    break;
+                case controlStates.noCamAndMove:
+                    this.cPlayerState.currentClState = controlStates.noMove;
+                    this.UpdatingAbilityList();
+                    this.switchingCameraControlToOn.Invoke();
+                    break;
+                case controlStates.noControl:
+                    this.cPlayerState.currentClState = controlStates.noMoveAndGenAbi;
+                    this.UpdatingAbilityList();
+                    this.switchingCameraControlToOn.Invoke();
+                    break;
+                case controlStates.noCamera:
+                    this.cPlayerState.currentClState = controlStates.totalControl;
+                    this.UpdatingAbilityList();
+                    this.switchingCameraControlToOn.Invoke();
+                    break;
+                default:
+                    Debug.Log("Camera Already On");
+                    break;
+            }
+        }
+    } 
+    #endregion
+
+    #region Story Input Handler
     private void StoryCsChange(controlStates newCs)
     {
         this.cPlayerState.currentClState = newCs;
+
+        if (this.cPlayerState.currentClState == controlStates.noCamAndMove ||
+            this.cPlayerState.currentClState == controlStates.noCamera ||
+            this.cPlayerState.currentClState == controlStates.noCameraAndGenAbi ||
+            this.cPlayerState.currentClState == controlStates.noControl)
+            this.switchingCameraToStoryRequest.Invoke();
+
         this.UpdatingAbilityList();
     }
 
     private void StoryCsExit(controlStates exitCs)
     {
         this.cPlayerState.currentClState = exitCs;
+
+        if (this.queryDesCamera)
+        {
+            this.ChangingCameraToOff(this.queryDesCamGb);
+            this.queryDesCamera = false;
+            this.queryDesCamGb = null;
+        }
+        else
+        {
+            this.switchingCameraToPlayer.Invoke();
+        }
+
         this.UpdatingAbilityList();
     }
 
     private void SettingStoryMode(bool state)
     {
         this.storyMode = state;
-    }
+    } 
     #endregion
 
     #region Death Conditions Methods

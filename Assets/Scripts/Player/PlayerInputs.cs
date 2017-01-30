@@ -48,10 +48,13 @@ public class PlayerInputs : MonoBehaviour
     {
         FSMChecker fsmCheckerTempLink = this.GetComponent<FSMChecker>();
 
-        fsmCheckerTempLink.formChangedInp.AddListener(UpdatingCurrentFormInputs);
+        fsmCheckerTempLink.formChangedInp.AddListener(this.UpdatingCurrentFormInputs);
 
         GameObject storyLineCheck = GameObject.FindGameObjectWithTag("StoryLine");
 
+        CameraManager cmTempLink = GameObject.FindGameObjectWithTag("GameController").GetComponent<CameraManager>();
+
+        cmTempLink.reAdjustingCamValues.AddListener(this.FixingCamValues);
 
         if (storyLineCheck != null)
         {
@@ -59,13 +62,12 @@ public class PlayerInputs : MonoBehaviour
             StoryLineInstance slTempLink =
                 GameObject.FindGameObjectWithTag("StoryLine").GetComponent<StoryLineInstance>();
 
-            slTempLink.ActivateStoryInputRequest.AddListener(SettingStoryInputs);
+            slTempLink.ActivateStoryInputRequest.AddListener(this.SettingStoryInputs);
         }
     }
     #endregion
 
-    #region Player Inputs Handler
-
+    #region Player Inputs Update Check
     private void Update()
     {
         this.MovingInputHandler();
@@ -75,6 +77,7 @@ public class PlayerInputs : MonoBehaviour
         this.StoryInputsHandler();
 
     }
+    #endregion
 
     #region Move Input
     private void MovingInputHandler()
@@ -182,6 +185,13 @@ public class PlayerInputs : MonoBehaviour
         {
             return false;
         }
+    }
+
+    private void FixingCamValues(float xInput, float yInput, float distInput)
+    {
+        this.currentX = xInput;
+        this.currentY = yInput;
+        this.currentDistance = distInput;
     }
     #endregion
 
@@ -2091,5 +2101,4 @@ public class PlayerInputs : MonoBehaviour
         }
     }
     #endregion 
-    #endregion
 }
