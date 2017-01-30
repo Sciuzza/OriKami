@@ -1,7 +1,7 @@
-Iki/Left/. . .
-Jiraiya/Right/"Sniff sniff"
-Koi/Left/Hey kid! Il The road’s open!*You can go back home!
-Jiraiya/Right/Thanks…
-Koi/Left/How far is the village from here?*Can you do it on your own?
-Jiraiya/Right/I should be ok. . .*My home’s not far from here.
-Koi/Left/Very well, be careful then!
+Iki/Left/Iki_Standard/. . .
+Jiraiya/Right/Jiraiya_Standard/sniff sniff
+Koi/Left/Koi_Standard/Hey kid! Il The road’s open!*You can go back home!
+Jiraiya/Right/Jiraiya_Standard/Thanks. . .
+Koi/Left/Koi_Standard/How far is the village from here?*Can you do it on your own?
+Jiraiya/Right/Jiraiya_Standard/I should be ok. . .*My home’s not far from here.
+Koi/Left/Koi_Standard/Very well, be careful then!
