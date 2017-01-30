@@ -7,7 +7,6 @@ public class EnvInputs : MonoBehaviour
     #region Private Variables
     private CharacterController ccLink;
     private bool onWaterFlag = false, onAir = false, onWater = false, onGround = false;
-    private bool storyMode;
     #endregion
 
     #region Events
@@ -22,17 +21,6 @@ public class EnvInputs : MonoBehaviour
     void Awake()
     {
         ccLink = this.GetComponent<CharacterController>();
-
-        GameObject storyLineCheck = GameObject.FindGameObjectWithTag("StoryLine");
-
-        if (storyLineCheck != null)
-        {
-
-            StoryLineInstance slTempLink =
-                GameObject.FindGameObjectWithTag("StoryLine").GetComponent<StoryLineInstance>();
-
-            slTempLink.IsStoryMode.AddListener(this.SettingStoryMode);
-        }
     }
     #endregion
 
@@ -101,10 +89,8 @@ public class EnvInputs : MonoBehaviour
     #region Triggers Handler
     void OnTriggerEnter(Collider envTrigger)
     {
-
         switch (envTrigger.gameObject.tag)
         {
-
             case "vAbilityta":
             case "vAbilitytb":
                 vFissureRequestOn.Invoke(envTrigger.gameObject.GetComponentInParent<VFissure>(), envTrigger.gameObject.tag);
@@ -129,7 +115,6 @@ public class EnvInputs : MonoBehaviour
             case "Story Triggers":
                 storyActivationRequest.Invoke(envTrigger);
                 break;
-
         }
 
     }
@@ -137,10 +122,8 @@ public class EnvInputs : MonoBehaviour
     void OnTriggerExit(Collider envTrigger)
     {
 
-
         switch (envTrigger.gameObject.tag)
         {
-
             case "vAbilityta":
             case "vAbilitytb":
                 vFissureRequestOff.Invoke();
@@ -160,14 +143,6 @@ public class EnvInputs : MonoBehaviour
                 this.cameraOnRequest.Invoke();
                 break;
         }
-    }
-    #endregion
-
-    #region General Methods
-
-    private void SettingStoryMode(bool state)
-    {
-        this.storyMode = state;
     }
     #endregion
 }

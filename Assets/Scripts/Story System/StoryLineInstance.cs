@@ -152,6 +152,7 @@ public class EnvironmentEffect
     public ObjectMoving ObjMovEffect;
     public ObjectActivation ObjActiEffect;
     public ObjectDeActivation ObjDeActiEffect;
+    public ObjectRotateTo ObjRotateEffect;
     public Baloon BaloonEffect;
 }
 
@@ -178,6 +179,15 @@ public class ObjectDeActivation
     public bool End;
     public GameObject GbRef;
     public float Time;
+}
+
+[Serializable]
+public class ObjectRotateTo
+{
+    public bool End;
+    public GameObject ObjectToRotate;
+    public GameObject Target;
+    public float LerpSpeed;
 }
 
 [Serializable]
@@ -383,7 +393,7 @@ public class StoryLineInstance : MonoBehaviour
     #region Events
     public event_joy_pc ActivateStoryInputRequest;
     public event_string FormUnlockRequest;
-    public event_cs ChangeCsRequest;
+    public event_cs ChangeCsEnterRequest, ChangeCsExitRequest;
     public event_string_string_string UiDialogueRequest;
     public UnityEvent DialogueEnded;
     public event_bool IsStoryMode;
@@ -494,13 +504,13 @@ public class StoryLineInstance : MonoBehaviour
     {
         GameController.Debugging("Living Story Started for the story " + this.storySelected.StoryName);
 
-        //this.camLastPos.Add(Camera.main.transform.position);
-        //this.camLastRot.Add(Camera.main.transform.rotation);
+        this.camLastPos.Add(Camera.main.transform.position);
+        this.camLastRot.Add(Camera.main.transform.rotation);
 
-        //this.IsStoryMode.Invoke(true);
-        //this.ChangeCsRequest.Invoke(this.storySelected.PlayerControlEffect);
+        this.IsStoryMode.Invoke(true);
+        this.ChangeCsEnterRequest.Invoke(this.storySelected.PlayerControlEffect);
 
-        //this.StartCoroutine(this.LivingStory());
+        this.StartCoroutine(this.LivingStory());
     }
 
     private IEnumerator LivingStory()
@@ -589,8 +599,8 @@ public class StoryLineInstance : MonoBehaviour
             yield return null;
         }
 
-        this.ApplyingLivingEffects();
         this.IsStoryMode.Invoke(false);
+        this.ApplyingLivingEffects();
         this.ResettingStoryCommonVariables();
     }
 
@@ -616,7 +626,7 @@ public class StoryLineInstance : MonoBehaviour
 
     private void ApplyingLivingEffects()
     {
-        this.ChangeCsRequest.Invoke(this.storySelected.EndControlEffect);
+        this.ChangeCsExitRequest.Invoke(this.storySelected.EndControlEffect);
     }
     #endregion
 
@@ -754,6 +764,7 @@ public class StoryLineInstance : MonoBehaviour
 
         movingPlayerEffect.End = true;
         this.effectCounter++;
+        GameController.Debugging("Effect Counter", this.effectCounter);
     }
 
     private IEnumerator PushBackPlayer(PlayerPushBack pushBackEffect)
@@ -780,6 +791,7 @@ public class StoryLineInstance : MonoBehaviour
 
         pushBackEffect.End = true;
         this.effectCounter++;
+        GameController.Debugging("Effect Counter", this.effectCounter);
     }
 
     private IEnumerator RotatePlayer(PlayerSee rotateEffect)
@@ -814,12 +826,12 @@ public class StoryLineInstance : MonoBehaviour
 
         rotateEffect.End = true;
         this.effectCounter++;
+        GameController.Debugging("Effect Counter", this.effectCounter);
         DestroyObject(tempObj);
     }
     #endregion
 
     #region Camera Effects Methods
-
     private void CameraEffectsHandler()
     {
         var camEffectsToEvaluate = this.storySelected.Events[this.eventIndex].Effects.CamEffect;
@@ -910,6 +922,7 @@ public class StoryLineInstance : MonoBehaviour
 
         movingCameraEffect.End = true;
         this.effectCounter++;
+        GameController.Debugging("Effect Counter", this.effectCounter);
     }
 
     private IEnumerator MovingStoryCamera(CameraEventRevert erCameraEffect, int listIndex)
@@ -955,6 +968,7 @@ public class StoryLineInstance : MonoBehaviour
 
         erCameraEffect.End = true;
         this.effectCounter++;
+        GameController.Debugging("Effect Counter", this.effectCounter);
     }
 
     private IEnumerator MovingStoryCamera(CameraStoryRevert srCameraEffect)
@@ -989,6 +1003,7 @@ public class StoryLineInstance : MonoBehaviour
 
         srCameraEffect.End = true;
         this.effectCounter++;
+        GameController.Debugging("Effect Counter", this.effectCounter);
     }
 
     private IEnumerator ShakingStoryCamera(CameraShake shakingCameraEffect)
@@ -1017,6 +1032,7 @@ public class StoryLineInstance : MonoBehaviour
 
         shakingCameraEffect.End = true;
         this.effectCounter++;
+        GameController.Debugging("Effect Counter", this.effectCounter);
     }
     #endregion
 
@@ -1072,6 +1088,19 @@ public class StoryLineInstance : MonoBehaviour
                     GameController.Debugging("Object DeActivation");
                     this.PlayObjDeActiEffect(envEffect.ObjDeActiEffect);
                     gbCheckTempRepo.Add(envEffect.ObjDeActiEffect.GbRef);
+                }
+
+                if (envEffect.ObjRotateEffect.ObjectToRotate != null && envEffect.ObjRotateEffect.Target != null)
+                {
+                    if (!this.IsGameobjectRefUnique(gbCheckTempRepo, envEffect.ObjRotateEffect.ObjectToRotate))
+                    {
+                        continue;
+                    }
+
+                    this.totalEventEffects++;
+                    GameController.Debugging("Object Rotate To");
+                    this.PlayObjRotateEffect(envEffect.ObjRotateEffect);
+                    gbCheckTempRepo.Add(envEffect.ObjRotateEffect.ObjectToRotate);
                 }
 
                 if (envEffect.BaloonEffect.NpcRef != null)
@@ -1136,6 +1165,20 @@ public class StoryLineInstance : MonoBehaviour
         }
     }
 
+    private void PlayObjRotateEffect(ObjectRotateTo effectToPlay)
+    {
+        if (effectToPlay.LerpSpeed == 0)
+        {
+            effectToPlay.ObjectToRotate.transform.LookAt(effectToPlay.Target.transform);
+            effectToPlay.End = true;
+            this.effectCounter++;
+        }
+        else
+        {
+            this.StartCoroutine(this.ObjectRotation(effectToPlay));
+        }
+    }
+
     private void PlayBaloonEffect(Baloon effectToPlay)
     {
         this.StartCoroutine(this.BubbleAdjustRot(effectToPlay));
@@ -1179,6 +1222,7 @@ public class StoryLineInstance : MonoBehaviour
 
         movingObjEffect.End = true;
         this.effectCounter++;
+        GameController.Debugging("Effect Counter", this.effectCounter);
     }
 
     private IEnumerator TimedActivation(ObjectActivation actiObjEffect)
@@ -1196,6 +1240,7 @@ public class StoryLineInstance : MonoBehaviour
         actiObjEffect.GbRef.SetActive(false);
         actiObjEffect.End = true;
         this.effectCounter++;
+        GameController.Debugging("Effect Counter", this.effectCounter);
     }
 
     private IEnumerator TimedDeActivation(ObjectDeActivation deActiObjEffect)
@@ -1213,6 +1258,36 @@ public class StoryLineInstance : MonoBehaviour
         deActiObjEffect.GbRef.SetActive(true);
         deActiObjEffect.End = true;
         this.effectCounter++;
+        GameController.Debugging("Effect Counter", this.effectCounter);
+    }
+
+    private IEnumerator ObjectRotation(ObjectRotateTo objRotEffect)
+    {
+        var objToMove = objRotEffect.ObjectToRotate;
+        var lerpSpeed = objRotEffect.LerpSpeed;
+        
+        var targetRotation = objRotEffect.Target.transform.rotation;
+
+        var posReached = false;
+
+        while (!posReached)
+        {
+            objToMove.transform.rotation = Quaternion.Slerp(
+                objToMove.transform.rotation,
+                targetRotation,
+                lerpSpeed * Time.deltaTime);
+
+            if (Quaternion.Angle(objToMove.transform.rotation, targetRotation) < 0.1f)
+            {
+                posReached = true;
+            }
+
+            yield return null;
+        }
+
+        objRotEffect.End = true;
+        this.effectCounter++;
+        GameController.Debugging("Effect Counter", this.effectCounter);
     }
 
     private IEnumerator BaloonDialogue(Baloon baloonEffect)
@@ -1231,6 +1306,7 @@ public class StoryLineInstance : MonoBehaviour
         baloonTempLink.CanvasRef.gameObject.SetActive(false);
         baloonEffect.End = true;
         this.effectCounter++;
+        GameController.Debugging("Effect Counter", this.effectCounter);
     }
 
     private IEnumerator BubbleAdjustRot(Baloon baloonEffect)
@@ -1382,18 +1458,26 @@ public class StoryLineInstance : MonoBehaviour
     {
         this.UiDialogueRequest.Invoke(dialogueEffect.Name[0], dialogueEffect.Label[0], dialogueEffect.Sentence[0]);
         var counter = 1;
+        var dialogueSkip = false;
 
         while (counter < dialogueEffect.Name.Count)
         {
+            if (Input.GetButtonDown(buttonsJoy.Y.ToString()))
+            {
+                dialogueSkip = true;
+                break;
+            }
+
             if (Input.GetButtonDown(buttonsJoy.X.ToString()) || Input.GetButtonDown(buttonsPc.E.ToString()))
             {
                 this.UiDialogueRequest.Invoke(dialogueEffect.Name[counter], dialogueEffect.Label[counter], dialogueEffect.Sentence[counter]);
                 counter++;
             }
+
             yield return null;
         }
 
-        while (!Input.GetButtonDown(buttonsJoy.X.ToString()) && !Input.GetButtonDown(buttonsPc.E.ToString()))
+        while (!Input.GetButtonDown(buttonsJoy.X.ToString()) && !Input.GetButtonDown(buttonsPc.E.ToString()) && !dialogueSkip)
         {
             yield return null;
         }
@@ -1401,6 +1485,7 @@ public class StoryLineInstance : MonoBehaviour
         this.DialogueEnded.Invoke();
         dialogueEffect.End = true;
         this.effectCounter++;
+        GameController.Debugging("Effect Counter", this.effectCounter);
     }
     #endregion
 

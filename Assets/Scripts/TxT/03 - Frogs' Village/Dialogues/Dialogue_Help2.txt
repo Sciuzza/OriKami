@@ -1,2 +1,2 @@
-Peppino/Left/Jiraiya? Nope, he's not here.*He doesn't like heights, so you'll hardly ever find him here.*Try looking for him in the Palace. Maybe you'll find him there.
-Iki/Right/. . .
+Peppino/Left/Villager_2/Jiraiya? Nope, he's not here.*He doesn't like heights, so you'll hardly ever find him here.*Try looking for him in the Palace. Maybe you'll find him there.
+Iki/Right/Iki_Standard/. . .

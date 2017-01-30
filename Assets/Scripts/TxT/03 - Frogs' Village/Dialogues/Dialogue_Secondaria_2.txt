@@ -1,2 +1,2 @@
-Blacksmith/Left/Are you back already? You’re done, aren’t you?
-Iki/Right/. . .
+Blacksmith/Left/Blacksmith_Standard/Are you back already? You’re done, aren’t you?
+Iki/Right/Iki_Standard/. . .

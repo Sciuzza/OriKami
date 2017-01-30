@@ -4,8 +4,6 @@ using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 
 public class GameController : MonoBehaviour
-    
-
 {
     public Camera cameraRef;
   
@@ -65,22 +63,22 @@ public class GameController : MonoBehaviour
         else
             return true;
     }
-	#endregion
+    #endregion
 
-	#region Debugging Static Methods
-	public static void Debugging(string whatToSay)
-	{
-		Debug.Log(whatToSay);
-	}
+    #region Debugging Static Methods
+    public static void Debugging(string whatToSay)
+    {
+        Debug.Log(whatToSay);
+    }
 
-	public static void Debugging(string WhatToSay, int integerNum)
-	{
-		Debug.Log(WhatToSay + " :" + integerNum);
-	}
+    public static void Debugging(string WhatToSay, int integerNum)
+    {
+        Debug.Log(WhatToSay + " :" + integerNum);
+    }
 
-	public static void Debugging(string WhatToSay, float floatNum)
-	{
-		Debug.Log(WhatToSay + " :" + floatNum);
-	}
-	#endregion
+    public static void Debugging(string WhatToSay, float floatNum)
+    {
+        Debug.Log(WhatToSay + " :" + floatNum);
+    }
+    #endregion
 }

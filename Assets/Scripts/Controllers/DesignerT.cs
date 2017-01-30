@@ -322,10 +322,11 @@ public class DesignerT : MonoBehaviour
 
         PlayerInputs playerInputsTempLink = player.GetComponent<PlayerInputs>();
 
-        playerInputsTempLink.currentInputs = GestioneInputs;
+        playerInputsTempLink.CurrentInputs = GestioneInputs;
+        playerInputsTempLink.CurrentPlCameraSettings = this.GestioneCamera;
 
 
-        
+
     } 
     #endregion
 

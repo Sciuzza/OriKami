@@ -13,17 +13,34 @@ public class CameraManager : MonoBehaviour
     #endregion Public Variables
 
     #region Private Variables
-    private Transform playerTransform;
+
+    // Variable needed in all the three styles
+    private enum CameraStyle
+    {
+        player,
+        designer,
+        story
+    }
+
     private Transform cameraTransform;
+    private RaycastHit hitInfo;
+    private CameraStyle currentCamera = CameraStyle.player;
+
+    // Variables needed for Player Style Camera
+    private Transform playerTransform;
     private float currentX;
     private float currentY;
-    private bool CameraByDesignToPlayer = true;
-    private RaycastHit hitInfo;
+    private float currentDistance;
+    private Coroutine plCamMoving;
 
-    private bool corStoryStopped;
-    private bool cameraByStoryToPlayer = true;
+    // Variables needed for Designer Style Camera
+    private Coroutine deCamMoving;
     private GameObject lastDesignCamera;
     #endregion Private Variables
+
+    #region Events
+    public event_float_float_float reAdjustingCamValues; 
+    #endregion
 
     #region Initializing Camera in Gameplay Scenes
     public void SettingPlayerCamera(GameObject player)
@@ -38,6 +55,13 @@ public class CameraManager : MonoBehaviour
         fsmLink.switchingCameraControlToOn.AddListener(this.SwitchByDeCameraToPlCamera);
         fsmLink.switchingCameraToStoryRequest.AddListener(this.SwitchByPlCameraToStoryCamera);
         fsmLink.switchingCameraToPlayer.AddListener(this.SwitchByStoryCameraToPlCamera);
+        fsmLink.plCameraMoveUsed.AddListener(this.PlayerCameraDirectInput);
+
+
+        this.currentDistance = this.CurrentPlCameraSettings.currentDistance;
+        this.currentX = 0;
+        this.currentY = 0;
+        this.plCamMoving = this.StartCoroutine(this.PlayerCameraMoving());
     }
 
     #endregion Initializing Camera in Gameplay Scenes
@@ -51,99 +75,58 @@ public class CameraManager : MonoBehaviour
     }
     #endregion Taking Game Controller Reference and Link the Initializer Event
 
-    #region Camera Player Mouse Zoom
-    private void Update()
+    #region Player Camera Handler
+    private void PlayerCameraDirectInput(float xInput, float yInput, float distInput)
     {
-        if (!this.CameraByDesignToPlayer) return;
+        this.currentX = xInput;
+        this.currentY = yInput;
+        this.currentDistance = distInput;
 
-        // Pc COde
-        if (Input.GetMouseButton(0))
+        if (this.plCamMoving == null)
         {
-            Cursor.visible = false;
-            this.currentX += Input.GetAxis("Mouse X") * this.CurrentPlCameraSettings.sensitivityX;
-            this.currentY -= Input.GetAxis("Mouse Y") * this.CurrentPlCameraSettings.sensitivityY;
+            this.currentCamera = CameraStyle.player;
+            this.plCamMoving = this.StartCoroutine(this.PlayerCameraMoving());
         }
-        else if (Input.GetMouseButtonUp(0))
-        {
-            Cursor.visible = true;
-        }
-
-        this.CurrentPlCameraSettings.currentDistance -= Input.GetAxis("Mouse ScrollWheel")
-                                                   * this.CurrentPlCameraSettings.sensitivityZoom;
-
-        this.CurrentPlCameraSettings.currentDistance = Mathf.Clamp(
-            this.CurrentPlCameraSettings.currentDistance,
-            this.CurrentPlCameraSettings.distanceMin,
-            this.CurrentPlCameraSettings.distanceMax);
-        this.currentY = Mathf.Clamp(this.currentY, this.CurrentPlCameraSettings.yAngleMin, this.CurrentPlCameraSettings.yAngleMax);
-
-        // Joy Code
-        this.currentX += Input.GetAxis("RJHor") * this.CurrentPlCameraSettings.sensitivityX;
-        this.currentY += Input.GetAxis("RJVer") * this.CurrentPlCameraSettings.sensitivityY;
-
-        if (Input.GetButton("CamZjoy"))
-            this.CurrentPlCameraSettings.currentDistance += Input.GetAxis("RJVer")
-                                                       * this.CurrentPlCameraSettings.sensitivityZoom;
-
-        this.CurrentPlCameraSettings.currentDistance = Mathf.Clamp(
-            this.CurrentPlCameraSettings.currentDistance,
-            this.CurrentPlCameraSettings.distanceMin,
-            this.CurrentPlCameraSettings.distanceMax);
-        this.currentY = Mathf.Clamp(this.currentY, this.CurrentPlCameraSettings.yAngleMin, this.CurrentPlCameraSettings.yAngleMax);
     }
-    #endregion Camera Player Mouse Zoom
 
-    #region Camera Follow
-    private void LateUpdate()
+    private IEnumerator PlayerCameraMoving()
     {
-        if (!this.CameraByDesignToPlayer || !this.cameraByStoryToPlayer) return;
-
-        // ReSharper disable once InvertIf
-        if (this.playerTransform != null)
+        while (this.currentCamera == CameraStyle.player)
         {
-            var dir = new Vector3(0, 0, -this.CurrentPlCameraSettings.currentDistance);
+            var dir = new Vector3(0, 0, -this.currentDistance);
             var rotation = Quaternion.Euler(this.currentY, this.currentX, 0);
 
             this.CameraTargetTransform.position = this.playerTransform.position + (rotation * dir);
             this.CameraTargetTransform.LookAt(this.playerTransform.position);
 
-
-
+            /*
+            if ((this.cameraTransform.position - this.CameraTargetTransform.position).sqrMagnitude < 0.1f
+                && Quaternion.Angle(this.cameraTransform.rotation, this.CameraTargetTransform.rotation) < 0.1f) yield return null;
+            */
             var playerToCameraRay = new Ray(this.playerTransform.position, -this.CameraTargetTransform.forward);
 
             // Debug.DrawRay(this.CameraTargetTransform.position, this.CameraTargetTransform.forward * (this.CurrentPlCameraSettings.currentDistance - this.CurrentPlCameraSettings.distanceMin));
-            this.cameraTransform.position = Vector3.Lerp(this.cameraTransform.position, !Physics.Raycast(playerToCameraRay, out this.hitInfo, this.CurrentPlCameraSettings.currentDistance, this.Env.value) ? this.CameraTargetTransform.position : this.hitInfo.point, 6f * Time.deltaTime);
+            this.cameraTransform.position = Vector3.Lerp(this.cameraTransform.position, !Physics.Raycast(playerToCameraRay, out this.hitInfo, this.currentDistance, this.Env.value) ? this.CameraTargetTransform.position : this.hitInfo.point, 6f * Time.deltaTime);
 
             this.cameraTransform.rotation = Quaternion.Slerp(this.cameraTransform.rotation, this.CameraTargetTransform.rotation, 6f * Time.deltaTime);
+
+            yield return null;
         }
 
-
-
-
+        GameController.Debugging("Coroutine Player Camera Ended");
+        this.plCamMoving = null;
     }
     #endregion Camera Follow
 
-    #region General Methods
-
+    #region Designer Camera Handler
     private void SwitchByPlCameraToDeCamera(GameObject cameraDir)
     {
-        this.CameraByDesignToPlayer = false;
+        this.currentCamera = CameraStyle.designer;
         this.lastDesignCamera = cameraDir;
 
-        if (this.cameraByStoryToPlayer)
-        {
-            this.StartCoroutine(this.LerpOnDesignerCamera(cameraDir));
-            Debug.Log("Camera 2 on");
-        }
-    }
+        this.deCamMoving = this.StartCoroutine(this.LerpOnDesignerCamera(cameraDir));
+        GameController.Debugging("Designer Camera On");
 
-    private void SwitchByDeCameraToPlCamera()
-    {
-        // Inserire Comportamento di rientro telecamera sul giocatore in modo da prevedere cambi di rotazione e posizione troppo elevati
-        this.CameraByDesignToPlayer = true;
-        this.lastDesignCamera = null;
-        Debug.Log("Camera 1 on");
-        this.StopAllCoroutines();
     }
 
     private IEnumerator LerpOnDesignerCamera(GameObject cameraDir)
@@ -152,9 +135,8 @@ public class CameraManager : MonoBehaviour
         var targetPosition = cameraDir.transform.position;
 
         var posReached = false;
-        Debug.Log("Coroutine Camera 2");
-
-        while (!posReached)
+        
+        while (!posReached && this.currentCamera == CameraStyle.designer)
         {
             this.cameraTransform.position = Vector3.Lerp(this.cameraTransform.position, targetPosition, 2f * Time.deltaTime);
             this.cameraTransform.rotation = Quaternion.Slerp(this.cameraTransform.rotation, targetRotation, 2f * Time.deltaTime);
@@ -162,34 +144,44 @@ public class CameraManager : MonoBehaviour
             if (Quaternion.Angle(this.cameraTransform.rotation, targetRotation) < 0.1f
                 && ((this.cameraTransform.position - targetPosition).sqrMagnitude < 0.1f)) posReached = true;
 
-
             yield return null;
         }
-        Debug.Log("Coroutine Camera 2 finished");
+        GameController.Debugging("Coroutine Designer Camera Ended");
+        this.deCamMoving = null;
     }
 
+    private void SwitchByDeCameraToPlCamera()
+    {
+        GameController.Debugging("Player Camera On");
+        this.ReadjustingCameraTarget();
+        this.currentCamera = CameraStyle.player;
+        this.plCamMoving = this.StartCoroutine(this.PlayerCameraMoving());
+    }
+
+    private void ReadjustingCameraTarget()
+    {
+        this.currentDistance = (this.lastDesignCamera.transform.position - this.playerTransform.position).magnitude / 2;
+        this.currentX = (this.lastDesignCamera.transform.position.x + this.playerTransform.position.x) / 2;
+        this.currentY = (this.lastDesignCamera.transform.position.y + this.playerTransform.position.y) / 2;
+
+        this.reAdjustingCamValues.Invoke(this.currentX, this.currentY, this.currentDistance);
+    }
+
+    #endregion General Methods
+
+    #region Story Camera Handler
     private void SwitchByPlCameraToStoryCamera()
     {
-        this.cameraByStoryToPlayer = false;
         Debug.Log("Camera 3 on");
-        this.StopAllCoroutines();
-
+        this.currentCamera = CameraStyle.story;
     }
 
     private void SwitchByStoryCameraToPlCamera()
     {
-        this.cameraByStoryToPlayer = true;
-        if (this.lastDesignCamera != null && this.CameraByDesignToPlayer == false)
-        {
-            Debug.Log("Camera 2 on");
-            this.StartCoroutine(this.LerpOnDesignerCamera(this.lastDesignCamera));
-        }
-        else
-        {
-            Debug.Log("Camera 1 on");
+        Debug.Log("Player Camera On");
+        this.currentCamera = CameraStyle.player;
+        this.plCamMoving = this.StartCoroutine(this.PlayerCameraMoving());
 
-
-        }
-    }
-    #endregion General Methods
+    } 
+    #endregion
 }
