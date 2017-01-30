@@ -1,14 +1,16 @@
-Koi/Left/Hi! I’m Koi and he’s Iki, my never-talking friend!*Who’re you? And where are we?
-Hikoboshi/Right/Hey. . . I’m Hikoboshi. . .*And this is a village. . .
-Koi/Left/Ehm. . . Hi Hikoboshi!*You don’t look really happy, is something wrong?
-Hikoboshi/Right/My heart is broken! My beloved one left me!*She’s there, in the sky kingdom, and I'll never see her again. . .
-Iki/Left/. . .
-Koi/Left/Oh. . . I’m sorry. . . Condolence. . .
-Hikoboshi/Right/No, she’s not dead. She’s just trapped there, in the higher zone. . .*And I’ve no way to reach her. . .
-Koi/Left/Don’t worry then! My friend and I will help you!*We’re going to look for her and then we’re going to let you know about her, all right?
-Iki/Left/. . .
-Hikoboshi/Right/Really? Would you do this, for me?*For us?
-Koi/Left/Of course! We have no hurry, right Iki?
-Iki/Left/. . .
-Koi/Left/Exactly! 
-Hikoboshi/Right/But he can’t travel on water like that. . .*How will he be able to move into the village?
+Koi/Left/Koi_Standard/Hi! I’m Koi and he’s Iki, my never-talking friend!
+Iki/Left/Iki_Standard/. . .
+Koi/Left/Koi_Standard/Who’re you? And where are we?
+Hikoboshi/Right/Hikoboshi_Sad/Hey. . . I’m Hikoboshi. . .*And this is a village. . .
+Koi/Left/Koi_Concerned/Ehm. . . Hi Hikoboshi!*You don’t look really happy, is something wrong?
+Hikoboshi/Right/Hikoboshi_Sad/My heart is broken! My beloved one left me!*She’s there, in the sky kingdom, and I'll never see her again. . .
+Iki/Left/Iki_Concerned/. . .
+Koi/Left/Koi_Concerned/Oh. . . I’m sorry. . . Condolence. . .
+Hikoboshi/Right/Hikoboshi_Sad/No, she’s not dead. She’s just trapped there, in the higher zone. . .*And I’ve no way to reach her. . .
+Koi/Left/Koi_Standard/Don’t worry then! My friend and I will help you!*We’re going to look for her and then we’re going to let you know about her, all right?
+Iki/Left/Iki_Standard/. . .
+Hikoboshi/Right/Hikoboshi_Standard/Really? Would you do this, for me?*For us?
+Koi/Left/Koi_Standard/Of course! We have no hurry, right Iki?
+Iki/Left/Iki_Standard/. . .
+Koi/Left/Koi_Standard/Exactly! 
+Hikoboshi/Right/Hikoboshi_Standard/But he can’t travel on water like that. . .*How will he be able to move into the village?

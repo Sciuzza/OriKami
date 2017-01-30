@@ -1,3 +1,3 @@
-Armadillos Major/Right/You… You’re the same origami from a while ago! What are you doing here?
-Iki/Left/. . .
-Armadillos Major/Right/No, it doesn’t matter now. I need to save my family!
+Armadillos Major/Right/ArmadilloMajor_Standard/You. . . You’re the same origami from a while ago! What are you doing here?
+Iki/Left/Iki_Standard/. . .
+Armadillos Major/Right/ArmadilloMajor_Standard/No, it doesn’t matter now. I need to save my family!

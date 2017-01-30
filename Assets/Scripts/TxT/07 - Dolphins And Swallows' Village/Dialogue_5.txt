@@ -1,7 +1,7 @@
-Orihime/Right/Who are thou, oh young origami?
-Iki/Left/. . .
-Orihime/Right/You do not speak.*I know who you are.*You are the hero whom others village chiefs referred to father about.
-Iki/Left/. . .
-Orihime/Right/Please forgive my impoliteness, I did not introduce myself.*My name is Orihime.*I am the daughter of the chief of this village, composed by both dolphins in the lower zone and swallows in the higher zone.
-Iki/Left/. . .
-Orihime/Right/Are you here for you wish to speak to father?*I fear that he is not here, at the moment, therefore I cannot introduce you.*I would like to accompany you to him, but unfortunately I have some urgent work to fulfil here.
+Orihime/Right/Orihime_Standard/Who are thou, oh young origami?
+Iki/Left/Iki_Standard/. . .
+Orihime/Right/Orihime_Standard/You do not speak.*I know who you are.*You are the hero whom others village chiefs referred to father about.
+Iki/Left/Iki_Standard/. . .
+Orihime/Right/Orihime_Standard/Please forgive my impoliteness, I did not introduce myself.*My name is Orihime.*I am the daughter of the chief of this village, composed by both dolphins in the lower zone and swallows in the higher zone.
+Iki/Left/Iki_Standard/. . .
+Orihime/Right/Orihime_Standard/Are you here for you wish to speak to father?*I fear that he is not here, at the moment, therefore I cannot introduce you.*I would like to accompany you to him, but unfortunately I have some urgent work to fulfil here.
