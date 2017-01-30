@@ -36,7 +36,7 @@ public class CameraManager : MonoBehaviour
     // Variables needed for Designer Style Camera
     private Coroutine deCamMoving;
     private GameObject lastDesignCamera;
-    private float slerpRotSpeed = 6;
+    private float camSpeed = 6;
     #endregion Private Variables
 
     #region Events
@@ -107,9 +107,9 @@ public class CameraManager : MonoBehaviour
             var playerToCameraRay = new Ray(this.playerTransform.position, -this.CameraTargetTransform.forward);
 
             // Debug.DrawRay(this.CameraTargetTransform.position, this.CameraTargetTransform.forward * (this.CurrentPlCameraSettings.currentDistance - this.CurrentPlCameraSettings.distanceMin));
-            this.cameraTransform.position = Vector3.Lerp(this.cameraTransform.position, !Physics.Raycast(playerToCameraRay, out this.hitInfo, this.currentDistance, this.Env.value) ? this.CameraTargetTransform.position : this.hitInfo.point, 6f * Time.deltaTime);
+            this.cameraTransform.position = Vector3.Lerp(this.cameraTransform.position, !Physics.Raycast(playerToCameraRay, out this.hitInfo, this.currentDistance, this.Env.value) ? this.CameraTargetTransform.position : this.hitInfo.point, this.camSpeed * Time.deltaTime);
 
-            this.cameraTransform.rotation = Quaternion.Slerp(this.cameraTransform.rotation, this.CameraTargetTransform.rotation, this.slerpRotSpeed * Time.deltaTime);
+            this.cameraTransform.rotation = Quaternion.Slerp(this.cameraTransform.rotation, this.CameraTargetTransform.rotation, this.camSpeed * Time.deltaTime);
 
             yield return null;
         }
@@ -161,22 +161,37 @@ public class CameraManager : MonoBehaviour
 
     private void ReadjustingCameraTarget()
     {
-        this.currentDistance = (this.lastDesignCamera.transform.position - this.playerTransform.position).magnitude / 2;
-        //this.currentX = (this.lastDesignCamera.transform.position.x + this.playerTransform.position.x) / 2;
-        //this.currentY = (this.lastDesignCamera.transform.position.y + this.playerTransform.position.y) / 2;
         var calPos = new GameObject();
 
         calPos.transform.position = this.lastDesignCamera.transform.position;
         calPos.transform.LookAt(this.playerTransform);
 
-        this.currentX = calPos.transform.position.x;
-        this.currentY = calPos.transform.position.y;
+        this.currentX = calPos.transform.eulerAngles.y;
+        this.currentY = calPos.transform.eulerAngles.x;
+        this.currentDistance = (this.lastDesignCamera.transform.position - this.playerTransform.position).magnitude / 2;
 
         Destroy(calPos);
        
         this.reAdjustingCamValues.Invoke(this.currentX, this.currentY, this.currentDistance);
+        this.StartCoroutine(this.SmoothingSlerp());
     }
 
+    private IEnumerator SmoothingSlerp()
+    {
+        var smoothTime = 1;
+
+        var smoothOnDelta = 4 / smoothTime;
+
+        this.camSpeed = 2;
+
+        while (this.camSpeed < 6)
+        {
+            this.camSpeed += smoothOnDelta * Time.deltaTime;
+            yield return null;
+        }
+
+        this.camSpeed = 6;
+    }
     #endregion General Methods
 
     #region Story Camera Handler

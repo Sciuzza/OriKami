@@ -73,7 +73,7 @@ public class PlayerMove
 {
     public bool End;
     public GameObject GbRef;
-    public float LerpSpeed;
+    public float TimeTaken;
 }
 
 [Serializable]
@@ -82,7 +82,7 @@ public class PlayerSee
     public bool End;
     [Tooltip("Standard Form, Frog Form, Armadillo Form, Dragon Form, Dolphin Form")]
     public GameObject GbRef;
-    public float LerpSpeed;
+    public float TimeTaken;
 }
 
 [Serializable]
@@ -90,7 +90,7 @@ public class PlayerPushBack
 {
     public bool End;
     public float PushingBackPower;
-    public float LerpSpeed;
+    public float TimeTaken;
 }
 
 [Serializable]
@@ -118,14 +118,14 @@ public class CameraMove
 {
     public bool End;
     public GameObject GbRef;
-    public float LerpSpeed;
+    public float TimeTaken;
 }
 
 [Serializable]
 public class CameraShake
 {
     public bool End;
-    public float ShakingDuration;
+    public float TimeTaken;
     public float ShakingPower;
     public float ShakingRoughness;
 }
@@ -134,14 +134,16 @@ public class CameraShake
 public class CameraEventRevert
 {
     public bool End;
-    public float ErLerpSpeed;
+    public bool Activated;
+    public float TimeTaken;
 }
 
 [Serializable]
 public class CameraStoryRevert
 {
     public bool End;
-    public float SrLerpSpeed;
+    public bool Activated;
+    public float TimeTaken;
 }
 #endregion Camera Effect Classes
 
@@ -163,7 +165,7 @@ public class ObjectMoving
     public bool End;
     public GameObject GbToMove;
     public GameObject GbTarget;
-    public float LerpSpeed;
+    public float TimeTaken;
 }
 
 [Serializable]
@@ -171,7 +173,9 @@ public class ObjectActivation
 {
     public bool End;
     public GameObject GbRef;
+    public float FadingInTime;
     public float Time;
+    public float FadingOutTime;
 }
 
 [Serializable]
@@ -180,6 +184,7 @@ public class ObjectDeActivation
     public bool End;
     public GameObject GbRef;
     public float Time;
+    public float FadingOutTime;
 }
 
 [Serializable]
@@ -188,7 +193,7 @@ public class ObjectRotateTo
     public bool End;
     public GameObject ObjectToRotate;
     public GameObject Target;
-    public float LerpSpeed;
+    public float TimeTaken;
 }
 
 [Serializable]
@@ -218,7 +223,7 @@ public class UiObjectMoving
     public bool End;
     public GameObject GbToMove;
     public GameObject GbTarget;
-    public float LerpSpeed;
+    public float TimeTaken;
 }
 
 [Serializable]
@@ -226,8 +231,9 @@ public class UiObjectActivation
 {
     public bool End;
     public GameObject GbRef;
+    public float FadingInTime;
     public float Time;
-    public float FadingTime;
+    public float FadingOutTime;
 }
 
 [Serializable]
@@ -236,7 +242,7 @@ public class UiObjectDeActivation
     public bool End;
     public GameObject GbRef;
     public float Time;
-    public float FadingTime;
+    public float FadingOutTime;
 }
 
 [Serializable]
@@ -246,6 +252,7 @@ public class UiDialogue
     public TextAsset DialogueRef;
     public List<string> Name;
     public List<string> Label;
+    public List<string> Sprite;
     public List<string> Sentence;
 }
 #endregion Ui Effect
@@ -374,7 +381,7 @@ public class SingleStory
 }
 
 [Serializable]
-public class StoryLine 
+public class StoryLine
 {
     public string StoryLineName;
     public Storylines StoryEnumName;
@@ -411,7 +418,7 @@ public class StoryLineInstance : MonoBehaviour
     private int eventIndex;
     private int effectCounter;
     private int totalEventEffects;
-   
+
     private List<Vector3> camLastPos = new List<Vector3>();
     private List<Quaternion> camLastRot = new List<Quaternion>();
     private int cameraChangeCounter;
@@ -678,7 +685,7 @@ public class StoryLineInstance : MonoBehaviour
                 this.PlayPlayerRewardEffect(plaEffectsToEvaluate.PlayerReward);
             }
         }
-        else if (plaEffectsToEvaluate.PushingBackEffect.PushingBackPower > 0)
+        else if (plaEffectsToEvaluate.PushingBackEffect.PushingBackPower > 0 && plaEffectsToEvaluate.PushingBackEffect.TimeTaken > 0)
         {
             this.totalEventEffects++;
             GameController.Debugging("Player Pushing Back");
@@ -705,13 +712,26 @@ public class StoryLineInstance : MonoBehaviour
     private void PlayPlayerRepoEffect(PlayerReposition effectToPlay)
     {
         this.player.transform.position = effectToPlay.GbRef.transform.position;
+        this.player.transform.rotation = effectToPlay.GbRef.transform.rotation;
         effectToPlay.End = true;
         this.effectCounter++;
     }
 
     private void PlayPlayerMoveEffect(PlayerMove effectToPlay)
     {
-        this.StartCoroutine(this.MovingPlayer(effectToPlay));
+        if (effectToPlay.TimeTaken == 0)
+        {
+            this.player.transform.position = effectToPlay.GbRef.transform.position;
+            this.player.transform.rotation = effectToPlay.GbRef.transform.rotation;
+            effectToPlay.End = true;
+            this.effectCounter++;
+        }
+        else
+        {
+            this.StartCoroutine(this.MovingPlayer(effectToPlay));
+
+        }
+
     }
 
     private void PlayPlayerRewardEffect(PlayerReward effectToPlay)
@@ -723,7 +743,16 @@ public class StoryLineInstance : MonoBehaviour
 
     private void PlayPlayerSeeEffect(PlayerSee effectToPlay)
     {
-        this.StartCoroutine(this.RotatePlayer(effectToPlay));
+        if (effectToPlay.TimeTaken == 0)
+        {
+            this.player.transform.LookAt(effectToPlay.GbRef.transform);
+            effectToPlay.End = true;
+            this.effectCounter++;
+        }
+        else
+        {
+            this.StartCoroutine(this.RotatePlayer(effectToPlay));
+        }
     }
 
     private void PlayPlayerPushingBackEffect(PlayerPushBack effectToPlay)
@@ -735,30 +764,32 @@ public class StoryLineInstance : MonoBehaviour
     {
         var whereToMove = movingPlayerEffect.GbRef;
         var objToMove = this.player;
-        var lerpSpeed = movingPlayerEffect.LerpSpeed;
 
+        var timeTaken = movingPlayerEffect.TimeTaken;
+
+        var oriPos = this.player.transform.position;
+        var oriRot = this.player.transform.rotation;
         var targetRotation = whereToMove.transform.rotation;
         var targetPosition = whereToMove.transform.position;
 
         var posReached = false;
 
+        var timePassed = 0f;
+
         while (!posReached)
         {
+            timePassed += Time.deltaTime / timeTaken;
+
             objToMove.transform.position = Vector3.Lerp(
-                objToMove.transform.position,
+                oriPos,
                 targetPosition,
-                lerpSpeed * Time.deltaTime);
+                timePassed);
             objToMove.transform.rotation = Quaternion.Slerp(
-                objToMove.transform.rotation,
+                oriRot,
                 targetRotation,
-                lerpSpeed * Time.deltaTime);
+                timePassed);
 
-            var targetPosYFixed = targetPosition;
-
-            targetPosYFixed.y = this.player.transform.position.y;
-
-            if (Quaternion.Angle(objToMove.transform.rotation, targetRotation) < 0.1f
-                && ((objToMove.transform.position - targetPosYFixed).sqrMagnitude < 0.1f))
+            if (timePassed >= 1)
             {
                 posReached = true;
             }
@@ -776,16 +807,24 @@ public class StoryLineInstance : MonoBehaviour
         var targetPosition = this.player.transform.position - (this.player.transform.forward * pushBackEffect.PushingBackPower);
         var objToMove = this.player;
 
+        var timeTaken = pushBackEffect.TimeTaken;
+
+        var oriPos = this.player.transform.position;
+
         var posReached = false;
+
+        var timePassed = 0f;
 
         while (!posReached)
         {
-            objToMove.transform.position = Vector3.Lerp(
-                objToMove.transform.position,
-                targetPosition,
-                pushBackEffect.LerpSpeed * Time.deltaTime);
+            timePassed += Time.deltaTime / timeTaken;
 
-            if ((objToMove.transform.position - targetPosition).sqrMagnitude < 0.1f)
+            objToMove.transform.position = Vector3.Lerp(
+                oriPos,
+                targetPosition,
+                timePassed);
+
+            if (timePassed >= 1)
             {
                 posReached = true;
             }
@@ -801,7 +840,7 @@ public class StoryLineInstance : MonoBehaviour
     private IEnumerator RotatePlayer(PlayerSee rotateEffect)
     {
         var objToMove = this.player;
-        var lerpSpeed = rotateEffect.LerpSpeed;
+        var timeTaken = rotateEffect.TimeTaken;
 
         var tempObj = new GameObject("temp");
         tempObj.transform.position = this.player.transform.position;
@@ -809,18 +848,23 @@ public class StoryLineInstance : MonoBehaviour
 
         tempObj.transform.LookAt(rotateEffect.GbRef.transform);
 
+        var oriRot = this.player.transform.rotation;
         var targetRotation = tempObj.transform.rotation;
 
         var posReached = false;
 
+        var timePassed = 0f;
+
         while (!posReached)
         {
+            timePassed += Time.deltaTime / timeTaken;
+
             objToMove.transform.rotation = Quaternion.Slerp(
                 objToMove.transform.rotation,
                 targetRotation,
-                lerpSpeed * Time.deltaTime);
+                timePassed);
 
-            if (Quaternion.Angle(objToMove.transform.rotation, targetRotation) < 0.1f)
+            if (timePassed >= 1)
             {
                 posReached = true;
             }
@@ -846,19 +890,21 @@ public class StoryLineInstance : MonoBehaviour
             GameController.Debugging("Camera Move");
             this.PlayCameraMoveEffect(camEffectsToEvaluate.CameraMoveEffect);
         }
-        else if (camEffectsToEvaluate.CameraShakeEffect.ShakingPower > 0)
+        else if (camEffectsToEvaluate.CameraShakeEffect.ShakingPower > 0 &&
+                 camEffectsToEvaluate.CameraShakeEffect.ShakingRoughness > 0 &&
+                 camEffectsToEvaluate.CameraShakeEffect.TimeTaken > 0)
         {
             this.totalEventEffects++;
             GameController.Debugging("Camera Shake");
             this.PlayCameraShakeEffect(camEffectsToEvaluate.CameraShakeEffect);
         }
-        else if (camEffectsToEvaluate.CameraErEffect.ErLerpSpeed > 0)
+        else if (camEffectsToEvaluate.CameraErEffect.Activated)
         {
             this.totalEventEffects++;
             GameController.Debugging("Camera ER");
             this.PlayCameraErEffect(camEffectsToEvaluate.CameraErEffect);
         }
-        else if (camEffectsToEvaluate.CameraSrEffect.SrLerpSpeed > 0)
+        else if (camEffectsToEvaluate.CameraSrEffect.Activated)
         {
             this.totalEventEffects++;
             GameController.Debugging("Camera SR");
@@ -875,7 +921,18 @@ public class StoryLineInstance : MonoBehaviour
             this.camLastRot.Add(Camera.main.transform.rotation);
         }
 
-        this.StartCoroutine(this.MovingStoryCamera(effectToPlay));
+        if (effectToPlay.TimeTaken == 0)
+        {
+            Camera.main.transform.position = effectToPlay.GbRef.transform.position;
+            Camera.main.transform.rotation = effectToPlay.GbRef.transform.rotation;
+            effectToPlay.End = true;
+            this.effectCounter++;
+        }
+        else
+        {
+            this.StartCoroutine(this.MovingStoryCamera(effectToPlay));
+
+        }
     }
 
     private void PlayCameraShakeEffect(CameraShake effectToPlay)
@@ -885,38 +942,69 @@ public class StoryLineInstance : MonoBehaviour
 
     private void PlayCameraErEffect(CameraEventRevert effectToPlay)
     {
-        this.StartCoroutine(this.MovingStoryCamera(effectToPlay, this.cameraChangeCounter - 1));
+        if (this.cameraChangeCounter - 1 < 0)
+        {
+            Debug.Log("Event Revert Effect bad applied");
+            effectToPlay.End = true;
+            this.effectCounter++;
+        }
+        else if (effectToPlay.TimeTaken == 0)
+        {
+            Camera.main.transform.position = this.camLastPos[this.cameraChangeCounter - 1];
+            Camera.main.transform.rotation = this.camLastRot[this.cameraChangeCounter - 1];
+            effectToPlay.End = true;
+            this.effectCounter++;
+        }
+        else
+        {
+            this.StartCoroutine(this.MovingStoryCamera(effectToPlay, this.cameraChangeCounter - 1));
+        }
     }
 
     private void PlayCameraSrEffect(CameraStoryRevert effectToPlay)
     {
-        this.StartCoroutine(this.MovingStoryCamera(effectToPlay));
+        if (effectToPlay.TimeTaken == 0)
+        {
+            Camera.main.transform.position = this.camLastPos[0];
+            Camera.main.transform.rotation = this.camLastRot[0];
+            effectToPlay.End = true;
+            this.effectCounter++;
+        }
+        else
+        {
+            this.StartCoroutine(this.MovingStoryCamera(effectToPlay));
+        }
     }
 
     private IEnumerator MovingStoryCamera(CameraMove movingCameraEffect)
     {
         var whereToMove = movingCameraEffect.GbRef;
         var objToMove = Camera.main;
-        var lerpSpeed = movingCameraEffect.LerpSpeed;
+        var timeTaken = movingCameraEffect.TimeTaken;
 
+        var oriPos = objToMove.transform.position;
+        var oriRot = objToMove.transform.rotation;
         var targetRotation = whereToMove.transform.rotation;
         var targetPosition = whereToMove.transform.position;
 
         var posReached = false;
 
+        var timePassed = 0f;
+
         while (!posReached)
         {
-            objToMove.transform.position = Vector3.Lerp(
-                objToMove.transform.position,
-                targetPosition,
-                lerpSpeed * Time.deltaTime);
-            objToMove.transform.rotation = Quaternion.Slerp(
-                objToMove.transform.rotation,
-                targetRotation,
-                lerpSpeed * Time.deltaTime);
+            timePassed += Time.deltaTime / timeTaken;
 
-            if (Quaternion.Angle(objToMove.transform.rotation, targetRotation) < 0.1f
-                && ((objToMove.transform.position - targetPosition).sqrMagnitude < 0.1f))
+            objToMove.transform.position = Vector3.Lerp(
+                oriPos,
+                targetPosition,
+                timePassed);
+            objToMove.transform.rotation = Quaternion.Slerp(
+                oriRot,
+                targetRotation,
+                timePassed);
+
+            if (timePassed >= 1)
             {
                 posReached = true;
             }
@@ -932,42 +1020,37 @@ public class StoryLineInstance : MonoBehaviour
     private IEnumerator MovingStoryCamera(CameraEventRevert erCameraEffect, int listIndex)
     {
         var objToMove = Camera.main;
-        var lerpSpeed = erCameraEffect.ErLerpSpeed;
 
-        var targetRotation = Quaternion.identity;
-        var targetPosition = new Vector3();
+        var timeTaken = erCameraEffect.TimeTaken;
 
-        if (listIndex >= 0)
-        {
-            targetRotation = this.camLastRot[listIndex];
-            targetPosition = this.camLastPos[listIndex];
-        }
+        var oriPos = objToMove.transform.position;
+        var oriRot = objToMove.transform.rotation;
+        var targetRotation = this.camLastRot[listIndex];
+        var targetPosition = this.camLastPos[listIndex];
 
         var posReached = false;
 
-        while (!posReached && listIndex >= 0)
-        {
-            objToMove.transform.position = Vector3.Lerp(
-                objToMove.transform.position,
-                targetPosition,
-                lerpSpeed * Time.deltaTime);
-            objToMove.transform.rotation = Quaternion.Slerp(
-                objToMove.transform.rotation,
-                targetRotation,
-                lerpSpeed * Time.deltaTime);
+        var timePassed = 0f;
 
-            if (Quaternion.Angle(objToMove.transform.rotation, targetRotation) < 0.1f
-                && ((objToMove.transform.position - targetPosition).sqrMagnitude < 0.1f))
+        while (!posReached)
+        {
+            timePassed += Time.deltaTime / timeTaken;
+
+            objToMove.transform.position = Vector3.Lerp(
+                oriPos,
+                targetPosition,
+                timePassed);
+            objToMove.transform.rotation = Quaternion.Slerp(
+                oriRot,
+                targetRotation,
+                timePassed);
+
+            if (timePassed >= 1)
             {
                 posReached = true;
             }
 
             yield return null;
-        }
-
-        if (listIndex < 0)
-        {
-            Debug.Log("Event Revert Effect bad applied");
         }
 
         erCameraEffect.End = true;
@@ -978,26 +1061,32 @@ public class StoryLineInstance : MonoBehaviour
     private IEnumerator MovingStoryCamera(CameraStoryRevert srCameraEffect)
     {
         var objToMove = Camera.main;
-        var lerpSpeed = srCameraEffect.SrLerpSpeed;
 
+        var timeTaken = srCameraEffect.TimeTaken;
+
+        var oriPos = objToMove.transform.position;
+        var oriRot = objToMove.transform.rotation;
         var targetRotation = this.camLastRot[0];
         var targetPosition = this.camLastPos[0];
 
         var posReached = false;
 
+        var timePassed = 0f;
+
         while (!posReached)
         {
-            objToMove.transform.position = Vector3.Lerp(
-                objToMove.transform.position,
-                targetPosition,
-                lerpSpeed * Time.deltaTime);
-            objToMove.transform.rotation = Quaternion.Slerp(
-                objToMove.transform.rotation,
-                targetRotation,
-                lerpSpeed * Time.deltaTime);
+            timePassed += Time.deltaTime / timeTaken;
 
-            if (Quaternion.Angle(objToMove.transform.rotation, targetRotation) < 0.1f
-                && ((objToMove.transform.position - targetPosition).sqrMagnitude < 0.1f))
+            objToMove.transform.position = Vector3.Lerp(
+                oriPos,
+                targetPosition,
+                timePassed);
+            objToMove.transform.rotation = Quaternion.Slerp(
+                oriRot,
+                targetRotation,
+                timePassed);
+
+            if (timePassed >= 1)
             {
                 posReached = true;
             }
@@ -1015,7 +1104,7 @@ public class StoryLineInstance : MonoBehaviour
         var timer = 0.0f;
         var originalCameraRot = Camera.main.transform.rotation;
 
-        while (shakingCameraEffect.ShakingDuration > timer)
+        while (shakingCameraEffect.TimeTaken > timer)
         {
             var rotationAmount = Random.insideUnitSphere * shakingCameraEffect.ShakingPower;
             rotationAmount.z = 0;
@@ -1027,9 +1116,16 @@ public class StoryLineInstance : MonoBehaviour
             yield return null;
         }
 
-        while (Quaternion.Angle(Camera.main.transform.rotation, originalCameraRot) > 0.1f)
+
+        var oriRot = Camera.main.transform.rotation;
+        var backToPos = 0.5f;
+        var timePassed = 0f;
+
+        while (timePassed <= 1)
         {
-            Camera.main.transform.rotation = Quaternion.Slerp(Camera.main.transform.rotation, originalCameraRot, Time.deltaTime * shakingCameraEffect.ShakingRoughness);
+            timePassed += Time.deltaTime / backToPos;
+
+            Camera.main.transform.rotation = Quaternion.Slerp(oriRot, originalCameraRot, timePassed);
 
             yield return null;
         }
@@ -1138,12 +1234,22 @@ public class StoryLineInstance : MonoBehaviour
 
     private void PlayObjMovingEffect(ObjectMoving effectToPlay)
     {
-        this.StartCoroutine(this.MovingObject(effectToPlay));
+        if (effectToPlay.TimeTaken == 0)
+        {
+            effectToPlay.GbToMove.transform.position = effectToPlay.GbTarget.transform.position;
+            effectToPlay.GbToMove.transform.rotation = effectToPlay.GbTarget.transform.rotation;
+            effectToPlay.End = true;
+            this.effectCounter++;
+        }
+        else
+        {
+            this.StartCoroutine(this.MovingObject(effectToPlay));
+        }
     }
 
     private void PlayObjActiEffect(ObjectActivation effectToPlay)
     {
-        if (effectToPlay.Time == 0)
+        if (effectToPlay.Time == 0 && effectToPlay.FadingInTime == 0 && effectToPlay.FadingOutTime == 0)
         {
             effectToPlay.GbRef.SetActive(true);
             effectToPlay.End = true;
@@ -1157,7 +1263,7 @@ public class StoryLineInstance : MonoBehaviour
 
     private void PlayObjDeActiEffect(ObjectDeActivation effectToPlay)
     {
-        if (effectToPlay.Time == 0)
+        if (effectToPlay.Time == 0 && effectToPlay.FadingOutTime == 0)
         {
             effectToPlay.GbRef.SetActive(false);
             effectToPlay.End = true;
@@ -1171,7 +1277,7 @@ public class StoryLineInstance : MonoBehaviour
 
     private void PlayObjRotateEffect(ObjectRotateTo effectToPlay)
     {
-        if (effectToPlay.LerpSpeed == 0)
+        if (effectToPlay.TimeTaken == 0)
         {
             effectToPlay.ObjectToRotate.transform.LookAt(effectToPlay.Target.transform);
             effectToPlay.End = true;
@@ -1193,30 +1299,31 @@ public class StoryLineInstance : MonoBehaviour
     {
         var whereToMove = movingObjEffect.GbTarget;
         var objToMove = movingObjEffect.GbToMove;
-        var lerpSpeed = movingObjEffect.LerpSpeed;
+        var timeTaken = movingObjEffect.TimeTaken;
 
+        var oriPos = objToMove.transform.position;
+        var oriRot = objToMove.transform.rotation;
         var targetRotation = whereToMove.transform.rotation;
         var targetPosition = whereToMove.transform.position;
 
         var posReached = false;
 
+        var timePassed = 0f;
+
         while (!posReached)
         {
+            timePassed += Time.deltaTime / timeTaken;
+
             objToMove.transform.position = Vector3.Lerp(
-                objToMove.transform.position,
+                oriPos,
                 targetPosition,
-                lerpSpeed * Time.deltaTime);
+                timePassed);
             objToMove.transform.rotation = Quaternion.Slerp(
-                objToMove.transform.rotation,
+                oriRot,
                 targetRotation,
-                lerpSpeed * Time.deltaTime);
+                timePassed);
 
-            var targetPosYFixed = targetPosition;
-
-            targetPosYFixed.y = this.player.transform.position.y;
-
-            if (Quaternion.Angle(objToMove.transform.rotation, targetRotation) < 0.1f
-                && ((objToMove.transform.position - targetPosYFixed).sqrMagnitude < 0.1f))
+            if (timePassed >= 1)
             {
                 posReached = true;
             }
@@ -1231,7 +1338,32 @@ public class StoryLineInstance : MonoBehaviour
 
     private IEnumerator TimedActivation(ObjectActivation actiObjEffect)
     {
+        var imTempLink = actiObjEffect.GbRef.GetComponent<MeshRenderer>();
+        var coOriginal = imTempLink.material.color;
+        coOriginal.a = 0;
+        imTempLink.material.color = coOriginal;
+        var coTempCopy = imTempLink.material.color;
+
         actiObjEffect.GbRef.SetActive(true);
+
+        if (actiObjEffect.FadingInTime == 0)
+        {
+            coTempCopy.a = 1;
+            imTempLink.material.color = coTempCopy;
+        }
+        else
+        {
+            var alphaDelta = 1f / actiObjEffect.FadingInTime;
+            while (imTempLink.material.color.a < 1)
+            {
+                coTempCopy.a += alphaDelta * Time.deltaTime;
+                imTempLink.material.color = coTempCopy;
+                yield return null;
+            }
+        }
+
+        coTempCopy.a = 1;
+        imTempLink.material.color = coTempCopy;
 
         var timer = 0.0f;
 
@@ -1241,7 +1373,27 @@ public class StoryLineInstance : MonoBehaviour
             yield return null;
         }
 
+        if (actiObjEffect.FadingOutTime == 0)
+        {
+            coTempCopy.a = 0;
+            imTempLink.material.color = coTempCopy;
+        }
+        else
+        {
+            var alphaDelta = 1f / actiObjEffect.FadingOutTime;
+
+            while (imTempLink.material.color.a > 0)
+            {
+                coTempCopy.a -= alphaDelta * Time.deltaTime;
+                imTempLink.material.color = coTempCopy;
+                yield return null;
+            }
+        }
+
+
         actiObjEffect.GbRef.SetActive(false);
+        coOriginal.a = 1;
+        imTempLink.material.color = coOriginal;
         actiObjEffect.End = true;
         this.effectCounter++;
         GameController.Debugging("Effect Counter", this.effectCounter);
@@ -1249,7 +1401,9 @@ public class StoryLineInstance : MonoBehaviour
 
     private IEnumerator TimedDeActivation(ObjectDeActivation deActiObjEffect)
     {
-        deActiObjEffect.GbRef.SetActive(false);
+        var imTempLink = deActiObjEffect.GbRef.GetComponent<MeshRenderer>();
+        var coOriginal = imTempLink.material.color;
+        var coTempCopy = imTempLink.material.color;
 
         var timer = 0.0f;
 
@@ -1259,7 +1413,26 @@ public class StoryLineInstance : MonoBehaviour
             yield return null;
         }
 
-        deActiObjEffect.GbRef.SetActive(true);
+        if (deActiObjEffect.FadingOutTime == 0)
+        {
+            coTempCopy.a = 0;
+            imTempLink.material.color = coTempCopy;
+        }
+        else
+        {
+            var alphaDelta = 1f / deActiObjEffect.FadingOutTime;
+
+            while (imTempLink.material.color.a > 0)
+            {
+                coTempCopy.a -= alphaDelta * Time.deltaTime;
+                imTempLink.material.color = coTempCopy;
+                yield return null;
+            }
+        }
+
+
+        deActiObjEffect.GbRef.SetActive(false);
+        imTempLink.material.color = coOriginal;
         deActiObjEffect.End = true;
         this.effectCounter++;
         GameController.Debugging("Effect Counter", this.effectCounter);
@@ -1268,20 +1441,25 @@ public class StoryLineInstance : MonoBehaviour
     private IEnumerator ObjectRotation(ObjectRotateTo objRotEffect)
     {
         var objToMove = objRotEffect.ObjectToRotate;
-        var lerpSpeed = objRotEffect.LerpSpeed;
-        
+        var timeTaken = objRotEffect.TimeTaken;
+
+        var oriRot = objToMove.transform.rotation;
         var targetRotation = objRotEffect.Target.transform.rotation;
 
         var posReached = false;
 
+        var timePassed = 0.0f;
+
         while (!posReached)
         {
-            objToMove.transform.rotation = Quaternion.Slerp(
-                objToMove.transform.rotation,
-                targetRotation,
-                lerpSpeed * Time.deltaTime);
+            timePassed += Time.deltaTime / timeTaken;
 
-            if (Quaternion.Angle(objToMove.transform.rotation, targetRotation) < 0.1f)
+            objToMove.transform.rotation = Quaternion.Slerp(
+                oriRot,
+                targetRotation,
+                timePassed);
+
+            if (timePassed >= 1)
             {
                 posReached = true;
             }
@@ -1323,6 +1501,8 @@ public class StoryLineInstance : MonoBehaviour
 
         while (!baloonEffect.End)
         {
+
+
             gbTargetTemp.transform.LookAt(Camera.main.transform);
             npcTempRef.transform.rotation = Quaternion.Slerp(npcTempRef.transform.rotation, gbTargetTemp.transform.rotation, Time.deltaTime);
             yield return null;
@@ -1398,13 +1578,11 @@ public class StoryLineInstance : MonoBehaviour
         }
     }
 
-
     private void PlayUiObjMovingEffect(UiObjectMoving effectToPlay)
     {
-        if (effectToPlay.LerpSpeed == 0)
+        if (effectToPlay.TimeTaken == 0)
         {
-            effectToPlay.GbToMove.GetComponent<RectTransform>().position =
-                effectToPlay.GbTarget.GetComponent<RectTransform>().position;
+            effectToPlay.GbToMove.GetComponent<RectTransform>().position = effectToPlay.GbTarget.GetComponent<RectTransform>().position;
             effectToPlay.End = true;
             this.effectCounter++;
         }
@@ -1416,7 +1594,7 @@ public class StoryLineInstance : MonoBehaviour
 
     private void PlayUiObjActiEffect(UiObjectActivation effectToPlay)
     {
-        if (effectToPlay.Time == 0)
+        if (effectToPlay.Time == 0 && effectToPlay.FadingInTime == 0 && effectToPlay.FadingOutTime == 0)
         {
             effectToPlay.GbRef.SetActive(true);
             effectToPlay.End = true;
@@ -1431,7 +1609,7 @@ public class StoryLineInstance : MonoBehaviour
 
     private void PlayUiObjDeActiEffect(UiObjectDeActivation effectToPlay)
     {
-        if (effectToPlay.Time == 0 && effectToPlay.FadingTime == 0)
+        if (effectToPlay.Time == 0 && effectToPlay.FadingOutTime == 0)
         {
             effectToPlay.GbRef.SetActive(false);
             effectToPlay.End = true;
@@ -1451,6 +1629,8 @@ public class StoryLineInstance : MonoBehaviour
         if (initialSplit.Length % 3 != 0)
         {
             GameController.Debugging("Txt File lines are not a multiple of 3");
+            effectToPlay.End = true;
+            this.effectCounter++;
             return;
         }
 
@@ -1522,7 +1702,33 @@ public class StoryLineInstance : MonoBehaviour
 
     private IEnumerator UiObjTimedActi(UiObjectActivation uiObjActiEffect)
     {
+        var imTempLink = uiObjActiEffect.GbRef.GetComponent<Image>();
+        var coOriginal = imTempLink.color;
+        coOriginal.a = 0;
+        imTempLink.color = coOriginal;
+        var coTempCopy = imTempLink.color;
+
         uiObjActiEffect.GbRef.SetActive(true);
+
+        if (uiObjActiEffect.FadingInTime == 0)
+        {
+            coTempCopy.a = 1;
+            imTempLink.color = coTempCopy;
+        }
+        else
+        {
+            var alphaDelta = 1f / uiObjActiEffect.FadingInTime;
+
+            while (imTempLink.color.a < 1)
+            {
+                coTempCopy.a += alphaDelta * Time.deltaTime;
+                imTempLink.color = coTempCopy;
+                yield return null;
+            }
+        }
+
+        coTempCopy.a = 1;
+        imTempLink.color = coTempCopy;
 
         var timer = 0.0f;
 
@@ -1532,21 +1738,26 @@ public class StoryLineInstance : MonoBehaviour
             yield return null;
         }
 
-        var imTempLink = uiObjActiEffect.GbRef.GetComponent<Image>();
-        var coOriginal = imTempLink.color;
-        var coTempCopy = imTempLink.color;
-
-        var alphaDelta = coTempCopy.a / uiObjActiEffect.FadingTime;
-
-        while (imTempLink.color.a > 0)
+        if (uiObjActiEffect.FadingOutTime == 0)
         {
-            coTempCopy.a -= alphaDelta * Time.deltaTime;
+            coTempCopy.a = 0;
             imTempLink.color = coTempCopy;
-            //uiObjActiEffect.GbRef.GetComponent<Image>().color = imTempLink.color;
-            yield return null;
+        }
+        else
+        {
+            var alphaDelta = 1f / uiObjActiEffect.FadingOutTime;
+
+            while (imTempLink.color.a > 0)
+            {
+                coTempCopy.a -= alphaDelta * Time.deltaTime;
+                imTempLink.color = coTempCopy;
+                yield return null;
+            }
         }
 
+
         uiObjActiEffect.GbRef.SetActive(false);
+        coOriginal.a = 1;
         imTempLink.color = coOriginal;
         uiObjActiEffect.End = true;
         this.effectCounter++;
@@ -1555,7 +1766,11 @@ public class StoryLineInstance : MonoBehaviour
 
     private IEnumerator UiObjTimedDeActi(UiObjectDeActivation uiObjDeActiEffect)
     {
-       
+
+        var imTempLink = uiObjDeActiEffect.GbRef.GetComponent<Image>();
+        var coOriginal = imTempLink.color;
+        var coTempCopy = imTempLink.color;
+
         var timer = 0.0f;
 
         while (timer < uiObjDeActiEffect.Time)
@@ -1564,19 +1779,23 @@ public class StoryLineInstance : MonoBehaviour
             yield return null;
         }
 
-        var imTempLink = uiObjDeActiEffect.GbRef.GetComponent<Image>();
-        var coOriginal = imTempLink.color;
-        var coTempCopy = imTempLink.color;
-
-        var alphaDelta = coTempCopy.a / uiObjDeActiEffect.FadingTime;
-
-        while (imTempLink.color.a > 0)
+        if (uiObjDeActiEffect.FadingOutTime == 0)
         {
-            coTempCopy.a -= alphaDelta * Time.deltaTime;
+            coTempCopy.a = 0;
             imTempLink.color = coTempCopy;
-            //uiObjDeActiEffect.GbRef.GetComponent<Image>().color = imTempLink.color;
-            yield return null;
         }
+        else
+        {
+            var alphaDelta = 1f / uiObjDeActiEffect.FadingOutTime;
+
+            while (imTempLink.color.a > 0)
+            {
+                coTempCopy.a -= alphaDelta * Time.deltaTime;
+                imTempLink.color = coTempCopy;
+                yield return null;
+            }
+        }
+
 
         uiObjDeActiEffect.GbRef.SetActive(false);
         imTempLink.color = coOriginal;
@@ -1589,18 +1808,25 @@ public class StoryLineInstance : MonoBehaviour
     {
         var whereToMove = uiObjMovEffect.GbTarget.GetComponent<RectTransform>();
         var objToMove = uiObjMovEffect.GbToMove.GetComponent<RectTransform>();
-        var lerpSpeed = uiObjMovEffect.LerpSpeed;
+
+        var timeTaken = uiObjMovEffect.TimeTaken;
+
+        var oriPos = whereToMove.position;
 
         var posReached = false;
 
+        var timePassed = 0.0f;
+
         while (!posReached)
         {
-            objToMove.position = Vector3.Lerp(
-                objToMove.position,
-                whereToMove.position,
-                lerpSpeed * Time.deltaTime);
+            timePassed += Time.deltaTime / timeTaken;
 
-            if ((objToMove.transform.position - whereToMove.position).sqrMagnitude < 0.1f)
+            objToMove.position = Vector3.Lerp(
+                oriPos,
+                whereToMove.position,
+                timePassed);
+
+            if (timePassed >= 1)
             {
                 posReached = true;
             }
