@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.UI;
 
 using Random = UnityEngine.Random;
 
@@ -214,6 +215,7 @@ public class UiEffect
 [Serializable]
 public class UiObjectMoving
 {
+    public bool End;
     public GameObject GbToMove;
     public GameObject GbTarget;
     public float LerpSpeed;
@@ -222,6 +224,7 @@ public class UiObjectMoving
 [Serializable]
 public class UiObjectActivation
 {
+    public bool End;
     public GameObject GbRef;
     public float Time;
     public float FadingTime;
@@ -230,6 +233,7 @@ public class UiObjectActivation
 [Serializable]
 public class UiObjectDeActivation
 {
+    public bool End;
     public GameObject GbRef;
     public float Time;
     public float FadingTime;
@@ -1397,18 +1401,46 @@ public class StoryLineInstance : MonoBehaviour
 
     private void PlayUiObjMovingEffect(UiObjectMoving effectToPlay)
     {
-
+        if (effectToPlay.LerpSpeed == 0)
+        {
+            effectToPlay.GbToMove.GetComponent<RectTransform>().position =
+                effectToPlay.GbTarget.GetComponent<RectTransform>().position;
+            effectToPlay.End = true;
+            this.effectCounter++;
+        }
+        else
+        {
+            this.StartCoroutine(this.UiObjMoving(effectToPlay));
+        }
     }
 
     private void PlayUiObjActiEffect(UiObjectActivation effectToPlay)
     {
-
+        if (effectToPlay.Time == 0)
+        {
+            effectToPlay.GbRef.SetActive(true);
+            effectToPlay.End = true;
+            this.effectCounter++;
+        }
+        else
+        {
+            this.StartCoroutine(this.UiObjTimedActi(effectToPlay));
+        }
 
     }
 
     private void PlayUiObjDeActiEffect(UiObjectDeActivation effectToPlay)
     {
-
+        if (effectToPlay.Time == 0 && effectToPlay.FadingTime == 0)
+        {
+            effectToPlay.GbRef.SetActive(false);
+            effectToPlay.End = true;
+            this.effectCounter++;
+        }
+        else
+        {
+            this.StartCoroutine(this.UiObjTimedDeActi(effectToPlay));
+        }
     }
 
     private void PlayDialogueEffect(UiDialogue effectToPlay)
@@ -1484,6 +1516,99 @@ public class StoryLineInstance : MonoBehaviour
 
         this.DialogueEnded.Invoke();
         dialogueEffect.End = true;
+        this.effectCounter++;
+        GameController.Debugging("Effect Counter", this.effectCounter);
+    }
+
+    private IEnumerator UiObjTimedActi(UiObjectActivation uiObjActiEffect)
+    {
+        uiObjActiEffect.GbRef.SetActive(true);
+
+        var timer = 0.0f;
+
+        while (timer < uiObjActiEffect.Time)
+        {
+            timer += Time.deltaTime;
+            yield return null;
+        }
+
+        var imTempLink = uiObjActiEffect.GbRef.GetComponent<Image>();
+        var coOriginal = imTempLink.color;
+        var coTempCopy = imTempLink.color;
+
+        var alphaDelta = coTempCopy.a / uiObjActiEffect.FadingTime;
+
+        while (imTempLink.color.a > 0)
+        {
+            coTempCopy.a -= alphaDelta * Time.deltaTime;
+            imTempLink.color = coTempCopy;
+            //uiObjActiEffect.GbRef.GetComponent<Image>().color = imTempLink.color;
+            yield return null;
+        }
+
+        uiObjActiEffect.GbRef.SetActive(false);
+        imTempLink.color = coOriginal;
+        uiObjActiEffect.End = true;
+        this.effectCounter++;
+        GameController.Debugging("Effect Counter", this.effectCounter);
+    }
+
+    private IEnumerator UiObjTimedDeActi(UiObjectDeActivation uiObjDeActiEffect)
+    {
+       
+        var timer = 0.0f;
+
+        while (timer < uiObjDeActiEffect.Time)
+        {
+            timer += Time.deltaTime;
+            yield return null;
+        }
+
+        var imTempLink = uiObjDeActiEffect.GbRef.GetComponent<Image>();
+        var coOriginal = imTempLink.color;
+        var coTempCopy = imTempLink.color;
+
+        var alphaDelta = coTempCopy.a / uiObjDeActiEffect.FadingTime;
+
+        while (imTempLink.color.a > 0)
+        {
+            coTempCopy.a -= alphaDelta * Time.deltaTime;
+            imTempLink.color = coTempCopy;
+            //uiObjDeActiEffect.GbRef.GetComponent<Image>().color = imTempLink.color;
+            yield return null;
+        }
+
+        uiObjDeActiEffect.GbRef.SetActive(false);
+        imTempLink.color = coOriginal;
+        uiObjDeActiEffect.End = true;
+        this.effectCounter++;
+        GameController.Debugging("Effect Counter", this.effectCounter);
+    }
+
+    private IEnumerator UiObjMoving(UiObjectMoving uiObjMovEffect)
+    {
+        var whereToMove = uiObjMovEffect.GbTarget.GetComponent<RectTransform>();
+        var objToMove = uiObjMovEffect.GbToMove.GetComponent<RectTransform>();
+        var lerpSpeed = uiObjMovEffect.LerpSpeed;
+
+        var posReached = false;
+
+        while (!posReached)
+        {
+            objToMove.position = Vector3.Lerp(
+                objToMove.position,
+                whereToMove.position,
+                lerpSpeed * Time.deltaTime);
+
+            if ((objToMove.transform.position - whereToMove.position).sqrMagnitude < 0.1f)
+            {
+                posReached = true;
+            }
+
+            yield return null;
+        }
+
+        uiObjMovEffect.End = true;
         this.effectCounter++;
         GameController.Debugging("Effect Counter", this.effectCounter);
     }
