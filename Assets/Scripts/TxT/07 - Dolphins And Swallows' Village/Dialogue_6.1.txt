@@ -1,5 +1,5 @@
-Orihime/Right/I must ask you one last favor.*Could you please reach father and show him what Hikoboshi and I gave to you?
-Iki/Left/. . .
-Orihime/Right/He is a very prideful and cussed swallow.*He will not easily admit his mistake, but you shall not give up.*Our love is in your hands.
-Iki/Left/. . .
-Orihime/Right/I mean. . .*Figuratively.
+Orihime/Right/Orihime_Standard/I must ask you one last favor.*Could you please reach father and show him what Hikoboshi and I gave to you?
+Iki/Left/Iki_Standard/. . .
+Orihime/Right/Orihime_Concerned/He is a very prideful and cussed swallow.*He will not easily admit his mistake, but you shall not give up.*Our love is in your hands.
+Iki/Left/Iki_Standard/. . .
+Orihime/Right/Orihime_Blushing/I mean. . .*Figuratively.

@@ -1,2 +1,2 @@
-Old Frog/Left/Go away, youngster, don’t disturb me while I’m enjoying this spectacle!
-Iki/Right/. . .
+Old Frog/Left/OldFrog_Standard/Go away, youngster, don’t disturb me while I’m enjoying this spectacle!
+Iki/Right/Iki_Standard/. . .

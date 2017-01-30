@@ -1,4 +1,4 @@
-Koi/Right/Wooooow! You can transform into an armadillo too! 
-Iki/Left/. . .
-Koi/Right/. . .
-Koi/Right/You’re going to come with me, aren’t you?
+Koi/Right/Koi_Astonished/Wooooow! You can transform into an armadillo too! 
+Iki/Left/Iki_Standard/. . .
+Koi/Right/Koi_Pensive/. . .
+Koi/Right/Koi_Standard/You’re going to come with me, aren’t you?
