@@ -1,0 +1,648 @@
+fileFormatVersion: 2
+guid: 5decf9775d3505e4db67c1a3b7a8fc6b
+timeCreated: 1485794427
+licenseType: Free
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: Bone003
+    100002: Coda 01_Bone
+    100004: Coda 02_Bone
+    100006: Coda_Fine_Bone
+    100008: Collo_Bone
+    100010: Collo_Fine_Bone
+    100012: Dolphine
+    100014: Dummy001
+    100016: Dummy002
+    100018: //RootNode
+    100020: Pinna SX 01_Bone
+    100022: Pinna SX 01_Bone(mirrored)
+    100024: Pinna SX 02_Bone
+    100026: Pinna SX 02_Bone(mirrored)
+    100028: Pinna SX 03_Bone
+    100030: Pinna SX 03_Bone(mirrored)
+    100032: Pinna SX_Fine_Bone
+    100034: Pinna SX_Fine_Bone(mirrored)
+    100036: Schiena 01_Bone
+    100038: Schiena 02_Bone
+    100040: Schiena 03_Bone
+    400000: Bone003
+    400002: Coda 01_Bone
+    400004: Coda 02_Bone
+    400006: Coda_Fine_Bone
+    400008: Collo_Bone
+    400010: Collo_Fine_Bone
+    400012: Dolphine
+    400014: Dummy001
+    400016: Dummy002
+    400018: //RootNode
+    400020: Pinna SX 01_Bone
+    400022: Pinna SX 01_Bone(mirrored)
+    400024: Pinna SX 02_Bone
+    400026: Pinna SX 02_Bone(mirrored)
+    400028: Pinna SX 03_Bone
+    400030: Pinna SX 03_Bone(mirrored)
+    400032: Pinna SX_Fine_Bone
+    400034: Pinna SX_Fine_Bone(mirrored)
+    400036: Schiena 01_Bone
+    400038: Schiena 02_Bone
+    400040: Schiena 03_Bone
+    4300000: Dolphine
+    7400000: Take 001
+    7400002: iki_dolphine_idle
+    7400004: iki_dolphin_swim
+    7400006: iki_dolphin_jump-start
+    7400008: iki_dolphin_jump-fly
+    7400010: iki_dolphin_jump-end
+    7400012: iki_dolphin_magikarp
+    9500000: //RootNode
+    13700000: Dolphine
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: Take 001
+      takeName: Take 001
+      firstFrame: 0
+      lastFrame: 197
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Dolphine
+        weight: 1
+      - path: Dummy002
+        weight: 1
+      - path: Dummy002/Dummy001
+        weight: 1
+      - path: Dummy002/Dummy001/Schiena 03_Bone
+        weight: 1
+      - path: Dummy002/Dummy001/Schiena 03_Bone/Coda 01_Bone
+        weight: 1
+      - path: Dummy002/Dummy001/Schiena 03_Bone/Coda 01_Bone/Coda 02_Bone
+        weight: 1
+      - path: Dummy002/Dummy001/Schiena 03_Bone/Coda 01_Bone/Coda 02_Bone/Bone003
+        weight: 1
+      - path: Dummy002/Dummy001/Schiena 03_Bone/Coda 01_Bone/Coda 02_Bone/Bone003/Coda_Fine_Bone
+        weight: 1
+      - path: Dummy002/Dummy001/Schiena 03_Bone/Pinna SX 01_Bone
+        weight: 1
+      - path: Dummy002/Dummy001/Schiena 03_Bone/Pinna SX 01_Bone/Pinna SX 02_Bone
+        weight: 1
+      - path: Dummy002/Dummy001/Schiena 03_Bone/Pinna SX 01_Bone/Pinna SX 02_Bone/Pinna
+          SX 03_Bone
+        weight: 1
+      - path: Dummy002/Dummy001/Schiena 03_Bone/Pinna SX 01_Bone/Pinna SX 02_Bone/Pinna
+          SX 03_Bone/Pinna SX_Fine_Bone
+        weight: 1
+      - path: Dummy002/Dummy001/Schiena 03_Bone/Pinna SX 01_Bone(mirrored)
+        weight: 1
+      - path: Dummy002/Dummy001/Schiena 03_Bone/Pinna SX 01_Bone(mirrored)/Pinna SX
+          02_Bone(mirrored)
+        weight: 1
+      - path: Dummy002/Dummy001/Schiena 03_Bone/Pinna SX 01_Bone(mirrored)/Pinna SX
+          02_Bone(mirrored)/Pinna SX 03_Bone(mirrored)
+        weight: 1
+      - path: Dummy002/Dummy001/Schiena 03_Bone/Pinna SX 01_Bone(mirrored)/Pinna SX
+          02_Bone(mirrored)/Pinna SX 03_Bone(mirrored)/Pinna SX_Fine_Bone(mirrored)
+        weight: 1
+      - path: Dummy002/Dummy001/Schiena 03_Bone/Schiena 02_Bone
+        weight: 1
+      - path: Dummy002/Dummy001/Schiena 03_Bone/Schiena 02_Bone/Schiena 01_Bone
+        weight: 1
+      - path: Dummy002/Dummy001/Schiena 03_Bone/Schiena 02_Bone/Schiena 01_Bone/Collo_Bone
+        weight: 1
+      - path: Dummy002/Dummy001/Schiena 03_Bone/Schiena 02_Bone/Schiena 01_Bone/Collo_Bone/Collo_Fine_Bone
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: iki_dolphine_idle
+      takeName: Take 001
+      firstFrame: 11
+      lastFrame: 35
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Dolphine
+        weight: 1
+      - path: Dummy002
+        weight: 1
+      - path: Dummy002/Dummy001
+        weight: 1
+      - path: Dummy002/Dummy001/Schiena 03_Bone
+        weight: 1
+      - path: Dummy002/Dummy001/Schiena 03_Bone/Coda 01_Bone
+        weight: 1
+      - path: Dummy002/Dummy001/Schiena 03_Bone/Coda 01_Bone/Coda 02_Bone
+        weight: 1
+      - path: Dummy002/Dummy001/Schiena 03_Bone/Coda 01_Bone/Coda 02_Bone/Bone003
+        weight: 1
+      - path: Dummy002/Dummy001/Schiena 03_Bone/Coda 01_Bone/Coda 02_Bone/Bone003/Coda_Fine_Bone
+        weight: 1
+      - path: Dummy002/Dummy001/Schiena 03_Bone/Pinna SX 01_Bone
+        weight: 1
+      - path: Dummy002/Dummy001/Schiena 03_Bone/Pinna SX 01_Bone/Pinna SX 02_Bone
+        weight: 1
+      - path: Dummy002/Dummy001/Schiena 03_Bone/Pinna SX 01_Bone/Pinna SX 02_Bone/Pinna
+          SX 03_Bone
+        weight: 1
+      - path: Dummy002/Dummy001/Schiena 03_Bone/Pinna SX 01_Bone/Pinna SX 02_Bone/Pinna
+          SX 03_Bone/Pinna SX_Fine_Bone
+        weight: 1
+      - path: Dummy002/Dummy001/Schiena 03_Bone/Pinna SX 01_Bone(mirrored)
+        weight: 1
+      - path: Dummy002/Dummy001/Schiena 03_Bone/Pinna SX 01_Bone(mirrored)/Pinna SX
+          02_Bone(mirrored)
+        weight: 1
+      - path: Dummy002/Dummy001/Schiena 03_Bone/Pinna SX 01_Bone(mirrored)/Pinna SX
+          02_Bone(mirrored)/Pinna SX 03_Bone(mirrored)
+        weight: 1
+      - path: Dummy002/Dummy001/Schiena 03_Bone/Pinna SX 01_Bone(mirrored)/Pinna SX
+          02_Bone(mirrored)/Pinna SX 03_Bone(mirrored)/Pinna SX_Fine_Bone(mirrored)
+        weight: 1
+      - path: Dummy002/Dummy001/Schiena 03_Bone/Schiena 02_Bone
+        weight: 1
+      - path: Dummy002/Dummy001/Schiena 03_Bone/Schiena 02_Bone/Schiena 01_Bone
+        weight: 1
+      - path: Dummy002/Dummy001/Schiena 03_Bone/Schiena 02_Bone/Schiena 01_Bone/Collo_Bone
+        weight: 1
+      - path: Dummy002/Dummy001/Schiena 03_Bone/Schiena 02_Bone/Schiena 01_Bone/Collo_Bone/Collo_Fine_Bone
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: iki_dolphin_swim
+      takeName: Take 001
+      firstFrame: 48
+      lastFrame: 73
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Dolphine
+        weight: 1
+      - path: Dummy002
+        weight: 1
+      - path: Dummy002/Dummy001
+        weight: 1
+      - path: Dummy002/Dummy001/Schiena 03_Bone
+        weight: 1
+      - path: Dummy002/Dummy001/Schiena 03_Bone/Coda 01_Bone
+        weight: 1
+      - path: Dummy002/Dummy001/Schiena 03_Bone/Coda 01_Bone/Coda 02_Bone
+        weight: 1
+      - path: Dummy002/Dummy001/Schiena 03_Bone/Coda 01_Bone/Coda 02_Bone/Bone003
+        weight: 1
+      - path: Dummy002/Dummy001/Schiena 03_Bone/Coda 01_Bone/Coda 02_Bone/Bone003/Coda_Fine_Bone
+        weight: 1
+      - path: Dummy002/Dummy001/Schiena 03_Bone/Pinna SX 01_Bone
+        weight: 1
+      - path: Dummy002/Dummy001/Schiena 03_Bone/Pinna SX 01_Bone/Pinna SX 02_Bone
+        weight: 1
+      - path: Dummy002/Dummy001/Schiena 03_Bone/Pinna SX 01_Bone/Pinna SX 02_Bone/Pinna
+          SX 03_Bone
+        weight: 1
+      - path: Dummy002/Dummy001/Schiena 03_Bone/Pinna SX 01_Bone/Pinna SX 02_Bone/Pinna
+          SX 03_Bone/Pinna SX_Fine_Bone
+        weight: 1
+      - path: Dummy002/Dummy001/Schiena 03_Bone/Pinna SX 01_Bone(mirrored)
+        weight: 1
+      - path: Dummy002/Dummy001/Schiena 03_Bone/Pinna SX 01_Bone(mirrored)/Pinna SX
+          02_Bone(mirrored)
+        weight: 1
+      - path: Dummy002/Dummy001/Schiena 03_Bone/Pinna SX 01_Bone(mirrored)/Pinna SX
+          02_Bone(mirrored)/Pinna SX 03_Bone(mirrored)
+        weight: 1
+      - path: Dummy002/Dummy001/Schiena 03_Bone/Pinna SX 01_Bone(mirrored)/Pinna SX
+          02_Bone(mirrored)/Pinna SX 03_Bone(mirrored)/Pinna SX_Fine_Bone(mirrored)
+        weight: 1
+      - path: Dummy002/Dummy001/Schiena 03_Bone/Schiena 02_Bone
+        weight: 1
+      - path: Dummy002/Dummy001/Schiena 03_Bone/Schiena 02_Bone/Schiena 01_Bone
+        weight: 1
+      - path: Dummy002/Dummy001/Schiena 03_Bone/Schiena 02_Bone/Schiena 01_Bone/Collo_Bone
+        weight: 1
+      - path: Dummy002/Dummy001/Schiena 03_Bone/Schiena 02_Bone/Schiena 01_Bone/Collo_Bone/Collo_Fine_Bone
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: iki_dolphin_jump-start
+      takeName: Take 001
+      firstFrame: 84
+      lastFrame: 109
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Dolphine
+        weight: 1
+      - path: Dummy002
+        weight: 1
+      - path: Dummy002/Dummy001
+        weight: 1
+      - path: Dummy002/Dummy001/Schiena 03_Bone
+        weight: 1
+      - path: Dummy002/Dummy001/Schiena 03_Bone/Coda 01_Bone
+        weight: 1
+      - path: Dummy002/Dummy001/Schiena 03_Bone/Coda 01_Bone/Coda 02_Bone
+        weight: 1
+      - path: Dummy002/Dummy001/Schiena 03_Bone/Coda 01_Bone/Coda 02_Bone/Bone003
+        weight: 1
+      - path: Dummy002/Dummy001/Schiena 03_Bone/Coda 01_Bone/Coda 02_Bone/Bone003/Coda_Fine_Bone
+        weight: 1
+      - path: Dummy002/Dummy001/Schiena 03_Bone/Pinna SX 01_Bone
+        weight: 1
+      - path: Dummy002/Dummy001/Schiena 03_Bone/Pinna SX 01_Bone/Pinna SX 02_Bone
+        weight: 1
+      - path: Dummy002/Dummy001/Schiena 03_Bone/Pinna SX 01_Bone/Pinna SX 02_Bone/Pinna
+          SX 03_Bone
+        weight: 1
+      - path: Dummy002/Dummy001/Schiena 03_Bone/Pinna SX 01_Bone/Pinna SX 02_Bone/Pinna
+          SX 03_Bone/Pinna SX_Fine_Bone
+        weight: 1
+      - path: Dummy002/Dummy001/Schiena 03_Bone/Pinna SX 01_Bone(mirrored)
+        weight: 1
+      - path: Dummy002/Dummy001/Schiena 03_Bone/Pinna SX 01_Bone(mirrored)/Pinna SX
+          02_Bone(mirrored)
+        weight: 1
+      - path: Dummy002/Dummy001/Schiena 03_Bone/Pinna SX 01_Bone(mirrored)/Pinna SX
+          02_Bone(mirrored)/Pinna SX 03_Bone(mirrored)
+        weight: 1
+      - path: Dummy002/Dummy001/Schiena 03_Bone/Pinna SX 01_Bone(mirrored)/Pinna SX
+          02_Bone(mirrored)/Pinna SX 03_Bone(mirrored)/Pinna SX_Fine_Bone(mirrored)
+        weight: 1
+      - path: Dummy002/Dummy001/Schiena 03_Bone/Schiena 02_Bone
+        weight: 1
+      - path: Dummy002/Dummy001/Schiena 03_Bone/Schiena 02_Bone/Schiena 01_Bone
+        weight: 1
+      - path: Dummy002/Dummy001/Schiena 03_Bone/Schiena 02_Bone/Schiena 01_Bone/Collo_Bone
+        weight: 1
+      - path: Dummy002/Dummy001/Schiena 03_Bone/Schiena 02_Bone/Schiena 01_Bone/Collo_Bone/Collo_Fine_Bone
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: iki_dolphin_jump-fly
+      takeName: Take 001
+      firstFrame: 110
+      lastFrame: 135
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Dolphine
+        weight: 1
+      - path: Dummy002
+        weight: 1
+      - path: Dummy002/Dummy001
+        weight: 1
+      - path: Dummy002/Dummy001/Schiena 03_Bone
+        weight: 1
+      - path: Dummy002/Dummy001/Schiena 03_Bone/Coda 01_Bone
+        weight: 1
+      - path: Dummy002/Dummy001/Schiena 03_Bone/Coda 01_Bone/Coda 02_Bone
+        weight: 1
+      - path: Dummy002/Dummy001/Schiena 03_Bone/Coda 01_Bone/Coda 02_Bone/Bone003
+        weight: 1
+      - path: Dummy002/Dummy001/Schiena 03_Bone/Coda 01_Bone/Coda 02_Bone/Bone003/Coda_Fine_Bone
+        weight: 1
+      - path: Dummy002/Dummy001/Schiena 03_Bone/Pinna SX 01_Bone
+        weight: 1
+      - path: Dummy002/Dummy001/Schiena 03_Bone/Pinna SX 01_Bone/Pinna SX 02_Bone
+        weight: 1
+      - path: Dummy002/Dummy001/Schiena 03_Bone/Pinna SX 01_Bone/Pinna SX 02_Bone/Pinna
+          SX 03_Bone
+        weight: 1
+      - path: Dummy002/Dummy001/Schiena 03_Bone/Pinna SX 01_Bone/Pinna SX 02_Bone/Pinna
+          SX 03_Bone/Pinna SX_Fine_Bone
+        weight: 1
+      - path: Dummy002/Dummy001/Schiena 03_Bone/Pinna SX 01_Bone(mirrored)
+        weight: 1
+      - path: Dummy002/Dummy001/Schiena 03_Bone/Pinna SX 01_Bone(mirrored)/Pinna SX
+          02_Bone(mirrored)
+        weight: 1
+      - path: Dummy002/Dummy001/Schiena 03_Bone/Pinna SX 01_Bone(mirrored)/Pinna SX
+          02_Bone(mirrored)/Pinna SX 03_Bone(mirrored)
+        weight: 1
+      - path: Dummy002/Dummy001/Schiena 03_Bone/Pinna SX 01_Bone(mirrored)/Pinna SX
+          02_Bone(mirrored)/Pinna SX 03_Bone(mirrored)/Pinna SX_Fine_Bone(mirrored)
+        weight: 1
+      - path: Dummy002/Dummy001/Schiena 03_Bone/Schiena 02_Bone
+        weight: 1
+      - path: Dummy002/Dummy001/Schiena 03_Bone/Schiena 02_Bone/Schiena 01_Bone
+        weight: 1
+      - path: Dummy002/Dummy001/Schiena 03_Bone/Schiena 02_Bone/Schiena 01_Bone/Collo_Bone
+        weight: 1
+      - path: Dummy002/Dummy001/Schiena 03_Bone/Schiena 02_Bone/Schiena 01_Bone/Collo_Bone/Collo_Fine_Bone
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: iki_dolphin_jump-end
+      takeName: Take 001
+      firstFrame: 136
+      lastFrame: 161
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Dolphine
+        weight: 1
+      - path: Dummy002
+        weight: 1
+      - path: Dummy002/Dummy001
+        weight: 1
+      - path: Dummy002/Dummy001/Schiena 03_Bone
+        weight: 1
+      - path: Dummy002/Dummy001/Schiena 03_Bone/Coda 01_Bone
+        weight: 1
+      - path: Dummy002/Dummy001/Schiena 03_Bone/Coda 01_Bone/Coda 02_Bone
+        weight: 1
+      - path: Dummy002/Dummy001/Schiena 03_Bone/Coda 01_Bone/Coda 02_Bone/Bone003
+        weight: 1
+      - path: Dummy002/Dummy001/Schiena 03_Bone/Coda 01_Bone/Coda 02_Bone/Bone003/Coda_Fine_Bone
+        weight: 1
+      - path: Dummy002/Dummy001/Schiena 03_Bone/Pinna SX 01_Bone
+        weight: 1
+      - path: Dummy002/Dummy001/Schiena 03_Bone/Pinna SX 01_Bone/Pinna SX 02_Bone
+        weight: 1
+      - path: Dummy002/Dummy001/Schiena 03_Bone/Pinna SX 01_Bone/Pinna SX 02_Bone/Pinna
+          SX 03_Bone
+        weight: 1
+      - path: Dummy002/Dummy001/Schiena 03_Bone/Pinna SX 01_Bone/Pinna SX 02_Bone/Pinna
+          SX 03_Bone/Pinna SX_Fine_Bone
+        weight: 1
+      - path: Dummy002/Dummy001/Schiena 03_Bone/Pinna SX 01_Bone(mirrored)
+        weight: 1
+      - path: Dummy002/Dummy001/Schiena 03_Bone/Pinna SX 01_Bone(mirrored)/Pinna SX
+          02_Bone(mirrored)
+        weight: 1
+      - path: Dummy002/Dummy001/Schiena 03_Bone/Pinna SX 01_Bone(mirrored)/Pinna SX
+          02_Bone(mirrored)/Pinna SX 03_Bone(mirrored)
+        weight: 1
+      - path: Dummy002/Dummy001/Schiena 03_Bone/Pinna SX 01_Bone(mirrored)/Pinna SX
+          02_Bone(mirrored)/Pinna SX 03_Bone(mirrored)/Pinna SX_Fine_Bone(mirrored)
+        weight: 1
+      - path: Dummy002/Dummy001/Schiena 03_Bone/Schiena 02_Bone
+        weight: 1
+      - path: Dummy002/Dummy001/Schiena 03_Bone/Schiena 02_Bone/Schiena 01_Bone
+        weight: 1
+      - path: Dummy002/Dummy001/Schiena 03_Bone/Schiena 02_Bone/Schiena 01_Bone/Collo_Bone
+        weight: 1
+      - path: Dummy002/Dummy001/Schiena 03_Bone/Schiena 02_Bone/Schiena 01_Bone/Collo_Bone/Collo_Fine_Bone
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: iki_dolphin_magikarp
+      takeName: Take 001
+      firstFrame: 172
+      lastFrame: 197
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Dolphine
+        weight: 1
+      - path: Dummy002
+        weight: 1
+      - path: Dummy002/Dummy001
+        weight: 1
+      - path: Dummy002/Dummy001/Schiena 03_Bone
+        weight: 1
+      - path: Dummy002/Dummy001/Schiena 03_Bone/Coda 01_Bone
+        weight: 1
+      - path: Dummy002/Dummy001/Schiena 03_Bone/Coda 01_Bone/Coda 02_Bone
+        weight: 1
+      - path: Dummy002/Dummy001/Schiena 03_Bone/Coda 01_Bone/Coda 02_Bone/Bone003
+        weight: 1
+      - path: Dummy002/Dummy001/Schiena 03_Bone/Coda 01_Bone/Coda 02_Bone/Bone003/Coda_Fine_Bone
+        weight: 1
+      - path: Dummy002/Dummy001/Schiena 03_Bone/Pinna SX 01_Bone
+        weight: 1
+      - path: Dummy002/Dummy001/Schiena 03_Bone/Pinna SX 01_Bone/Pinna SX 02_Bone
+        weight: 1
+      - path: Dummy002/Dummy001/Schiena 03_Bone/Pinna SX 01_Bone/Pinna SX 02_Bone/Pinna
+          SX 03_Bone
+        weight: 1
+      - path: Dummy002/Dummy001/Schiena 03_Bone/Pinna SX 01_Bone/Pinna SX 02_Bone/Pinna
+          SX 03_Bone/Pinna SX_Fine_Bone
+        weight: 1
+      - path: Dummy002/Dummy001/Schiena 03_Bone/Pinna SX 01_Bone(mirrored)
+        weight: 1
+      - path: Dummy002/Dummy001/Schiena 03_Bone/Pinna SX 01_Bone(mirrored)/Pinna SX
+          02_Bone(mirrored)
+        weight: 1
+      - path: Dummy002/Dummy001/Schiena 03_Bone/Pinna SX 01_Bone(mirrored)/Pinna SX
+          02_Bone(mirrored)/Pinna SX 03_Bone(mirrored)
+        weight: 1
+      - path: Dummy002/Dummy001/Schiena 03_Bone/Pinna SX 01_Bone(mirrored)/Pinna SX
+          02_Bone(mirrored)/Pinna SX 03_Bone(mirrored)/Pinna SX_Fine_Bone(mirrored)
+        weight: 1
+      - path: Dummy002/Dummy001/Schiena 03_Bone/Schiena 02_Bone
+        weight: 1
+      - path: Dummy002/Dummy001/Schiena 03_Bone/Schiena 02_Bone/Schiena 01_Bone
+        weight: 1
+      - path: Dummy002/Dummy001/Schiena 03_Bone/Schiena 02_Bone/Schiena 01_Bone/Collo_Bone
+        weight: 1
+      - path: Dummy002/Dummy001/Schiena 03_Bone/Schiena 02_Bone/Schiena 01_Bone/Collo_Bone/Collo_Fine_Bone
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
