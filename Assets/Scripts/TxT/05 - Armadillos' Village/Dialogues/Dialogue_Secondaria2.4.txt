@@ -1,9 +1,9 @@
-Maneki/Left/W-w-who are you?!
-Iki/Right/. . .
-Maneki/Left/Did you co-co-come here for me?
-Iki/Right/. . .
-Maneki/Left/You-you-you are. . . You are the origami that helped the major breaking the boulders a while ago, aren’t you?*I’ve seen you from here.
-Iki/Right/. . .
-Maneki/Left/My partner asked you to come find me, right?*You’re here to help me because he’s worried, I guess. . .
-Iki/Right/. . .
-Maneki/Left/You’re right, earthquake is over, it’s time to get back to work!
+Maneki/Left/Maneki_Scared/W-w-who are you?!
+Iki/Right/Iki_Concerned/. . .
+Maneki/Left/Maneki_Scared/Did you co-co-come here for me?
+Iki/Right/Iki_Standard/. . .
+Maneki/Left/Maneki_Scared/You-you-you are. . . You are the origami that helped the major breaking the boulders a while ago, aren’t you?*I’ve seen you from here.
+Iki/Right/Iki_Standard/. . .
+Maneki/Left/Maneki_Standard/My partner asked you to come find me, right?*You’re here to help me because he’s worried, I guess. . .
+Iki/Right/Iki_Standard/. . .
+Maneki/Left/Maneki_Standard/You’re right, the earthquake is over, it’s time to get back to work!

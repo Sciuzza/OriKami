@@ -1,4 +1,4 @@
-Koi/Left/Wow, how beautiful! This village is really gorgeous!
-Iki/Right/. . .
-Koi/Left/Look at those beautiful lanterns! And those castles in the air!*And those awesome little lakes! And. . .
-Koi/Left/That dolphin. . .*That doesn’t look really happy. . .*Maybe we should talk with him.
+Koi/Left/Koi_Astonished/Wow, how beautiful! This village is really gorgeous!
+Iki/Right/Iki_Standard/. . .
+Koi/Left/Koi_Astonished/Look at those beautiful lanterns! And those castles in the air!*And those awesome little lakes! And. . .
+Koi/Left/Koi_Pensive/That dolphin. . .*That doesn’t look really happy. . .*Maybe we should talk with him.

@@ -1,5 +1,5 @@
-Koi/Left/What the… He blocked us!
-Iki/Right/. . .
-Koi/Left/Why? Why did he do this!?.
-Iki/Right/. . .
-Koi/Left/Maybe he didn’t see us. . .? 
+Koi/Left/Koi_Astonished/What the. . . He blocked us!
+Iki/Right/Iki_Concerned/. . .
+Koi/Left/Koi_Mad/Why? Why did he do this!?.
+Iki/Right/Iki_Standard/. . .
+Koi/Left/Koi_Pensive/Maybe he didn’t see us. . .? 
