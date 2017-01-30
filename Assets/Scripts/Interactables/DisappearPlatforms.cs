@@ -11,6 +11,8 @@ namespace Orikami
         public MeshRenderer PlatformMesh;
         public float smoothing = 1f;
         public float disappearingTime = 0f;
+        public bool destroyPlatforms;
+        public bool timedPlatforms;
 
         IEnumerator MyCoroutine()
         {
@@ -32,7 +34,12 @@ namespace Orikami
 
         void OnTriggerEnter(Collider other)
         {
-            if (other.gameObject.tag == "Player")
+            if (other.gameObject.tag == "Player"&&timedPlatforms)
+            {
+                StartCoroutine(MyCoroutine());
+            }
+
+            if (other.gameObject.tag == "Player" && destroyPlatforms)
             {
                 StartCoroutine(MyCoroutine());
             }
@@ -41,7 +48,7 @@ namespace Orikami
         void OnTriggerExit(Collider other)
         {
 
-            if (other.gameObject.tag == "Player")
+            if (other.gameObject.tag == "Player"&&timedPlatforms)
             {
                 StartCoroutine(MyCoroutineExit());
             }

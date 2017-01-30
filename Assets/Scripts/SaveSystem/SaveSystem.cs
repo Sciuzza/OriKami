@@ -10,18 +10,50 @@ using UnityEngine.SceneManagement;
 public class SaveSystem : MonoBehaviour
 {
     private Transform PlayerTempLink;
+    int questemp;
+    private StoryLineInstance slTempLink;
 
-    void Awake()
+
+
+    private void Awake()
     {
-        GameController gcTempLink = this.GetComponent<GameController>();
-        gcTempLink.gpInitializer.AddListener(GameplayInitialization);
+        var gcTempLink = this.GetComponent<GameController>();
+        gcTempLink.gpInitializer.AddListener(this.GameplayInitialization);
+        var storyLineCheck = GameObject.FindGameObjectWithTag("StoryLine");
+
+
+        if (storyLineCheck != null)
+        {
+            this.slTempLink = storyLineCheck.GetComponent<StoryLineInstance>();
+
+            if (this.slTempLink != null)
+                this.questemp = (this.slTempLink.CurrentStoryLine.Stories.Count * 2) + 1;
+        }
     }
 
-    void Update()
+    private void Update()
     {
+        if (this.slTempLink == null) return;
+
         if (Input.GetKeyDown(KeyCode.K))
         {
             SceneManager.LoadScene("Ricky Testing");
+        }
+
+        if (Input.GetKeyDown(KeyCode.J))
+        {
+
+            this.slTempLink.CurrentStoryLine.Completed = true;
+
+        }
+        if (Input.GetKeyDown(KeyCode.G))
+        {
+
+            foreach (var item in this.slTempLink.CurrentStoryLine.Stories)
+            {
+                item.Active = true;
+                item.Completed = true;
+            }
         }
     }
 
@@ -32,8 +64,8 @@ public class SaveSystem : MonoBehaviour
         fsmCheckerTempLink.deathRequest.AddListener(LoadState);
         PlayerTempLink = player.transform;
 
-    }
 
+    }
 
     public void SaveState()
     {
@@ -45,6 +77,7 @@ public class SaveSystem : MonoBehaviour
 
         #region Position & Rotation
         SensibleData data = new SensibleData();
+
 
         data.posx = PlayerTempLink.transform.position.x;
         data.posy = PlayerTempLink.transform.position.y;
@@ -66,8 +99,29 @@ public class SaveSystem : MonoBehaviour
         data.formsUnlocked[3] = fsmTempLink.abiUnlocked.dolphinUnlocked;
         #endregion
 
-        bf.Serialize(file, data);
+        #region QuestSave
+        QuestData questData = new QuestData();
+        StoryLineInstance storyLineTempLink = GameObject.FindGameObjectWithTag("StoryLine").GetComponent<StoryLineInstance>();
 
+
+
+        questData.StoryLine_Completed_Save = storyLineTempLink.CurrentStoryLine.Completed;
+        questemp = storyLineTempLink.CurrentStoryLine.Stories.Count * 2 + 1;
+
+        bool[] tempSave = new bool[questemp];
+        tempSave[0] = storyLineTempLink.CurrentStoryLine.Completed;
+        int j = 0;
+        for (int i = 1; i < storyLineTempLink.CurrentStoryLine.Stories.Count; i += 2)
+        {
+            tempSave[i] = storyLineTempLink.CurrentStoryLine.Stories[j].Active;
+            tempSave[i + 1] = storyLineTempLink.CurrentStoryLine.Stories[j].Completed;
+            j++;
+        }
+
+        #endregion
+
+        bf.Serialize(file, data);
+        bf.Serialize(file, questData);
         file.Close();
 
     }
@@ -78,30 +132,43 @@ public class SaveSystem : MonoBehaviour
         {
             BinaryFormatter bf = new BinaryFormatter();
             FileStream file = File.Open(Application.persistentDataPath + "/PlayerData.dat", FileMode.Open);
-            SensibleData data = (SensibleData)bf.Deserialize(file);     
-
+            SensibleData data = (SensibleData)bf.Deserialize(file);
+            QuestData questData = (QuestData)bf.Deserialize(file);
+            FSMChecker fsmTempLink = PlayerTempLink.gameObject.GetComponent<FSMChecker>();
+            StoryLineInstance storyLineTempLink = GameObject.FindGameObjectWithTag("StoryLine").GetComponent<StoryLineInstance>();
+            StoryLineInstance singleStoryTempLink = GameObject.FindGameObjectWithTag("StoryLine").GetComponent<StoryLineInstance>();
             file.Close();
 
+            #region LoadPosition&Rotation
             PlayerTempLink.transform.position = new Vector3(data.posx, data.posy, data.posz);
             PlayerTempLink.transform.rotation = Quaternion.Euler(data.rotx, data.roty, data.rotz);
+            #endregion
 
-            FSMChecker fsmTempLink = PlayerTempLink.gameObject.GetComponent<FSMChecker>();
-
-            //fsmTempLink.abiUnlocked.frogUnlocked = data.frogUnlocked;
-            //fsmTempLink.abiUnlocked.armaUnlocked = data.armaUnlocked;
-            //fsmTempLink.abiUnlocked.craneUnlocked = data.craneUnlocked;
-            //fsmTempLink.abiUnlocked.dolphinUnlocked = data.dolphinUnlocked;
-
+            #region LoadUnLockedForms
             fsmTempLink.abiUnlocked.frogUnlocked = data.formsUnlocked[0];
             fsmTempLink.abiUnlocked.armaUnlocked = data.formsUnlocked[1];
             fsmTempLink.abiUnlocked.craneUnlocked = data.formsUnlocked[2];
             fsmTempLink.abiUnlocked.dolphinUnlocked = data.formsUnlocked[3];
-
-            //player.GetComponent<FSMChecker>().abiUnlocked.frogUnlocked = data.frogUnLocked;
-            //player.GetComponent<FSMChecker>().abiUnlocked.armaUnlocked = data.armaUnLocked;
-            //player.GetComponent<FSMChecker>().abiUnlocked.craneUnlocked = data.cranUnLocked;
-            //player.GetComponent<FSMChecker>().abiUnlocked.dolphinUnlocked = data.dolpingUnLocked;
             PlayerTempLink.GetComponent<FSMChecker>().UpdatingAbilityList();
+            #endregion
+
+            #region LoadQuestData
+            bool[] loadTemp = new bool[questemp];
+            loadTemp = questData.infoQuest;
+
+
+
+
+            storyLineTempLink.CurrentStoryLine.Completed = questData.StoryLine_Completed_Save;
+            // singleStoryTempLink.CurrentStoryLine.S = questData.SingleStory_Active_Save;
+            singleStoryTempLink.storySelected.Completed = questData.SingleStory_Completed_Save;
+
+            storyLineTempLink.CurrentStoryLine.Stories = new List<SingleStory>();
+
+
+            #endregion
+
+
 
             // player.GetComponent<FSMChecker>().cPlayerState.currentAbilities.AddRange(data.saveAbilities);
         }
@@ -122,11 +189,7 @@ public class SensibleData
     public float rotz;
     #endregion
 
-    //public bool frogUnlocked;
-    //public bool armaUnlocked;
-    //public bool craneUnlocked;
-    //public bool dolphinUnlocked;
-
+    //Array for Forms
     public bool[] formsUnlocked;
     // public List<abilties> saveAbilities;
 
@@ -141,6 +204,18 @@ public class EnvData
     public float[] position;
     public float[] rotation;
     public bool isActive;
+}
+
+[System.Serializable]
+public class QuestData
+{
+    public bool StoryLine_Completed_Save;
+    public bool SingleStory_Completed_Save;
+    public bool SingleStory_Active_Save;
+    public bool[] infoQuest;
+    public List<SingleStory>[] stories_save;
+
+
 }
 
 

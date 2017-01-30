@@ -1,8 +1,8 @@
 Jiraiya/Left/Father.
-Frogs Chief/Right/Son. /n Are you here to beg me to forgive you?
+Frogs Chief/Right/Son.*Are you here to beg me to forgive you?
 Jiraiya/Left/No. We need to talk.
-Frogs Chief/Right/… /n Your voice has changed. /n All right, I’ll listen to you.
+Frogs Chief/Right/. . .*Your voice has changed.*All right, I’ll listen to you.
 Jiraiya/Left/I will become village chief. This is what you want and the village relies on me.
-Jiraiya/Left/Just… Not now. /n I’m still young, I don’t want to waste my time learning things I won’t remember because I can’t focus on it. /n Give me some more time, I won’t let you down, I promise.
-Frogs Chief/Right/I see. I understand your reasons, but I don’t agree with your choice. /n However, this is your decision. The decision of a grown up frog. /n We’ll do as you wish, I’ll give you your time.
+Jiraiya/Left/Just. . . Not now.*I’m still young, I don’t want to waste my time learning things I won’t remember because I can’t focus on it.*Give me some more time, I won’t let you down, I promise.
+Frogs Chief/Right/I see. I understand your reasons, but I don’t agree with your choice.*However, this is your decision. The decision of a grown up frog.*We’ll do as you wish, I’ll give you your time.
 Jiraiya/Left/Thanks. You won’t regret trusting me.

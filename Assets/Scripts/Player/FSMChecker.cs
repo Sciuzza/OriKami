@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using UnityEngine.Events;
 using System.Collections.Generic;
@@ -178,6 +178,7 @@ public class FSMChecker : MonoBehaviour
     private bool dying = false;
 
     private controlStates previousClState;
+    private bool storyMode;
 
     private bool isGlidingSound = false;
     private bool isRollingSound = false;
@@ -240,12 +241,12 @@ public class FSMChecker : MonoBehaviour
             if (slTempLink != null)
             {
                 slTempLink.FormUnlockRequest.AddListener(this.UnlockingAbility);
-                slTempLink.ChangeControlStateRequest.AddListener(this.StoryCsChange);
-                slTempLink.StoryExitCsStateRequest.AddListener(this.StoryCsExit);
+                slTempLink.ChangeCsRequest.AddListener(this.StoryCsChange);
+                slTempLink.IsStoryMode.AddListener(this.SettingStoryMode);
             }
         }
     }
-
+                
     void Start()
     {
 
@@ -496,6 +497,7 @@ public class FSMChecker : MonoBehaviour
                 break;
         }
     }
+    #endregion
 
     #region Standard Abilities Handler
     private void UpdatingStdAbilityList()
@@ -1464,19 +1466,23 @@ public class FSMChecker : MonoBehaviour
         switch (this.cPlayerState.currentClState)
         {
             case controlStates.noGenAbi:
-                this.cPlayerState.currentClState = controlStates.noCameraAndGenAbi;
+                if (!this.storyMode) this.cPlayerState.currentClState = controlStates.noCameraAndGenAbi;
+                else this.previousClState = controlStates.noCameraAndGenAbi;
                 this.switchingCameraControlToOFF.Invoke(CameraDir);
                 break;
             case controlStates.noMove:
-                this.cPlayerState.currentClState = controlStates.noCamAndMove;
+                if (!this.storyMode) this.cPlayerState.currentClState = controlStates.noCamAndMove;
+                else this.previousClState = controlStates.noCamAndMove;
                 this.switchingCameraControlToOFF.Invoke(CameraDir);
                 break;
             case controlStates.noMoveAndGenAbi:
-                this.cPlayerState.currentClState = controlStates.noControl;
+                if (!this.storyMode) this.cPlayerState.currentClState = controlStates.noControl;
+                else this.previousClState = controlStates.noControl;
                 this.switchingCameraControlToOFF.Invoke(CameraDir);
                 break;
             case controlStates.totalControl:
-                this.cPlayerState.currentClState = controlStates.noCamera;
+                if (!this.storyMode) this.cPlayerState.currentClState = controlStates.noCamera;
+                else this.previousClState = controlStates.noCamera;
                 this.switchingCameraControlToOFF.Invoke(CameraDir);
                 break;
             default:
@@ -1490,19 +1496,23 @@ public class FSMChecker : MonoBehaviour
         switch (this.cPlayerState.currentClState)
         {
             case controlStates.noCameraAndGenAbi:
-                this.cPlayerState.currentClState = controlStates.noGenAbi;
+                if (!this.storyMode) this.cPlayerState.currentClState = controlStates.noGenAbi;
+                else this.previousClState = controlStates.noGenAbi;
                 this.switchingCameraControlToOn.Invoke();
                 break;
             case controlStates.noCamAndMove:
-                this.cPlayerState.currentClState = controlStates.noMove;
+                if (!this.storyMode) this.cPlayerState.currentClState = controlStates.noMove;
+                else this.previousClState = controlStates.noMove;
                 this.switchingCameraControlToOn.Invoke();
                 break;
             case controlStates.noControl:
-                this.cPlayerState.currentClState = controlStates.noMoveAndGenAbi;
+                if (!this.storyMode) this.cPlayerState.currentClState = controlStates.noMoveAndGenAbi;
+                else this.previousClState = controlStates.noMoveAndGenAbi;
                 this.switchingCameraControlToOn.Invoke();
                 break;
             case controlStates.noCamera:
-                this.cPlayerState.currentClState = controlStates.totalControl;
+                if (!this.storyMode) this.cPlayerState.currentClState = controlStates.totalControl;
+                else this.previousClState = controlStates.totalControl;
                 this.switchingCameraControlToOn.Invoke();
                 break;
             default:
@@ -1587,30 +1597,20 @@ public class FSMChecker : MonoBehaviour
 
     private void StoryCsChange(controlStates newCs)
     {
-        this.previousClState = this.cPlayerState.currentClState;
         this.cPlayerState.currentClState = newCs;
         this.UpdatingAbilityList();
-
-        if (this.cPlayerState.currentClState == controlStates.noCamAndMove ||
-            this.cPlayerState.currentClState == controlStates.noCamera ||
-            this.cPlayerState.currentClState == controlStates.noCameraAndGenAbi ||
-            this.cPlayerState.currentClState == controlStates.noControl)
-            this.switchingCameraToStoryRequest.Invoke();
-
     }
 
-    private void StoryCsExit()
+    private void StoryCsExit(controlStates exitCs)
     {
-        this.cPlayerState.currentClState = this.previousClState;
+        this.cPlayerState.currentClState = exitCs;
         this.UpdatingAbilityList();
-
-        if (this.cPlayerState.currentClState != controlStates.noCamAndMove &&
-            this.cPlayerState.currentClState != controlStates.noCamera &&
-            this.cPlayerState.currentClState != controlStates.noCameraAndGenAbi &&
-            this.cPlayerState.currentClState != controlStates.noControl)
-            this.switchingCameraToPlayer.Invoke();
     }
-    #endregion
+
+    private void SettingStoryMode(bool state)
+    {
+        this.storyMode = state;
+    }
     #endregion
 
     #region Death Conditions Methods

@@ -1,0 +1,319 @@
+fileFormatVersion: 2
+guid: 71978471c853172438935f3f0f30a2db
+timeCreated: 1484846761
+licenseType: Free
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: AlaDX01_Bone
+    100002: AlaDX01_Bone002
+    100004: AlaDX02_Bone
+    100006: AlaDX02_Bone002
+    100008: AlaDX03_Bone
+    100010: AlaDX03_Bone002
+    100012: AlaDX04_Bone
+    100014: AlaDX04_Bone002
+    100016: AlaDX05_Bone
+    100018: AlaDX05_Bone002
+    100020: AlaDX_Fine_Bone
+    100022: AlaDX_Fine_Bone002
+    100024: AlaSX01_Bone
+    100026: AlaSX01_Bone002
+    100028: AlaSX02_Bone
+    100030: AlaSX02_Bone002
+    100032: AlaSX03_Bone
+    100034: AlaSX03_Bone002
+    100036: AlaSX04_Bone
+    100038: AlaSX04_Bone002
+    100040: AlaSX05_Bone
+    100042: AlaSX05_Bone002
+    100044: AlaSX_Fine_Bone
+    100046: AlaSX_Fine_Bone002
+    100048: BaseCoda01_Bone
+    100050: BaseCoda01_Bone002
+    100052: BaseCoda02_Bone
+    100054: BaseCoda02_Bone002
+    100056: Becco_Bone
+    100058: Becco_Bone002
+    100060: CodaDX01_Bone
+    100062: CodaDX01_Bone002
+    100064: CodaDX02_Bone
+    100066: CodaDX02_Bone002
+    100068: CodaDX_Fine_Bone
+    100070: CodaDX_Fine_Bone002
+    100072: CodaSX01_Bone
+    100074: CodaSX01_Bone002
+    100076: CodaSX02_Bone
+    100078: CodaSX02_Bone002
+    100080: CodaSX_Fine_Bone
+    100082: CodaSX_Fine_Bone002
+    100084: //RootNode
+    100086: Schiena01_Bone
+    100088: Schiena01_Bone002
+    100090: Schiena02_Bone
+    100092: Schiena02_Bone002
+    100094: Schiena03_Bone
+    100096: Schiena03_Bone002
+    100098: Shogun
+    100100: Testa_Bone
+    100102: Testa_Bone002
+    100104: Testa_Fine_Bone
+    100106: Testa_Fine_Bone002
+    400000: AlaDX01_Bone
+    400002: AlaDX01_Bone002
+    400004: AlaDX02_Bone
+    400006: AlaDX02_Bone002
+    400008: AlaDX03_Bone
+    400010: AlaDX03_Bone002
+    400012: AlaDX04_Bone
+    400014: AlaDX04_Bone002
+    400016: AlaDX05_Bone
+    400018: AlaDX05_Bone002
+    400020: AlaDX_Fine_Bone
+    400022: AlaDX_Fine_Bone002
+    400024: AlaSX01_Bone
+    400026: AlaSX01_Bone002
+    400028: AlaSX02_Bone
+    400030: AlaSX02_Bone002
+    400032: AlaSX03_Bone
+    400034: AlaSX03_Bone002
+    400036: AlaSX04_Bone
+    400038: AlaSX04_Bone002
+    400040: AlaSX05_Bone
+    400042: AlaSX05_Bone002
+    400044: AlaSX_Fine_Bone
+    400046: AlaSX_Fine_Bone002
+    400048: BaseCoda01_Bone
+    400050: BaseCoda01_Bone002
+    400052: BaseCoda02_Bone
+    400054: BaseCoda02_Bone002
+    400056: Becco_Bone
+    400058: Becco_Bone002
+    400060: CodaDX01_Bone
+    400062: CodaDX01_Bone002
+    400064: CodaDX02_Bone
+    400066: CodaDX02_Bone002
+    400068: CodaDX_Fine_Bone
+    400070: CodaDX_Fine_Bone002
+    400072: CodaSX01_Bone
+    400074: CodaSX01_Bone002
+    400076: CodaSX02_Bone
+    400078: CodaSX02_Bone002
+    400080: CodaSX_Fine_Bone
+    400082: CodaSX_Fine_Bone002
+    400084: //RootNode
+    400086: Schiena01_Bone
+    400088: Schiena01_Bone002
+    400090: Schiena02_Bone
+    400092: Schiena02_Bone002
+    400094: Schiena03_Bone
+    400096: Schiena03_Bone002
+    400098: Shogun
+    400100: Testa_Bone
+    400102: Testa_Bone002
+    400104: Testa_Fine_Bone
+    400106: Testa_Fine_Bone002
+    4300000: Shogun
+    7400000: NPC_swallowShogun_Idle
+    9500000: //RootNode
+    13700000: Shogun
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: NPC_swallowShogun_Idle
+      takeName: Take 001
+      firstFrame: 80
+      lastFrame: 140
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Schiena01_Bone
+        weight: 1
+      - path: Schiena01_Bone/BaseCoda01_Bone
+        weight: 1
+      - path: Schiena01_Bone/BaseCoda01_Bone/BaseCoda02_Bone
+        weight: 1
+      - path: Schiena01_Bone/BaseCoda01_Bone/BaseCoda02_Bone/CodaDX01_Bone
+        weight: 1
+      - path: Schiena01_Bone/BaseCoda01_Bone/BaseCoda02_Bone/CodaDX01_Bone/CodaDX02_Bone
+        weight: 1
+      - path: Schiena01_Bone/BaseCoda01_Bone/BaseCoda02_Bone/CodaDX01_Bone/CodaDX02_Bone/CodaDX_Fine_Bone
+        weight: 1
+      - path: Schiena01_Bone/BaseCoda01_Bone/BaseCoda02_Bone/CodaSX01_Bone
+        weight: 1
+      - path: Schiena01_Bone/BaseCoda01_Bone/BaseCoda02_Bone/CodaSX01_Bone/CodaSX02_Bone
+        weight: 1
+      - path: Schiena01_Bone/BaseCoda01_Bone/BaseCoda02_Bone/CodaSX01_Bone/CodaSX02_Bone/CodaSX_Fine_Bone
+        weight: 1
+      - path: Schiena01_Bone/Schiena02_Bone
+        weight: 1
+      - path: Schiena01_Bone/Schiena02_Bone/Schiena03_Bone
+        weight: 1
+      - path: Schiena01_Bone/Schiena02_Bone/Schiena03_Bone/AlaDX01_Bone
+        weight: 1
+      - path: Schiena01_Bone/Schiena02_Bone/Schiena03_Bone/AlaDX01_Bone/AlaDX02_Bone
+        weight: 1
+      - path: Schiena01_Bone/Schiena02_Bone/Schiena03_Bone/AlaDX01_Bone/AlaDX02_Bone/AlaDX03_Bone
+        weight: 1
+      - path: Schiena01_Bone/Schiena02_Bone/Schiena03_Bone/AlaDX01_Bone/AlaDX02_Bone/AlaDX03_Bone/AlaDX04_Bone
+        weight: 1
+      - path: Schiena01_Bone/Schiena02_Bone/Schiena03_Bone/AlaDX01_Bone/AlaDX02_Bone/AlaDX03_Bone/AlaDX04_Bone/AlaDX05_Bone
+        weight: 1
+      - path: Schiena01_Bone/Schiena02_Bone/Schiena03_Bone/AlaDX01_Bone/AlaDX02_Bone/AlaDX03_Bone/AlaDX04_Bone/AlaDX05_Bone/AlaDX_Fine_Bone
+        weight: 1
+      - path: Schiena01_Bone/Schiena02_Bone/Schiena03_Bone/AlaSX01_Bone
+        weight: 1
+      - path: Schiena01_Bone/Schiena02_Bone/Schiena03_Bone/AlaSX01_Bone/AlaSX02_Bone
+        weight: 1
+      - path: Schiena01_Bone/Schiena02_Bone/Schiena03_Bone/AlaSX01_Bone/AlaSX02_Bone/AlaSX03_Bone
+        weight: 1
+      - path: Schiena01_Bone/Schiena02_Bone/Schiena03_Bone/AlaSX01_Bone/AlaSX02_Bone/AlaSX03_Bone/AlaSX04_Bone
+        weight: 1
+      - path: Schiena01_Bone/Schiena02_Bone/Schiena03_Bone/AlaSX01_Bone/AlaSX02_Bone/AlaSX03_Bone/AlaSX04_Bone/AlaSX05_Bone
+        weight: 1
+      - path: Schiena01_Bone/Schiena02_Bone/Schiena03_Bone/AlaSX01_Bone/AlaSX02_Bone/AlaSX03_Bone/AlaSX04_Bone/AlaSX05_Bone/AlaSX_Fine_Bone
+        weight: 1
+      - path: Schiena01_Bone/Schiena02_Bone/Schiena03_Bone/Testa_Bone
+        weight: 1
+      - path: Schiena01_Bone/Schiena02_Bone/Schiena03_Bone/Testa_Bone/Becco_Bone
+        weight: 1
+      - path: Schiena01_Bone/Schiena02_Bone/Schiena03_Bone/Testa_Bone/Becco_Bone/Testa_Fine_Bone
+        weight: 1
+      - path: Schiena01_Bone002
+        weight: 1
+      - path: Schiena01_Bone002/BaseCoda01_Bone002
+        weight: 1
+      - path: Schiena01_Bone002/BaseCoda01_Bone002/BaseCoda02_Bone002
+        weight: 1
+      - path: Schiena01_Bone002/BaseCoda01_Bone002/BaseCoda02_Bone002/CodaDX01_Bone002
+        weight: 1
+      - path: Schiena01_Bone002/BaseCoda01_Bone002/BaseCoda02_Bone002/CodaDX01_Bone002/CodaDX02_Bone002
+        weight: 1
+      - path: Schiena01_Bone002/BaseCoda01_Bone002/BaseCoda02_Bone002/CodaDX01_Bone002/CodaDX02_Bone002/CodaDX_Fine_Bone002
+        weight: 1
+      - path: Schiena01_Bone002/BaseCoda01_Bone002/BaseCoda02_Bone002/CodaSX01_Bone002
+        weight: 1
+      - path: Schiena01_Bone002/BaseCoda01_Bone002/BaseCoda02_Bone002/CodaSX01_Bone002/CodaSX02_Bone002
+        weight: 1
+      - path: Schiena01_Bone002/BaseCoda01_Bone002/BaseCoda02_Bone002/CodaSX01_Bone002/CodaSX02_Bone002/CodaSX_Fine_Bone002
+        weight: 1
+      - path: Schiena01_Bone002/Schiena02_Bone002
+        weight: 1
+      - path: Schiena01_Bone002/Schiena02_Bone002/Schiena03_Bone002
+        weight: 1
+      - path: Schiena01_Bone002/Schiena02_Bone002/Schiena03_Bone002/AlaDX01_Bone002
+        weight: 1
+      - path: Schiena01_Bone002/Schiena02_Bone002/Schiena03_Bone002/AlaDX01_Bone002/AlaDX02_Bone002
+        weight: 1
+      - path: Schiena01_Bone002/Schiena02_Bone002/Schiena03_Bone002/AlaDX01_Bone002/AlaDX02_Bone002/AlaDX03_Bone002
+        weight: 1
+      - path: Schiena01_Bone002/Schiena02_Bone002/Schiena03_Bone002/AlaDX01_Bone002/AlaDX02_Bone002/AlaDX03_Bone002/AlaDX04_Bone002
+        weight: 1
+      - path: Schiena01_Bone002/Schiena02_Bone002/Schiena03_Bone002/AlaDX01_Bone002/AlaDX02_Bone002/AlaDX03_Bone002/AlaDX04_Bone002/AlaDX05_Bone002
+        weight: 1
+      - path: Schiena01_Bone002/Schiena02_Bone002/Schiena03_Bone002/AlaDX01_Bone002/AlaDX02_Bone002/AlaDX03_Bone002/AlaDX04_Bone002/AlaDX05_Bone002/AlaDX_Fine_Bone002
+        weight: 1
+      - path: Schiena01_Bone002/Schiena02_Bone002/Schiena03_Bone002/AlaSX01_Bone002
+        weight: 1
+      - path: Schiena01_Bone002/Schiena02_Bone002/Schiena03_Bone002/AlaSX01_Bone002/AlaSX02_Bone002
+        weight: 1
+      - path: Schiena01_Bone002/Schiena02_Bone002/Schiena03_Bone002/AlaSX01_Bone002/AlaSX02_Bone002/AlaSX03_Bone002
+        weight: 1
+      - path: Schiena01_Bone002/Schiena02_Bone002/Schiena03_Bone002/AlaSX01_Bone002/AlaSX02_Bone002/AlaSX03_Bone002/AlaSX04_Bone002
+        weight: 1
+      - path: Schiena01_Bone002/Schiena02_Bone002/Schiena03_Bone002/AlaSX01_Bone002/AlaSX02_Bone002/AlaSX03_Bone002/AlaSX04_Bone002/AlaSX05_Bone002
+        weight: 1
+      - path: Schiena01_Bone002/Schiena02_Bone002/Schiena03_Bone002/AlaSX01_Bone002/AlaSX02_Bone002/AlaSX03_Bone002/AlaSX04_Bone002/AlaSX05_Bone002/AlaSX_Fine_Bone002
+        weight: 1
+      - path: Schiena01_Bone002/Schiena02_Bone002/Schiena03_Bone002/Testa_Bone002
+        weight: 1
+      - path: Schiena01_Bone002/Schiena02_Bone002/Schiena03_Bone002/Testa_Bone002/Becco_Bone002
+        weight: 1
+      - path: Schiena01_Bone002/Schiena02_Bone002/Schiena03_Bone002/Testa_Bone002/Becco_Bone002/Testa_Fine_Bone002
+        weight: 1
+      - path: Shogun
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

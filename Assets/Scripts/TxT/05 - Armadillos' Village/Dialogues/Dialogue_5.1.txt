@@ -1,7 +1,7 @@
 Elder/Left/I see. You still didn’t find yourself, and we can’t give you what you are looking for, but don’t lose heart!
-Elder/Left/World is based on balance and everyone have to find his one. /n Just because you didn’t find yours yet, though, it doesn’t mean you’ll never do. 
-Iki/Right/…
-Elder/Left/I lived for a long while, and I’ve seen ages come one after another. /n However, in the last thousand years the balance of the whole world has faltered too. 
+Elder/Left/World is based on balance and everyone have to find his one.*Just because you didn’t find yours yet, though, it doesn’t mean you’ll never do. 
+Iki/Right/. . .
+Elder/Left/I lived for a long while, and I’ve seen ages come one after another.*However, in the last thousand years the balance of the whole world has faltered too. 
 Elder/Left/Back in my days, things like this wouldn’t have happened!
-Iki/Right/…
-Elder/Well, it’s time to let you go! /n Come back to say hello whenever you want, and good luck with your journey!
+Iki/Right/. . .
+Elder/Well, it’s time to let you go!*Come back to say hello whenever you want, and good luck with your journey!

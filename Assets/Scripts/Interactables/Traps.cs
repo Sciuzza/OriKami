@@ -77,7 +77,7 @@ public class Traps : MonoBehaviour
     /*void OnCollisionEnter (Collision coll)
     {
         if (coll.collider.tag == "Player")
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            SceneManager.LoadScene(SceneManager.GetActiveScene().Name);
     }*/
 
 }

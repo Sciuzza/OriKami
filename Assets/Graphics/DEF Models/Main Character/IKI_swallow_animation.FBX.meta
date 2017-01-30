@@ -1,0 +1,386 @@
+fileFormatVersion: 2
+guid: 4d19bd7b703aacf4ca436e2bdc09c843
+timeCreated: 1484764031
+licenseType: Free
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: AlaDX01_Bone
+    100002: AlaDX02_Bone
+    100004: AlaDX03_Bone
+    100006: AlaDX04_Bone
+    100008: AlaDX05_Bone
+    100010: AlaDX_Fine_Bone
+    100012: AlaSX01_Bone
+    100014: AlaSX02_Bone
+    100016: AlaSX03_Bone
+    100018: AlaSX04_Bone
+    100020: AlaSX05_Bone
+    100022: AlaSX_Fine_Bone
+    100024: BaseCoda01_Bone
+    100026: BaseCoda02_Bone
+    100028: Becco_Bone
+    100030: CodaDX01_Bone
+    100032: CodaDX02_Bone
+    100034: CodaDX_Fine_Bone
+    100036: CodaSX01_Bone
+    100038: CodaSX02_Bone
+    100040: CodaSX_Fine_Bone
+    100042: //RootNode
+    100044: Schiena01_Bone
+    100046: Schiena02_Bone
+    100048: Schiena03_Bone
+    100050: Swallow
+    100052: Testa_Bone
+    100054: Testa_Fine_Bone
+    400000: AlaDX01_Bone
+    400002: AlaDX02_Bone
+    400004: AlaDX03_Bone
+    400006: AlaDX04_Bone
+    400008: AlaDX05_Bone
+    400010: AlaDX_Fine_Bone
+    400012: AlaSX01_Bone
+    400014: AlaSX02_Bone
+    400016: AlaSX03_Bone
+    400018: AlaSX04_Bone
+    400020: AlaSX05_Bone
+    400022: AlaSX_Fine_Bone
+    400024: BaseCoda01_Bone
+    400026: BaseCoda02_Bone
+    400028: Becco_Bone
+    400030: CodaDX01_Bone
+    400032: CodaDX02_Bone
+    400034: CodaDX_Fine_Bone
+    400036: CodaSX01_Bone
+    400038: CodaSX02_Bone
+    400040: CodaSX_Fine_Bone
+    400042: //RootNode
+    400044: Schiena01_Bone
+    400046: Schiena02_Bone
+    400048: Schiena03_Bone
+    400050: Swallow
+    400052: Testa_Bone
+    400054: Testa_Fine_Bone
+    4300000: Swallow
+    7400000: Take 001
+    7400002: iki_swallow_glide
+    7400004: iki_swallow_idle
+    7400006: iki_swallow_magikarp
+    9500000: //RootNode
+    13700000: Swallow
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: iki_swallow_glide
+      takeName: Take 001
+      firstFrame: 10
+      lastFrame: 70
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Schiena01_Bone
+        weight: 1
+      - path: Schiena01_Bone/BaseCoda01_Bone
+        weight: 1
+      - path: Schiena01_Bone/BaseCoda01_Bone/BaseCoda02_Bone
+        weight: 1
+      - path: Schiena01_Bone/BaseCoda01_Bone/BaseCoda02_Bone/CodaDX01_Bone
+        weight: 1
+      - path: Schiena01_Bone/BaseCoda01_Bone/BaseCoda02_Bone/CodaDX01_Bone/CodaDX02_Bone
+        weight: 1
+      - path: Schiena01_Bone/BaseCoda01_Bone/BaseCoda02_Bone/CodaDX01_Bone/CodaDX02_Bone/CodaDX_Fine_Bone
+        weight: 1
+      - path: Schiena01_Bone/BaseCoda01_Bone/BaseCoda02_Bone/CodaSX01_Bone
+        weight: 1
+      - path: Schiena01_Bone/BaseCoda01_Bone/BaseCoda02_Bone/CodaSX01_Bone/CodaSX02_Bone
+        weight: 1
+      - path: Schiena01_Bone/BaseCoda01_Bone/BaseCoda02_Bone/CodaSX01_Bone/CodaSX02_Bone/CodaSX_Fine_Bone
+        weight: 1
+      - path: Schiena01_Bone/Schiena02_Bone
+        weight: 1
+      - path: Schiena01_Bone/Schiena02_Bone/Schiena03_Bone
+        weight: 1
+      - path: Schiena01_Bone/Schiena02_Bone/Schiena03_Bone/AlaDX01_Bone
+        weight: 1
+      - path: Schiena01_Bone/Schiena02_Bone/Schiena03_Bone/AlaDX01_Bone/AlaDX02_Bone
+        weight: 1
+      - path: Schiena01_Bone/Schiena02_Bone/Schiena03_Bone/AlaDX01_Bone/AlaDX02_Bone/AlaDX03_Bone
+        weight: 1
+      - path: Schiena01_Bone/Schiena02_Bone/Schiena03_Bone/AlaDX01_Bone/AlaDX02_Bone/AlaDX03_Bone/AlaDX04_Bone
+        weight: 1
+      - path: Schiena01_Bone/Schiena02_Bone/Schiena03_Bone/AlaDX01_Bone/AlaDX02_Bone/AlaDX03_Bone/AlaDX04_Bone/AlaDX05_Bone
+        weight: 1
+      - path: Schiena01_Bone/Schiena02_Bone/Schiena03_Bone/AlaDX01_Bone/AlaDX02_Bone/AlaDX03_Bone/AlaDX04_Bone/AlaDX05_Bone/AlaDX_Fine_Bone
+        weight: 1
+      - path: Schiena01_Bone/Schiena02_Bone/Schiena03_Bone/AlaSX01_Bone
+        weight: 1
+      - path: Schiena01_Bone/Schiena02_Bone/Schiena03_Bone/AlaSX01_Bone/AlaSX02_Bone
+        weight: 1
+      - path: Schiena01_Bone/Schiena02_Bone/Schiena03_Bone/AlaSX01_Bone/AlaSX02_Bone/AlaSX03_Bone
+        weight: 1
+      - path: Schiena01_Bone/Schiena02_Bone/Schiena03_Bone/AlaSX01_Bone/AlaSX02_Bone/AlaSX03_Bone/AlaSX04_Bone
+        weight: 1
+      - path: Schiena01_Bone/Schiena02_Bone/Schiena03_Bone/AlaSX01_Bone/AlaSX02_Bone/AlaSX03_Bone/AlaSX04_Bone/AlaSX05_Bone
+        weight: 1
+      - path: Schiena01_Bone/Schiena02_Bone/Schiena03_Bone/AlaSX01_Bone/AlaSX02_Bone/AlaSX03_Bone/AlaSX04_Bone/AlaSX05_Bone/AlaSX_Fine_Bone
+        weight: 1
+      - path: Schiena01_Bone/Schiena02_Bone/Schiena03_Bone/Testa_Bone
+        weight: 1
+      - path: Schiena01_Bone/Schiena02_Bone/Schiena03_Bone/Testa_Bone/Becco_Bone
+        weight: 1
+      - path: Schiena01_Bone/Schiena02_Bone/Schiena03_Bone/Testa_Bone/Becco_Bone/Testa_Fine_Bone
+        weight: 1
+      - path: Swallow
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: iki_swallow_idle
+      takeName: Take 001
+      firstFrame: 80
+      lastFrame: 140
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Schiena01_Bone
+        weight: 1
+      - path: Schiena01_Bone/BaseCoda01_Bone
+        weight: 1
+      - path: Schiena01_Bone/BaseCoda01_Bone/BaseCoda02_Bone
+        weight: 1
+      - path: Schiena01_Bone/BaseCoda01_Bone/BaseCoda02_Bone/CodaDX01_Bone
+        weight: 1
+      - path: Schiena01_Bone/BaseCoda01_Bone/BaseCoda02_Bone/CodaDX01_Bone/CodaDX02_Bone
+        weight: 1
+      - path: Schiena01_Bone/BaseCoda01_Bone/BaseCoda02_Bone/CodaDX01_Bone/CodaDX02_Bone/CodaDX_Fine_Bone
+        weight: 1
+      - path: Schiena01_Bone/BaseCoda01_Bone/BaseCoda02_Bone/CodaSX01_Bone
+        weight: 1
+      - path: Schiena01_Bone/BaseCoda01_Bone/BaseCoda02_Bone/CodaSX01_Bone/CodaSX02_Bone
+        weight: 1
+      - path: Schiena01_Bone/BaseCoda01_Bone/BaseCoda02_Bone/CodaSX01_Bone/CodaSX02_Bone/CodaSX_Fine_Bone
+        weight: 1
+      - path: Schiena01_Bone/Schiena02_Bone
+        weight: 1
+      - path: Schiena01_Bone/Schiena02_Bone/Schiena03_Bone
+        weight: 1
+      - path: Schiena01_Bone/Schiena02_Bone/Schiena03_Bone/AlaDX01_Bone
+        weight: 1
+      - path: Schiena01_Bone/Schiena02_Bone/Schiena03_Bone/AlaDX01_Bone/AlaDX02_Bone
+        weight: 1
+      - path: Schiena01_Bone/Schiena02_Bone/Schiena03_Bone/AlaDX01_Bone/AlaDX02_Bone/AlaDX03_Bone
+        weight: 1
+      - path: Schiena01_Bone/Schiena02_Bone/Schiena03_Bone/AlaDX01_Bone/AlaDX02_Bone/AlaDX03_Bone/AlaDX04_Bone
+        weight: 1
+      - path: Schiena01_Bone/Schiena02_Bone/Schiena03_Bone/AlaDX01_Bone/AlaDX02_Bone/AlaDX03_Bone/AlaDX04_Bone/AlaDX05_Bone
+        weight: 1
+      - path: Schiena01_Bone/Schiena02_Bone/Schiena03_Bone/AlaDX01_Bone/AlaDX02_Bone/AlaDX03_Bone/AlaDX04_Bone/AlaDX05_Bone/AlaDX_Fine_Bone
+        weight: 1
+      - path: Schiena01_Bone/Schiena02_Bone/Schiena03_Bone/AlaSX01_Bone
+        weight: 1
+      - path: Schiena01_Bone/Schiena02_Bone/Schiena03_Bone/AlaSX01_Bone/AlaSX02_Bone
+        weight: 1
+      - path: Schiena01_Bone/Schiena02_Bone/Schiena03_Bone/AlaSX01_Bone/AlaSX02_Bone/AlaSX03_Bone
+        weight: 1
+      - path: Schiena01_Bone/Schiena02_Bone/Schiena03_Bone/AlaSX01_Bone/AlaSX02_Bone/AlaSX03_Bone/AlaSX04_Bone
+        weight: 1
+      - path: Schiena01_Bone/Schiena02_Bone/Schiena03_Bone/AlaSX01_Bone/AlaSX02_Bone/AlaSX03_Bone/AlaSX04_Bone/AlaSX05_Bone
+        weight: 1
+      - path: Schiena01_Bone/Schiena02_Bone/Schiena03_Bone/AlaSX01_Bone/AlaSX02_Bone/AlaSX03_Bone/AlaSX04_Bone/AlaSX05_Bone/AlaSX_Fine_Bone
+        weight: 1
+      - path: Schiena01_Bone/Schiena02_Bone/Schiena03_Bone/Testa_Bone
+        weight: 1
+      - path: Schiena01_Bone/Schiena02_Bone/Schiena03_Bone/Testa_Bone/Becco_Bone
+        weight: 1
+      - path: Schiena01_Bone/Schiena02_Bone/Schiena03_Bone/Testa_Bone/Becco_Bone/Testa_Fine_Bone
+        weight: 1
+      - path: Swallow
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: iki_swallow_magikarp
+      takeName: Take 001
+      firstFrame: 150
+      lastFrame: 210
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Schiena01_Bone
+        weight: 1
+      - path: Schiena01_Bone/BaseCoda01_Bone
+        weight: 1
+      - path: Schiena01_Bone/BaseCoda01_Bone/BaseCoda02_Bone
+        weight: 1
+      - path: Schiena01_Bone/BaseCoda01_Bone/BaseCoda02_Bone/CodaDX01_Bone
+        weight: 1
+      - path: Schiena01_Bone/BaseCoda01_Bone/BaseCoda02_Bone/CodaDX01_Bone/CodaDX02_Bone
+        weight: 1
+      - path: Schiena01_Bone/BaseCoda01_Bone/BaseCoda02_Bone/CodaDX01_Bone/CodaDX02_Bone/CodaDX_Fine_Bone
+        weight: 1
+      - path: Schiena01_Bone/BaseCoda01_Bone/BaseCoda02_Bone/CodaSX01_Bone
+        weight: 1
+      - path: Schiena01_Bone/BaseCoda01_Bone/BaseCoda02_Bone/CodaSX01_Bone/CodaSX02_Bone
+        weight: 1
+      - path: Schiena01_Bone/BaseCoda01_Bone/BaseCoda02_Bone/CodaSX01_Bone/CodaSX02_Bone/CodaSX_Fine_Bone
+        weight: 1
+      - path: Schiena01_Bone/Schiena02_Bone
+        weight: 1
+      - path: Schiena01_Bone/Schiena02_Bone/Schiena03_Bone
+        weight: 1
+      - path: Schiena01_Bone/Schiena02_Bone/Schiena03_Bone/AlaDX01_Bone
+        weight: 1
+      - path: Schiena01_Bone/Schiena02_Bone/Schiena03_Bone/AlaDX01_Bone/AlaDX02_Bone
+        weight: 1
+      - path: Schiena01_Bone/Schiena02_Bone/Schiena03_Bone/AlaDX01_Bone/AlaDX02_Bone/AlaDX03_Bone
+        weight: 1
+      - path: Schiena01_Bone/Schiena02_Bone/Schiena03_Bone/AlaDX01_Bone/AlaDX02_Bone/AlaDX03_Bone/AlaDX04_Bone
+        weight: 1
+      - path: Schiena01_Bone/Schiena02_Bone/Schiena03_Bone/AlaDX01_Bone/AlaDX02_Bone/AlaDX03_Bone/AlaDX04_Bone/AlaDX05_Bone
+        weight: 1
+      - path: Schiena01_Bone/Schiena02_Bone/Schiena03_Bone/AlaDX01_Bone/AlaDX02_Bone/AlaDX03_Bone/AlaDX04_Bone/AlaDX05_Bone/AlaDX_Fine_Bone
+        weight: 1
+      - path: Schiena01_Bone/Schiena02_Bone/Schiena03_Bone/AlaSX01_Bone
+        weight: 1
+      - path: Schiena01_Bone/Schiena02_Bone/Schiena03_Bone/AlaSX01_Bone/AlaSX02_Bone
+        weight: 1
+      - path: Schiena01_Bone/Schiena02_Bone/Schiena03_Bone/AlaSX01_Bone/AlaSX02_Bone/AlaSX03_Bone
+        weight: 1
+      - path: Schiena01_Bone/Schiena02_Bone/Schiena03_Bone/AlaSX01_Bone/AlaSX02_Bone/AlaSX03_Bone/AlaSX04_Bone
+        weight: 1
+      - path: Schiena01_Bone/Schiena02_Bone/Schiena03_Bone/AlaSX01_Bone/AlaSX02_Bone/AlaSX03_Bone/AlaSX04_Bone/AlaSX05_Bone
+        weight: 1
+      - path: Schiena01_Bone/Schiena02_Bone/Schiena03_Bone/AlaSX01_Bone/AlaSX02_Bone/AlaSX03_Bone/AlaSX04_Bone/AlaSX05_Bone/AlaSX_Fine_Bone
+        weight: 1
+      - path: Schiena01_Bone/Schiena02_Bone/Schiena03_Bone/Testa_Bone
+        weight: 1
+      - path: Schiena01_Bone/Schiena02_Bone/Schiena03_Bone/Testa_Bone/Becco_Bone
+        weight: 1
+      - path: Schiena01_Bone/Schiena02_Bone/Schiena03_Bone/Testa_Bone/Becco_Bone/Testa_Fine_Bone
+        weight: 1
+      - path: Swallow
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

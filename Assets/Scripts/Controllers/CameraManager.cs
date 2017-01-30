@@ -17,8 +17,12 @@ public class CameraManager : MonoBehaviour
     private Transform cameraTransform;
     private float currentX;
     private float currentY;
-    private bool cameraPlayerControl = true;
+    private bool CameraByDesignToPlayer = true;
     private RaycastHit hitInfo;
+
+    private bool corStoryStopped;
+    private bool cameraByStoryToPlayer = true;
+    private GameObject lastDesignCamera;
     #endregion Private Variables
 
     #region Initializing Camera in Gameplay Scenes
@@ -30,10 +34,10 @@ public class CameraManager : MonoBehaviour
 
         var fsmLink = player.GetComponent<FSMChecker>();
 
-        fsmLink.switchingCameraControlToOFF.AddListener(this.SwitchingCameraControlToOff);
-        fsmLink.switchingCameraControlToOn.AddListener(this.SwitchingCameraControlToOn);
-        fsmLink.switchingCameraToStoryRequest.AddListener(this.SwitchingCameraToStoryCamera);
-        fsmLink.switchingCameraToPlayer.AddListener(this.SwitchingCameraToPlayer);
+        fsmLink.switchingCameraControlToOFF.AddListener(this.SwitchByPlCameraToDeCamera);
+        fsmLink.switchingCameraControlToOn.AddListener(this.SwitchByDeCameraToPlCamera);
+        fsmLink.switchingCameraToStoryRequest.AddListener(this.SwitchByPlCameraToStoryCamera);
+        fsmLink.switchingCameraToPlayer.AddListener(this.SwitchByStoryCameraToPlCamera);
     }
 
     #endregion Initializing Camera in Gameplay Scenes
@@ -50,7 +54,7 @@ public class CameraManager : MonoBehaviour
     #region Camera Player Mouse Zoom
     private void Update()
     {
-        if (!this.cameraPlayerControl) return;
+        if (!this.CameraByDesignToPlayer) return;
 
         // Pc COde
         if (Input.GetMouseButton(0))
@@ -92,7 +96,7 @@ public class CameraManager : MonoBehaviour
     #region Camera Follow
     private void LateUpdate()
     {
-        if (!this.cameraPlayerControl) return;
+        if (!this.CameraByDesignToPlayer || !this.cameraByStoryToPlayer) return;
 
         // ReSharper disable once InvertIf
         if (this.playerTransform != null)
@@ -103,7 +107,7 @@ public class CameraManager : MonoBehaviour
             this.CameraTargetTransform.position = this.playerTransform.position + (rotation * dir);
             this.CameraTargetTransform.LookAt(this.playerTransform.position);
 
-        
+
 
             var playerToCameraRay = new Ray(this.playerTransform.position, -this.CameraTargetTransform.forward);
 
@@ -113,19 +117,33 @@ public class CameraManager : MonoBehaviour
             this.cameraTransform.rotation = Quaternion.Slerp(this.cameraTransform.rotation, this.CameraTargetTransform.rotation, 6f * Time.deltaTime);
         }
 
-       
 
-       
+
+
     }
     #endregion Camera Follow
 
     #region General Methods
 
-    private void SwitchingCameraControlToOff(GameObject cameraDir)
+    private void SwitchByPlCameraToDeCamera(GameObject cameraDir)
     {
-        this.cameraPlayerControl = false;
+        this.CameraByDesignToPlayer = false;
+        this.lastDesignCamera = cameraDir;
 
-        this.StartCoroutine(this.LerpOnDesignerCamera(cameraDir));
+        if (this.cameraByStoryToPlayer)
+        {
+            this.StartCoroutine(this.LerpOnDesignerCamera(cameraDir));
+            Debug.Log("Camera 2 on");
+        }
+    }
+
+    private void SwitchByDeCameraToPlCamera()
+    {
+        // Inserire Comportamento di rientro telecamera sul giocatore in modo da prevedere cambi di rotazione e posizione troppo elevati
+        this.CameraByDesignToPlayer = true;
+        this.lastDesignCamera = null;
+        Debug.Log("Camera 1 on");
+        this.StopAllCoroutines();
     }
 
     private IEnumerator LerpOnDesignerCamera(GameObject cameraDir)
@@ -134,8 +152,9 @@ public class CameraManager : MonoBehaviour
         var targetPosition = cameraDir.transform.position;
 
         var posReached = false;
+        Debug.Log("Coroutine Camera 2");
 
-        while (!this.cameraPlayerControl && !posReached)
+        while (!posReached)
         {
             this.cameraTransform.position = Vector3.Lerp(this.cameraTransform.position, targetPosition, 2f * Time.deltaTime);
             this.cameraTransform.rotation = Quaternion.Slerp(this.cameraTransform.rotation, targetRotation, 2f * Time.deltaTime);
@@ -143,26 +162,34 @@ public class CameraManager : MonoBehaviour
             if (Quaternion.Angle(this.cameraTransform.rotation, targetRotation) < 0.1f
                 && ((this.cameraTransform.position - targetPosition).sqrMagnitude < 0.1f)) posReached = true;
 
+
             yield return null;
         }
+        Debug.Log("Coroutine Camera 2 finished");
     }
 
-    private void SwitchingCameraControlToOn()
+    private void SwitchByPlCameraToStoryCamera()
     {
-        // Inserire Comportamento di rientro telecamera sul giocatore in modo da prevedere cambi di rotazione e posizione troppo elevati
-        this.cameraPlayerControl = true;
+        this.cameraByStoryToPlayer = false;
+        Debug.Log("Camera 3 on");
+        this.StopAllCoroutines();
 
-        this.StopCoroutine("LerpOnDesignerCamera");
     }
 
-    private void SwitchingCameraToStoryCamera()
+    private void SwitchByStoryCameraToPlCamera()
     {
-        this.cameraPlayerControl = false;
-    }
+        this.cameraByStoryToPlayer = true;
+        if (this.lastDesignCamera != null && this.CameraByDesignToPlayer == false)
+        {
+            Debug.Log("Camera 2 on");
+            this.StartCoroutine(this.LerpOnDesignerCamera(this.lastDesignCamera));
+        }
+        else
+        {
+            Debug.Log("Camera 1 on");
 
-    private void SwitchingCameraToPlayer()
-    {
-        this.cameraPlayerControl = true;
+
+        }
     }
     #endregion General Methods
 }
