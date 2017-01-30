@@ -1,12 +1,13 @@
-Iki/Left/. . .
-Jiraiya/Right/Sob sob 
-Iki/Left/. . .
-Jiraiya/Right/"sniff" Hey. . . It’s you again. . .
-Iki/Left/. . .
-Jiraiya/Right/Why are you here?
-Iki/Left/. . .
-Jiraiya/Right/You want to take me back, right?*Well too bad, I’ve no intention to follow you.*I don’t want to hear my father yelling at me forevermore. That’s why I ran away.*I don’t even care about becoming village chief… Not now at least!*I’m still too young to think about these things…
-Iki/Left/. . .
-Jiraiya/Right/I know what you are thinking.*I should talk with my father about these things, not with you.*But would he understand me?
-Iki/Left/. . . 
-Jiraiya/Right/. . .*I think I should at least give it a try. Thanks. I’ll do it.*It’s time to grow up.
+Iki/Left/Iki_Concerned/. . .
+Jiraiya/Right/Jiraiya_Cry/Sob sob 
+Iki/Left/Iki_Concerned/. . .
+Jiraiya/Right/Jiraiya_Cry/sniff. . . Hey. . . It’s you again. . .
+Iki/Left/Iki_Concerned/. . .
+Jiraiya/Right/Jiriaya_Standard/Why are you here?
+Iki/Left/Iki_Standard/. . .
+Jiraiya/Right/Jiraiya_Determinated/You want to take me back, right?*Well too bad, I’ve no intention to follow you.*I don’t want to hear my father yelling at me forevermore. That’s why I ran away.
+Jiraiya/Right/Jiraiya_Determinated/I don’t even care about becoming village chief. . . Not now at least!*I’m still too young to think about these things. . .
+Iki/Left/Iki_Standard/. . .
+Jiraiya/Right/Jiraiya_Determinated/I know what you are thinking.*I should talk with my father about these things, not with you.*But would he understand me?
+Iki/Left/Iki_Standard/. . . 
+Jiraiya/Right/Jiraiya_Determinated/. . .*I think I should at least give it a try. Thanks. I’ll do it.*It’s time to grow up.
