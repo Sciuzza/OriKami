@@ -1,5 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq.Expressions;
+
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 
@@ -25,6 +28,12 @@ public class PlayerInputs : MonoBehaviour
 
     private float currentX, currentY, currentDistance = 6;
 
+    private List<string> scenes = new List<string>()
+    {
+        "Main Menu", "Route 1", "Route 2", "Frogs' Village", "Armadillos' Village",
+        "Route 3", "Dolphins and Swallows' Village", "Route 4", "Dragon's Spring Temple"
+    };
+
     private enum CurrentForm
     {
         Std,
@@ -42,7 +51,7 @@ public class PlayerInputs : MonoBehaviour
     public event_abi_vector3 dirAbiRequest;
     public event_int mainMenuRequest;
     public event_float_float_float camMoveRequest;
-    public event_int switchSceneRequest;
+    public event_string switchSceneRequest;
     #endregion
 
     #region Taking References and Linking Events
@@ -136,7 +145,7 @@ public class PlayerInputs : MonoBehaviour
     private void CameraInputHandler()
     {
         if (this.PcCamInputHandler() || this.JoyCamInputHandler())
-          this.camMoveRequest.Invoke(this.currentX, this.currentY, this.currentDistance);
+            this.camMoveRequest.Invoke(this.currentX, this.currentY, this.currentDistance);
     }
 
     private bool PcCamInputHandler()
@@ -1996,14 +2005,43 @@ public class PlayerInputs : MonoBehaviour
     #region Extra Inputs
     private void ExtraInputsHandler()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
-            this.switchSceneRequest.Invoke(1);
-        if (Input.GetKeyDown(KeyCode.PageUp))
-            this.switchSceneRequest.Invoke(SceneManager.GetActiveScene().buildIndex + 1);
-        if (Input.GetKeyDown(KeyCode.PageDown))
-            this.switchSceneRequest.Invoke(SceneManager.GetActiveScene().buildIndex - 1);
-        if (Input.GetKeyDown(KeyCode.End))
-            this.switchSceneRequest.Invoke(SceneManager.GetActiveScene().buildIndex);
+
+        if (SceneManager.GetActiveScene().buildIndex != 11)
+        {
+            if (Input.GetKeyDown(KeyCode.Escape))
+                this.switchSceneRequest.Invoke("Main Menu");
+            if (Input.GetKeyDown(KeyCode.PageUp))
+                this.switchSceneRequest.Invoke(this.CalculatingScene(SceneManager.GetActiveScene().name, 1));
+            if (Input.GetKeyDown(KeyCode.PageDown))
+                this.switchSceneRequest.Invoke(this.CalculatingScene(SceneManager.GetActiveScene().name, -1));
+            if (Input.GetKeyDown(KeyCode.End))
+                this.switchSceneRequest.Invoke(this.CalculatingScene(SceneManager.GetActiveScene().name, 0));
+        }
+    }
+
+    private string CalculatingScene(string currentScene, int codeLogic)
+    {
+        int i = 0;
+
+        string currentSceneToFind = this.scenes.Find(x => x == currentScene);
+
+        if (currentSceneToFind != null) i = this.scenes.IndexOf(currentSceneToFind);
+        else return null;
+
+        if (codeLogic == 1)
+        {
+            if (i + 1 < this.scenes.Count) return this.scenes[i + 1];
+            else return null;
+        }
+        else if (codeLogic == -1)
+        {
+            if (i - 1 >= 0) return this.scenes[i - 1];
+            else return null;
+        }
+        else
+        {
+            return currentScene;
+        }
     }
     #endregion
 

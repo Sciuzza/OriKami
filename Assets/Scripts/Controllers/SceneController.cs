@@ -88,7 +88,7 @@ public class SceneController : MonoBehaviour
         plTempLink.previousSceneRequest.AddListener(LoadingPreviousScene);
         plTempLink.resettingSceneRequest.AddListener(ResettingCurrentScene);
 
-        //plTempLink.switchSceneRequest.AddListener(this.ChangingScenehandlerByIndex);
+        plTempLink.switchSceneRequest.AddListener(this.ChangingScenehandler);
 
         var changeLevTempLink = GameObject.FindGameObjectsWithTag("ChangeScene");
 
@@ -184,7 +184,7 @@ public class SceneController : MonoBehaviour
         var sceneIndex = SceneManager.GetSceneByName(sceneName).buildIndex;
 
 
-        if (sceneIndex > 0 && sceneIndex < 3)
+        if (sceneName == "Main Menu")
         {
             this.stoppingLogicRequest.Invoke();
             this.LoadingScenebyName(sceneName);

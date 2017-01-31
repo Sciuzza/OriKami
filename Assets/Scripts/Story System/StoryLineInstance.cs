@@ -1498,11 +1498,11 @@ public class StoryLineInstance : MonoBehaviour
             }
         }
 
-
         if (actiObjEffect.Time != 0 && actiObjEffect.FadingOutTime != 0)
         {
             actiObjEffect.GbRef.SetActive(false);
         }
+
         coOriginal.a = 1;
         imTempLink.material.color = coOriginal;
         actiObjEffect.End = true;
@@ -1540,7 +1540,6 @@ public class StoryLineInstance : MonoBehaviour
                 yield return null;
             }
         }
-
 
         deActiObjEffect.GbRef.SetActive(false);
         imTempLink.material.color = coOriginal;
@@ -1720,7 +1719,6 @@ public class StoryLineInstance : MonoBehaviour
         {
             this.StartCoroutine(this.UiObjTimedActi(effectToPlay));
         }
-
     }
 
     private void PlayUiObjDeActiEffect(UiObjectDeActivation effectToPlay)
@@ -1739,7 +1737,7 @@ public class StoryLineInstance : MonoBehaviour
 
     private void PlayDialogueEffect(UiDialogue effectToPlay)
     {
-        var delimiters = new char[2] { '/', '\n' };
+        var delimiters = new char[] { '/', '\n' };
         var initialSplit = effectToPlay.DialogueRef.text.Split(delimiters, StringSplitOptions.None);
 
         if (initialSplit.Length % 3 != 0)
