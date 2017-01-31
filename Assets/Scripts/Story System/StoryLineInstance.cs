@@ -638,7 +638,7 @@ public class StoryLineInstance : MonoBehaviour
     private void ApplyingLivingEffects()
     {
         if (this.storySelected.AutoComplete) this.storySelected.Completed = true;
-        
+
 
 
         this.ChangeCsExitRequest.Invoke(this.storySelected.EndControlEffect);
@@ -1763,7 +1763,7 @@ public class StoryLineInstance : MonoBehaviour
 
         if (uiObjActiEffect.Time != 0 && uiObjActiEffect.FadingOutTime != 0)
         {
-        uiObjActiEffect.GbRef.SetActive(false);  
+            uiObjActiEffect.GbRef.SetActive(false);
         }
         coOriginal.a = 1;
         imTempLink.color = coOriginal;
@@ -1849,11 +1849,12 @@ public class StoryLineInstance : MonoBehaviour
     #endregion
 
     #region Edit Mode Methods
-    /*
-public void OnValidate()
-{
-GameObject.FindGameObjectWithTag("GameController").GetComponent<QuestsManager>().AddToRepository(this.CurrentStoryLine);
-}
-*/
+
+    public void OnValidate()
+    {
+        GameObject.FindGameObjectWithTag("GameController").GetComponent<QuestsManager>().AddToRepository(this.CurrentStoryLine);
+        Debug.Log("Ciao");
+    }
+
     #endregion
 }

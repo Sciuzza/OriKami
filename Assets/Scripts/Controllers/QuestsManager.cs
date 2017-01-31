@@ -25,6 +25,7 @@ public class QuestsManager : MonoBehaviour
 
         if (storyLineTempRepo == null) return;
 
+        /*
         foreach (var t in storyLineTempRepo)
         {
             if (
@@ -32,6 +33,7 @@ public class QuestsManager : MonoBehaviour
                     x => x.StoryEnumName == t.GetComponent<StoryLineInstance>().CurrentStoryLine.StoryEnumName)
                 == null) this.StoryLineRepo.Add(t.GetComponent<StoryLineInstance>().CurrentStoryLine);
         }
+        */
     }
 
     public void AddToRepository(StoryLine currentSlTemp)
@@ -39,14 +41,8 @@ public class QuestsManager : MonoBehaviour
 
 
         if (this.StoryLineRepo.Find(x => x == currentSlTemp) == null && 
-            this.StoryLineRepo.Find(x => x.StoryLineName == currentSlTemp.StoryLineName) == null &&
-            currentSlTemp.StoryLineName == currentSlTemp.StoryEnumName.ToString())
+            this.StoryLineRepo.Find(x => x.StoryLineName == currentSlTemp.StoryLineName) == null)
             this.StoryLineRepo.Add(currentSlTemp);
-
-
-        
-
-
     }
 
 
