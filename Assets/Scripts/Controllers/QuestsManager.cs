@@ -40,9 +40,14 @@ public class QuestsManager : MonoBehaviour
     {
 
 
-        if (this.StoryLineRepo.Find(x => x == currentSlTemp) == null && 
-            this.StoryLineRepo.Find(x => x.StoryLineName == currentSlTemp.StoryLineName) == null)
+        if (this.StoryLineRepo.Find(x => x.StoryLineName == currentSlTemp.StoryLineName) == null)
             this.StoryLineRepo.Add(currentSlTemp);
+        else
+        {
+            int i = this.StoryLineRepo.FindIndex(x => x.StoryLineName == currentSlTemp.StoryLineName);
+            this.StoryLineRepo.RemoveAt(i);
+            this.StoryLineRepo.Add(currentSlTemp);
+        }
     }
 
 

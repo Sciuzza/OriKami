@@ -95,7 +95,6 @@ public class SceneController : MonoBehaviour
         foreach (var t in changeLevTempLink)
         {
             t.GetComponent<MoveToNextLevel>().SceneChangeRequest.AddListener(this.ChangingScenehandler);
-            Debug.Log(t);
         }
 
 

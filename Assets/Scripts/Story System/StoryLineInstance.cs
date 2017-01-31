@@ -8,30 +8,6 @@ using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
 #region Enum Types
-public enum Stories
-{
-    Story1,
-    Story2,
-    Story3,
-    None
-}
-
-public enum Events
-{
-    Event1,
-    Event2,
-    Event3,
-    None
-}
-
-public enum Storylines
-{
-    StoryLine1,
-    StoryLine2,
-    StoryLine3,
-    None
-}
-
 public enum Movies
 {
     Movie1,
@@ -348,7 +324,6 @@ public class ItemDependencies
 public class StoryEvent
 {
     public string EventName;
-    public Events EventEnumName;
     public buttonsJoy PlayerInputJoy;
     public buttonsPc PlayerInputPc;
     public float EventEndDelay;
@@ -359,7 +334,6 @@ public class StoryEvent
 public class SingleStory
 {
     public string StoryName;
-    public Stories StoryEnumName;
     public bool Active;
     public bool AutoComplete;
     public bool Completed;
@@ -367,12 +341,12 @@ public class SingleStory
     public GenTriggerConditions GenAccessCond;
     public List<ItemDependencies> ItemAccessCondition;
 
-    public List<Stories> StoryActiveOnActivation;
-    public List<Stories> StoryActiveOnCompletion;
-    public List<Stories> StoryCompleteOnActivation;
-    public List<Stories> StoryCompleteOnCompletion;
-    public List<Storylines> StoryLineCompleteOnActivation;
-    public List<Storylines> StoryLineCompleteOnCompletion;
+    public List<string> StoryActiveOnActivation;
+    public List<string> StoryActiveOnCompletion;
+    public List<string> StoryCompleteOnActivation;
+    public List<string> StoryCompleteOnCompletion;
+    public List<string> StoryLineCompleteOnActivation;
+    public List<string> StoryLineCompleteOnCompletion;
 
     public controlStates PlayerControlEffect;
     public controlStates EndControlEffect;
@@ -384,12 +358,11 @@ public class SingleStory
 public class StoryLine
 {
     public string StoryLineName;
-    public Storylines StoryEnumName;
     public bool Completed;
 
-    public List<Stories> StoryActiveOnCompletion;
-    public List<Stories> StoryCompleteOnCompletion;
-    public List<Storylines> StoryLineCompleteOnCompletion;
+    public List<string> StoryActiveOnCompletion;
+    public List<string> StoryCompleteOnCompletion;
+    public List<string> StoryLineCompleteOnCompletion;
 
     public List<SingleStory> Stories;
 }
@@ -422,6 +395,8 @@ public class StoryLineInstance : MonoBehaviour
     private List<Vector3> camLastPos = new List<Vector3>();
     private List<Quaternion> camLastRot = new List<Quaternion>();
     private int cameraChangeCounter;
+
+    private QuestsManager questRepo;
     #endregion
 
     #region Taking References and Linking Events
@@ -434,6 +409,8 @@ public class StoryLineInstance : MonoBehaviour
 
         var plTempLink = this.player.GetComponent<PlayerInputs>();
         plTempLink.storyLivingRequest.AddListener(this.LivingStoryEvent);
+
+        this.questRepo = GameObject.FindGameObjectWithTag("GameController").GetComponent<QuestsManager>();
     }
     #endregion
 
@@ -515,6 +492,7 @@ public class StoryLineInstance : MonoBehaviour
     {
         GameController.Debugging("Living Story Started for the story " + this.storySelected.StoryName);
 
+        this.ActivationEffects();
         this.camLastPos.Add(Camera.main.transform.position);
         this.camLastRot.Add(Camera.main.transform.rotation);
 
@@ -537,7 +515,7 @@ public class StoryLineInstance : MonoBehaviour
                 this.EnvEffectsHandler();
                 this.UiEffectsHandler();
 
-                GameController.Debugging("Total Events", this.totalEventEffects);
+                GameController.Debugging("Total Effects", this.totalEventEffects);
                 GameController.Debugging("Effect Counter", this.effectCounter);
 
                 if (this.totalEventEffects == 0)
@@ -563,7 +541,7 @@ public class StoryLineInstance : MonoBehaviour
                     this.EnvEffectsHandler();
                     this.UiEffectsHandler();
 
-                    GameController.Debugging("Total Events", this.totalEventEffects);
+                    GameController.Debugging("Total Effects", this.totalEventEffects);
                     GameController.Debugging("Effect Counter", this.effectCounter);
 
                     if (this.totalEventEffects == 0)
@@ -580,7 +558,7 @@ public class StoryLineInstance : MonoBehaviour
                     this.EnvEffectsHandler();
                     this.UiEffectsHandler();
 
-                    GameController.Debugging("Total Events", this.totalEventEffects);
+                    GameController.Debugging("Total Effects", this.totalEventEffects);
                     GameController.Debugging("Effect Counter", this.effectCounter);
 
                     if (this.totalEventEffects == 0)
@@ -639,10 +617,136 @@ public class StoryLineInstance : MonoBehaviour
     {
         if (this.storySelected.AutoComplete) this.storySelected.Completed = true;
 
-
+        this.CompletionEffects();
 
         this.ChangeCsExitRequest.Invoke(this.storySelected.EndControlEffect);
     }
+
+    private void ActivationEffects()
+    {
+        foreach (var storyName in this.storySelected.StoryActiveOnActivation)
+        {
+            SingleStory storyToFind = this.SearchingStoryInside(storyName);
+
+            if (storyToFind != null) storyToFind.Active = true;
+            else
+            {
+                Debug.Log(storyName + " Not Found inside this Storyline");
+            }
+
+            SingleStory storyToFindInRepo = this.SearchingStoryInRepo(storyName);
+
+            if (storyToFindInRepo != null) storyToFindInRepo.Active = true;
+            else
+            {
+                Debug.Log(storyName + " Not Found inside Repo");
+            }
+        }
+
+        foreach (var storyName in this.storySelected.StoryCompleteOnActivation)
+        {
+            SingleStory storyToFind = this.SearchingStoryInside(storyName);
+
+            if (storyToFind != null) storyToFind.Completed = true;
+            else
+            {
+                Debug.Log(storyName + " Not Found inside this Storyline");
+            }
+
+            SingleStory storyToFindInRepo = this.SearchingStoryInRepo(storyName);
+
+            if (storyToFindInRepo != null) storyToFindInRepo.Completed = true;
+            else
+            {
+                Debug.Log(storyName + " Not Found inside Repo");
+            }
+        }
+
+        foreach (var storyLine in this.storySelected.StoryLineCompleteOnActivation)
+        {
+            StoryLine storyLineToFind = this.SearchingStoryLineInRepo(storyLine);
+
+            if (storyLineToFind != null) storyLineToFind.Completed = true;
+            else
+            {
+                Debug.Log(storyLine + " Not Found inside Repo");
+            }
+        }
+    }
+
+    private void CompletionEffects()
+    {
+        foreach (var storyName in this.storySelected.StoryActiveOnCompletion)
+        {
+            SingleStory storyToFind = this.SearchingStoryInside(storyName);
+
+            if (storyToFind != null) storyToFind.Active = true;
+            else
+            {
+                Debug.Log(storyName + " Not Found inside this Storyline");
+            }
+
+            SingleStory storyToFindInRepo = this.SearchingStoryInRepo(storyName);
+
+            if (storyToFindInRepo != null) storyToFindInRepo.Active = true;
+            else
+            {
+                Debug.Log(storyName + " Not Found inside Repo");
+            }
+        }
+
+        foreach (var storyName in this.storySelected.StoryCompleteOnCompletion)
+        {
+            SingleStory storyToFind = this.SearchingStoryInside(storyName);
+
+            if (storyToFind != null) storyToFind.Completed = true;
+            else
+            {
+                Debug.Log(storyName + " Not Found inside this Storyline");
+            }
+
+            SingleStory storyToFindInRepo = this.SearchingStoryInRepo(storyName);
+
+            if (storyToFindInRepo != null) storyToFindInRepo.Completed = true;
+            else
+            {
+                Debug.Log(storyName + " Not Found inside Repo");
+            }
+        }
+
+        foreach (var storyLine in this.storySelected.StoryLineCompleteOnCompletion)
+        {
+            StoryLine storyLineToFind = this.SearchingStoryLineInRepo(storyLine);
+
+            if (storyLineToFind != null) storyLineToFind.Completed = true;
+            else
+            {
+                Debug.Log(storyLine + " Not Found inside Repo");
+            }
+        }
+    }
+
+    private SingleStory SearchingStoryInside(string storyName)
+    {
+        return this.CurrentStoryLine.Stories.Find(x => x.StoryName == storyName);
+    }
+
+    private SingleStory SearchingStoryInRepo(string storyName)
+    {
+        StoryLine storyline = this.questRepo.StoryLineRepo.Find(x => x.Stories.Find(y => y.StoryName == storyName) != null);
+
+        if (storyline != null) return storyline.Stories.Find(x => x.StoryName == storyName);
+        else
+        {
+            return null;
+        }
+    }
+
+    private StoryLine SearchingStoryLineInRepo(string storyLineName)
+    {
+        return this.questRepo.StoryLineRepo.Find(x => x.StoryLineName == storyLineName);
+    }
+
     #endregion
 
     #region Player Effects Methods
@@ -1451,7 +1555,13 @@ public class StoryLineInstance : MonoBehaviour
         var timeTaken = objRotEffect.TimeTaken;
 
         var oriRot = objToMove.transform.rotation;
-        var targetRotation = objRotEffect.Target.transform.rotation;
+
+        var target = new GameObject();
+
+        target.transform.position = objToMove.transform.position;
+        target.transform.rotation = objToMove.transform.rotation;
+
+        target.transform.LookAt(objRotEffect.Target.transform);
 
         var posReached = false;
 
@@ -1463,7 +1573,7 @@ public class StoryLineInstance : MonoBehaviour
 
             objToMove.transform.rotation = Quaternion.Slerp(
                 oriRot,
-                targetRotation,
+                target.transform.rotation,
                 timePassed);
 
             if (timePassed >= 1)
@@ -1853,7 +1963,6 @@ public class StoryLineInstance : MonoBehaviour
     public void OnValidate()
     {
         GameObject.FindGameObjectWithTag("GameController").GetComponent<QuestsManager>().AddToRepository(this.CurrentStoryLine);
-        Debug.Log("Ciao");
     }
 
     #endregion
