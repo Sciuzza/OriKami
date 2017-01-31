@@ -5,19 +5,28 @@ using UnityEngine.SceneManagement;
 public class Traps : MonoBehaviour
 {
     bool isDirectionRight = true;
-    public bool movingPlatforms;
+    public bool isPlatform;
 
     public float sphereSpeed;
     float sphereRotation = 0f;
 
+    
     public Transform A;
     public Transform B;
     Transform targetTr;
     Transform rotationSphere;
+    Transform playerLinker;
+
+    void Awake()
+    {
+        playerLinker = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
+    }
+
 
     void Start()
     {
         targetTr = A;
+    
     }
 
 
@@ -58,9 +67,10 @@ public class Traps : MonoBehaviour
 
     void OnTriggerStay(Collider other)
     {
-        if (other.gameObject.tag == "Player")
+        if (other.gameObject.tag == "Player" && isPlatform)
         {
             other.transform.SetParent(this.gameObject.transform);
+          
         }
     }
 
@@ -68,11 +78,13 @@ public class Traps : MonoBehaviour
     {
         if (other.gameObject.tag == "Player")
         {
-            other.transform.parent = null;
+          other.transform.parent = null;
+            isPlatform = false;
+          
         }
     }
 
-
+    //  playerLinker.transform.SetParent(this.gameObject.transform.GetChild(0));
 
     /*void OnCollisionEnter (Collision coll)
     {
