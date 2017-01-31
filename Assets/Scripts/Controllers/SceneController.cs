@@ -2,6 +2,7 @@
 using System.Collections;
 
 using UnityEngine.Events;
+using UnityEditor.SceneManagement;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -15,6 +16,8 @@ public class SceneController : MonoBehaviour
     public float standardLoadingTime;
 
     private string sceneToLoad;
+
+    public Scene[] scenes;
 
     private AsyncOperation loadingStatus;
 
@@ -33,6 +36,26 @@ public class SceneController : MonoBehaviour
         gcTempLink.gpInitializer.AddListener(GamePlayInitialization);
         //gcTempLink.ngpInitializer.AddListener(NgpInitializer);
 
+        //this.SavingSceneRef();
+
+    }
+
+
+    private void SavingSceneRef()
+    {
+
+        if (SceneManager.sceneCount > 0)
+        {
+            Debug.Log(SceneManager.sceneCount);
+            this.scenes = new Scene[SceneManager.sceneCount];
+
+            for (int n = 0; n < SceneManager.sceneCount; ++n)
+            {
+                this.scenes[n] = SceneManager.GetSceneAt(n);
+                Debug.Log(this.scenes[n]);
+                Debug.Log("Ciao");
+            }
+        }
     }
 
     #endregion
@@ -62,14 +85,18 @@ public class SceneController : MonoBehaviour
         plTempLink.mainMenuRequest.AddListener(LoadingScenebyIndex);
         plTempLink.nextSceneRequest.AddListener(LoadingNextScene);
         plTempLink.previousSceneRequest.AddListener(LoadingPreviousScene);
-       plTempLink.resettingSceneRequest.AddListener(ResettingCurrentScene);
+        plTempLink.resettingSceneRequest.AddListener(ResettingCurrentScene);
+
+        //plTempLink.switchSceneRequest.AddListener(this.ChangingScenehandlerByIndex);
 
         var changeLevTempLink = GameObject.FindGameObjectsWithTag("ChangeScene");
 
         foreach (var t in changeLevTempLink)
         {
             t.GetComponent<MoveToNextLevel>().SceneChangeRequest.AddListener(this.ChangingScenehandler);
+            Debug.Log(t);
         }
+
 
 
     }
@@ -84,8 +111,9 @@ public class SceneController : MonoBehaviour
 
     private IEnumerator LoadingNewScene(string sceneToLoad)
     {
-
+      
         this.loadingStatus = SceneManager.LoadSceneAsync(sceneToLoad, LoadSceneMode.Additive);
+      
         this.loadingStatus.allowSceneActivation = false;
 
         var ciccioRef = SceneManager.GetSceneByName(sceneToLoad);
@@ -172,6 +200,7 @@ public class SceneController : MonoBehaviour
             SceneManager.LoadScene("LoadingScreen");
         }
     }
+
 
     #endregion
 

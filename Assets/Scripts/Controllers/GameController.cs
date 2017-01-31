@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 public class GameController : MonoBehaviour
 {
     public Camera cameraRef;
+    public GameObject dLight;
   
     #region Private Variables
     private GameObject player; 
@@ -23,6 +24,7 @@ public class GameController : MonoBehaviour
         
         DontDestroyOnLoad(this.gameObject);
         DontDestroyOnLoad(cameraRef.gameObject);
+        DontDestroyOnLoad(this.dLight);
         
     }
     #endregion
@@ -41,9 +43,11 @@ public class GameController : MonoBehaviour
         if (FindingPlayer())
         {
             Debug.Log("Initializer Invoked Once");
+
+            this.SettingDLight();
+
             gpInitializer.Invoke(player);
             StartCoroutine(this.player.GetComponent<MoveHandler>().MoveHandlerUpdate());
-
         }
         else
         {
@@ -62,6 +66,29 @@ public class GameController : MonoBehaviour
         }
         else
             return true;
+    }
+
+    private void SettingDLight()
+    {
+        var dLightInScene = GameObject.FindGameObjectWithTag("DLight");
+
+        this.dLight.transform.rotation = dLightInScene.transform.rotation;
+
+        var dLightComp = this.dLight.GetComponent<Light>();
+        var dLightInSceneComp = dLightInScene.GetComponent<Light>();
+
+        dLightComp.type = dLightInSceneComp.type;
+        dLightComp.bakedIndex = dLightInSceneComp.bakedIndex;
+        dLightComp.color = dLightInSceneComp.color;
+        dLightComp.intensity = dLightInSceneComp.intensity;
+        dLightComp.bounceIntensity = dLightInSceneComp.bounceIntensity;
+        dLightComp.shadows = dLightInSceneComp.shadows;
+        dLightComp.shadowStrength = dLightInSceneComp.shadowStrength;
+        dLightComp.shadowBias = dLightInSceneComp.shadowBias;
+        dLightComp.shadowNormalBias = dLightInSceneComp.shadowNormalBias;
+        dLightComp.shadowNearPlane = dLightInSceneComp.shadowNearPlane;
+
+        dLightInScene.SetActive(false);
     }
     #endregion
 

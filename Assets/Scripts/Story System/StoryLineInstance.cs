@@ -1485,7 +1485,7 @@ public class StoryLineInstance : MonoBehaviour
             yield return new WaitForSeconds(baloonEffect.BaloonSpeed);
         }
 
-        baloonTempLink.CanvasRef.gameObject.SetActive(false);
+        baloonTempLink.gameObject.SetActive(false);
         baloonEffect.End = true;
         this.effectCounter++;
         GameController.Debugging("Effect Counter", this.effectCounter);
@@ -1498,16 +1498,15 @@ public class StoryLineInstance : MonoBehaviour
         var gbTargetTemp = new GameObject();
         gbTargetTemp.transform.position = npcTempRef.transform.position;
         gbTargetTemp.transform.rotation = npcTempRef.transform.rotation;
+        gbTargetTemp.transform.LookAt(Camera.main.transform);
 
         while (!baloonEffect.End)
         {
-
-
-            gbTargetTemp.transform.LookAt(Camera.main.transform);
             npcTempRef.transform.rotation = Quaternion.Slerp(npcTempRef.transform.rotation, gbTargetTemp.transform.rotation, Time.deltaTime);
             yield return null;
         }
 
+        baloonEffect.End = false;
         DestroyObject(gbTargetTemp);
     }
     #endregion

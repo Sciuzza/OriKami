@@ -94,15 +94,12 @@ public class MenuManager : MonoBehaviour
         this.legends = mmListButtonRef.Find(x => x.gameObject.name == "Legends' Journal");
         this.options = mmListButtonRef.Find(x => x.gameObject.name == "Options");
         this.exit = mmListButtonRef.Find(x => x.gameObject.name == "Exit");
-
-        
+ 
         this.newGame.onClick.AddListener(PlayNewGameSound);
         this.newGame.onClick.AddListener(InvokingNewGame);
         this.continueB.onClick.AddListener(PlayNewGameSound);
         this.continueB.onClick.AddListener(InvokingLevelSel);
         this.exit.onClick.AddListener(QuitGame);
-
-    
 
 
          //EventSystem.current.SetSelectedGameObject(this.newGame.gameObject);
@@ -111,7 +108,7 @@ public class MenuManager : MonoBehaviour
 
     private void InvokingNewGame()
     {
-        changingSceneRequest.Invoke("Route 1");
+        changingSceneRequest.Invoke("Armadillos' Village");
     }
 
     private void InvokingLevelSel()

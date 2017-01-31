@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 
 public class PlayerInputs : MonoBehaviour
 {
@@ -41,6 +42,7 @@ public class PlayerInputs : MonoBehaviour
     public event_abi_vector3 dirAbiRequest;
     public event_int mainMenuRequest;
     public event_float_float_float camMoveRequest;
+    public event_int switchSceneRequest;
     #endregion
 
     #region Taking References and Linking Events
@@ -1995,13 +1997,13 @@ public class PlayerInputs : MonoBehaviour
     private void ExtraInputsHandler()
     {
         if (Input.GetKeyDown(KeyCode.Escape))
-            mainMenuRequest.Invoke(1);
+            this.switchSceneRequest.Invoke(1);
         if (Input.GetKeyDown(KeyCode.PageUp))
-            nextSceneRequest.Invoke();
+            this.switchSceneRequest.Invoke(SceneManager.GetActiveScene().buildIndex + 1);
         if (Input.GetKeyDown(KeyCode.PageDown))
-            previousSceneRequest.Invoke();
+            this.switchSceneRequest.Invoke(SceneManager.GetActiveScene().buildIndex - 1);
         if (Input.GetKeyDown(KeyCode.End))
-            resettingSceneRequest.Invoke();
+            this.switchSceneRequest.Invoke(SceneManager.GetActiveScene().buildIndex);
     }
     #endregion
 
