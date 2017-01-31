@@ -72,7 +72,7 @@ public class SaveSystem : MonoBehaviour
         #region Binary Formatter & File Creation
 
         BinaryFormatter bf = new BinaryFormatter();
-        FileStream file = File.Create(Application.persistentDataPath + "/PlayerData.dat");
+        FileStream file = File.Create(Application.persistentDataPath + "/PlayerDataDef.dat");
         #endregion
 
         #region Position & Rotation
@@ -99,6 +99,7 @@ public class SaveSystem : MonoBehaviour
         data.formsUnlocked[3] = fsmTempLink.abiUnlocked.dolphinUnlocked;
         #endregion
 
+        /*
         #region QuestSave
         QuestData questData = new QuestData();
         StoryLineInstance storyLineTempLink = GameObject.FindGameObjectWithTag("StoryLine").GetComponent<StoryLineInstance>();
@@ -119,21 +120,21 @@ public class SaveSystem : MonoBehaviour
         }
 
         #endregion
-
+    */
         bf.Serialize(file, data);
-        bf.Serialize(file, questData);
+        //bf.Serialize(file, questData);
         file.Close();
 
     }
 
     public void LoadState()
     {
-        if (File.Exists(Application.persistentDataPath + "/PlayerData.dat"))
+        if (File.Exists(Application.persistentDataPath + "/PlayerDataDef.dat"))
         {
             BinaryFormatter bf = new BinaryFormatter();
-            FileStream file = File.Open(Application.persistentDataPath + "/PlayerData.dat", FileMode.Open);
+            FileStream file = File.Open(Application.persistentDataPath + "/PlayerDataDef.dat", FileMode.Open);
             SensibleData data = (SensibleData)bf.Deserialize(file);
-            QuestData questData = (QuestData)bf.Deserialize(file);
+            //QuestData questData = (QuestData)bf.Deserialize(file);
             FSMChecker fsmTempLink = PlayerTempLink.gameObject.GetComponent<FSMChecker>();
             StoryLineInstance storyLineTempLink = GameObject.FindGameObjectWithTag("StoryLine").GetComponent<StoryLineInstance>();
             StoryLineInstance singleStoryTempLink = GameObject.FindGameObjectWithTag("StoryLine").GetComponent<StoryLineInstance>();
@@ -152,6 +153,7 @@ public class SaveSystem : MonoBehaviour
             PlayerTempLink.GetComponent<FSMChecker>().UpdatingAbilityList();
             #endregion
 
+            /*
             #region LoadQuestData
             bool[] loadTemp = new bool[questemp];
             loadTemp = questData.infoQuest;
@@ -165,8 +167,8 @@ public class SaveSystem : MonoBehaviour
 
             storyLineTempLink.CurrentStoryLine.Stories = new List<SingleStory>();
 
-
             #endregion
+    */
 
 
 

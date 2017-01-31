@@ -108,7 +108,7 @@ public class MenuManager : MonoBehaviour
 
     private void InvokingNewGame()
     {
-        changingSceneRequest.Invoke("Armadillos' Village");
+        changingSceneRequest.Invoke("Route 1");
     }
 
     private void InvokingLevelSel()
