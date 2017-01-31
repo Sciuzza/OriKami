@@ -136,8 +136,8 @@ public class SaveSystem : MonoBehaviour
             SensibleData data = (SensibleData)bf.Deserialize(file);
             //QuestData questData = (QuestData)bf.Deserialize(file);
             FSMChecker fsmTempLink = PlayerTempLink.gameObject.GetComponent<FSMChecker>();
-            StoryLineInstance storyLineTempLink = GameObject.FindGameObjectWithTag("StoryLine").GetComponent<StoryLineInstance>();
-            StoryLineInstance singleStoryTempLink = GameObject.FindGameObjectWithTag("StoryLine").GetComponent<StoryLineInstance>();
+            //StoryLineInstance storyLineTempLink = GameObject.FindGameObjectWithTag("StoryLine").GetComponent<StoryLineInstance>();
+            //StoryLineInstance singleStoryTempLink = GameObject.FindGameObjectWithTag("StoryLine").GetComponent<StoryLineInstance>();
             file.Close();
 
             #region LoadPosition&Rotation
