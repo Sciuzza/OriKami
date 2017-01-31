@@ -73,6 +73,10 @@ public class CameraManager : MonoBehaviour
         var gcLink = this.GetComponent<GameController>();
 
         gcLink.gpInitializer.AddListener(this.SettingPlayerCamera);
+
+        var scLink = this.GetComponent<SceneController>();
+
+        scLink.stoppingLogicRequest.AddListener(this.StoppingCoro);
     }
     #endregion Taking Game Controller Reference and Link the Initializer Event
 
@@ -209,4 +213,9 @@ public class CameraManager : MonoBehaviour
 
     } 
     #endregion
+
+    private void StoppingCoro()
+    {
+        this.StopAllCoroutines();
+    }
 }

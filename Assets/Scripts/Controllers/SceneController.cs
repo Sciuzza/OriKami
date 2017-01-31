@@ -20,6 +20,8 @@ public class SceneController : MonoBehaviour
 
     private AsyncOperation loadingStatus;
 
+    public UnityEvent stoppingLogicRequest;
+
     #region Taking References and linking Events
     void Awake()
     {
@@ -185,7 +187,7 @@ public class SceneController : MonoBehaviour
 
         if (sceneIndex > 0 && sceneIndex < 3)
         {
-
+            this.stoppingLogicRequest.Invoke();
             this.LoadingScenebyName(sceneName);
         }
         else if (sceneName == "LoadingScreen")
@@ -195,6 +197,7 @@ public class SceneController : MonoBehaviour
         }
         else
         {
+            this.stoppingLogicRequest.Invoke();
             this.sceneToLoad = sceneName;
             SceneManager.LoadScene("LoadingScreen");
         }

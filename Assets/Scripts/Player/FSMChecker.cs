@@ -223,7 +223,7 @@ public class FSMChecker : MonoBehaviour
     // Variables needed to handle Designer Cam Query Situations in Story Mode
     private bool queryDesCamera;
     private GameObject queryDesCamGb;
-    private bool storyMode;
+    public static bool storyMode;
 
     private bool isGlidingSound = false;
     private bool isRollingSound = false;
@@ -1689,7 +1689,7 @@ public class FSMChecker : MonoBehaviour
 
     private void SettingStoryMode(bool state)
     {
-        this.storyMode = state;
+        storyMode = state;
     }
     #endregion
 

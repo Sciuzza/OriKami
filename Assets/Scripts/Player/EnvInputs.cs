@@ -14,7 +14,9 @@ public class EnvInputs : MonoBehaviour
     public event_ps psChanged;
     public UnityEvent vFissureRequestOff, playerIsDead, cameraOnRequest;
     public event_Gb cameraOffRequest;
+
     public event_collider storyActivationRequest;
+
     #endregion
 
     #region Taking References
@@ -113,6 +115,7 @@ public class EnvInputs : MonoBehaviour
                 this.cameraOffRequest.Invoke(envTrigger.gameObject.GetComponentInChildren<CameraDirRef>().CameraDirRefObj);
                 break;
             case "Story Triggers":
+                if (!FSMChecker.storyMode)
                 storyActivationRequest.Invoke(envTrigger);
                 break;
         }

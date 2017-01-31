@@ -441,11 +441,11 @@ public class StoryLineInstance : MonoBehaviour
     // Check Completed , Active and Relation Conditions
     private void CheckingAccessAndExistenceConditions(Collider trigger)
     {
-        GameController.Debugging(trigger.name);
+        Debug.Log(trigger.name);
 
         if (this.CurrentStoryLine.Completed)
         {
-            GameController.Debugging("Storyline already Completed");
+            Debug.Log("Storyline already Completed");
             return;
         }
 
@@ -458,14 +458,14 @@ public class StoryLineInstance : MonoBehaviour
             }
 
             this.storySelected = story;
-            GameController.Debugging(this.storySelected.StoryName);
+            Debug.Log(this.storySelected.StoryName);
             break;
         }
 
         if (this.storySelected != null && this.CheckItemConditions())
             this.InitializingStory();
         else
-            GameController.Debugging("No Story is accessible through this Trigger " + trigger.name);
+            Debug.Log("No Story is accessible through this Trigger " + trigger.name);
     }
 
     private bool CheckItemConditions()
@@ -499,6 +499,7 @@ public class StoryLineInstance : MonoBehaviour
         }
         else
         {
+            Debug.Log("Ciao");
             this.LivingStoryEvent();
         }
     }
@@ -1496,13 +1497,13 @@ public class StoryLineInstance : MonoBehaviour
         var npcTempRef = baloonEffect.NpcRef;
 
         var gbTargetTemp = new GameObject();
-        gbTargetTemp.transform.position = npcTempRef.transform.position;
-        gbTargetTemp.transform.rotation = npcTempRef.transform.rotation;
-        gbTargetTemp.transform.LookAt(Camera.main.transform);
 
         while (!baloonEffect.End)
         {
-            npcTempRef.transform.rotation = Quaternion.Slerp(npcTempRef.transform.rotation, gbTargetTemp.transform.rotation, Time.deltaTime);
+            gbTargetTemp.transform.position = npcTempRef.transform.position;
+            gbTargetTemp.transform.rotation = npcTempRef.transform.rotation;
+            gbTargetTemp.transform.LookAt(Camera.main.transform);
+            npcTempRef.transform.rotation = Quaternion.Slerp(npcTempRef.transform.rotation, gbTargetTemp.transform.rotation, 5 * Time.deltaTime);
             yield return null;
         }
 
