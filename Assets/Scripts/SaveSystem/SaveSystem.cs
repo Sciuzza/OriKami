@@ -13,11 +13,9 @@ public class SaveSystem : MonoBehaviour
     int questemp;
     private StoryLineInstance slTempLink;
 
-
-
     private void Awake()
     {
-        var gcTempLink = this.GetComponent<GameController>();
+        GameController gcTempLink = this.GetComponent<GameController>();
         gcTempLink.gpInitializer.AddListener(this.GameplayInitialization);
         var storyLineCheck = GameObject.FindGameObjectWithTag("StoryLine");
 
@@ -28,10 +26,7 @@ public class SaveSystem : MonoBehaviour
 
             if (this.slTempLink != null)
                 this.questemp = (this.slTempLink.CurrentStoryLine.Stories.Count * 2) + 1;
-            if (this.slTempLink !=null)
-            {
-                this.questempSingle = (this.slTempLink.CurrentStoryLine.Stories.Count * 2) + 1;
-            }
+
         }
     }
 
@@ -76,7 +71,7 @@ public class SaveSystem : MonoBehaviour
         #region Binary Formatter & File Creation
 
         BinaryFormatter bf = new BinaryFormatter();
-        FileStream file = File.Create(Application.persistentDataPath + "/PlayerData.dat");
+        FileStream file = File.Create(Application.persistentDataPath + "/PlayerDataDef.dat");
         #endregion
 
         #region Position & Rotation
@@ -132,10 +127,10 @@ public class SaveSystem : MonoBehaviour
 
     public void LoadState()
     {
-        if (File.Exists(Application.persistentDataPath + "/PlayerData.dat"))
+        if (File.Exists(Application.persistentDataPath + "/PlayerDataDef.dat"))
         {
             BinaryFormatter bf = new BinaryFormatter();
-            FileStream file = File.Open(Application.persistentDataPath + "/PlayerData.dat", FileMode.Open);
+            FileStream file = File.Open(Application.persistentDataPath + "/PlayerDataDef.dat", FileMode.Open);
             SensibleData data = (SensibleData)bf.Deserialize(file);
             QuestData questData = (QuestData)bf.Deserialize(file);
             FSMChecker fsmTempLink = PlayerTempLink.gameObject.GetComponent<FSMChecker>();
