@@ -2,7 +2,6 @@
 using System.Collections;
 
 using UnityEngine.Events;
-using UnityEditor.SceneManagement;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
