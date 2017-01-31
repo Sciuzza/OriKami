@@ -499,7 +499,6 @@ public class StoryLineInstance : MonoBehaviour
         }
         else
         {
-            Debug.Log("Ciao");
             this.LivingStoryEvent();
         }
     }
@@ -638,6 +637,10 @@ public class StoryLineInstance : MonoBehaviour
 
     private void ApplyingLivingEffects()
     {
+        if (this.storySelected.AutoComplete) this.storySelected.Completed = true;
+        
+
+
         this.ChangeCsExitRequest.Invoke(this.storySelected.EndControlEffect);
     }
     #endregion
@@ -1392,7 +1395,10 @@ public class StoryLineInstance : MonoBehaviour
         }
 
 
-        actiObjEffect.GbRef.SetActive(false);
+        if (actiObjEffect.Time != 0 && actiObjEffect.FadingOutTime != 0)
+        {
+            actiObjEffect.GbRef.SetActive(false);
+        }
         coOriginal.a = 1;
         imTempLink.material.color = coOriginal;
         actiObjEffect.End = true;
@@ -1755,8 +1761,10 @@ public class StoryLineInstance : MonoBehaviour
             }
         }
 
-
-        uiObjActiEffect.GbRef.SetActive(false);
+        if (uiObjActiEffect.Time != 0 && uiObjActiEffect.FadingOutTime != 0)
+        {
+        uiObjActiEffect.GbRef.SetActive(false);  
+        }
         coOriginal.a = 1;
         imTempLink.color = coOriginal;
         uiObjActiEffect.End = true;
