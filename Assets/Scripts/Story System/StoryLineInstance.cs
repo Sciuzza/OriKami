@@ -360,9 +360,9 @@ public class SingleStory
 {
     public string StoryName;
     public Stories StoryEnumName;
-    public bool Active;
+    public bool ActiveS;
     public bool AutoComplete;
-    public bool Completed;
+    public bool CompletedS;
 
     public GenTriggerConditions GenAccessCond;
     public List<ItemDependencies> ItemAccessCondition;
@@ -452,7 +452,7 @@ public class StoryLineInstance : MonoBehaviour
         foreach (var story in this.CurrentStoryLine.Stories)
         {
             if ((story.GenAccessCond.STriggerRef != trigger && story.GenAccessCond.TriggerRef != trigger)
-                || !story.Active || story.Completed)
+                || !story.ActiveS || story.CompletedS)
             {
                 continue;
             }
