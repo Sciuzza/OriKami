@@ -4,6 +4,8 @@ using System.Collections;
 
 public class Puzzles : MonoBehaviour
 {
+    public bool isPlatform;
+
     //Gestione Movimento oggetti  
     public bool moveObject;
     public bool moveUp;
@@ -325,6 +327,11 @@ public class Puzzles : MonoBehaviour
     {
         if (other.gameObject.tag == "Player" && keepRotating)
         {
+            //in caso di morte
+           
+        }
+        if (other.gameObject.tag == "Player" && keepRotating && isPlatform)
+        {
             other.transform.SetParent(this.gameObject.transform);
         }
 
@@ -342,6 +349,7 @@ public class Puzzles : MonoBehaviour
         if (other.gameObject.tag == "Player")
         {
             other.transform.parent = null;
+            
         }
               
     }
