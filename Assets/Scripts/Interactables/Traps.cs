@@ -79,7 +79,7 @@ public class Traps : MonoBehaviour
         if (other.gameObject.tag == "Player")
         {
           other.transform.parent = null;
-            isPlatform = false;
+            
           
         }
     }
