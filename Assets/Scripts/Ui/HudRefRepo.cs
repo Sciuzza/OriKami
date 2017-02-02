@@ -18,4 +18,6 @@ public class HudRefRepo : MonoBehaviour
 
     // to handle dialogue texts
     public Text DialogueT, RightLabelT, LeftLabelT;
+
+    public MovieLogic MovieRef;
 }
