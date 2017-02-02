@@ -48,7 +48,6 @@ public class PlayerMove
 public class PlayerSee
 {
     public bool End;
-    [Tooltip("Standard Form, Frog Form, Armadillo Form, Dragon Form, Dolphin Form")]
     public GameObject GbRef;
     public float TimeTaken;
 }
@@ -57,6 +56,7 @@ public class PlayerSee
 public class PlayerPushBack
 {
     public bool End;
+    public GameObject GbRef;
     public float PushingBackPower;
     public float TimeTaken;
 }
@@ -380,7 +380,7 @@ public class StoryLineInstance : MonoBehaviour
     #region Private Variables
     private GameObject player;
 
-    public SingleStory storySelected;
+    private SingleStory storySelected;
 
     private int eventIndex;
     private int effectCounter;
@@ -427,15 +427,17 @@ public class StoryLineInstance : MonoBehaviour
 
         foreach (var story in this.CurrentStoryLine.Stories)
         {
-            if ((story.GenAccessCond.STriggerRef != trigger && story.GenAccessCond.TriggerRef != trigger)
-                || !story.Active || story.Completed)
+            if ((story.GenAccessCond.STriggerRef == trigger || story.GenAccessCond.TriggerRef == trigger)
+                && story.Active && !story.Completed)
+            {
+                this.storySelected = story;
+                Debug.Log(this.storySelected.StoryName);
+                break;
+            }
+            else
             {
                 continue;
             }
-
-            this.storySelected = story;
-            Debug.Log(this.storySelected.StoryName);
-            break;
         }
 
         if (this.storySelected != null && this.CheckItemConditions())
@@ -794,8 +796,16 @@ public class StoryLineInstance : MonoBehaviour
                 GameController.Debugging("Player Reward");
                 this.PlayPlayerRewardEffect(plaEffectsToEvaluate.PlayerReward);
             }
+            if (plaEffectsToEvaluate.PushingBackEffect.PushingBackPower > 0
+                && plaEffectsToEvaluate.PushingBackEffect.TimeTaken > 0 && plaEffectsToEvaluate.PushingBackEffect.GbRef != null)
+            {
+                this.totalEventEffects++;
+                GameController.Debugging("Player Pushing Back");
+                this.PlayPlayerPushingBackEffect(plaEffectsToEvaluate.PushingBackEffect);
+            }
+
         }
-        else if (plaEffectsToEvaluate.PushingBackEffect.PushingBackPower > 0 && plaEffectsToEvaluate.PushingBackEffect.TimeTaken > 0)
+        else if (plaEffectsToEvaluate.PushingBackEffect.PushingBackPower > 0 && plaEffectsToEvaluate.PushingBackEffect.TimeTaken > 0 && plaEffectsToEvaluate.PushingBackEffect.GbRef != null)
         {
             this.totalEventEffects++;
             GameController.Debugging("Player Pushing Back");
@@ -914,7 +924,7 @@ public class StoryLineInstance : MonoBehaviour
 
     private IEnumerator PushBackPlayer(PlayerPushBack pushBackEffect)
     {
-        var targetPosition = this.player.transform.position - (this.player.transform.forward * pushBackEffect.PushingBackPower);
+        var targetPosition = this.player.transform.position + (Vector3.ProjectOnPlane(pushBackEffect.GbRef.transform.forward, this.player.transform.up).normalized * pushBackEffect.PushingBackPower);
         var objToMove = this.player;
 
         var timeTaken = pushBackEffect.TimeTaken;

@@ -1667,11 +1667,12 @@ public class FSMChecker : MonoBehaviour
 
         this.cPlayerState.currentClState = newCs;
 
-        if (this.cPlayerState.currentClState == controlStates.noCamAndMove ||
-            this.cPlayerState.currentClState == controlStates.noCamera ||
-            this.cPlayerState.currentClState == controlStates.noCameraAndGenAbi ||
-            this.cPlayerState.currentClState == controlStates.noControl)
+        if (this.cPlayerState.currentClState == controlStates.noCamAndMove
+            || this.cPlayerState.currentClState == controlStates.noCamera
+            || this.cPlayerState.currentClState == controlStates.noCameraAndGenAbi
+            || this.cPlayerState.currentClState == controlStates.noControl)
             this.switchingCameraToStoryRequest.Invoke();
+        
 
         this.UpdatingAbilityList();
     }

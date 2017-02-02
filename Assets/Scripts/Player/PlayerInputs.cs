@@ -2052,6 +2052,9 @@ public class PlayerInputs : MonoBehaviour
         {
             storyLivingRequest.Invoke();
             this.storyModeInput = false;
+            this.storyJoyInput = buttonsJoy.none;
+            this.storyPcInput = buttonsPc.none;
+       
         }
     }
 
