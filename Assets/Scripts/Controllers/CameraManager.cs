@@ -96,6 +96,9 @@ public class CameraManager : MonoBehaviour
 
     private IEnumerator PlayerCameraMoving()
     {
+
+        this.reAdjustingCamValues.Invoke(this.currentX, this.currentY, this.currentDistance);
+
         while (this.currentCamera == CameraStyle.player)
         {
             var dir = new Vector3(0, 0, -this.currentDistance);
@@ -176,7 +179,7 @@ public class CameraManager : MonoBehaviour
 
         Destroy(calPos);
        
-        this.reAdjustingCamValues.Invoke(this.currentX, this.currentY, this.currentDistance);
+        //this.reAdjustingCamValues.Invoke(this.currentX, this.currentY, this.currentDistance);
         this.StartCoroutine(this.SmoothingSlerp());
     }
 
@@ -211,11 +214,13 @@ public class CameraManager : MonoBehaviour
         this.currentCamera = CameraStyle.player;
         this.plCamMoving = this.StartCoroutine(this.PlayerCameraMoving());
 
-    } 
+    }
     #endregion
 
+    #region General Methods
     private void StoppingCoro()
     {
         this.StopAllCoroutines();
-    }
+    } 
+    #endregion
 }
