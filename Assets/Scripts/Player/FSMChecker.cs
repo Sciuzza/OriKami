@@ -184,6 +184,11 @@ public class event_string_string_string : UnityEvent<string, string, string>
 public class event_float_float_float : UnityEvent<float, float, float>
 {
 }
+
+[System.Serializable]
+public class event_int_float : UnityEvent<int, float>
+{
+}
 #endregion
 
 public class FSMChecker : MonoBehaviour

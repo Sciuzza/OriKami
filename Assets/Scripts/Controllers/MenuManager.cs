@@ -35,6 +35,7 @@ public class MenuManager : MonoBehaviour
     #region Public variables
     public UnityEvent loadingSceneRequest;
     public event_string changingSceneRequest;
+    public UnityEvent movieEndNotification;
     #endregion
 
     #region Taking References and linking Events
@@ -55,6 +56,7 @@ public class MenuManager : MonoBehaviour
         var slTempLink = GameObject.FindGameObjectWithTag("StoryLine").GetComponent<StoryLineInstance>();
         slTempLink.UiDialogueRequest.AddListener(this.PoppingOutDialogue);
         slTempLink.DialogueEnded.AddListener(this.ResettingDialogue);
+        slTempLink.MovieRequest.AddListener(this.PoppingOutMovie);
     }
 
     #endregion
@@ -130,13 +132,6 @@ public class MenuManager : MonoBehaviour
     {
         GameObject.FindGameObjectWithTag("GameController").GetComponent<SoundManager>().PlaySound(1, 2);
     }
-
- 
-
-
-
- 
-  
     #endregion
 
     #region Level Selection Handler
@@ -251,6 +246,58 @@ public class MenuManager : MonoBehaviour
         this.gpUiRef.Dialogue.SetActive(false);
     }
 
+    private void PoppingOutMovie(int movieIndex, float smoothingAlpha)
+    {
+        if (movieIndex < this.gpUiRef.MovieRef.Movie.Length)
+        {
+            this.gpUiRef.MovieRef.ImLink.texture = this.gpUiRef.MovieRef.Movie[movieIndex] as MovieTexture;
+            this.gpUiRef.MovieRef.AudioLink.clip = this.gpUiRef.MovieRef.Audio[movieIndex];
+
+            this.gpUiRef.MovieRef.Movie[movieIndex].Play();
+            this.gpUiRef.MovieRef.AudioLink.Play();
+            this.StartCoroutine(this.MovieCheck(movieIndex, smoothingAlpha));
+        }
+        else
+        {
+            Debug.Log("Movie can't be played");
+            this.movieEndNotification.Invoke();
+        }
+    }
+
+    private IEnumerator MovieCheck(int movieIndex, float smoothingAlpha)
+    {
+        var colorLink = this.gpUiRef.MovieRef.ImLink.color;
+
+        var alphaDelta = 1 / smoothingAlpha;
+
+        while (colorLink.a < 1)
+        {
+            colorLink.a += alphaDelta * Time.deltaTime;
+            this.gpUiRef.MovieRef.ImLink.color = colorLink;
+            yield return null;
+        }
+
+        colorLink.a = 1;
+        this.gpUiRef.MovieRef.ImLink.color = colorLink;
+
+        while (this.gpUiRef.MovieRef.Movie[movieIndex].isPlaying)
+        {
+            yield return null;
+        }
+
+        while (colorLink.a > 0)
+        {
+            colorLink.a -= alphaDelta * Time.deltaTime;
+            this.gpUiRef.MovieRef.ImLink.color = colorLink;
+            yield return null;
+        }
+
+        colorLink.a = 0;
+        this.gpUiRef.MovieRef.ImLink.color = colorLink;
+
+        this.movieEndNotification.Invoke();
+
+    }
     #endregion
 
     #region Loading Screen Handler

@@ -8,14 +8,6 @@ using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
 #region Enum Types
-public enum Movies
-{
-    Movie1,
-    Movie2,
-    Movie3,
-    None
-}
-
 public enum ItemType
 {
     Item1,
@@ -276,11 +268,12 @@ public class AnimationEffect
 #endregion Animation Effect
 
 #region Movie Effect
-
 [Serializable]
 public class MovieEffect
 {
-    public Movies MovieName;
+    public bool End;
+    public int MovieIndex;
+    public float SmoothInTime;
 }
 
 #endregion Movie Effect
@@ -381,6 +374,7 @@ public class StoryLineInstance : MonoBehaviour
     public event_string_string_string UiDialogueRequest;
     public UnityEvent DialogueEnded;
     public event_bool IsStoryMode;
+    public event_int_float MovieRequest;
     #endregion
 
     #region Private Variables
@@ -397,6 +391,7 @@ public class StoryLineInstance : MonoBehaviour
     private int cameraChangeCounter;
 
     private QuestsManager questRepo;
+    private MenuManager mmLink;
     #endregion
 
     #region Taking References and Linking Events
@@ -411,6 +406,10 @@ public class StoryLineInstance : MonoBehaviour
         plTempLink.storyLivingRequest.AddListener(this.LivingStoryEvent);
 
         this.questRepo = GameObject.FindGameObjectWithTag("GameController").GetComponent<QuestsManager>();
+
+        this.mmLink = GameObject.FindGameObjectWithTag("GameController").GetComponent<MenuManager>();
+
+        this.mmLink.movieEndNotification.AddListener(this.MovieEnd);
     }
     #endregion
 
@@ -514,6 +513,7 @@ public class StoryLineInstance : MonoBehaviour
                 this.CameraEffectsHandler();
                 this.EnvEffectsHandler();
                 this.UiEffectsHandler();
+                this.MovieEffectsHandler();
 
                 GameController.Debugging("Total Effects", this.totalEventEffects);
                 GameController.Debugging("Effect Counter", this.effectCounter);
@@ -540,6 +540,7 @@ public class StoryLineInstance : MonoBehaviour
                     this.CameraEffectsHandler();
                     this.EnvEffectsHandler();
                     this.UiEffectsHandler();
+                    this.MovieEffectsHandler();
 
                     GameController.Debugging("Total Effects", this.totalEventEffects);
                     GameController.Debugging("Effect Counter", this.effectCounter);
@@ -557,6 +558,7 @@ public class StoryLineInstance : MonoBehaviour
                     this.CameraEffectsHandler();
                     this.EnvEffectsHandler();
                     this.UiEffectsHandler();
+                    this.MovieEffectsHandler();
 
                     GameController.Debugging("Total Effects", this.totalEventEffects);
                     GameController.Debugging("Effect Counter", this.effectCounter);
@@ -1956,12 +1958,34 @@ public class StoryLineInstance : MonoBehaviour
     }
     #endregion
 
-    #region Edit Mode Methods
+    #region Movie Effects Methods
+    private void MovieEffectsHandler()
+    {
+        var movieEffectToEvaluate = this.storySelected.Events[this.eventIndex].Effects.MovieEffect;
 
+        if (movieEffectToEvaluate.MovieIndex > 0)
+        {
+            this.totalEventEffects++;
+            Debug.Log("Movie");
+            this.PlayMovieEffect(movieEffectToEvaluate);
+        }
+    }
+
+    private void PlayMovieEffect(MovieEffect movEffect)
+    {
+        this.MovieRequest.Invoke(movEffect.MovieIndex - 1, movEffect.SmoothInTime);
+    }
+
+    private void MovieEnd()
+    {
+        this.effectCounter++;
+    }
+    #endregion
+
+    #region Edit Mode Methods
     public void OnValidate()
     {
         GameObject.FindGameObjectWithTag("GameController").GetComponent<QuestsManager>().AddToRepository(this.CurrentStoryLine);
     }
-
     #endregion
 }
