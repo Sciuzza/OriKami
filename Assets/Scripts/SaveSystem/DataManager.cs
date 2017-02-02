@@ -38,7 +38,7 @@ public class DataManager : MonoBehaviour {
     public SensibleGeneralData sgData;
     
 
-	public void UpdateData(float x, float y, float z, float rotX, float rotY, float rotZ)
+    public void UpdateData(float x, float y, float z, float rotX, float rotY, float rotZ)
     {
         sgData.PlayerX = x;
         sgData.PlayerY = y;
@@ -56,9 +56,9 @@ public class DataManager : MonoBehaviour {
         sgData.playerForms.Clear();
         sgData.playerForms.TrimExcess();
 
-        sgData.playerForms.AddRange(forms);
+       // sgData.playerForms.AddRange(forms);
     }
-
+    /*
     public void UpdateDataObjects(List<List<T>>trapPositions)
     {
         sgData.gameTraps.Clear();
@@ -68,7 +68,7 @@ public class DataManager : MonoBehaviour {
 
     }
 
-
+    */
 
 
 }
