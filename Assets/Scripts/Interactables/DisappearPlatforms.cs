@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 namespace Orikami
 {
@@ -9,19 +10,23 @@ namespace Orikami
 
         public BoxCollider platformCollider;
         public MeshRenderer PlatformMesh;
+        public MeshRenderer[] dandelionDeactivation;
         public float smoothing = 1f;
         public float disappearingTime = 0f;
         public bool destroyPlatforms;
         public bool timedPlatforms;
+        public bool groupPlatforms;
+
+     
 
         IEnumerator MyCoroutine()
         {
-            
+
             print("On platform");
             yield return new WaitForSeconds(disappearingTime);
             PlatformMesh.enabled = false;
             platformCollider.isTrigger = true;
-            
+
         }
 
         IEnumerator MyCoroutineExit()
@@ -32,9 +37,31 @@ namespace Orikami
 
         }
 
+        IEnumerator MyGroupDeactivation()
+        {
+            yield return new WaitForSeconds(disappearingTime);
+            foreach (var item in dandelionDeactivation)
+            {
+                item.enabled = false;
+            }
+
+            platformCollider.isTrigger = true;
+        }
+
+        IEnumerator MyGroupDeactivationExit()
+        {
+            yield return new WaitForSeconds(disappearingTime);
+            foreach (var item in dandelionDeactivation)
+            {
+                item.enabled = true;
+            }
+
+            platformCollider.isTrigger = false;
+        }
+
         void OnTriggerEnter(Collider other)
         {
-            if (other.gameObject.tag == "Player"&&timedPlatforms)
+            if (other.gameObject.tag == "Player" && timedPlatforms)
             {
                 StartCoroutine(MyCoroutine());
             }
@@ -43,14 +70,23 @@ namespace Orikami
             {
                 StartCoroutine(MyCoroutine());
             }
-
+            if (other.gameObject.tag == "Player" && groupPlatforms)
+            {
+                StartCoroutine(MyGroupDeactivation());
+            }
         }
         void OnTriggerExit(Collider other)
         {
 
-            if (other.gameObject.tag == "Player"&&timedPlatforms)
+            if (other.gameObject.tag == "Player" && timedPlatforms)
             {
                 StartCoroutine(MyCoroutineExit());
+            }
+
+            if (other.gameObject.tag =="Player" &&groupPlatforms)
+            {
+                StartCoroutine(MyGroupDeactivationExit());
+
             }
 
         }
