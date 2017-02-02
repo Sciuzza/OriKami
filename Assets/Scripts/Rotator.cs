@@ -7,7 +7,7 @@ public class Rotator : MonoBehaviour {
 
     {
         
-        transform.Rotate(new Vector3(15, 30, 45) * Time.deltaTime);       
+        transform.Rotate(new Vector3(0, 45, 0) * Time.deltaTime);       
 	}
 
     
