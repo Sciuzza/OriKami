@@ -378,18 +378,21 @@ public class StoryLineInstance : MonoBehaviour
     #endregion
 
     #region Private Variables
+    private class ActiveStories
+    {
+        public SingleStory storySelected;
+        public int eventIndex;
+        public int effectCounter;
+        public int totalEventEffects;
+        public List<Vector3> camLastPos = new List<Vector3>();
+        public List<Quaternion> camLastRot = new List<Quaternion>();
+        public int cameraChangeCounter;
+        public int storyIndex;
+    }
+
+    private List<ActiveStories> livingStory;
+
     private GameObject player;
-
-    private SingleStory storySelected;
-
-    private int eventIndex;
-    private int effectCounter;
-    private int totalEventEffects;
-
-    private List<Vector3> camLastPos = new List<Vector3>();
-    private List<Quaternion> camLastRot = new List<Quaternion>();
-    private int cameraChangeCounter;
-
     private QuestsManager questRepo;
     private MenuManager mmLink;
     #endregion
@@ -425,25 +428,37 @@ public class StoryLineInstance : MonoBehaviour
             return;
         }
 
+        var found = false;
+        SingleStory storyToEvaluate = null;
+
         foreach (var story in this.CurrentStoryLine.Stories)
         {
             if ((story.GenAccessCond.STriggerRef == trigger || story.GenAccessCond.TriggerRef == trigger)
                 && story.Active && !story.Completed)
             {
-                this.storySelected = story;
-                Debug.Log(this.storySelected.StoryName);
+                storyToEvaluate = story;
+                Debug.Log(storyToEvaluate.StoryName + " Trigger, Active and Completed Conditions Passed");
+                found = true;
                 break;
-            }
-            else
-            {
-                continue;
             }
         }
 
-        if (this.storySelected != null && this.CheckItemConditions())
-            this.InitializingStory();
-        else
-            Debug.Log("No Story is accessible through this Trigger " + trigger.name);
+
+        if (!found)
+        {
+            Debug.Log("Trigger, Active or Completed Conditions not Passed " + trigger.name);
+            return;
+        }
+
+        if (!this.CheckItemConditions())
+        {
+            Debug.Log("Item Conditions not passed " + trigger.name);
+            return;
+        }
+
+        Debug.Log(storyToEvaluate.StoryName + " Conditions Passed, Initializing and Evaluating Input Conditions");
+            this.InitializingStory(storyToEvaluate);
+      
     }
 
     private bool CheckItemConditions()
@@ -459,26 +474,46 @@ public class StoryLineInstance : MonoBehaviour
     }
 
     // Check all the other Access conditions
-    private void InitializingStory()
+    private void InitializingStory(SingleStory livingStoryToAdd)
     {
+        int storyIndex = this.AddingNewLivingStory(livingStoryToAdd);
+
         if (this.IsNeededInput(
-             this.storySelected.GenAccessCond.PlayerInputJoy,
-             this.storySelected.GenAccessCond.PlayerInputPc))
+             this.livingStory[storyIndex].storySelected.GenAccessCond.PlayerInputJoy,
+             this.livingStory[storyIndex].storySelected.GenAccessCond.PlayerInputPc))
         {
             this.ActivateStoryInputRequest.Invoke(
-             this.storySelected.GenAccessCond.PlayerInputJoy,
-             this.storySelected.GenAccessCond.PlayerInputPc);
+             this.livingStory[storyIndex].storySelected.GenAccessCond.PlayerInputJoy,
+             this.livingStory[storyIndex].storySelected.GenAccessCond.PlayerInputPc);
         }
-        else if (this.IsNeededInput(this.storySelected.Events[0].PlayerInputJoy, this.storySelected.Events[0].PlayerInputPc))
+        else if (this.IsNeededInput(this.livingStory[storyIndex].storySelected.Events[0].PlayerInputJoy, this.livingStory[storyIndex].storySelected.Events[0].PlayerInputPc))
         {
             this.ActivateStoryInputRequest.Invoke(
-             this.storySelected.Events[0].PlayerInputJoy,
-             this.storySelected.Events[0].PlayerInputPc);
+             this.livingStory[storyIndex].storySelected.Events[0].PlayerInputJoy,
+             this.livingStory[storyIndex].storySelected.Events[0].PlayerInputPc);
         }
         else
         {
-            this.LivingStoryEvent();
+            this.LivingStoryEvent(storyIndex);
         }
+    }
+
+    private int AddingNewLivingStory(SingleStory newStory)
+    {
+        this.livingStory.Add(new ActiveStories());
+
+        int storyIndexTemp = this.livingStory.Count - 1;
+
+        this.livingStory[storyIndexTemp].storySelected = newStory;
+        this.livingStory[storyIndexTemp].effectCounter = 0;
+        this.livingStory[storyIndexTemp].camLastPos = new List<Vector3>();
+        this.livingStory[storyIndexTemp].camLastRot = new List<Quaternion>();
+        this.livingStory[storyIndexTemp].cameraChangeCounter = 0;
+        this.livingStory[storyIndexTemp].totalEventEffects = 0;
+        this.livingStory[storyIndexTemp].eventIndex = 0;
+        this.livingStory[storyIndexTemp].storyIndex = storyIndexTemp;
+
+        return this.livingStory[storyIndexTemp].storyIndex;
     }
 
     private bool IsNeededInput(buttonsJoy joyInput, buttonsPc pcInput)
@@ -489,27 +524,32 @@ public class StoryLineInstance : MonoBehaviour
 
     #region Living Story Core
     // Start the Story
-    private void LivingStoryEvent()
+    private void LivingStoryEvent(int storyIndex)
     {
-        GameController.Debugging("Living Story Started for the story " + this.storySelected.StoryName);
+        GameController.Debugging("Living Story Started for the story " + this.livingStory[storyIndex].storySelected.StoryName);
 
-        this.ActivationEffects();
-        this.camLastPos.Add(Camera.main.transform.position);
-        this.camLastRot.Add(Camera.main.transform.rotation);
+        this.ActivationEffects(this.livingStory[storyIndex].storySelected);
+        this.livingStory[storyIndex].camLastPos.Add(Camera.main.transform.position);
+        this.livingStory[storyIndex].camLastRot.Add(Camera.main.transform.rotation);
 
         this.IsStoryMode.Invoke(true);
-        this.ChangeCsEnterRequest.Invoke(this.storySelected.PlayerControlEffect);
+        this.ChangeCsEnterRequest.Invoke(this.livingStory[storyIndex].storySelected.PlayerControlEffect);
 
-        this.StartCoroutine(this.LivingStory());
+        this.StartCoroutine(this.LivingStory(storyIndex));
     }
 
-    private IEnumerator LivingStory()
+    private IEnumerator LivingStory(int storyIndex)
     {
-        while (this.eventIndex < this.storySelected.Events.Count)
-        {
-            GameController.Debugging("event", this.eventIndex);
+        var eventIndex = this.livingStory[storyIndex].eventIndex;
+        var storySelected = this.livingStory[storyIndex].storySelected;
+        var totalEventEffects = this.livingStory[storyIndex].totalEventEffects;
+        var effectCounter = this.livingStory[storyIndex].effectCounter;
 
-            if (this.eventIndex == 0)
+        while (eventIndex < storySelected.Events.Count)
+        {
+            GameController.Debugging("event", eventIndex);
+
+            if (eventIndex == 0)
             {
                 this.PlayerEffectsHandler();
                 this.CameraEffectsHandler();
@@ -517,23 +557,23 @@ public class StoryLineInstance : MonoBehaviour
                 this.UiEffectsHandler();
                 this.MovieEffectsHandler();
 
-                GameController.Debugging("Total Effects", this.totalEventEffects);
-                GameController.Debugging("Effect Counter", this.effectCounter);
+                GameController.Debugging("Total Effects", totalEventEffects);
+                GameController.Debugging("Effect Counter", effectCounter);
 
-                if (this.totalEventEffects == 0)
+                if (totalEventEffects == 0)
                 {
                     GameController.Debugging("Event index 0 , 0 effects found");
-                    this.eventIndex++;
+                    eventIndex++;
                     continue;
                 }
             }
             else
             {
-                if (this.storySelected.Events[this.eventIndex].PlayerInputJoy != buttonsJoy.none
-                    && this.storySelected.Events[this.eventIndex].PlayerInputPc != buttonsPc.none)
+                if (storySelected.Events[eventIndex].PlayerInputJoy != buttonsJoy.none
+                    && storySelected.Events[eventIndex].PlayerInputPc != buttonsPc.none)
                 {
-                    while (!Input.GetButtonDown(this.storySelected.Events[this.eventIndex].PlayerInputJoy.ToString())
-                        && !Input.GetButtonDown(this.storySelected.Events[this.eventIndex].PlayerInputPc.ToString()))
+                    while (!Input.GetButtonDown(storySelected.Events[eventIndex].PlayerInputJoy.ToString())
+                        && !Input.GetButtonDown(storySelected.Events[eventIndex].PlayerInputPc.ToString()))
                     {
                         yield return null;
                     }
@@ -544,13 +584,13 @@ public class StoryLineInstance : MonoBehaviour
                     this.UiEffectsHandler();
                     this.MovieEffectsHandler();
 
-                    GameController.Debugging("Total Effects", this.totalEventEffects);
-                    GameController.Debugging("Effect Counter", this.effectCounter);
+                    GameController.Debugging("Total Effects", totalEventEffects);
+                    GameController.Debugging("Effect Counter", effectCounter);
 
-                    if (this.totalEventEffects == 0)
+                    if (totalEventEffects == 0)
                     {
                         GameController.Debugging("Event index 0 , 0 effects found");
-                        this.eventIndex++;
+                        eventIndex++;
                         continue;
                     }
                 }
@@ -562,73 +602,57 @@ public class StoryLineInstance : MonoBehaviour
                     this.UiEffectsHandler();
                     this.MovieEffectsHandler();
 
-                    GameController.Debugging("Total Effects", this.totalEventEffects);
-                    GameController.Debugging("Effect Counter", this.effectCounter);
+                    GameController.Debugging("Total Effects", totalEventEffects);
+                    GameController.Debugging("Effect Counter", effectCounter);
 
-                    if (this.totalEventEffects == 0)
+                    if (totalEventEffects == 0)
                     {
                         GameController.Debugging("Event index 0 , 0 effects found");
-                        this.eventIndex++;
+                        eventIndex++;
                         continue;
                     }
                 }
             }
 
-            while (this.effectCounter < this.totalEventEffects)
+            while (effectCounter < totalEventEffects)
             {
                 yield return null;
             }
 
             var timer = 0.0f;
 
-            while (timer < this.storySelected.Events[this.eventIndex].EventEndDelay)
+            while (timer < storySelected.Events[eventIndex].EventEndDelay)
             {
                 timer += Time.deltaTime;
                 yield return null;
             }
 
-            this.eventIndex++;
-            this.ResettingEventCommonVariables();
+            eventIndex++;
             yield return null;
         }
 
         this.IsStoryMode.Invoke(false);
-        this.ApplyingLivingEffects();
-        this.ResettingStoryCommonVariables();
+        this.ApplyingLivingEffects(storySelected);
+        this.RemovingStory(storyIndex);
     }
 
-    private void ResettingEventCommonVariables()
+    private void RemovingStory(int storyIndex)
     {
-        this.effectCounter = 0;
-        this.totalEventEffects = 0;
+       this.livingStory.RemoveAt(storyIndex);
     }
 
-    private void ResettingStoryCommonVariables()
+    private void ApplyingLivingEffects(SingleStory storySelected)
     {
-        this.effectCounter = 0;
-        this.totalEventEffects = 0;
+        if (storySelected.AutoComplete) storySelected.Completed = true;
 
-        this.eventIndex = 0;
-        this.storySelected = null;
-        this.camLastPos.Clear();
-        this.camLastPos.TrimExcess();
-        this.camLastRot.Clear();
-        this.camLastRot.TrimExcess();
-        this.cameraChangeCounter = 0;
+        this.CompletionEffects(storySelected);
+
+        this.ChangeCsExitRequest.Invoke(storySelected.EndControlEffect);
     }
 
-    private void ApplyingLivingEffects()
+    private void ActivationEffects(SingleStory storySelected)
     {
-        if (this.storySelected.AutoComplete) this.storySelected.Completed = true;
-
-        this.CompletionEffects();
-
-        this.ChangeCsExitRequest.Invoke(this.storySelected.EndControlEffect);
-    }
-
-    private void ActivationEffects()
-    {
-        foreach (var storyName in this.storySelected.StoryActiveOnActivation)
+        foreach (var storyName in storySelected.StoryActiveOnActivation)
         {
             SingleStory storyToFind = this.SearchingStoryInside(storyName);
 
@@ -647,7 +671,7 @@ public class StoryLineInstance : MonoBehaviour
             }
         }
 
-        foreach (var storyName in this.storySelected.StoryCompleteOnActivation)
+        foreach (var storyName in storySelected.StoryCompleteOnActivation)
         {
             SingleStory storyToFind = this.SearchingStoryInside(storyName);
 
@@ -666,7 +690,7 @@ public class StoryLineInstance : MonoBehaviour
             }
         }
 
-        foreach (var storyLine in this.storySelected.StoryLineCompleteOnActivation)
+        foreach (var storyLine in storySelected.StoryLineCompleteOnActivation)
         {
             StoryLine storyLineToFind = this.SearchingStoryLineInRepo(storyLine);
 
@@ -678,9 +702,9 @@ public class StoryLineInstance : MonoBehaviour
         }
     }
 
-    private void CompletionEffects()
+    private void CompletionEffects(SingleStory storySelected)
     {
-        foreach (var storyName in this.storySelected.StoryActiveOnCompletion)
+        foreach (var storyName in storySelected.StoryActiveOnCompletion)
         {
             SingleStory storyToFind = this.SearchingStoryInside(storyName);
 
@@ -699,7 +723,7 @@ public class StoryLineInstance : MonoBehaviour
             }
         }
 
-        foreach (var storyName in this.storySelected.StoryCompleteOnCompletion)
+        foreach (var storyName in storySelected.StoryCompleteOnCompletion)
         {
             SingleStory storyToFind = this.SearchingStoryInside(storyName);
 
@@ -718,7 +742,7 @@ public class StoryLineInstance : MonoBehaviour
             }
         }
 
-        foreach (var storyLine in this.storySelected.StoryLineCompleteOnCompletion)
+        foreach (var storyLine in storySelected.StoryLineCompleteOnCompletion)
         {
             StoryLine storyLineToFind = this.SearchingStoryLineInRepo(storyLine);
 
@@ -754,13 +778,13 @@ public class StoryLineInstance : MonoBehaviour
     #endregion
 
     #region Player Effects Methods
-    private void PlayerEffectsHandler()
+    private void PlayerEffectsHandler(SingleStory storySelected, ref int storyIndex)
     {
-        var plaEffectsToEvaluate = this.storySelected.Events[this.eventIndex].Effects.PlaEffect;
+        var plaEffectsToEvaluate = storySelected.Events[eventIndex].Effects.PlaEffect;
 
         if (plaEffectsToEvaluate.PlayerRepositionEffect.GbRef != null)
         {
-            this.totalEventEffects++;
+            totalEventEffects++;
             GameController.Debugging("Player Repo");
             this.PlayPlayerRepoEffect(plaEffectsToEvaluate.PlayerRepositionEffect);
 
@@ -829,7 +853,7 @@ public class StoryLineInstance : MonoBehaviour
         }
     }
 
-    private void PlayPlayerRepoEffect(PlayerReposition effectToPlay)
+    private void PlayPlayerRepoEffect(PlayerReposition effectToPlay, ref int effectCounter)
     {
         this.player.transform.position = effectToPlay.GbRef.transform.position;
         this.player.transform.rotation = effectToPlay.GbRef.transform.rotation;
@@ -924,7 +948,7 @@ public class StoryLineInstance : MonoBehaviour
 
     private IEnumerator PushBackPlayer(PlayerPushBack pushBackEffect)
     {
-        var targetPosition = this.player.transform.position + (Vector3.ProjectOnPlane(pushBackEffect.GbRef.transform.forward, this.player.transform.up).normalized * pushBackEffect.PushingBackPower);
+        var targetPosition = this.player.transform.position - (Vector3.ProjectOnPlane(pushBackEffect.GbRef.transform.forward, this.player.transform.up).normalized * pushBackEffect.PushingBackPower);
         var objToMove = this.player;
 
         var timeTaken = pushBackEffect.TimeTaken;
