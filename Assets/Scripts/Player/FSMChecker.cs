@@ -199,6 +199,11 @@ public class event_joy_pc_story : UnityEvent<buttonsJoy, buttonsPc, SingleStory>
 public class event_story : UnityEvent<SingleStory>
 {
 }
+
+[System.Serializable]
+public class event_string_string_string_string : UnityEvent<string, string, string, string>
+{
+}
 #endregion
 
 public class FSMChecker : MonoBehaviour

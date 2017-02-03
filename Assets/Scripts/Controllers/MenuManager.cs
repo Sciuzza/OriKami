@@ -96,7 +96,7 @@ public class MenuManager : MonoBehaviour
         this.legends = mmListButtonRef.Find(x => x.gameObject.name == "Legends' Journal");
         this.options = mmListButtonRef.Find(x => x.gameObject.name == "Options");
         this.exit = mmListButtonRef.Find(x => x.gameObject.name == "Exit");
- 
+
         this.newGame.onClick.AddListener(PlayNewGameSound);
         this.newGame.onClick.AddListener(InvokingNewGame);
         this.continueB.onClick.AddListener(PlayNewGameSound);
@@ -104,8 +104,8 @@ public class MenuManager : MonoBehaviour
         this.exit.onClick.AddListener(QuitGame);
 
 
-         //EventSystem.current.SetSelectedGameObject(this.newGame.gameObject);
-       
+        //EventSystem.current.SetSelectedGameObject(this.newGame.gameObject);
+
     }
 
     private void InvokingNewGame()
@@ -219,7 +219,7 @@ public class MenuManager : MonoBehaviour
         this.gpUiRef = GameObject.FindGameObjectWithTag("Gameplay Ui").GetComponent<HudRefRepo>();
     }
 
-    private void PoppingOutDialogue(string name, string label, string sentence)
+    private void PoppingOutDialogue(string name, string label, string sentence, string spritename)
     {
         this.gpUiRef.Dialogue.SetActive(true);
 
@@ -227,13 +227,23 @@ public class MenuManager : MonoBehaviour
         {
             this.gpUiRef.RightLabel.SetActive(true);
             this.gpUiRef.LeftLabel.SetActive(false);
+            this.gpUiRef.leftImageGb.SetActive(false);
             this.gpUiRef.RightLabelT.text = name;
+            this.gpUiRef.rightImageGb.SetActive(true);
+
+            if (this.gpUiRef.AvatarNames.Contains(spritename))
+                this.gpUiRef.rightImage.sprite = this.gpUiRef.Avatars[this.gpUiRef.AvatarNames.IndexOf(spritename)];
         }
         else
         {
             this.gpUiRef.LeftLabel.SetActive(true);
             this.gpUiRef.RightLabel.SetActive(false);
+            this.gpUiRef.rightImageGb.SetActive(false);
             this.gpUiRef.LeftLabelT.text = name;
+            this.gpUiRef.leftImageGb.SetActive(true);
+
+            if (this.gpUiRef.AvatarNames.Contains(spritename))
+                this.gpUiRef.leftImage.sprite = this.gpUiRef.Avatars[this.gpUiRef.AvatarNames.IndexOf(spritename)];
         }
 
         this.gpUiRef.DialogueT.text = sentence;
@@ -244,6 +254,8 @@ public class MenuManager : MonoBehaviour
         this.gpUiRef.RightLabel.SetActive(false);
         this.gpUiRef.LeftLabel.SetActive(false);
         this.gpUiRef.Dialogue.SetActive(false);
+        this.gpUiRef.leftImageGb.SetActive(false);
+        this.gpUiRef.rightImageGb.SetActive(false);
     }
 
     private void PoppingOutMovie(int movieIndex, float smoothingAlpha)

@@ -220,8 +220,8 @@ public class UiDialogue
     public TextAsset DialogueRef;
     public List<string> Name;
     public List<string> Label;
-    public List<string> Sprite;
     public List<string> Sentence;
+    public List<string> Sprite;
 }
 #endregion Ui Effect
 
@@ -374,7 +374,7 @@ public class StoryLineInstance : MonoBehaviour
     public event_joy_pc_story ActivateStoryInputRequest;
     public event_string FormUnlockRequest;
     public event_cs ChangeCsEnterRequest, ChangeCsExitRequest;
-    public event_string_string_string UiDialogueRequest;
+    public event_string_string_string_string UiDialogueRequest;
     public UnityEvent DialogueEnded;
     public event_bool IsStoryMode;
     public event_int_float MovieRequest;
@@ -1925,19 +1925,20 @@ public class StoryLineInstance : MonoBehaviour
         var delimiters = new char[] { '/', '\n' };
         var initialSplit = effectToPlay.DialogueRef.text.Split(delimiters, StringSplitOptions.None);
 
-        if (initialSplit.Length % 3 != 0)
+        if (initialSplit.Length % 4 != 0)
         {
-            GameController.Debugging("Txt File lines are not a multiple of 3");
+            GameController.Debugging("Txt File lines are not a multiple of 4");
             effectToPlay.End = true;
             this.effectCounter++;
             return;
         }
 
-        for (var i = 0; i < initialSplit.Length; i += 3)
+        for (var i = 0; i < initialSplit.Length; i += 4)
         {
             effectToPlay.Name.Add(initialSplit[i]);
             effectToPlay.Label.Add(initialSplit[i + 1]);
-            effectToPlay.Sentence.Add(initialSplit[i + 2]);
+            effectToPlay.Sprite.Add(initialSplit[i + 2]);
+            effectToPlay.Sentence.Add(initialSplit[i + 3]);
         }
 
         for (var index = 0; index < effectToPlay.Sentence.Count; index++)
@@ -1967,7 +1968,7 @@ public class StoryLineInstance : MonoBehaviour
 
     private IEnumerator LivingDialogue(UiDialogue dialogueEffect)
     {
-        this.UiDialogueRequest.Invoke(dialogueEffect.Name[0], dialogueEffect.Label[0], dialogueEffect.Sentence[0]);
+        this.UiDialogueRequest.Invoke(dialogueEffect.Name[0], dialogueEffect.Label[0], dialogueEffect.Sentence[0], dialogueEffect.Sprite[0]);
         var counter = 1;
         var dialogueSkip = false;
 
@@ -1981,7 +1982,7 @@ public class StoryLineInstance : MonoBehaviour
 
             if (Input.GetButtonDown(buttonsJoy.X.ToString()) || Input.GetButtonDown(buttonsPc.E.ToString()))
             {
-                this.UiDialogueRequest.Invoke(dialogueEffect.Name[counter], dialogueEffect.Label[counter], dialogueEffect.Sentence[counter]);
+                this.UiDialogueRequest.Invoke(dialogueEffect.Name[counter], dialogueEffect.Label[counter], dialogueEffect.Sentence[counter], dialogueEffect.Sprite[counter]);
                 counter++;
             }
 
