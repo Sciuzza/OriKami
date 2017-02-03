@@ -331,6 +331,9 @@ public class SingleStory
     public bool AutoComplete;
     public bool Completed;
 
+    [Tooltip("Flag only if the story contains one event with 1 baloon effect")]
+    public bool BaloonType;
+
     public GenTriggerConditions GenAccessCond;
     public List<ItemDependencies> ItemAccessCondition;
 
@@ -368,19 +371,24 @@ public class StoryLineInstance : MonoBehaviour
     #endregion
 
     #region Events
-    public event_joy_pc ActivateStoryInputRequest;
+    public event_joy_pc_story ActivateStoryInputRequest;
     public event_string FormUnlockRequest;
     public event_cs ChangeCsEnterRequest, ChangeCsExitRequest;
     public event_string_string_string UiDialogueRequest;
     public UnityEvent DialogueEnded;
     public event_bool IsStoryMode;
     public event_int_float MovieRequest;
+    public UnityEvent eraseInputMemoryRequest;
     #endregion
 
     #region Private Variables
     private GameObject player;
 
     private SingleStory storySelected;
+
+
+
+    private List<SingleStory> baloonStory = new List<SingleStory>();
 
     private int eventIndex;
     private int effectCounter;
@@ -401,9 +409,11 @@ public class StoryLineInstance : MonoBehaviour
 
         var envTempLink = this.player.GetComponent<EnvInputs>();
         envTempLink.storyActivationRequest.AddListener(this.CheckingAccessAndExistenceConditions);
+        envTempLink.storyZoneExit.AddListener(this.ErasingInputMemory);
+        envTempLink.storyZoneEnter.AddListener(this.LoadingInputMemory);
 
         var plTempLink = this.player.GetComponent<PlayerInputs>();
-        plTempLink.storyLivingRequest.AddListener(this.LivingStoryEvent);
+        plTempLink.storyLivingRequest.AddListener(this.TriggeringStoryByInput);
 
         this.questRepo = GameObject.FindGameObjectWithTag("GameController").GetComponent<QuestsManager>();
 
@@ -425,14 +435,34 @@ public class StoryLineInstance : MonoBehaviour
             return;
         }
 
+        bool storyFound = false;
+        bool baloonFound = false;
+
         foreach (var story in this.CurrentStoryLine.Stories)
         {
             if ((story.GenAccessCond.STriggerRef == trigger || story.GenAccessCond.TriggerRef == trigger)
                 && story.Active && !story.Completed)
             {
-                this.storySelected = story;
-                Debug.Log(this.storySelected.StoryName);
-                break;
+                if (!story.BaloonType)
+                {
+                    this.storySelected = story;
+                    Debug.Log(this.storySelected.StoryName);
+                    storyFound = true;
+                    break;
+
+                }
+                else
+                {
+                    if (!this.baloonStory.Contains(story))
+                    {
+
+                        this.baloonStory.Add(story);
+                        Debug.Log(this.baloonStory[this.baloonStory.Count - 1].StoryName);
+                        baloonFound = true;
+                        break;
+                    }
+                }
+
             }
             else
             {
@@ -440,13 +470,18 @@ public class StoryLineInstance : MonoBehaviour
             }
         }
 
-        if (this.storySelected != null && this.CheckItemConditions())
+        if (storyFound && this.CheckItemConditions(this.storySelected))
+        {
             this.InitializingStory();
-        else
-            Debug.Log("No Story is accessible through this Trigger " + trigger.name);
+        }
+        else if (baloonFound)
+        {
+            this.LivingBaloonStory();
+        }
+        else Debug.Log("No Story is accessible through this Trigger " + trigger.name);
     }
 
-    private bool CheckItemConditions()
+    private bool CheckItemConditions(SingleStory storyToCheck)
     {
         /*
         foreach (var item in this.storySelected.ItemAccessCondition)
@@ -461,19 +496,22 @@ public class StoryLineInstance : MonoBehaviour
     // Check all the other Access conditions
     private void InitializingStory()
     {
+
         if (this.IsNeededInput(
              this.storySelected.GenAccessCond.PlayerInputJoy,
              this.storySelected.GenAccessCond.PlayerInputPc))
         {
             this.ActivateStoryInputRequest.Invoke(
              this.storySelected.GenAccessCond.PlayerInputJoy,
-             this.storySelected.GenAccessCond.PlayerInputPc);
+             this.storySelected.GenAccessCond.PlayerInputPc,
+             this.storySelected);
         }
         else if (this.IsNeededInput(this.storySelected.Events[0].PlayerInputJoy, this.storySelected.Events[0].PlayerInputPc))
         {
             this.ActivateStoryInputRequest.Invoke(
              this.storySelected.Events[0].PlayerInputJoy,
-             this.storySelected.Events[0].PlayerInputPc);
+             this.storySelected.Events[0].PlayerInputPc,
+             this.storySelected);
         }
         else
         {
@@ -485,6 +523,87 @@ public class StoryLineInstance : MonoBehaviour
     {
         return joyInput != buttonsJoy.none && pcInput != buttonsPc.none;
     }
+
+    private void TriggeringStoryByInput(SingleStory storyToTrigger)
+    {
+        if (this.storySelected == storyToTrigger)
+        {
+            this.LivingStoryEvent();
+        }
+        else
+        {
+            this.storySelected = storyToTrigger;
+            this.LivingStoryEvent();
+        }
+    }
+
+    private void RemovingBaloonStories()
+    {
+        this.StopAllCoroutines();
+
+        foreach (var bstory in this.baloonStory)
+        {
+            bstory.Events[0].Effects.EnvEffect[0].BaloonEffect.NpcRef.GetComponentInChildren<BaloonBeha>().gameObject.SetActive(false);
+        }
+
+        this.baloonStory.Clear();
+        this.baloonStory.TrimExcess();
+    }
+
+    private void ErasingInputMemory(Collider trigger)
+    {
+        if (this.storySelected.GenAccessCond.STriggerRef == trigger || this.storySelected.GenAccessCond.TriggerRef == trigger)
+            this.eraseInputMemoryRequest.Invoke();
+    }
+
+    private void LoadingInputMemory(Collider trigger)
+    {
+        Debug.Log(trigger.name);
+
+        if (this.CurrentStoryLine.Completed)
+        {
+            return;
+        }
+
+        bool storyFound = false;
+        SingleStory storyRef = null;
+
+        foreach (var story in this.CurrentStoryLine.Stories)
+        {
+            if ((story.GenAccessCond.STriggerRef == trigger || story.GenAccessCond.TriggerRef == trigger)
+                && story.Active && !story.Completed)
+            {
+                if (!story.BaloonType)
+                {
+                    storyRef = story;
+                    storyFound = true;
+                    break;
+
+                }
+            }
+        }
+
+        if (storyFound && this.CheckItemConditions(storyRef))
+        {
+            if (this.IsNeededInput(
+            storyRef.GenAccessCond.PlayerInputJoy,
+            storyRef.GenAccessCond.PlayerInputPc))
+            {
+                this.ActivateStoryInputRequest.Invoke(
+                 storyRef.GenAccessCond.PlayerInputJoy,
+                 storyRef.GenAccessCond.PlayerInputPc,
+                 storyRef);
+            }
+            else if (this.IsNeededInput(storyRef.Events[0].PlayerInputJoy, storyRef.Events[0].PlayerInputPc))
+            {
+                this.ActivateStoryInputRequest.Invoke(
+                 storyRef.Events[0].PlayerInputJoy,
+                 storyRef.Events[0].PlayerInputPc,
+                 storyRef);
+            }
+        }
+        
+    }
     #endregion
 
     #region Living Story Core
@@ -492,6 +611,8 @@ public class StoryLineInstance : MonoBehaviour
     private void LivingStoryEvent()
     {
         GameController.Debugging("Living Story Started for the story " + this.storySelected.StoryName);
+
+        this.RemovingBaloonStories();
 
         this.ActivationEffects();
         this.camLastPos.Add(Camera.main.transform.position);
@@ -595,6 +716,13 @@ public class StoryLineInstance : MonoBehaviour
         this.IsStoryMode.Invoke(false);
         this.ApplyingLivingEffects();
         this.ResettingStoryCommonVariables();
+    }
+
+    private void LivingBaloonStory()
+    {
+        GameController.Debugging("Living Baloon Story Started for the story " + this.baloonStory[this.baloonStory.Count - 1].StoryName);
+
+        this.PlayBaloonStory(this.baloonStory[this.baloonStory.Count - 1].Events[0].Effects.EnvEffect[0].BaloonEffect, this.baloonStory[this.baloonStory.Count - 1]);
     }
 
     private void ResettingEventCommonVariables()
@@ -924,7 +1052,7 @@ public class StoryLineInstance : MonoBehaviour
 
     private IEnumerator PushBackPlayer(PlayerPushBack pushBackEffect)
     {
-        var targetPosition = this.player.transform.position + (Vector3.ProjectOnPlane(pushBackEffect.GbRef.transform.forward, this.player.transform.up).normalized * pushBackEffect.PushingBackPower);
+        var targetPosition = this.player.transform.position - (Vector3.ProjectOnPlane(pushBackEffect.GbRef.transform.forward, this.player.transform.up).normalized * pushBackEffect.PushingBackPower);
         var objToMove = this.player;
 
         var timeTaken = pushBackEffect.TimeTaken;
@@ -1415,6 +1543,12 @@ public class StoryLineInstance : MonoBehaviour
         this.StartCoroutine(this.BaloonDialogue(effectToPlay));
     }
 
+    private void PlayBaloonStory(Baloon effectToPlay, SingleStory baloonStorySelected)
+    {
+        this.StartCoroutine(this.BubbleAdjustRotStory(effectToPlay));
+        this.StartCoroutine(this.BaloonDialogueStory(effectToPlay, baloonStorySelected));
+    }
+
     private IEnumerator MovingObject(ObjectMoving movingObjEffect)
     {
         var whereToMove = movingObjEffect.GbTarget;
@@ -1620,6 +1754,45 @@ public class StoryLineInstance : MonoBehaviour
     }
 
     private IEnumerator BubbleAdjustRot(Baloon baloonEffect)
+    {
+        var npcTempRef = baloonEffect.NpcRef;
+
+        var gbTargetTemp = new GameObject();
+
+        while (!baloonEffect.End)
+        {
+            gbTargetTemp.transform.position = npcTempRef.transform.position;
+            gbTargetTemp.transform.rotation = npcTempRef.transform.rotation;
+            gbTargetTemp.transform.LookAt(Camera.main.transform);
+            npcTempRef.transform.rotation = Quaternion.Slerp(npcTempRef.transform.rotation, gbTargetTemp.transform.rotation, 5 * Time.deltaTime);
+            yield return null;
+        }
+
+        baloonEffect.End = false;
+        DestroyObject(gbTargetTemp);
+    }
+
+    private IEnumerator BaloonDialogueStory(Baloon baloonEffect, SingleStory baloonStorySelected)
+    {
+        var baloonTempLink = baloonEffect.NpcRef.GetComponentInChildren<BaloonBeha>(true);
+
+        var sentences = baloonTempLink.TextAssetRef.text.Split('\n');
+        baloonTempLink.gameObject.SetActive(true);
+
+        for (var i = baloonEffect.StartLine; i <= baloonEffect.EndLine; i++)
+        {
+            baloonTempLink.TextRef.text = sentences[i];
+            yield return new WaitForSeconds(baloonEffect.BaloonSpeed);
+        }
+
+        baloonTempLink.gameObject.SetActive(false);
+        baloonEffect.End = true;
+        this.baloonStory.Remove(baloonStorySelected);
+
+        Debug.Log("Baloon Story Ended");
+    }
+
+    private IEnumerator BubbleAdjustRotStory(Baloon baloonEffect)
     {
         var npcTempRef = baloonEffect.NpcRef;
 

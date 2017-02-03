@@ -15,7 +15,7 @@ public class EnvInputs : MonoBehaviour
     public UnityEvent vFissureRequestOff, playerIsDead, cameraOnRequest;
     public event_Gb cameraOffRequest;
 
-    public event_collider storyActivationRequest;
+    public event_collider storyActivationRequest, storyZoneExit, storyZoneEnter;
 
     #endregion
 
@@ -117,6 +117,10 @@ public class EnvInputs : MonoBehaviour
             case "Story Triggers":
                 if (!FSMChecker.storyMode)
                 storyActivationRequest.Invoke(envTrigger);
+                else
+                {
+                    this.storyZoneEnter.Invoke(envTrigger);
+                }
                 break;
         }
 
@@ -144,6 +148,10 @@ public class EnvInputs : MonoBehaviour
                 break;
             case "Camera Control":
                 this.cameraOnRequest.Invoke();
+                break;
+            case "Story Triggers":
+                if (FSMChecker.storyMode)
+                    this.storyZoneExit.Invoke(envTrigger);
                 break;
         }
     }

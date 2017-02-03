@@ -25,6 +25,7 @@ public class PlayerInputs : MonoBehaviour
     private bool storyModeInput = false;
     private buttonsJoy storyJoyInput = buttonsJoy.none;
     private buttonsPc storyPcInput = buttonsPc.none;
+    private SingleStory ssTempRef;
 
     private float currentX, currentY, currentDistance = 6;
 
@@ -46,7 +47,9 @@ public class PlayerInputs : MonoBehaviour
     #endregion
 
     #region Events
-    public UnityEvent rollStopped, nextSceneRequest, previousSceneRequest, resettingSceneRequest, storyLivingRequest;
+
+    public UnityEvent rollStopped, nextSceneRequest, previousSceneRequest, resettingSceneRequest;
+    public event_story storyLivingRequest;
     public event_abi genAbiRequest;
     public event_abi_vector3 dirAbiRequest;
     public event_int mainMenuRequest;
@@ -74,6 +77,7 @@ public class PlayerInputs : MonoBehaviour
                 GameObject.FindGameObjectWithTag("StoryLine").GetComponent<StoryLineInstance>();
 
             slTempLink.ActivateStoryInputRequest.AddListener(this.SettingStoryInputs);
+            slTempLink.eraseInputMemoryRequest.AddListener(this.DisablingStoryInputs);
         }
     }
     #endregion
@@ -2048,13 +2052,9 @@ public class PlayerInputs : MonoBehaviour
     #region Story Inputs
     private void StoryInputsHandler()
     {
-        if (StoryInputPressed())
+        if (StoryInputPressed() && !FSMChecker.storyMode)
         {
-            storyLivingRequest.Invoke();
-            this.storyModeInput = false;
-            this.storyJoyInput = buttonsJoy.none;
-            this.storyPcInput = buttonsPc.none;
-       
+            storyLivingRequest.Invoke(this.ssTempRef);
         }
     }
 
@@ -2100,12 +2100,22 @@ public class PlayerInputs : MonoBehaviour
             return false;
     }
 
-    private void SettingStoryInputs(buttonsJoy joyInput, buttonsPc pcInput)
+    private void SettingStoryInputs(buttonsJoy joyInput, buttonsPc pcInput, SingleStory ssToRemember)
     {
         storyJoyInput = joyInput;
         storyPcInput = pcInput;
 
         storyModeInput = true;
+
+        this.ssTempRef = ssToRemember;
+    }
+
+    private void DisablingStoryInputs()
+    {
+        this.storyModeInput = false;
+        this.storyJoyInput = buttonsJoy.none;
+        this.storyPcInput = buttonsPc.none;
+        this.ssTempRef = null;
     }
     #endregion
 

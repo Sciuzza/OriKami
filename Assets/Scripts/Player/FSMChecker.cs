@@ -189,6 +189,16 @@ public class event_float_float_float : UnityEvent<float, float, float>
 public class event_int_float : UnityEvent<int, float>
 {
 }
+
+[System.Serializable]
+public class event_joy_pc_story : UnityEvent<buttonsJoy, buttonsPc, SingleStory>
+{
+}
+
+[System.Serializable]
+public class event_story : UnityEvent<SingleStory>
+{
+}
 #endregion
 
 public class FSMChecker : MonoBehaviour
