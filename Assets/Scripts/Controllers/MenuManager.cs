@@ -9,7 +9,8 @@ using UnityEngine.EventSystems;
 
 public class MenuManager : MonoBehaviour
 {
-
+    private string currentScene;
+    
     #region Public Variables
     public event_int switchSceneRequestByInt;
     public event_string switchSceneRequestByName;
@@ -45,10 +46,12 @@ public class MenuManager : MonoBehaviour
 
         gcTempLink.ngpInitializer.AddListener(this.InitializingNgpScene);
         gcTempLink.gpInitializer.AddListener(this.InitializingGpScene);
+        
 
         var scTempLink = this.GetComponent<SceneController>();
 
         scTempLink.ProgressUpdateRequest.AddListener(this.UpdatingProgressBar);
+       
 
         var storyLineCheck = GameObject.FindGameObjectWithTag("StoryLine");
 
@@ -57,6 +60,7 @@ public class MenuManager : MonoBehaviour
         slTempLink.UiDialogueRequest.AddListener(this.PoppingOutDialogue);
         slTempLink.DialogueEnded.AddListener(this.ResettingDialogue);
         slTempLink.MovieRequest.AddListener(this.PoppingOutMovie);
+       
     }
 
     #endregion
@@ -102,6 +106,9 @@ public class MenuManager : MonoBehaviour
         this.continueB.onClick.AddListener(PlayNewGameSound);
         this.continueB.onClick.AddListener(InvokingLevelSel);
         this.exit.onClick.AddListener(QuitGame);
+       
+
+       
 
 
         //EventSystem.current.SetSelectedGameObject(this.newGame.gameObject);
@@ -111,6 +118,7 @@ public class MenuManager : MonoBehaviour
     private void InvokingNewGame()
     {
         changingSceneRequest.Invoke("Route 1");
+        
     }
 
     private void InvokingLevelSel()
@@ -132,6 +140,25 @@ public class MenuManager : MonoBehaviour
     {
         GameObject.FindGameObjectWithTag("GameController").GetComponent<SoundManager>().PlaySound(1, 2);
     }
+
+    ////VA SPOSTATO DA QUA RICKY
+    //public void GameStartSound()
+    //{
+    //    Debug.Log("START GAMESOUND");
+    //    currentScene = SceneManager.GetActiveScene().name;
+    //    if (currentScene == "Main Menu"||currentScene == "Route 1" || currentScene == "Route 2" || currentScene == "route 3" || currentScene == "Route 4")
+    //    {
+    //        GameObject.FindGameObjectWithTag("GameController").GetComponent<SoundManager>().PlaySound(1, 5);
+
+    //        if (!GameObject.FindGameObjectWithTag("GameController").GetComponent<AudioSource>().isPlaying)
+    //        {
+    //            GameObject.FindGameObjectWithTag("GameController").GetComponent<SoundManager>().PlaySound(1, 6);
+
+    //        }
+
+    //    }
+       
+    //}
     #endregion
 
     #region Level Selection Handler
@@ -152,7 +179,7 @@ public class MenuManager : MonoBehaviour
         route4 = mmButtonRef[6];
         back = mmButtonRef[7];
 
-
+         
         route1.onClick.AddListener(InvokingRoute1);
         route1.onClick.AddListener(PlayNewGameSound);
         frogsV.onClick.AddListener(InvokingFrogsV);
@@ -174,6 +201,7 @@ public class MenuManager : MonoBehaviour
     private void InvokingRoute1()
     {
         switchSceneRequestByName.Invoke("Route 1");
+        
     }
 
     private void InvokingFrogsV()
