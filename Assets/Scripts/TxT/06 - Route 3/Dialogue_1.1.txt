@@ -1,5 +1,5 @@
-Iki/Right/…
-Koi/Left/That guy’s exactly like you!!*Well not exactly like you, you know… No racism intended, uh!
-Koi/Left/Koi_Standard/Do you know him?
-Iki/Right/Iki_Concerned/. . .
+Iki/Right/Iki_Happy/. . .
+Koi/Left/Koi_Astonished/That guy’s exactly like you!!
+Koi/Left/Koi_Standard/Well not exactly like you, you know. . . No racism intended, uh!*Do you know him?
+Iki/Right/Iki_Standard/. . .
 Koi/Left/Koi_Standard/You don’t uh?
