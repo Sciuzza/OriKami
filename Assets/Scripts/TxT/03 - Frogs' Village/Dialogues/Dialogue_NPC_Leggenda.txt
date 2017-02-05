@@ -1,3 +1,3 @@
 Betsy/Left/Villager_Legend/This is the Royal Palace.*It's really beautiful, isn't it?
-Iki/Right/Iki_Standard/. . .
+Iki/Right/Iki_Standard/...
 Betsy/Left/Villager_Legend/Every servant of the King resides there, with the Royal Family itself!*What a majestic creation.

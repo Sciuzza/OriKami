@@ -1,3 +1,3 @@
-Koi/Right/Koi_Astonished/What. . . What was that?!
-Iki/Left/Iki_Concerned/. . .
-Koi/Right/Koi_Standard/It came from farther ahead. . . Maybe we should go and see!
+Koi/Right/Koi_Astonished/What... What was that?!
+Iki/Left/Iki_Concerned/...
+Koi/Right/Koi_Standard/It came from farther ahead... Maybe we should go and see!

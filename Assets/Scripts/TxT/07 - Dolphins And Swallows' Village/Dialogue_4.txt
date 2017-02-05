@@ -1,6 +1,6 @@
 Guard/Right/Guard/Who should we announce?
-Iki/Left/Iki_Standard/. . .
-Guard/Right/Guard/. . .
+Iki/Left/Iki_Standard/...
+Guard/Right/Guard/...
 Guard/Right/Guard/Princess! There’s a weird origami at the door.*Should I fend him off?
 Orihime/Left/Orihime_Standard/Is him here to meet my father?
 Guard/Right/Guard/I do not know, since he refuses to speak.

@@ -1,5 +1,5 @@
 Merchant/Left/Merchant_Standard/I know you have things to do and time is money, so I’ll just go straight to the point. 
-Iki/Right/Iki_Standard/. . .
+Iki/Right/Iki_Standard/...
 Merchant/Left/Merchant_Standard/My partner, Maneki, has a peculiar phobia for earthquakes and he ran as soon as it struck.*Please, try asking people around here to find out where he ran to and go looking for him.
 Merchant/Left/Merchant_Concerned/Since he became my business partner I made a fortune and without him my business can’t go on!*Plus, I’m so worried about him…
 Merchant/Left/Merchant_Standard/Please find him!!

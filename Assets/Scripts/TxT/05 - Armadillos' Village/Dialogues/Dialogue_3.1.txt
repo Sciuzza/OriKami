@@ -1,4 +1,4 @@
 Elder/Left/Elder_Astonished/What kind of sorcery is this? You can transform!
-Iki/Right/Iki_Standard/. . .
-Elder/Left/Elder_Astonished/Interesting. . .
+Iki/Right/Iki_Standard/...
+Elder/Left/Elder_Astonished/Interesting...
 Elder/Left/Elder_Standard/What are you waiting for now?*Go, and help us removing those boulders!
