@@ -1,7 +1,7 @@
-Jiraiya/Right/Jiraiya_Standard/I’m… I’m Jiraiya… Who are you?*Did my father send you?
+Jiraiya/Right/Jiraiya_Standard/I’m... I’m Jiraiya... Who are you?*Did my father send you?
 Koi/Left/Koi_Standard/I’m Koi! And he’s my friend of few words, Iki!*And no, unless your father is a carp that lives in my village, I don’t think I’ve ever met him…
 Koi/Left/Koi_Standard/We were just passing by. How did you get lost?
-Jiraiya/Right/Jiraiya_Standard/Sniff. . . I ran away from the village. . .*But I can’t find the road to get back anymore.
-Iki/Left/Iki_Concerned/. . .
-Koi/Left/Koi_Standard/Ok. . . Uhm. . .*Maybe if we push this rice field up like the other one he’ll be able to go back home!
+Jiraiya/Right/Jiraiya_Standard/Sniff... I ran away from the village...*But I can’t find the road to get back anymore.
+Iki/Left/Iki_Concerned/...
+Koi/Left/Koi_Standard/Ok... Uhm...*Maybe if we push this rice field up like the other one he’ll be able to go back home!
 Jiraiya/Right/Jiraiya_Standard/sniff sniff
