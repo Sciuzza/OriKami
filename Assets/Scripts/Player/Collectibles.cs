@@ -7,7 +7,11 @@ public class Collectibles : MonoBehaviour
 {
 
 
-    int goldenCollectible = 0;
+    public int GoldenCollectible = 0;
+    public int Collectible2 = 0;
+    public int Collectible3 = 0;
+    public int Collectible4 = 0;
+
     public Text countText;
 
 
@@ -17,8 +21,8 @@ public class Collectibles : MonoBehaviour
         if (other.gameObject.tag == "Collectibles")
         {
             other.gameObject.SetActive(false);
-            goldenCollectible += 1;
-            countText.text = goldenCollectible.ToString();
+            this.GoldenCollectible += 1;
+            countText.text = this.GoldenCollectible.ToString();
 
         }
     }

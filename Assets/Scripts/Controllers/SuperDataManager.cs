@@ -1,10 +1,12 @@
-﻿using UnityEngine;
+﻿using System;
+
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
 using UnityEngine.SceneManagement;
 
-#region Env Data Classes 
+#region Scene Based Data
 [System.Serializable]
 public class QuestsData
 {
@@ -21,13 +23,8 @@ public class StoryData
 }
 
 [System.Serializable]
-public class PlayerPosData
+public class PlayerSrData
 {
-    public int Collectible1;
-    public int Collectible2;
-    public int Collectible3;
-    public int Collectible4;
-
     public float PlayerPosX;
     public float PlayerPosY;
     public float PlayerPosZ;
@@ -35,11 +32,6 @@ public class PlayerPosData
     public float PlayerRotX;
     public float PlayerRotY;
     public float PlayerRotZ;
-
-    public bool FrogUnlocked;
-    public bool ArmaUnlocked;
-    public bool CraneUnlocked;
-    public bool DolphinUnlocked;
 }
 
 [System.Serializable]
@@ -62,24 +54,80 @@ public class ObjectsData
 public class ButtonsData
 {
     public string ButtonName;
-    public bool IsActive;
+    public bool IsDisabled;
 }
 
 [System.Serializable]
 public class EnvDatas
 {
     public string GpSceneName;
-    public PlayerPosData PlState;
+    public PlayerSrData PlState;
     public List<ObjectsData> ObjState;
     public List<ButtonsData> ButState;
     public QuestsData SlState;
 } 
 #endregion
 
+#region Global Data
+[System.Serializable]
+public class PlayerNsData
+{
+    public int Collectible1;
+    public int Collectible2;
+    public int Collectible3;
+    public int Collectible4;
+
+    public bool FrogUnlocked;
+    public bool ArmaUnlocked;
+    public bool CraneUnlocked;
+    public bool DolphinUnlocked;
+}
+#endregion
+
 public class SuperDataManager : MonoBehaviour
 {
     [SerializeField]
     public List<EnvDatas> EnvSensData;
+
+    [SerializeField]
+    public PlayerNsData PlNsData;
+
+    public event_listEnvSens_plNsSens SaveRequest;
+
+    private void Awake()
+    {
+        MenuManager mmTempLink = this.gameObject.GetComponent<MenuManager>();
+
+        mmTempLink.newDataRequest.AddListener(this.RequestingSave);
+
+        SuperSaveLoadManager sslmTempLinkl = this.gameObject.GetComponent<SuperSaveLoadManager>();
+
+        sslmTempLinkl.TempDataUpdateRequest.AddListener(this.UpdatingTempRepo);
+    }
+
+    private void RequestingSave()
+    {
+        this.SaveRequest.Invoke(this.EnvSensData, this.PlNsData);
+    }
+
+    private void UpdatingTempRepo(List<EnvDatas> newEnvSensData, PlayerNsData newPlSensData)
+    {
+        this.EnvSensData.Clear();
+        this.EnvSensData.TrimExcess();
+        this.EnvSensData = new List<EnvDatas>();
+        this.EnvSensData = newEnvSensData;
+
+        this.PlNsData = null;
+        this.PlNsData = newPlSensData;
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.J))
+        {
+            this.RequestingSave();
+        }
+    }
 
     #region Edit Mode Called Methods
     public void AddingStoryLineEditMode(StoryLine slToAdd)
@@ -106,14 +154,34 @@ public class SuperDataManager : MonoBehaviour
 
         if (sceneData == null) return;
 
-        sceneData.PlState.PlayerPosX = player.transform.position.x;
-        sceneData.PlState.PlayerPosY = player.transform.position.y;
-        sceneData.PlState.PlayerPosZ = player.transform.position.z;
+        Transform plTrans = player.transform;
 
-        sceneData.PlState.PlayerRotX = player.transform.eulerAngles.x;
-        sceneData.PlState.PlayerRotY = player.transform.eulerAngles.y;
-        sceneData.PlState.PlayerRotZ = player.transform.eulerAngles.z;
+        sceneData.PlState.PlayerPosX = plTrans.position.x;
+        sceneData.PlState.PlayerPosY = plTrans.position.y;
+        sceneData.PlState.PlayerPosZ = plTrans.position.z;
+
+        sceneData.PlState.PlayerRotX = plTrans.eulerAngles.x;
+        sceneData.PlState.PlayerRotY = plTrans.eulerAngles.y;
+        sceneData.PlState.PlayerRotZ = plTrans.eulerAngles.z;
     }
+
+    public void UpdatingPlNsState(GameObject player)
+    {
+        FSMChecker fsmTempLink = player.GetComponent<FSMChecker>();
+
+        this.PlNsData.FrogUnlocked = fsmTempLink.abiUnlocked.frogUnlocked;
+        this.PlNsData.ArmaUnlocked = fsmTempLink.abiUnlocked.armaUnlocked;
+        this.PlNsData.CraneUnlocked = fsmTempLink.abiUnlocked.craneUnlocked;
+        this.PlNsData.DolphinUnlocked = fsmTempLink.abiUnlocked.dolphinUnlocked;
+
+        Collectibles clTempLink = player.GetComponent<Collectibles>();
+
+        this.PlNsData.Collectible1 = clTempLink.GoldenCollectible;
+        this.PlNsData.Collectible2 = clTempLink.Collectible2;
+        this.PlNsData.Collectible3 = clTempLink.Collectible3;
+        this.PlNsData.Collectible4 = clTempLink.Collectible4;
+    }
+
 
     public void UpdatingObjState(GameObject obj)
     {
@@ -127,6 +195,18 @@ public class SuperDataManager : MonoBehaviour
         var sceneData = this.CheckingSceneBelonging();
 
         if (sceneData == null) return;
+
+        if (sceneData.ButState.Find(x => x.ButtonName == button.gameObject.name) == null)
+        {
+            var newButton = new ButtonsData { ButtonName = button.gameObject.name, IsDisabled = button.keyHit };
+
+            sceneData.ButState.Add(newButton);
+        }
+        else
+        {
+            ButtonsData buttonToUpdate = sceneData.ButState.Find(x => x.ButtonName == button.gameObject.name);
+            buttonToUpdate.IsDisabled = button.keyHit;
+        }
     }
 
     private EnvDatas CheckingSceneBelonging()
@@ -169,7 +249,7 @@ public class SuperDataManager : MonoBehaviour
             for (var ssIndex = 0; ssIndex < qmTempLink.StoryLineRepo[slIndex].Stories.Count; ssIndex++)
             {
                 this.questSensData[slIndex].Story.Add(new StoryData());
-                this.questSensData[slIndex].Story[ssIndex].IsActive = qmTempLink.StoryLineRepo[slIndex].Stories[ssIndex].Active;
+                this.questSensData[slIndex].Story[ssIndex].IsDisabled = qmTempLink.StoryLineRepo[slIndex].Stories[ssIndex].Active;
                 this.questSensData[slIndex].Story[ssIndex].IsCompleted = qmTempLink.StoryLineRepo[slIndex].Stories[ssIndex].Completed;
             }
         }   

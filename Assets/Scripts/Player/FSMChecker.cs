@@ -204,6 +204,12 @@ public class event_story : UnityEvent<SingleStory>
 public class event_string_string_string_string : UnityEvent<string, string, string, string>
 {
 }
+
+[System.Serializable]
+public class event_listEnvSens_plNsSens : UnityEvent<List<EnvDatas>, PlayerNsData>
+{
+    
+}
 #endregion
 
 public class FSMChecker : MonoBehaviour
@@ -1822,6 +1828,14 @@ public class FSMChecker : MonoBehaviour
             deathRequest.Invoke();
         else
             dying = false;
+    }
+    #endregion
+
+    #region Edit Mode Methods
+
+    public void OnValidate()
+    {
+        //GameObject.FindGameObjectWithTag("GameController").GetComponent<SuperDataManager>().UpdatingPlState(this.gameObject);
     }
     #endregion
 }
