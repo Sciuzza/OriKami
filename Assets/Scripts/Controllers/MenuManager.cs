@@ -37,6 +37,7 @@ public class MenuManager : MonoBehaviour
     public UnityEvent loadingSceneRequest;
     public event_string changingSceneRequest;
     public UnityEvent movieEndNotification;
+    public UnityEvent newDataRequest, loadDataRequest;
     #endregion
 
     #region Taking References and linking Events
@@ -102,15 +103,13 @@ public class MenuManager : MonoBehaviour
         this.exit = mmListButtonRef.Find(x => x.gameObject.name == "Exit");
 
         this.newGame.onClick.AddListener(PlayNewGameSound);
+        this.newGame.onClick.AddListener(this.SendingNewDataRequestEvent);
         this.newGame.onClick.AddListener(InvokingNewGame);
         this.continueB.onClick.AddListener(PlayNewGameSound);
+        this.continueB.onClick.AddListener(this.SendingLoadDataRequestEvent);
         this.continueB.onClick.AddListener(InvokingLevelSel);
         this.exit.onClick.AddListener(QuitGame);
-       
-
-       
-
-
+ 
         //EventSystem.current.SetSelectedGameObject(this.newGame.gameObject);
 
     }
@@ -139,6 +138,16 @@ public class MenuManager : MonoBehaviour
     public void PlayBackSound()
     {
         GameObject.FindGameObjectWithTag("GameController").GetComponent<SoundManager>().PlaySound(1, 2);
+    }
+
+    public void SendingNewDataRequestEvent()
+    {
+        this.newDataRequest.Invoke();
+    }
+
+    public void SendingLoadDataRequestEvent()
+    {
+        this.loadDataRequest.Invoke();
     }
 
     ////VA SPOSTATO DA QUA RICKY

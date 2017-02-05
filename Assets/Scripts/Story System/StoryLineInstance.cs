@@ -2167,9 +2167,11 @@ public class StoryLineInstance : MonoBehaviour
     #endregion
 
     #region Edit Mode Methods
+    
     public void OnValidate()
     {
-        GameObject.FindGameObjectWithTag("GameController").GetComponent<QuestsManager>().AddToRepository(this.CurrentStoryLine);
+        //GameObject.FindGameObjectWithTag("GameController").GetComponent<SuperDataManager>().AddingStoryLineEditMode(this.CurrentStoryLine);
     }
+    
     #endregion
 }
