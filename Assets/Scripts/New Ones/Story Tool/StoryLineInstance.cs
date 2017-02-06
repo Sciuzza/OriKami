@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 using Random = UnityEngine.Random;
@@ -379,6 +380,7 @@ public class StoryLineInstance : MonoBehaviour
     public event_bool IsStoryMode;
     public event_int_float MovieRequest;
     public UnityEvent eraseInputMemoryRequest;
+    public UnityEvent UpdateTempMemoryRequest;
     #endregion
 
     #region Private Variables
@@ -420,6 +422,10 @@ public class StoryLineInstance : MonoBehaviour
         this.mmLink = GameObject.FindGameObjectWithTag("GameController").GetComponent<MenuManager>();
 
         this.mmLink.movieEndNotification.AddListener(this.MovieEnd);
+
+        var sdmTempLink = GameObject.FindGameObjectWithTag("GameController").GetComponent<SuperDataManager>();
+
+        sdmTempLink.RequestUpdateByLoad.AddListener(this.LoadingCurrentState);
     }
     #endregion
 
@@ -751,6 +757,7 @@ public class StoryLineInstance : MonoBehaviour
 
         this.CompletionEffects();
 
+        this.UpdateTempMemoryRequest.Invoke();
         this.ChangeCsExitRequest.Invoke(this.storySelected.EndControlEffect);
     }
 
@@ -856,6 +863,17 @@ public class StoryLineInstance : MonoBehaviour
                 Debug.Log(storyLine + " Not Found inside Repo");
             }
         }
+
+        if (this.storySelected.AutoComplete)
+        {
+            SingleStory storyToFindInRepo = this.SearchingStoryInRepo(this.storySelected.StoryName);
+
+            if (storyToFindInRepo != null) storyToFindInRepo.Completed = true;
+            else
+            {
+                Debug.Log(this.storySelected.StoryName + " Not Found inside Repo");
+            }
+        }
     }
 
     private SingleStory SearchingStoryInside(string storyName)
@@ -879,6 +897,27 @@ public class StoryLineInstance : MonoBehaviour
         return this.questRepo.StoryLineRepo.Find(x => x.StoryLineName == storyLineName);
     }
 
+    private void LoadingCurrentState()
+    {
+        EnvDatas sceneData = GameObject.FindGameObjectWithTag("GameController").GetComponent<SuperDataManager>().EnvSensData.Find(x => x.GpSceneName == SceneManager.GetActiveScene().name);
+
+        this.CurrentStoryLine.Completed = sceneData.SlState.IsCompleted;
+
+        if (this.CurrentStoryLine.Stories.Count != sceneData.SlState.Story.Count)
+        {
+            Debug.Log("Quest Syncro not possible");
+            return;
+        }
+        else
+        {
+            for (int storyIndex = 0; storyIndex < this.CurrentStoryLine.Stories.Count; storyIndex++)
+            {
+                this.CurrentStoryLine.Stories[storyIndex].Active = sceneData.SlState.Story[storyIndex].IsActive;
+                this.CurrentStoryLine.Stories[storyIndex].Completed = sceneData.SlState.Story[storyIndex].IsCompleted;
+            }
+        }
+
+    }
     #endregion
 
     #region Player Effects Methods
@@ -2170,7 +2209,8 @@ public class StoryLineInstance : MonoBehaviour
     
     public void OnValidate()
     {
-        //GameObject.FindGameObjectWithTag("GameController").GetComponent<SuperDataManager>().AddingStoryLineEditMode(this.CurrentStoryLine);
+        GameObject.FindGameObjectWithTag("GameController").GetComponent<SuperDataManager>().AddingStoryLineEditMode(this.CurrentStoryLine);
+        GameObject.FindGameObjectWithTag("GameController").GetComponent<QuestsManager>().AddToRepository(this.CurrentStoryLine);
     }
     
     #endregion
