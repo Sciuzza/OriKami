@@ -1,8 +1,8 @@
 Blacksmith/Left/Blacksmith_Cheering/You’re the origami who helped the King’s son, aren’t you?*I need someone lend me a hand. You’re free, aren’t you?
-Iki/Right/Iki_Standard/. . .
+Iki/Right/Iki_Standard/...
 Blacksmith/Left/Blacksmith_Cheering/Perfect! Isn’t it?*A customer asked me a lucky charm with the shape of a cherry blossom, but I don’t have the right tools to finish my work.
 Blacksmith/Left/Blacksmith_Cheering/You can help me, can’t you? All you have to do is to bring me a pink log, a chisel and a hammer.*Easy, isn’t it?
-Iki/Right/Iki_Standard/. . .
+Iki/Right/Iki_Standard/...
 Blacksmith/Left/Blacksmith_Cheering/I can count on you, can’t I?
-Iki/Right/Iki_Standard/. . .
+Iki/Right/Iki_Standard/...
 Blacksmith/Left/Blacksmith_Cheering/Thank you very much, then!!
