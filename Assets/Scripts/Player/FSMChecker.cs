@@ -3,6 +3,8 @@ using System.Collections;
 using UnityEngine.Events;
 using System.Collections.Generic;
 
+using UnityEngine.SceneManagement;
+
 #region Finite State Machine enum Structure
 public enum abilties
 {
@@ -319,6 +321,11 @@ public class FSMChecker : MonoBehaviour
                 slTempLink.IsStoryMode.AddListener(this.SettingStoryMode);
             }
         }
+
+        var sdmTempLink = GameObject.FindGameObjectWithTag("GameController").GetComponent<SuperDataManager>();
+
+        sdmTempLink.RequestUpdateToSave.AddListener(this.SavingCurrentState);
+        sdmTempLink.RequestUpdateByLoad.AddListener(this.LoadingCurrentState);
     }
 
     void Start()
@@ -1828,6 +1835,74 @@ public class FSMChecker : MonoBehaviour
             deathRequest.Invoke();
         else
             dying = false;
+    }
+    #endregion
+
+    #region Saving and Loading State Methods
+    private void SavingCurrentState()
+    {
+        var dataToUpdate =
+            GameObject.FindGameObjectWithTag("GameController")
+                .GetComponent<SuperDataManager>()
+                .EnvSensData.Find(x => x.GpSceneName == SceneManager.GetActiveScene().name)
+                .PlState;
+
+        var plTrans = this.gameObject.transform;
+
+        dataToUpdate.PlayerPosX = plTrans.position.x;
+        dataToUpdate.PlayerPosY = plTrans.position.y;
+        dataToUpdate.PlayerPosZ = plTrans.position.z;
+
+        dataToUpdate.PlayerRotX = plTrans.eulerAngles.x;
+        dataToUpdate.PlayerRotY = plTrans.eulerAngles.y;
+        dataToUpdate.PlayerRotZ = plTrans.eulerAngles.z;
+
+        var plNsDataToUpdate =
+            GameObject.FindGameObjectWithTag("GameController").GetComponent<SuperDataManager>().PlNsData;
+
+        var clTempLink = this.gameObject.GetComponent<Collectibles>();
+
+        plNsDataToUpdate.Collectible1 = clTempLink.GoldenCollectible;
+        plNsDataToUpdate.Collectible2 = clTempLink.Collectible2;
+        plNsDataToUpdate.Collectible3 = clTempLink.Collectible3;
+        plNsDataToUpdate.Collectible4 = clTempLink.Collectible4;
+
+        plNsDataToUpdate.FrogUnlocked = this.abiUnlocked.frogUnlocked;
+        plNsDataToUpdate.ArmaUnlocked = this.abiUnlocked.armaUnlocked;
+        plNsDataToUpdate.CraneUnlocked = this.abiUnlocked.craneUnlocked;
+        plNsDataToUpdate.DolphinUnlocked = this.abiUnlocked.dolphinUnlocked;
+
+    }
+
+    private void LoadingCurrentState()
+    {
+        var dataToUpdate =
+            GameObject.FindGameObjectWithTag("GameController")
+                .GetComponent<SuperDataManager>()
+                .EnvSensData.Find(x => x.GpSceneName == SceneManager.GetActiveScene().name)
+                .PlState;
+
+        var plTrans = this.gameObject.transform;
+
+        plTrans.position = new Vector3(dataToUpdate.PlayerPosX, dataToUpdate.PlayerPosY, dataToUpdate.PlayerPosZ);
+        plTrans.rotation = Quaternion.Euler(dataToUpdate.PlayerRotX, dataToUpdate.PlayerRotY, dataToUpdate.PlayerRotZ);
+
+        var plNsDataToUpdate =
+            GameObject.FindGameObjectWithTag("GameController").GetComponent<SuperDataManager>().PlNsData;
+
+        var clTempLink = this.gameObject.GetComponent<Collectibles>();
+
+        clTempLink.GoldenCollectible = plNsDataToUpdate.Collectible1;
+        clTempLink.Collectible2 = plNsDataToUpdate.Collectible2;
+        clTempLink.Collectible3 = plNsDataToUpdate.Collectible3;
+        clTempLink.Collectible4 = plNsDataToUpdate.Collectible4;
+
+        this.abiUnlocked.frogUnlocked = plNsDataToUpdate.FrogUnlocked;
+        this.abiUnlocked.armaUnlocked = plNsDataToUpdate.ArmaUnlocked;
+        this.abiUnlocked.craneUnlocked = plNsDataToUpdate.CraneUnlocked;
+        this.abiUnlocked.dolphinUnlocked = plNsDataToUpdate.DolphinUnlocked;
+
+        this.UpdatingAbilityList();
     }
     #endregion
 

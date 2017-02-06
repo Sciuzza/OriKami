@@ -47,8 +47,16 @@ public class MoveHandler : MonoBehaviour
         fsmCheckTempLink.stoppingRollLogic.AddListener(StoppingRoll);
         fsmCheckTempLink.enableGlideLogic.AddListener(SettingGlideGravity);
         fsmCheckTempLink.stopGlideLogic.AddListener(SettingNormalGravity);
+        fsmCheckTempLink.deathRequest.AddListener(this.ResettingVerticalVelocity);
+
+        this.deathRequest.AddListener(this.ResettingVerticalVelocity);
     }
     #endregion
+
+    private void ResettingVerticalVelocity()
+    {
+        this.verticalVelocity = 0;
+    }
 
     #region Move and Rotation Handling Methods
     public IEnumerator MoveHandlerUpdate()

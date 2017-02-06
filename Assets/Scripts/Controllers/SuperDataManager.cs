@@ -4,6 +4,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
+using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 
 #region Scene Based Data
@@ -86,14 +87,20 @@ public class PlayerNsData
 
 public class SuperDataManager : MonoBehaviour
 {
+    #region Public Variables
     [SerializeField]
     public List<EnvDatas> EnvSensData;
 
     [SerializeField]
-    public PlayerNsData PlNsData;
+    public PlayerNsData PlNsData; 
+    #endregion
 
+    #region Events
     public event_listEnvSens_plNsSens SaveRequest;
+    public UnityEvent RequestUpdateToSave, RequestUpdateByLoad;
+    #endregion
 
+    #region Taking References and Linking Events
     private void Awake()
     {
         MenuManager mmTempLink = this.gameObject.GetComponent<MenuManager>();
@@ -105,13 +112,20 @@ public class SuperDataManager : MonoBehaviour
         sslmTempLinkl.TempDataUpdateRequest.AddListener(this.UpdatingTempRepo);
     }
 
-    private void RequestingSave()
-    {
-        this.SaveRequest.Invoke(this.EnvSensData, this.PlNsData);
-    }
+    #endregion
 
+    #region Requesting New Values by Local Variables and Objects to Update Temp Repo and Saving to SuperSaveLoadManager
+    public void RequestingSave()
+    {
+        this.RequestUpdateToSave.Invoke();
+        this.SaveRequest.Invoke(this.EnvSensData, this.PlNsData);
+    } 
+    #endregion
+
+    #region Loading Update Temp Repo by SuperSaveLoadManager and request Involved Local Variables and Objects to update themselves
     private void UpdatingTempRepo(List<EnvDatas> newEnvSensData, PlayerNsData newPlSensData)
     {
+        /*
         this.EnvSensData.Clear();
         this.EnvSensData.TrimExcess();
         this.EnvSensData = new List<EnvDatas>();
@@ -119,15 +133,20 @@ public class SuperDataManager : MonoBehaviour
 
         this.PlNsData = null;
         this.PlNsData = newPlSensData;
+        */
+        this.RequestUpdateByLoad.Invoke();
     }
+    #endregion
 
+    #region Testing Save (to be Removed)
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.J))
         {
             this.RequestingSave();
         }
-    }
+    } 
+    #endregion
 
     #region Edit Mode Called Methods
     public void AddingStoryLineEditMode(StoryLine slToAdd)

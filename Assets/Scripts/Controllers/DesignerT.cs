@@ -303,8 +303,6 @@ public class DesignerT : MonoBehaviour
         fsmExecutorTempLink.currentMoveValues = GestioneMovimento;
         fsmExecutorTempLink.generalValues = GeneralTweaks;
 
-
-
         CameraManager cmTempLink = this.GetComponent<CameraManager>();
 
         cmTempLink.CurrentPlCameraSettings = GestioneCamera;

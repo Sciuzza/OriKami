@@ -7,6 +7,8 @@ public class CheckPointTest : MonoBehaviour
     public GameObject Player;
     public bool saveGame, loadGame;
 
+    public bool Triggered;
+
     void Awake()
     {
        save = GameObject.FindGameObjectWithTag("GameController").GetComponent<SaveSystem>();
@@ -15,6 +17,7 @@ public class CheckPointTest : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
+        /*
         if (other.gameObject.tag == "Player" && saveGame)
         {
             Debug.Log("Saving....");
@@ -25,6 +28,13 @@ public class CheckPointTest : MonoBehaviour
         {
             Debug.Log("Loading....");
             save.LoadState();
+        }
+        */
+
+        if (other.gameObject.CompareTag("Player") && !this.Triggered)
+        {
+            GameObject.FindGameObjectWithTag("GameController").GetComponent<SuperDataManager>().RequestingSave();
+            this.Triggered = true;
         }
     }
 

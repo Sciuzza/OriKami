@@ -61,7 +61,7 @@ public class SaveSystem : MonoBehaviour
     private void GameplayInitialization(GameObject player)
     {
         FSMChecker fsmCheckerTempLink = player.GetComponent<FSMChecker>();
-        fsmCheckerTempLink.deathRequest.AddListener(LoadState);
+        //fsmCheckerTempLink.deathRequest.AddListener(LoadState);
         PlayerTempLink = player.transform;
 
 

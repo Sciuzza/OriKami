@@ -22,6 +22,10 @@ public class SuperSaveLoadManager : MonoBehaviour {
         var sdmTempLink = this.gameObject.GetComponent<SuperDataManager>();
 
         sdmTempLink.SaveRequest.AddListener(this.SavingOnDiskData);
+
+        GameController gcTempLink = this.gameObject.GetComponent<GameController>();
+
+        gcTempLink.gpInitializer.AddListener(this.InitializingGameplayScene);
     }
 
     private void SavingOnDiskData(List<EnvDatas> newEnvDatas, PlayerNsData newPlNsData)
@@ -45,7 +49,7 @@ public class SuperSaveLoadManager : MonoBehaviour {
         this.EnvSensDataLocalCopy.Clear();
         this.EnvSensDataLocalCopy.TrimExcess();
         this.EnvSensDataLocalCopy.AddRange(newEnvDatas);
-        
+  
 
         this.PlNsDataLocalCopy = null;
         this.PlNsDataLocalCopy = new PlayerNsData();
@@ -62,7 +66,6 @@ public class SuperSaveLoadManager : MonoBehaviour {
     private void LoadingOnDiskData()
     {
         BinaryFormatter bf = new BinaryFormatter();
-
         if (File.Exists(Application.persistentDataPath + "/EnvSensData.dat"))
         {
             var envSensFile = File.Open(Application.persistentDataPath + "/EnvSensData.dat", FileMode.Open);
@@ -79,13 +82,48 @@ public class SuperSaveLoadManager : MonoBehaviour {
             this.PlNsDataLocalCopy = (PlayerNsData)bf.Deserialize(plSensFile);
             plSensFile.Close();
         }
-
         this.TempDataUpdateRequest.Invoke(this.EnvSensDataLocalCopy, this.PlNsDataLocalCopy);
     }
 
+    private void InitializingGameplayScene(GameObject player)
+    {
+        player.GetComponent<FSMChecker>().deathRequest.AddListener(this.LoadingOnDiskData);
+    }
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.K)) this.LoadingOnDiskData();
+        if (Input.GetKeyDown(KeyCode.L)) this.LoadingOnDiskData();
     }
+
+
+    /*
+           foreach (var scene in newEnvDatas)
+        {
+            EnvDatas tempData = new EnvDatas();
+
+            tempData.PlState.PlayerPosX = scene.PlState.PlayerPosX;
+            tempData.PlState.PlayerPosY = scene.PlState.PlayerPosY;
+            tempData.PlState.PlayerPosY = scene.PlState.PlayerPosZ;
+
+            tempData.PlState.PlayerRotX = scene.PlState.PlayerRotX;
+            tempData.PlState.PlayerRotY = scene.PlState.PlayerRotY;
+            tempData.PlState.PlayerRotZ = scene.PlState.PlayerRotY;
+
+            tempData.GpSceneName = scene.GpSceneName;
+
+            foreach (var button in scene.ButState)
+            {
+                ButtonsData tempButData = new ButtonsData();
+
+                tempButData.ButtonName = button.ButtonName;
+                tempButData.IsDisabled = button.IsDisabled;
+
+
+                tempData.ButState
+            }
+
+            
+        }
+        
+     */ 
 }
