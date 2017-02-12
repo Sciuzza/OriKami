@@ -1,0 +1,198 @@
+fileFormatVersion: 2
+guid: df76b5297760b384d9e9c0c8b76dd000
+timeCreated: 1486924931
+licenseType: Free
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: bedwater_bamboo
+    100002: finale_route3_isoletta1
+    100004: finale_route3_isoletta2
+    100006: ground_roccia
+    100008: ground_terra
+    100010: piattaforma1
+    100012: piattaforma2
+    100014: piattaforma2_terra
+    100016: piattaforma3
+    100018: piattaforma4
+    100020: piattaforma4_terra
+    100022: piattaforma5
+    100024: piattaforma5_terra
+    100026: river1
+    100028: river2
+    100030: river3
+    100032: river4
+    100034: river5
+    100036: riverbed
+    100038: //RootNode
+    100040: spuntone_grande
+    100042: spuntone_piccolo
+    100044: spuntoni_finali_portone
+    100046: water_bamboo
+    100048: water_brumble
+    100050: waterfall
+    400000: bedwater_bamboo
+    400002: finale_route3_isoletta1
+    400004: finale_route3_isoletta2
+    400006: ground_roccia
+    400008: ground_terra
+    400010: piattaforma1
+    400012: piattaforma2
+    400014: piattaforma2_terra
+    400016: piattaforma3
+    400018: piattaforma4
+    400020: piattaforma4_terra
+    400022: piattaforma5
+    400024: piattaforma5_terra
+    400026: river1
+    400028: river2
+    400030: river3
+    400032: river4
+    400034: river5
+    400036: riverbed
+    400038: //RootNode
+    400040: spuntone_grande
+    400042: spuntone_piccolo
+    400044: spuntoni_finali_portone
+    400046: water_bamboo
+    400048: water_brumble
+    400050: waterfall
+    2300000: bedwater_bamboo
+    2300002: finale_route3_isoletta1
+    2300004: finale_route3_isoletta2
+    2300006: ground_roccia
+    2300008: ground_terra
+    2300010: piattaforma1
+    2300012: piattaforma2
+    2300014: piattaforma2_terra
+    2300016: piattaforma3
+    2300018: piattaforma4
+    2300020: piattaforma4_terra
+    2300022: piattaforma5
+    2300024: piattaforma5_terra
+    2300026: river1
+    2300028: river2
+    2300030: river3
+    2300032: river4
+    2300034: river5
+    2300036: riverbed
+    2300038: spuntone_grande
+    2300040: spuntone_piccolo
+    2300042: spuntoni_finali_portone
+    2300044: water_bamboo
+    2300046: water_brumble
+    2300048: waterfall
+    3300000: bedwater_bamboo
+    3300002: finale_route3_isoletta1
+    3300004: finale_route3_isoletta2
+    3300006: ground_roccia
+    3300008: ground_terra
+    3300010: piattaforma1
+    3300012: piattaforma2
+    3300014: piattaforma2_terra
+    3300016: piattaforma3
+    3300018: piattaforma4
+    3300020: piattaforma4_terra
+    3300022: piattaforma5
+    3300024: piattaforma5_terra
+    3300026: river1
+    3300028: river2
+    3300030: river3
+    3300032: river4
+    3300034: river5
+    3300036: riverbed
+    3300038: spuntone_grande
+    3300040: spuntone_piccolo
+    3300042: spuntoni_finali_portone
+    3300044: water_bamboo
+    3300046: water_brumble
+    3300048: waterfall
+    4300000: ground_roccia
+    4300002: finale_route3_isoletta1
+    4300004: finale_route3_isoletta2
+    4300006: spuntoni_finali_portone
+    4300008: spuntone_piccolo
+    4300010: spuntone_grande
+    4300012: river5
+    4300014: water_bamboo
+    4300016: waterfall
+    4300018: river1
+    4300020: river2
+    4300022: river3
+    4300024: river4
+    4300026: riverbed
+    4300028: bedwater_bamboo
+    4300030: ground_terra
+    4300032: piattaforma1
+    4300034: piattaforma2
+    4300036: piattaforma3
+    4300038: piattaforma4
+    4300040: piattaforma5
+    4300042: piattaforma2_terra
+    4300044: piattaforma4_terra
+    4300046: piattaforma5_terra
+    4300048: water_brumble
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
