@@ -10,7 +10,7 @@ public class ButtonUpdateState : MonoBehaviour {
 
     public void OnValidate()
     {
-        GameObject.FindGameObjectWithTag("GameController").GetComponent<SuperDataManager>().UpdatingButState(this.gameObject);
+        //GameObject.FindGameObjectWithTag("GameController").GetComponent<SuperDataManager>().UpdatingButState(this.gameObject);
     }
     #endregion
 

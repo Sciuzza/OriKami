@@ -9,7 +9,7 @@ public class ObjectUpdate : MonoBehaviour {
 
     public void OnValidate()
     {
-       GameObject.FindGameObjectWithTag("GameController").GetComponent<SuperDataManager>().UpdatingObjState(this.gameObject);
+       //GameObject.FindGameObjectWithTag("GameController").GetComponent<SuperDataManager>().UpdatingObjState(this.gameObject);
     }
     #endregion
 

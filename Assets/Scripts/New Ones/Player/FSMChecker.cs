@@ -2015,7 +2015,7 @@ public class FSMChecker : MonoBehaviour
 
     public void OnValidate()
     {
-        GameObject.FindGameObjectWithTag("GameController").GetComponent<SuperDataManager>().UpdatingPlState(this.gameObject);
+        //GameObject.FindGameObjectWithTag("GameController").GetComponent<SuperDataManager>().UpdatingPlState(this.gameObject);
     }
     #endregion
 }
