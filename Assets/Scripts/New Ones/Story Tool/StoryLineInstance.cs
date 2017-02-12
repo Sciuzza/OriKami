@@ -2014,6 +2014,18 @@ public class StoryLineInstance : MonoBehaviour
 
     private void PlayDialogueEffect(UiDialogue effectToPlay)
     {
+        effectToPlay.Label.Clear();
+        effectToPlay.Label.TrimExcess();
+
+        effectToPlay.Name.Clear();
+        effectToPlay.Name.TrimExcess();
+
+        effectToPlay.Sentence.Clear();
+        effectToPlay.Sentence.TrimExcess();
+
+        effectToPlay.Sprite.Clear();
+        effectToPlay.Sprite.TrimExcess();
+
         var delimiters = new char[] { '/', '\n' };
         var initialSplit = effectToPlay.DialogueRef.text.Split(delimiters, StringSplitOptions.None);
 
@@ -2061,14 +2073,12 @@ public class StoryLineInstance : MonoBehaviour
     private IEnumerator LivingDialogue(UiDialogue dialogueEffect)
     {
         this.UiDialogueRequest.Invoke(dialogueEffect.Name[0], dialogueEffect.Label[0], dialogueEffect.Sentence[0], dialogueEffect.Sprite[0]);
-        var counter = 1;
-        var dialogueSkip = false;
+        var counter = 0;
 
         while (counter < dialogueEffect.Name.Count)
         {
             if (Input.GetButtonDown(buttonsJoy.Y.ToString()))
             {
-                dialogueSkip = true;
                 break;
             }
 
@@ -2078,11 +2088,6 @@ public class StoryLineInstance : MonoBehaviour
                 counter++;
             }
 
-            yield return null;
-        }
-
-        while (!Input.GetButtonDown(buttonsJoy.X.ToString()) && !Input.GetButtonDown(buttonsPc.E.ToString()) && !dialogueSkip)
-        {
             yield return null;
         }
 

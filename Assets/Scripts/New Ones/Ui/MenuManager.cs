@@ -52,16 +52,6 @@ public class MenuManager : MonoBehaviour
         var scTempLink = this.GetComponent<SceneController>();
 
         scTempLink.ProgressUpdateRequest.AddListener(this.UpdatingProgressBar);
-       
-
-        var storyLineCheck = GameObject.FindGameObjectWithTag("StoryLine");
-
-        if (storyLineCheck == null) return;
-        var slTempLink = GameObject.FindGameObjectWithTag("StoryLine").GetComponent<StoryLineInstance>();
-        slTempLink.UiDialogueRequest.AddListener(this.PoppingOutDialogue);
-        slTempLink.DialogueEnded.AddListener(this.ResettingDialogue);
-        slTempLink.MovieRequest.AddListener(this.PoppingOutMovie);
-       
     }
 
     #endregion
@@ -254,6 +244,14 @@ public class MenuManager : MonoBehaviour
     private void InitializingGpScene(GameObject player)
     {
         this.gpUiRef = GameObject.FindGameObjectWithTag("Gameplay Ui").GetComponent<HudRefRepo>();
+
+        var storyLineCheck = GameObject.FindGameObjectWithTag("StoryLine");
+
+        if (storyLineCheck == null) return;
+        var slTempLink = GameObject.FindGameObjectWithTag("StoryLine").GetComponent<StoryLineInstance>();
+        slTempLink.UiDialogueRequest.AddListener(this.PoppingOutDialogue);
+        slTempLink.DialogueEnded.AddListener(this.ResettingDialogue);
+        slTempLink.MovieRequest.AddListener(this.PoppingOutMovie);
     }
 
     private void PoppingOutDialogue(string name, string label, string sentence, string spritename)
