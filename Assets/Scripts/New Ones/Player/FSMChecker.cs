@@ -218,6 +218,7 @@ public class FSMChecker : MonoBehaviour
 {
     #region Public Variables
     public formsSettings abiUnlocked;
+    public playerLegends legUnlocked;
     public float drowTimerSetting;
     #endregion
 
@@ -319,6 +320,7 @@ public class FSMChecker : MonoBehaviour
                 slTempLink.ChangeCsEnterRequest.AddListener(this.StoryCsChange);
                 slTempLink.ChangeCsExitRequest.AddListener(this.StoryCsExit);
                 slTempLink.IsStoryMode.AddListener(this.SettingStoryMode);
+                slTempLink.LegendsUpdateRequest.AddListener(this.UnlockingLegend);
             }
         }
 
@@ -1614,6 +1616,28 @@ public class FSMChecker : MonoBehaviour
 
         this.UpdatingAbilityList();
     }
+
+    private void UnlockingLegend(int LegendIndex)
+    {
+        switch (LegendIndex)
+        {
+            case 0:
+                this.legUnlocked.Legend1 = true;
+                break;
+            case 1:
+                this.legUnlocked.Legend2 = true;
+                break;
+            case 2:
+                this.legUnlocked.Legend3 = true;
+                break;
+            case 3:
+                this.legUnlocked.Legend4 = true;
+                break;
+            case 4:
+                this.legUnlocked.Legend5 = true;
+                break;
+        }
+    }
     #endregion
 
     #region Designer Camera Handler
@@ -1872,6 +1896,12 @@ public class FSMChecker : MonoBehaviour
         plNsDataToUpdate.CraneUnlocked = this.abiUnlocked.craneUnlocked;
         plNsDataToUpdate.DolphinUnlocked = this.abiUnlocked.dolphinUnlocked;
 
+        plNsDataToUpdate.Legend1Unlocked = this.legUnlocked.Legend1;
+        plNsDataToUpdate.Legend2Unlocked = this.legUnlocked.Legend2;
+        plNsDataToUpdate.Legend3Unlocked = this.legUnlocked.Legend3;
+        plNsDataToUpdate.Legend4Unlocked = this.legUnlocked.Legend4;
+        plNsDataToUpdate.Legend5Unlocked = this.legUnlocked.Legend5;
+
     }
 
     private void LoadingCurrentState()
@@ -1903,6 +1933,13 @@ public class FSMChecker : MonoBehaviour
         this.abiUnlocked.dolphinUnlocked = plNsDataToUpdate.DolphinUnlocked;
 
         this.UpdatingAbilityList();
+
+        this.legUnlocked.Legend1 = plNsDataToUpdate.Legend1Unlocked;
+        this.legUnlocked.Legend2 = plNsDataToUpdate.Legend2Unlocked;
+        this.legUnlocked.Legend3 = plNsDataToUpdate.Legend3Unlocked;
+        this.legUnlocked.Legend4 = plNsDataToUpdate.Legend4Unlocked;
+        this.legUnlocked.Legend5 = plNsDataToUpdate.Legend5Unlocked;
+
     }
     #endregion
 

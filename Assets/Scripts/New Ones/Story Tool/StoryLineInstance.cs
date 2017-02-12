@@ -28,6 +28,7 @@ public class PlayerEffect
     public PlayerSee PlayerSeeEffect;
     public PlayerPushBack PushingBackEffect;
     public PlayerReward PlayerReward;
+    public PlayerLegend PlayerLegend;
 }
 
 [Serializable]
@@ -68,6 +69,14 @@ public class PlayerReward
     public bool End;
     [Tooltip("Standard Form, Frog Form, Armadillo Form, Dragon Form, Dolphin Form")]
     public string FormName;
+}
+
+[Serializable]
+public class PlayerLegend
+{
+    public bool End;
+    public bool LegendUnlocked;
+    public int LegendIndex;
 }
 #endregion Player Effect Classes
 
@@ -381,6 +390,7 @@ public class StoryLineInstance : MonoBehaviour
     public event_int_float MovieRequest;
     public UnityEvent eraseInputMemoryRequest;
     public UnityEvent UpdateTempMemoryRequest;
+    public event_int LegendsUpdateRequest;
     #endregion
 
     #region Private Variables
@@ -937,6 +947,13 @@ public class StoryLineInstance : MonoBehaviour
                 GameController.Debugging("Player Reward");
                 this.PlayPlayerRewardEffect(plaEffectsToEvaluate.PlayerReward);
             }
+
+            if (plaEffectsToEvaluate.PlayerLegend.LegendUnlocked)
+            {
+                this.totalEventEffects++;
+                Debug.Log("Player Legend");
+                this.PlayPlayerLegendEffect(plaEffectsToEvaluate.PlayerLegend);
+            }
         }
         else if (plaEffectsToEvaluate.PlayerMoveEffect.GbRef != null)
         {
@@ -949,6 +966,13 @@ public class StoryLineInstance : MonoBehaviour
                 this.totalEventEffects++;
                 GameController.Debugging("Player Reward");
                 this.PlayPlayerRewardEffect(plaEffectsToEvaluate.PlayerReward);
+            }
+
+            if (plaEffectsToEvaluate.PlayerLegend.LegendUnlocked)
+            {
+                this.totalEventEffects++;
+                Debug.Log("Player Legend");
+                this.PlayPlayerLegendEffect(plaEffectsToEvaluate.PlayerLegend);
             }
         }
         else if (plaEffectsToEvaluate.PlayerSeeEffect.GbRef != null)
@@ -963,6 +987,14 @@ public class StoryLineInstance : MonoBehaviour
                 GameController.Debugging("Player Reward");
                 this.PlayPlayerRewardEffect(plaEffectsToEvaluate.PlayerReward);
             }
+
+            if (plaEffectsToEvaluate.PlayerLegend.LegendUnlocked)
+            {
+                this.totalEventEffects++;
+                Debug.Log("Player Legend");
+                this.PlayPlayerLegendEffect(plaEffectsToEvaluate.PlayerLegend);
+            }
+
             if (plaEffectsToEvaluate.PushingBackEffect.PushingBackPower > 0
                 && plaEffectsToEvaluate.PushingBackEffect.TimeTaken > 0 && plaEffectsToEvaluate.PushingBackEffect.GbRef != null)
             {
@@ -984,6 +1016,13 @@ public class StoryLineInstance : MonoBehaviour
                 GameController.Debugging("Player Reward");
                 this.PlayPlayerRewardEffect(plaEffectsToEvaluate.PlayerReward);
             }
+
+            if (plaEffectsToEvaluate.PlayerLegend.LegendUnlocked)
+            {
+                this.totalEventEffects++;
+                Debug.Log("Player Legend");
+                this.PlayPlayerLegendEffect(plaEffectsToEvaluate.PlayerLegend);
+            }
         }
         else
         {
@@ -992,6 +1031,13 @@ public class StoryLineInstance : MonoBehaviour
                 this.totalEventEffects++;
                 GameController.Debugging("Player Reward");
                 this.PlayPlayerRewardEffect(plaEffectsToEvaluate.PlayerReward);
+            }
+
+            if (plaEffectsToEvaluate.PlayerLegend.LegendUnlocked)
+            {
+                this.totalEventEffects++;
+                Debug.Log("Player Legend");
+                this.PlayPlayerLegendEffect(plaEffectsToEvaluate.PlayerLegend);
             }
         }
     }
@@ -1024,6 +1070,13 @@ public class StoryLineInstance : MonoBehaviour
     private void PlayPlayerRewardEffect(PlayerReward effectToPlay)
     {
         this.FormUnlockRequest.Invoke(effectToPlay.FormName);
+        effectToPlay.End = true;
+        this.effectCounter++;
+    }
+
+    private void PlayPlayerLegendEffect(PlayerLegend effectToPlay)
+    {
+        this.LegendsUpdateRequest.Invoke(effectToPlay.LegendIndex);
         effectToPlay.End = true;
         this.effectCounter++;
     }
@@ -1091,7 +1144,7 @@ public class StoryLineInstance : MonoBehaviour
 
     private IEnumerator PushBackPlayer(PlayerPushBack pushBackEffect)
     {
-        var targetPosition = this.player.transform.position - (Vector3.ProjectOnPlane(pushBackEffect.GbRef.transform.forward, this.player.transform.up).normalized * pushBackEffect.PushingBackPower);
+        var targetPosition = this.player.transform.position + (Vector3.ProjectOnPlane(pushBackEffect.GbRef.transform.forward, this.player.transform.up).normalized * pushBackEffect.PushingBackPower);
         var objToMove = this.player;
 
         var timeTaken = pushBackEffect.TimeTaken;

@@ -82,6 +82,12 @@ public class PlayerNsData
     public bool ArmaUnlocked;
     public bool CraneUnlocked;
     public bool DolphinUnlocked;
+
+    public bool Legend1Unlocked;
+    public bool Legend2Unlocked;
+    public bool Legend3Unlocked;
+    public bool Legend4Unlocked;
+    public bool Legend5Unlocked;
 }
 #endregion
 
@@ -227,6 +233,12 @@ public class SuperDataManager : MonoBehaviour
         this.PlNsData.ArmaUnlocked = fsmTempLink.abiUnlocked.armaUnlocked;
         this.PlNsData.CraneUnlocked = fsmTempLink.abiUnlocked.craneUnlocked;
         this.PlNsData.DolphinUnlocked = fsmTempLink.abiUnlocked.dolphinUnlocked;
+
+        this.PlNsData.Legend1Unlocked = fsmTempLink.legUnlocked.Legend1;
+        this.PlNsData.Legend2Unlocked = fsmTempLink.legUnlocked.Legend2;
+        this.PlNsData.Legend3Unlocked = fsmTempLink.legUnlocked.Legend3;
+        this.PlNsData.Legend4Unlocked = fsmTempLink.legUnlocked.Legend4;
+        this.PlNsData.Legend5Unlocked = fsmTempLink.legUnlocked.Legend5;
 
         Collectibles clTempLink = player.GetComponent<Collectibles>();
 
