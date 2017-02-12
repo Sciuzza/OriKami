@@ -254,6 +254,7 @@ public class Puzzles : MonoBehaviour
 
 
     }
+
     IEnumerator RotateMe(Vector3 byAngles, float inTime)
     {
         var fromAngle = rotateObject.transform.rotation;
@@ -289,7 +290,7 @@ public class Puzzles : MonoBehaviour
             if (disabledObject != null)
             {
                 disabledObject.gameObject.SetActive(false);
-                disableObject = false;
+                //disableObject = false;
             }
 
         }
@@ -298,7 +299,7 @@ public class Puzzles : MonoBehaviour
             if (disabledObject != null)
             {
                 disabledObject.gameObject.SetActive(false);
-                disableObject = false;
+                //disableObject = false;
             }
         }
 
@@ -345,12 +346,12 @@ public class Puzzles : MonoBehaviour
         //    other.transform.SetParent(this.gameObject.transform);
         //}
     }
+
     void OnTriggerExit(Collider other)
     {
         if (other.gameObject.tag == "Player")
         {
-            other.transform.parent = null;
-            
+            other.transform.parent = null;   
         }
               
     }

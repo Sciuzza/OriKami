@@ -321,6 +321,7 @@ public class FSMChecker : MonoBehaviour
                 slTempLink.ChangeCsExitRequest.AddListener(this.StoryCsExit);
                 slTempLink.IsStoryMode.AddListener(this.SettingStoryMode);
                 slTempLink.LegendsUpdateRequest.AddListener(this.UnlockingLegend);
+                slTempLink.TransfRequest.AddListener(this.CallingTransformation);
             }
         }
 
@@ -392,7 +393,6 @@ public class FSMChecker : MonoBehaviour
 
     private void CheckingAbiRequirements(abilties abiReceived)
     {
-
         if (this.cPlayerState.currentAbilities.Contains(abiReceived))
         {
             switch (abiReceived)
@@ -1725,7 +1725,7 @@ public class FSMChecker : MonoBehaviour
             || this.cPlayerState.currentClState == controlStates.noControl)
             this.switchingCameraToStoryRequest.Invoke();
         
-
+        this.EnablingMove();
         this.UpdatingAbilityList();
     }
 
@@ -1748,6 +1748,74 @@ public class FSMChecker : MonoBehaviour
     private void SettingStoryMode(bool state)
     {
         storyMode = state;
+    }
+
+     private void CallingTransformation(abilties abiReceived)
+    {
+            switch (abiReceived)
+            {
+                case abilties.toStd:
+                    cPlayerState.previousForm = cPlayerState.currentForm;
+                    cPlayerState.currentForm = "Standard Form";
+                    formChangedInp.Invoke(cPlayerState.currentForm);
+                    if (cPlayerState.currentPlState == playerStates.rolling)
+                        EnablingMove();
+                    else
+                        UpdatingAbilityList();
+                    formChanged.Invoke(cPlayerState.currentForm, cPlayerState.previousForm, cPlayerState.forms);
+                    if (cPlayerState.previousForm == "Dragon Form")
+                        stopGlideLogic.Invoke();
+                    SettingCapsuleCollider(0.15f, 1);
+                    break;
+                case abilties.toFrog:
+                    cPlayerState.previousForm = cPlayerState.currentForm;
+                    cPlayerState.currentForm = "Frog Form";
+                    formChangedInp.Invoke(cPlayerState.currentForm);
+                    if (cPlayerState.currentPlState == playerStates.rolling)
+                        EnablingMove();
+                    else
+                        UpdatingAbilityList();
+                    formChanged.Invoke(cPlayerState.currentForm, cPlayerState.previousForm, cPlayerState.forms);
+                    if (cPlayerState.previousForm == "Dragon Form")
+                        stopGlideLogic.Invoke();
+                    SettingCapsuleCollider(0.15f, 0.7f);
+                    break;
+                case abilties.toCrane:
+                    cPlayerState.previousForm = cPlayerState.currentForm;
+                    cPlayerState.currentForm = "Dragon Form";
+                    formChangedInp.Invoke(cPlayerState.currentForm);
+                    if (cPlayerState.currentPlState == playerStates.rolling)
+                        EnablingMove();
+                    else
+                        UpdatingAbilityList();
+                    formChanged.Invoke(cPlayerState.currentForm, cPlayerState.previousForm, cPlayerState.forms);
+                    enableGlideLogic.Invoke();
+                    SettingCapsuleCollider(0.15f, 0.7f);
+                    break;
+                case abilties.toArma:
+                    cPlayerState.previousForm = cPlayerState.currentForm;
+                    cPlayerState.currentForm = "Armadillo Form";
+                    formChangedInp.Invoke(cPlayerState.currentForm);
+                    UpdatingAbilityList();
+                    formChanged.Invoke(cPlayerState.currentForm, cPlayerState.previousForm, cPlayerState.forms);
+                    if (cPlayerState.previousForm == "Dragon Form")
+                        stopGlideLogic.Invoke();
+                    SettingCapsuleCollider(0.15f, 0.7f);
+                    break;
+                case abilties.toDolp:
+                    cPlayerState.previousForm = cPlayerState.currentForm;
+                    cPlayerState.currentForm = "Dolphin Form";
+                    formChangedInp.Invoke(cPlayerState.currentForm);
+                    if (cPlayerState.currentPlState == playerStates.rolling)
+                        EnablingMove();
+                    else
+                        UpdatingAbilityList();
+                    formChanged.Invoke(cPlayerState.currentForm, cPlayerState.previousForm, cPlayerState.forms);
+                    if (cPlayerState.previousForm == "Dragon Form")
+                        stopGlideLogic.Invoke();
+                    SettingCapsuleCollider(0.15f, 0.7f);
+                    break;
+            }
     }
     #endregion
 

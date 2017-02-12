@@ -24,6 +24,7 @@ public class SuperSaveLoadManager : MonoBehaviour {
         GameController gcTempLink = this.gameObject.GetComponent<GameController>();
 
         gcTempLink.gpInitializer.AddListener(this.InitializingGameplayScene);
+        gcTempLink.requestErase.AddListener(this.ErasingData);
     }
 
     private void SavingOnDiskData(List<EnvDatas> newEnvDatas, PlayerNsData newPlNsData)
@@ -87,6 +88,7 @@ public class SuperSaveLoadManager : MonoBehaviour {
     {
         //this.LoadingOnDiskData();
         player.GetComponent<FSMChecker>().deathRequest.AddListener(this.LoadingOnDiskData);
+        Debug.Log("Da qui ok");
     }
 
     private void Update()
@@ -94,4 +96,17 @@ public class SuperSaveLoadManager : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.L)) this.LoadingOnDiskData();
     }
 
+
+    private void ErasingData()
+    {
+        if (File.Exists(Application.persistentDataPath + "/EnvSensData.dat"))
+        {
+            File.Delete(Application.persistentDataPath + "/EnvSensData.dat");
+        }
+
+        if (File.Exists(Application.persistentDataPath + "/PlNsData.dat"))
+        {
+            File.Delete(Application.persistentDataPath + "/PlNsData.dat");
+        }
+    }
 }

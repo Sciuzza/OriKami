@@ -265,6 +265,8 @@ public class SuperDataManager : MonoBehaviour
 
             objToUpdate = new ObjectsData();
 
+            objToUpdate.ObjName = obj.name;
+
             objToUpdate.ObjPosX = thisTrans.position.x;
             objToUpdate.ObjPosY = thisTrans.position.y;
             objToUpdate.ObjPosZ = thisTrans.position.z;
@@ -273,7 +275,8 @@ public class SuperDataManager : MonoBehaviour
             objToUpdate.ObjRotY = thisTrans.eulerAngles.y;
             objToUpdate.ObjRotZ = thisTrans.eulerAngles.z;
 
-            objToUpdate.IsActive = this.gameObject.activeInHierarchy;
+            objToUpdate.IsActive = obj.activeSelf;
+            
 
             sceneData.ObjState.Add(objToUpdate);
         }
@@ -291,7 +294,7 @@ public class SuperDataManager : MonoBehaviour
             objToUpdate.ObjRotY = thisTrans.eulerAngles.y;
             objToUpdate.ObjRotZ = thisTrans.eulerAngles.z;
 
-            objToUpdate.IsActive = this.gameObject.activeInHierarchy;
+            objToUpdate.IsActive = obj.activeSelf;
 
             sceneData.ObjState.Add(objToUpdate);
         }

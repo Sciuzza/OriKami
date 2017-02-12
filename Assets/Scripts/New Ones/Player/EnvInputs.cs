@@ -68,7 +68,7 @@ public class EnvInputs : MonoBehaviour
                 }
                 else if (onWaterFlag && !onWater && onGround)
                 {
-                   // Debug.Log("Acqua");
+                    // Debug.Log("Acqua");
                     psChanged.Invoke(physicStates.onWater);
                     onWater = true;
                     onGround = false;
@@ -115,20 +115,16 @@ public class EnvInputs : MonoBehaviour
                 this.cameraOffRequest.Invoke(envTrigger.gameObject.GetComponentInChildren<CameraDirRef>().CameraDirRefObj);
                 break;
             case "Story Triggers":
-                if (!FSMChecker.storyMode)
-                storyActivationRequest.Invoke(envTrigger);
+                if (!FSMChecker.storyMode) this.storyActivationRequest.Invoke(envTrigger);
                 else
                 {
                     this.storyZoneEnter.Invoke(envTrigger);
                 }
                 break;
             case "CheckPoint":
-                if (!envTrigger.GetComponent<CheckPoint>().Triggered)
-                {
-                    GameObject.FindGameObjectWithTag("GameController").GetComponent<SuperDataManager>().RequestingSave();
-                    envTrigger.GetComponent<CheckPoint>().Triggered = true;
-                    Debug.Log("Saved");
-                }
+                envTrigger.gameObject.SetActive(false);
+                GameObject.FindGameObjectWithTag("GameController").GetComponent<SuperDataManager>().RequestingSave();
+                Debug.Log("Saved");
                 break;
         }
 
@@ -158,8 +154,7 @@ public class EnvInputs : MonoBehaviour
                 this.cameraOnRequest.Invoke();
                 break;
             case "Story Triggers":
-                if (FSMChecker.storyMode)
-                    this.storyZoneExit.Invoke(envTrigger);
+                this.storyZoneExit.Invoke(envTrigger);
                 break;
         }
     }
