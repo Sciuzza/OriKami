@@ -2,7 +2,7 @@ Guard/Right/Guard/Who should we announce?
 Iki/Left/Iki_Standard/...
 Guard/Right/Guard/...
 Guard/Right/Guard/Princess! There’s a weird origami at the door.*Should I fend him off?
-Orihime/Left/Orihime_Standard/Is him here to meet my father?
+Orihime/Left/Orihime_Dark/Is him here to meet my father?
 Guard/Right/Guard/I do not know, since he refuses to speak.
-Orihime/Left/Orihime_Standard/Let him in.
-Guard/Right//Guard/Don't you try harming our princess.
+Orihime/Left/Orihime_Dark/Let him in.
+Guard/Right//Guard/Act properly, or you'll be arrested.
