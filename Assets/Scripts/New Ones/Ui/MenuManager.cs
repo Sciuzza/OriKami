@@ -56,9 +56,7 @@ public class MenuManager : MonoBehaviour
         var sdManTempLink = this.gameObject.GetComponent<SuperDataManager>();
 
         sdManTempLink.DisableContinueRequest.AddListener(this.DisablingContinue);
-
     }
-
     #endregion
 
     #region Menu Handling Methods
@@ -77,6 +75,7 @@ public class MenuManager : MonoBehaviour
                 break;
         }
     }
+    #endregion
 
     #region Main Menu Handler
     public void InitializingMainMenuPanel()
@@ -329,6 +328,5 @@ public class MenuManager : MonoBehaviour
     {
         this.progressBar.fillAmount = value;
     }
-    #endregion
     #endregion
 }

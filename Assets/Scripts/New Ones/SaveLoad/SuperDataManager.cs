@@ -117,12 +117,12 @@ public class SuperDataManager : MonoBehaviour
     {
         this.InitializingOriginalData();
 
-        MenuManager mmTempLink = this.gameObject.GetComponent<MenuManager>();
+        var mmTempLink = this.gameObject.GetComponent<MenuManager>();
 
         mmTempLink.newDataRequest.AddListener(this.NewGameHandler);
         mmTempLink.loadDataRequest.AddListener(this.ContinueHandler);
 
-        GameController gcTempLink = this.gameObject.GetComponent<GameController>();
+        var gcTempLink = this.gameObject.GetComponent<GameController>();
 
         gcTempLink.gpInitializer.AddListener(this.InitializingGameplayScene);
         gcTempLink.ngpInitializer.AddListener(this.InitializingNgpScene);
@@ -174,6 +174,44 @@ public class SuperDataManager : MonoBehaviour
 
     private void NewGameHandler()
     {
+        var bf = new BinaryFormatter();
+
+        if (File.Exists(Application.persistentDataPath + "/EnvSensOriData.dat"))
+        {
+            var envSensFile = File.Open(Application.persistentDataPath + "/EnvSensOriData.dat", FileMode.Open);
+
+            this.EnvSensData.Clear();
+            this.EnvSensData.TrimExcess();
+
+            this.EnvSensData = (List<EnvDatas>)bf.Deserialize(envSensFile);
+
+            envSensFile.Close();
+           
+        }
+        else
+        {
+           
+            Debug.Log("EnvSensOriData not Found");
+        }
+
+        if (File.Exists(Application.persistentDataPath + "/PlNsData.dat"))
+        {
+            var plSensFile = File.Open(Application.persistentDataPath + "/PlNsOriData.dat", FileMode.Open);
+
+            this.PlNsData = null;
+
+            this.PlNsData = (PlayerNsData)bf.Deserialize(plSensFile);
+
+            plSensFile.Close();
+           
+        }
+        else
+        {
+            Debug.Log("PlNsOriData not Found");
+        }
+
+        this.SavingOnDiskData();
+        this.SwitchSceneRequest.Invoke("Route 1");
 
     }
     #endregion
@@ -189,10 +227,12 @@ public class SuperDataManager : MonoBehaviour
 
         player.GetComponent<FSMChecker>().deathRequest.AddListener(this.LoadingOnDiskData);
         player.GetComponent<EnvInputs>().SaveRequestByCheck.AddListener(this.SaveHandler);
+
+        this.LoadingHandler();
     } 
     #endregion
 
-    #region Requesting New Values by Local Variables and Objects to Update Temp Repo and Saving to SuperSaveLoadManager
+    #region Save Handler
     private void SaveHandler()
     {
         this.RequestLocalUpdateToRepo.Invoke();
@@ -266,12 +306,11 @@ public class SuperDataManager : MonoBehaviour
         {
             var envSensFile = File.Open(Application.persistentDataPath + "/EnvSensData.dat", FileMode.Open);
 
-            List<EnvDatas> diskEnvDatas = new List<EnvDatas>();
-            diskEnvDatas.AddRange(this.gameObject.GetComponent<SuperDataManager>().EnvSensData);
+            this.EnvSensData.Clear();
+            this.EnvSensData.TrimExcess();
 
-            diskEnvDatas = (List<EnvDatas>)bf.Deserialize(envSensFile);
+            this.EnvSensData = (List<EnvDatas>)bf.Deserialize(envSensFile);
 
-            this.gameObject.GetComponent<SuperDataManager>().EnvSensData = diskEnvDatas;
             envSensFile.Close();
             this.checkSave1 = true;
         }
@@ -285,11 +324,10 @@ public class SuperDataManager : MonoBehaviour
         {
             var plSensFile = File.Open(Application.persistentDataPath + "/PlNsData.dat", FileMode.Open);
 
-            var diskPlNsData = this.gameObject.GetComponent<SuperDataManager>().PlNsData;
+            this.PlNsData = null;
 
-            diskPlNsData = (PlayerNsData)bf.Deserialize(plSensFile);
+            this.PlNsData = (PlayerNsData)bf.Deserialize(plSensFile);
 
-            this.gameObject.GetComponent<SuperDataManager>().PlNsData = diskPlNsData;
             plSensFile.Close();
             this.checkSave2 = true;
         }
@@ -500,7 +538,4 @@ public class SuperDataManager : MonoBehaviour
         }
     } 
     #endregion
-
 }
-
-

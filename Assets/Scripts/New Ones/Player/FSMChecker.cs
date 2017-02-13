@@ -1970,6 +1970,8 @@ public class FSMChecker : MonoBehaviour
         plNsDataToUpdate.Legend4Unlocked = this.legUnlocked.Legend4;
         plNsDataToUpdate.Legend5Unlocked = this.legUnlocked.Legend5;
 
+        plNsDataToUpdate.SceneToLoad = SceneManager.GetActiveScene().name;
+
     }
 
     private void LoadingCurrentState()

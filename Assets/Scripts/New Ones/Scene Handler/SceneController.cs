@@ -39,6 +39,10 @@ public class SceneController : MonoBehaviour
 
         //this.SavingSceneRef();
 
+        SuperDataManager stmTempLink = this.gameObject.GetComponent<SuperDataManager>();
+
+        stmTempLink.SwitchSceneRequest.AddListener(this.ChangingScenehandler);
+
     }
 
 
