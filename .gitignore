@@ -28,3 +28,5 @@ sysinfo.txt
 # Builds
 *.apk
 *.unitypackage
+.vs/Supercharger/Orikami Local.CSharp/codemap.dat
+.vs/Supercharger/Orikami Local.CSharp/global_history.dat
