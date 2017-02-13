@@ -103,7 +103,7 @@ public class SuperDataManager : MonoBehaviour
 
     #region Events
     public event_listEnvSens_plNsSens SaveRequest;
-    public UnityEvent RequestUpdateToSave, RequestUpdateByLoad;
+    public UnityEvent LocalDataRequest, RequestUpdateByLoad;
     #endregion
 
     #region Taking References and Linking Events
@@ -119,10 +119,10 @@ public class SuperDataManager : MonoBehaviour
 
         GameController gcTempLink = this.gameObject.GetComponent<GameController>();
 
-        gcTempLink.gpInitializer.AddListener(this.Initialization);
+        gcTempLink.gpInitializer.AddListener(this.GpInitializer);
     }
 
-    private void Initialization(GameObject player)
+    private void GpInitializer(GameObject player)
     {
         StoryLineInstance currentSlInScene =
             GameObject.FindGameObjectWithTag("StoryLine").GetComponent<StoryLineInstance>();
@@ -134,7 +134,7 @@ public class SuperDataManager : MonoBehaviour
     #region Requesting New Values by Local Variables and Objects to Update Temp Repo and Saving to SuperSaveLoadManager
     public void RequestingSave()
     {
-        this.RequestUpdateToSave.Invoke();
+        this.LocalDataRequest.Invoke();
         this.SaveRequest.Invoke(this.EnvSensData, this.PlNsData);
     }
 

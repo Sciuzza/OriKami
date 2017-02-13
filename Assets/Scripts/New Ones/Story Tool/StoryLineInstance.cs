@@ -1267,6 +1267,8 @@ public class StoryLineInstance : MonoBehaviour
         var oriRot = this.player.transform.rotation;
         var targetRotation = tempObj.transform.rotation;
 
+        targetRotation = Quaternion.Euler(oriRot.eulerAngles.x, targetRotation.eulerAngles.y, oriRot.eulerAngles.z); 
+
         var posReached = false;
 
         var timePassed = 0f;
@@ -1276,7 +1278,7 @@ public class StoryLineInstance : MonoBehaviour
             timePassed += Time.deltaTime / timeTaken;
 
             objToMove.transform.rotation = Quaternion.Slerp(
-                objToMove.transform.rotation,
+                oriRot,
                 targetRotation,
                 timePassed);
 

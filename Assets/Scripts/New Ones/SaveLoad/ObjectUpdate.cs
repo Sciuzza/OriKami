@@ -17,7 +17,7 @@ public class ObjectUpdate : MonoBehaviour {
     {
         var sdmTempLink = GameObject.FindGameObjectWithTag("GameController").GetComponent<SuperDataManager>();
 
-        sdmTempLink.RequestUpdateToSave.AddListener(this.SavingCurrentState);
+        sdmTempLink.LocalDataRequest.AddListener(this.SavingCurrentState);
         sdmTempLink.RequestUpdateByLoad.AddListener(this.LoadingCurrentState);
     }
 

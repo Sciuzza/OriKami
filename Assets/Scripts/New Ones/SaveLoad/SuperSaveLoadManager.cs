@@ -24,7 +24,7 @@ public class SuperSaveLoadManager : MonoBehaviour {
         GameController gcTempLink = this.gameObject.GetComponent<GameController>();
 
         gcTempLink.gpInitializer.AddListener(this.InitializingGameplayScene);
-        gcTempLink.requestErase.AddListener(this.ErasingData);
+        //gcTempLink.requestErase.AddListener(this.ErasingData);
     }
 
     private void SavingOnDiskData(List<EnvDatas> newEnvDatas, PlayerNsData newPlNsData)
