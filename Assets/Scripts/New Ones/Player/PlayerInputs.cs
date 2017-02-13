@@ -85,12 +85,11 @@ public class PlayerInputs : MonoBehaviour
     #region Player Inputs Update Check
     private void Update()
     {
+        this.StoryInputsHandler();
         this.MovingInputHandler();
         this.CameraInputHandler();
         this.GenAbiInputHandler();
         this.ExtraInputsHandler();
-        this.StoryInputsHandler();
-
     }
     #endregion
 
@@ -2052,32 +2051,36 @@ public class PlayerInputs : MonoBehaviour
     #region Story Inputs
     private void StoryInputsHandler()
     {
-        if (StoryInputPressed() && !FSMChecker.storyMode)
+        if (this.StoryInputPressed() && !FSMChecker.storyMode)
         {
-            storyLivingRequest.Invoke(this.ssTempRef);
+            this.storyLivingRequest.Invoke(this.ssTempRef);
+            Debug.Log("Ok ci siamo fin qua");
+        }
+        else if (this.StoryInputPressed() && FSMChecker.storyMode)
+        {
+            Debug.Log("Problema");
         }
     }
 
     private bool StoryInputPressed()
     {
-        if (storyModeInput)
+        if (this.storyModeInput)
         {
-            if (storyJoyInput.ToString() != "LT" &&
-         storyJoyInput.ToString() != "RT")
+            if (this.storyJoyInput.ToString() != "LT" && this.storyJoyInput.ToString() != "RT")
             {
-                if (Input.GetButtonDown(storyJoyInput.ToString()))
+                if (Input.GetButtonDown(this.storyJoyInput.ToString()))
                     return true;
                 else
                     return false;
             }
             else
             {
-                if (storyJoyInput.ToString() == "LT")
+                if (this.storyJoyInput.ToString() == "LT")
                 {
-                    if (Input.GetAxis("LRT") > 0 && !switchCooldown)
+                    if (Input.GetAxis("LRT") > 0 && !this.switchCooldown)
                     {
-                        switchCooldown = true;
-                        StartCoroutine(SwitchingCooldown());
+                        this.switchCooldown = true;
+                        this.StartCoroutine(this.SwitchingCooldown());
                         return true;
                     }
                     else
@@ -2085,10 +2088,10 @@ public class PlayerInputs : MonoBehaviour
                 }
                 else
                 {
-                    if (Input.GetAxis("LRT") < 0 && !switchCooldown)
+                    if (Input.GetAxis("LRT") < 0 && !this.switchCooldown)
                     {
-                        switchCooldown = true;
-                        StartCoroutine(SwitchingCooldown());
+                        this.switchCooldown = true;
+                        this.StartCoroutine(this.SwitchingCooldown());
                         return true;
                     }
                     else
@@ -2102,10 +2105,10 @@ public class PlayerInputs : MonoBehaviour
 
     private void SettingStoryInputs(buttonsJoy joyInput, buttonsPc pcInput, SingleStory ssToRemember)
     {
-        storyJoyInput = joyInput;
-        storyPcInput = pcInput;
+        this.storyJoyInput = joyInput;
+        this.storyPcInput = pcInput;
 
-        storyModeInput = true;
+        this.storyModeInput = true;
 
         this.ssTempRef = ssToRemember;
     }

@@ -55,7 +55,7 @@ public class ObjectsData
 public class ButtonsData
 {
     public string ButtonName;
-    public bool IsDisabled;
+    public List<bool> IsDisabled;
 }
 
 [System.Serializable]
@@ -66,7 +66,7 @@ public class EnvDatas
     public List<ObjectsData> ObjState;
     public List<ButtonsData> ButState;
     public QuestsData SlState;
-} 
+}
 #endregion
 
 #region Global Data
@@ -82,6 +82,12 @@ public class PlayerNsData
     public bool ArmaUnlocked;
     public bool CraneUnlocked;
     public bool DolphinUnlocked;
+
+    public bool Legend1Unlocked;
+    public bool Legend2Unlocked;
+    public bool Legend3Unlocked;
+    public bool Legend4Unlocked;
+    public bool Legend5Unlocked;
 }
 #endregion
 
@@ -92,7 +98,7 @@ public class SuperDataManager : MonoBehaviour
     public List<EnvDatas> EnvSensData;
 
     [SerializeField]
-    public PlayerNsData PlNsData; 
+    public PlayerNsData PlNsData;
     #endregion
 
     #region Events
@@ -110,8 +116,19 @@ public class SuperDataManager : MonoBehaviour
         SuperSaveLoadManager sslmTempLinkl = this.gameObject.GetComponent<SuperSaveLoadManager>();
 
         sslmTempLinkl.TempDataUpdateRequest.AddListener(this.UpdatingTempRepo);
+
+        GameController gcTempLink = this.gameObject.GetComponent<GameController>();
+
+        gcTempLink.gpInitializer.AddListener(this.Initialization);
     }
 
+    private void Initialization(GameObject player)
+    {
+        StoryLineInstance currentSlInScene =
+            GameObject.FindGameObjectWithTag("StoryLine").GetComponent<StoryLineInstance>();
+
+        currentSlInScene.UpdateTempMemoryRequest.AddListener(this.UpdatingQuestData);
+    }
     #endregion
 
     #region Requesting New Values by Local Variables and Objects to Update Temp Repo and Saving to SuperSaveLoadManager
@@ -119,11 +136,35 @@ public class SuperDataManager : MonoBehaviour
     {
         this.RequestUpdateToSave.Invoke();
         this.SaveRequest.Invoke(this.EnvSensData, this.PlNsData);
-    } 
+    }
+
+    private void UpdatingQuestData()
+    {
+        var slRepoToUpdate = new List<StoryLine>();
+
+        slRepoToUpdate.AddRange(this.gameObject.GetComponent<QuestsManager>().StoryLineRepo);
+
+        for (var slInRepo = 0; slInRepo < slRepoToUpdate.Count; slInRepo++)
+        {
+            var scenedata = this.EnvSensData.Find(x => x.SlState.SlName == slRepoToUpdate[slInRepo].StoryLineName);
+
+            if (scenedata == null) continue;
+
+            scenedata.SlState.IsCompleted = slRepoToUpdate[slInRepo].Completed;
+
+            for (var storyIndex = 0; storyIndex < scenedata.SlState.Story.Count; storyIndex++)
+            {
+                scenedata.SlState.Story[storyIndex].IsActive = slRepoToUpdate[slInRepo].Stories[storyIndex].Active;
+                scenedata.SlState.Story[storyIndex].IsCompleted = slRepoToUpdate[slInRepo].Stories[storyIndex].Completed;
+            }
+        }
+
+
+    }
     #endregion
 
     #region Loading Update Temp Repo by SuperSaveLoadManager and request Involved Local Variables and Objects to update themselves
-    private void UpdatingTempRepo(List<EnvDatas> newEnvSensData, PlayerNsData newPlSensData)
+    private void UpdatingTempRepo()
     {
         /*
         this.EnvSensData.Clear();
@@ -145,7 +186,7 @@ public class SuperDataManager : MonoBehaviour
         {
             this.RequestingSave();
         }
-    } 
+    }
     #endregion
 
     #region Edit Mode Called Methods
@@ -193,6 +234,12 @@ public class SuperDataManager : MonoBehaviour
         this.PlNsData.CraneUnlocked = fsmTempLink.abiUnlocked.craneUnlocked;
         this.PlNsData.DolphinUnlocked = fsmTempLink.abiUnlocked.dolphinUnlocked;
 
+        this.PlNsData.Legend1Unlocked = fsmTempLink.legUnlocked.Legend1;
+        this.PlNsData.Legend2Unlocked = fsmTempLink.legUnlocked.Legend2;
+        this.PlNsData.Legend3Unlocked = fsmTempLink.legUnlocked.Legend3;
+        this.PlNsData.Legend4Unlocked = fsmTempLink.legUnlocked.Legend4;
+        this.PlNsData.Legend5Unlocked = fsmTempLink.legUnlocked.Legend5;
+
         Collectibles clTempLink = player.GetComponent<Collectibles>();
 
         this.PlNsData.Collectible1 = clTempLink.GoldenCollectible;
@@ -201,30 +248,105 @@ public class SuperDataManager : MonoBehaviour
         this.PlNsData.Collectible4 = clTempLink.Collectible4;
     }
 
-
     public void UpdatingObjState(GameObject obj)
     {
         var sceneData = this.CheckingSceneBelonging();
 
         if (sceneData == null) return;
+
+        Transform thisTrans = obj.transform;
+
+        ObjectsData objToUpdate = sceneData.ObjState.Find(x => x.ObjName == obj.name);
+
+
+        if (objToUpdate != null)
+        {
+            sceneData.ObjState.Remove(objToUpdate);
+
+            objToUpdate = new ObjectsData();
+
+            objToUpdate.ObjName = obj.name;
+
+            objToUpdate.ObjPosX = thisTrans.position.x;
+            objToUpdate.ObjPosY = thisTrans.position.y;
+            objToUpdate.ObjPosZ = thisTrans.position.z;
+
+            objToUpdate.ObjRotX = thisTrans.eulerAngles.x;
+            objToUpdate.ObjRotY = thisTrans.eulerAngles.y;
+            objToUpdate.ObjRotZ = thisTrans.eulerAngles.z;
+
+            objToUpdate.IsActive = obj.activeSelf;
+            
+
+            sceneData.ObjState.Add(objToUpdate);
+        }
+        else
+        {
+            objToUpdate = new ObjectsData();
+
+            objToUpdate.ObjName = obj.name;
+
+            objToUpdate.ObjPosX = thisTrans.position.x;
+            objToUpdate.ObjPosY = thisTrans.position.y;
+            objToUpdate.ObjPosZ = thisTrans.position.z;
+
+            objToUpdate.ObjRotX = thisTrans.eulerAngles.x;
+            objToUpdate.ObjRotY = thisTrans.eulerAngles.y;
+            objToUpdate.ObjRotZ = thisTrans.eulerAngles.z;
+
+            objToUpdate.IsActive = obj.activeSelf;
+
+            sceneData.ObjState.Add(objToUpdate);
+        }
     }
 
-    public void UpdatingButState(Puzzles button)
+    public void UpdatingButState(GameObject puzzleType)
     {
         var sceneData = this.CheckingSceneBelonging();
 
         if (sceneData == null) return;
 
-        if (sceneData.ButState.Find(x => x.ButtonName == button.gameObject.name) == null)
+        var newButton = sceneData.ButState.Find(x => x.ButtonName == puzzleType.name);
+
+        if (newButton == null)
         {
-            var newButton = new ButtonsData { ButtonName = button.gameObject.name, IsDisabled = button.keyHit };
+            newButton = new ButtonsData();
+
+            newButton.ButtonName = puzzleType.name;
+
+            var puzzleScripts = new List<Puzzles>();
+
+            puzzleScripts.AddRange(puzzleType.GetComponents<Puzzles>());
+
+            newButton.IsDisabled = new List<bool>();
+
+            foreach (var puzzle in puzzleScripts)
+            {
+                newButton.IsDisabled.Add(puzzle.keyHit);
+            }
 
             sceneData.ButState.Add(newButton);
         }
         else
         {
-            ButtonsData buttonToUpdate = sceneData.ButState.Find(x => x.ButtonName == button.gameObject.name);
-            buttonToUpdate.IsDisabled = button.keyHit;
+            sceneData.ButState.Remove(newButton);
+
+            newButton = new ButtonsData();
+
+            newButton.ButtonName = puzzleType.name;
+
+            var puzzleScripts = new List<Puzzles>();
+
+            puzzleScripts.AddRange(puzzleType.GetComponents<Puzzles>());
+
+            newButton.IsDisabled = new List<bool>();
+
+            foreach (var puzzle in puzzleScripts)
+            {
+                newButton.IsDisabled.Add(puzzle.keyHit);
+            }
+
+            sceneData.ButState.Add(newButton);
         }
     }
 
@@ -235,42 +357,8 @@ public class SuperDataManager : MonoBehaviour
         return this.EnvSensData.Find(x => x.GpSceneName == currentScene);
     }
     #endregion
+
+
 }
 
-/*
-    [SerializeField]
-    public List<QuestsData> questSensData;
 
-    private void Awake()
-    {
-        MenuManager mmTempLink = this.gameObject.GetComponent<MenuManager>();
-
-        mmTempLink.newDataRequest.AddListener(this.InitializingNewData);
-    }
-
-    private void InitializingNewData()
-    {
-        this.NewGameQuestDataInitializer();
-    }
-
-    private void NewGameQuestDataInitializer()
-    {
-        var qmTempLink = this.gameObject.GetComponent<QuestsManager>();
-
-        this.questSensData = new List<QuestsData>();
-
-        for (var slIndex = 0; slIndex < qmTempLink.StoryLineRepo.Count; slIndex++)
-        {
-            this.questSensData.Add(new QuestsData());
-            this.questSensData[slIndex].IsCompleted = qmTempLink.StoryLineRepo[slIndex].Completed;
-            this.questSensData[slIndex].Story = new List<StoryData>();
-
-            for (var ssIndex = 0; ssIndex < qmTempLink.StoryLineRepo[slIndex].Stories.Count; ssIndex++)
-            {
-                this.questSensData[slIndex].Story.Add(new StoryData());
-                this.questSensData[slIndex].Story[ssIndex].IsDisabled = qmTempLink.StoryLineRepo[slIndex].Stories[ssIndex].Active;
-                this.questSensData[slIndex].Story[ssIndex].IsCompleted = qmTempLink.StoryLineRepo[slIndex].Stories[ssIndex].Completed;
-            }
-        }   
-    }
-*/

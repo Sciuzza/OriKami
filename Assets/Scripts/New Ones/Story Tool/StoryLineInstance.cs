@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 using Random = UnityEngine.Random;
@@ -27,6 +28,8 @@ public class PlayerEffect
     public PlayerSee PlayerSeeEffect;
     public PlayerPushBack PushingBackEffect;
     public PlayerReward PlayerReward;
+    public PlayerLegend PlayerLegend;
+    public PlayerTransformation PlayerTransf;
 }
 
 [Serializable]
@@ -65,8 +68,25 @@ public class PlayerPushBack
 public class PlayerReward
 {
     public bool End;
+    public bool Enable;
     [Tooltip("Standard Form, Frog Form, Armadillo Form, Dragon Form, Dolphin Form")]
     public string FormName;
+}
+
+[Serializable]
+public class PlayerLegend
+{
+    public bool End;
+    public bool LegendUnlocked;
+    public int LegendIndex;
+}
+
+[Serializable]
+public class PlayerTransformation
+{
+    public bool End;
+    public bool Enable;
+    public string WhichForm;
 }
 #endregion Player Effect Classes
 
@@ -379,6 +399,9 @@ public class StoryLineInstance : MonoBehaviour
     public event_bool IsStoryMode;
     public event_int_float MovieRequest;
     public UnityEvent eraseInputMemoryRequest;
+    public UnityEvent UpdateTempMemoryRequest;
+    public event_int LegendsUpdateRequest;
+    public event_abi TransfRequest;
     #endregion
 
     #region Private Variables
@@ -420,6 +443,10 @@ public class StoryLineInstance : MonoBehaviour
         this.mmLink = GameObject.FindGameObjectWithTag("GameController").GetComponent<MenuManager>();
 
         this.mmLink.movieEndNotification.AddListener(this.MovieEnd);
+
+        var sdmTempLink = GameObject.FindGameObjectWithTag("GameController").GetComponent<SuperDataManager>();
+
+        sdmTempLink.RequestUpdateByLoad.AddListener(this.LoadingCurrentState);
     }
     #endregion
 
@@ -446,7 +473,7 @@ public class StoryLineInstance : MonoBehaviour
                 if (!story.BaloonType)
                 {
                     this.storySelected = story;
-                    Debug.Log(this.storySelected.StoryName);
+                    Debug.Log("Story Name : " + this.storySelected.StoryName);
                     storyFound = true;
                     break;
 
@@ -529,9 +556,11 @@ public class StoryLineInstance : MonoBehaviour
         if (this.storySelected == storyToTrigger)
         {
             this.LivingStoryEvent();
+            Debug.Log("prima");
         }
         else
         {
+            Debug.Log("seconda");
             this.storySelected = storyToTrigger;
             this.LivingStoryEvent();
         }
@@ -552,7 +581,7 @@ public class StoryLineInstance : MonoBehaviour
 
     private void ErasingInputMemory(Collider trigger)
     {
-        if (this.storySelected.GenAccessCond.STriggerRef == trigger || this.storySelected.GenAccessCond.TriggerRef == trigger)
+        //if (this.storySelected.GenAccessCond.STriggerRef == trigger || this.storySelected.GenAccessCond.TriggerRef == trigger)
             this.eraseInputMemoryRequest.Invoke();
     }
 
@@ -751,6 +780,7 @@ public class StoryLineInstance : MonoBehaviour
 
         this.CompletionEffects();
 
+        this.UpdateTempMemoryRequest.Invoke();
         this.ChangeCsExitRequest.Invoke(this.storySelected.EndControlEffect);
     }
 
@@ -856,6 +886,17 @@ public class StoryLineInstance : MonoBehaviour
                 Debug.Log(storyLine + " Not Found inside Repo");
             }
         }
+
+        if (this.storySelected.AutoComplete)
+        {
+            SingleStory storyToFindInRepo = this.SearchingStoryInRepo(this.storySelected.StoryName);
+
+            if (storyToFindInRepo != null) storyToFindInRepo.Completed = true;
+            else
+            {
+                Debug.Log(this.storySelected.StoryName + " Not Found inside Repo");
+            }
+        }
     }
 
     private SingleStory SearchingStoryInside(string storyName)
@@ -879,6 +920,27 @@ public class StoryLineInstance : MonoBehaviour
         return this.questRepo.StoryLineRepo.Find(x => x.StoryLineName == storyLineName);
     }
 
+    private void LoadingCurrentState()
+    {
+        EnvDatas sceneData = GameObject.FindGameObjectWithTag("GameController").GetComponent<SuperDataManager>().EnvSensData.Find(x => x.GpSceneName == SceneManager.GetActiveScene().name);
+
+        this.CurrentStoryLine.Completed = sceneData.SlState.IsCompleted;
+
+        if (this.CurrentStoryLine.Stories.Count != sceneData.SlState.Story.Count)
+        {
+            Debug.Log("Quest Syncro not possible");
+            return;
+        }
+        else
+        {
+            for (int storyIndex = 0; storyIndex < this.CurrentStoryLine.Stories.Count; storyIndex++)
+            {
+                this.CurrentStoryLine.Stories[storyIndex].Active = sceneData.SlState.Story[storyIndex].IsActive;
+                this.CurrentStoryLine.Stories[storyIndex].Completed = sceneData.SlState.Story[storyIndex].IsCompleted;
+            }
+        }
+
+    }
     #endregion
 
     #region Player Effects Methods
@@ -892,11 +954,25 @@ public class StoryLineInstance : MonoBehaviour
             GameController.Debugging("Player Repo");
             this.PlayPlayerRepoEffect(plaEffectsToEvaluate.PlayerRepositionEffect);
 
-            if (plaEffectsToEvaluate.PlayerReward.FormName != " ")
+            if (plaEffectsToEvaluate.PlayerReward.Enable)
             {
                 this.totalEventEffects++;
                 GameController.Debugging("Player Reward");
                 this.PlayPlayerRewardEffect(plaEffectsToEvaluate.PlayerReward);
+            }
+
+            if (plaEffectsToEvaluate.PlayerLegend.LegendUnlocked)
+            {
+                this.totalEventEffects++;
+                Debug.Log("Player Legend");
+                this.PlayPlayerLegendEffect(plaEffectsToEvaluate.PlayerLegend);
+            }
+
+            if (plaEffectsToEvaluate.PlayerTransf.Enable)
+            {
+                this.totalEventEffects++;
+                Debug.Log("Player Transformation");
+                this.PlayPlayerTransfEffect(plaEffectsToEvaluate.PlayerTransf);
             }
         }
         else if (plaEffectsToEvaluate.PlayerMoveEffect.GbRef != null)
@@ -905,11 +981,25 @@ public class StoryLineInstance : MonoBehaviour
             GameController.Debugging("Player Move");
             this.PlayPlayerMoveEffect(plaEffectsToEvaluate.PlayerMoveEffect);
 
-            if (plaEffectsToEvaluate.PlayerReward.FormName != " ")
+            if (plaEffectsToEvaluate.PlayerReward.Enable)
             {
                 this.totalEventEffects++;
                 GameController.Debugging("Player Reward");
                 this.PlayPlayerRewardEffect(plaEffectsToEvaluate.PlayerReward);
+            }
+
+            if (plaEffectsToEvaluate.PlayerLegend.LegendUnlocked)
+            {
+                this.totalEventEffects++;
+                Debug.Log("Player Legend");
+                this.PlayPlayerLegendEffect(plaEffectsToEvaluate.PlayerLegend);
+            }
+
+            if (plaEffectsToEvaluate.PlayerTransf.Enable)
+            {
+                this.totalEventEffects++;
+                Debug.Log("Player Transformation");
+                this.PlayPlayerTransfEffect(plaEffectsToEvaluate.PlayerTransf);
             }
         }
         else if (plaEffectsToEvaluate.PlayerSeeEffect.GbRef != null)
@@ -918,12 +1008,27 @@ public class StoryLineInstance : MonoBehaviour
             GameController.Debugging("Player See");
             this.PlayPlayerSeeEffect(plaEffectsToEvaluate.PlayerSeeEffect);
 
-            if (plaEffectsToEvaluate.PlayerReward.FormName != " ")
+            if (plaEffectsToEvaluate.PlayerReward.Enable)
             {
                 this.totalEventEffects++;
                 GameController.Debugging("Player Reward");
                 this.PlayPlayerRewardEffect(plaEffectsToEvaluate.PlayerReward);
             }
+
+            if (plaEffectsToEvaluate.PlayerLegend.LegendUnlocked)
+            {
+                this.totalEventEffects++;
+                Debug.Log("Player Legend");
+                this.PlayPlayerLegendEffect(plaEffectsToEvaluate.PlayerLegend);
+            }
+
+            if (plaEffectsToEvaluate.PlayerTransf.Enable)
+            {
+                this.totalEventEffects++;
+                Debug.Log("Player Transformation");
+                this.PlayPlayerTransfEffect(plaEffectsToEvaluate.PlayerTransf);
+            }
+
             if (plaEffectsToEvaluate.PushingBackEffect.PushingBackPower > 0
                 && plaEffectsToEvaluate.PushingBackEffect.TimeTaken > 0 && plaEffectsToEvaluate.PushingBackEffect.GbRef != null)
             {
@@ -939,20 +1044,48 @@ public class StoryLineInstance : MonoBehaviour
             GameController.Debugging("Player Pushing Back");
             this.PlayPlayerPushingBackEffect(plaEffectsToEvaluate.PushingBackEffect);
 
-            if (plaEffectsToEvaluate.PlayerReward.FormName != " ")
+            if (plaEffectsToEvaluate.PlayerReward.Enable)
             {
                 this.totalEventEffects++;
                 GameController.Debugging("Player Reward");
                 this.PlayPlayerRewardEffect(plaEffectsToEvaluate.PlayerReward);
             }
+
+            if (plaEffectsToEvaluate.PlayerLegend.LegendUnlocked)
+            {
+                this.totalEventEffects++;
+                Debug.Log("Player Legend");
+                this.PlayPlayerLegendEffect(plaEffectsToEvaluate.PlayerLegend);
+            }
+
+            if (plaEffectsToEvaluate.PlayerTransf.Enable)
+            {
+                this.totalEventEffects++;
+                Debug.Log("Player Transformation");
+                this.PlayPlayerTransfEffect(plaEffectsToEvaluate.PlayerTransf);
+            }
         }
         else
         {
-            if (plaEffectsToEvaluate.PlayerReward.FormName != " ")
+            if (plaEffectsToEvaluate.PlayerReward.Enable)
             {
                 this.totalEventEffects++;
                 GameController.Debugging("Player Reward");
                 this.PlayPlayerRewardEffect(plaEffectsToEvaluate.PlayerReward);
+            }
+
+            if (plaEffectsToEvaluate.PlayerLegend.LegendUnlocked)
+            {
+                this.totalEventEffects++;
+                Debug.Log("Player Legend");
+                this.PlayPlayerLegendEffect(plaEffectsToEvaluate.PlayerLegend);
+            }
+
+            if (plaEffectsToEvaluate.PlayerTransf.Enable)
+            {
+                this.totalEventEffects++;
+                Debug.Log("Player Transformation");
+                this.PlayPlayerTransfEffect(plaEffectsToEvaluate.PlayerTransf);
             }
         }
     }
@@ -985,6 +1118,41 @@ public class StoryLineInstance : MonoBehaviour
     private void PlayPlayerRewardEffect(PlayerReward effectToPlay)
     {
         this.FormUnlockRequest.Invoke(effectToPlay.FormName);
+        effectToPlay.End = true;
+        this.effectCounter++;
+    }
+
+    private void PlayPlayerLegendEffect(PlayerLegend effectToPlay)
+    {
+        this.LegendsUpdateRequest.Invoke(effectToPlay.LegendIndex);
+        effectToPlay.End = true;
+        this.effectCounter++;
+    }
+
+    private void PlayPlayerTransfEffect(PlayerTransformation effectToPlay)
+    {
+        switch (effectToPlay.WhichForm)
+        {
+            case "Standard Form":
+                this.TransfRequest.Invoke(abilties.toStd);
+                break;
+            case "Frog Form":
+                this.TransfRequest.Invoke(abilties.toFrog);
+                break;
+            case "Arma Form":
+                this.TransfRequest.Invoke(abilties.toArma);
+                break;
+            case "Dragon Form":
+                this.TransfRequest.Invoke(abilties.toCrane);
+                break;
+            case "Dolphin Form":
+                this.TransfRequest.Invoke(abilties.toDolp);
+                break;
+            default:
+                Debug.Log("Wrong String Detected for Transf Effect");
+                break;
+        }
+
         effectToPlay.End = true;
         this.effectCounter++;
     }
@@ -1052,7 +1220,7 @@ public class StoryLineInstance : MonoBehaviour
 
     private IEnumerator PushBackPlayer(PlayerPushBack pushBackEffect)
     {
-        var targetPosition = this.player.transform.position - (Vector3.ProjectOnPlane(pushBackEffect.GbRef.transform.forward, this.player.transform.up).normalized * pushBackEffect.PushingBackPower);
+        var targetPosition = this.player.transform.position + (Vector3.ProjectOnPlane(pushBackEffect.GbRef.transform.forward, this.player.transform.up).normalized * pushBackEffect.PushingBackPower);
         var objToMove = this.player;
 
         var timeTaken = pushBackEffect.TimeTaken;
@@ -1922,6 +2090,18 @@ public class StoryLineInstance : MonoBehaviour
 
     private void PlayDialogueEffect(UiDialogue effectToPlay)
     {
+        effectToPlay.Label.Clear();
+        effectToPlay.Label.TrimExcess();
+
+        effectToPlay.Name.Clear();
+        effectToPlay.Name.TrimExcess();
+
+        effectToPlay.Sentence.Clear();
+        effectToPlay.Sentence.TrimExcess();
+
+        effectToPlay.Sprite.Clear();
+        effectToPlay.Sprite.TrimExcess();
+
         var delimiters = new char[] { '/', '\n' };
         var initialSplit = effectToPlay.DialogueRef.text.Split(delimiters, StringSplitOptions.None);
 
@@ -1969,14 +2149,12 @@ public class StoryLineInstance : MonoBehaviour
     private IEnumerator LivingDialogue(UiDialogue dialogueEffect)
     {
         this.UiDialogueRequest.Invoke(dialogueEffect.Name[0], dialogueEffect.Label[0], dialogueEffect.Sentence[0], dialogueEffect.Sprite[0]);
-        var counter = 1;
-        var dialogueSkip = false;
+        var counter = 0;
 
         while (counter < dialogueEffect.Name.Count)
         {
             if (Input.GetButtonDown(buttonsJoy.Y.ToString()))
             {
-                dialogueSkip = true;
                 break;
             }
 
@@ -1986,11 +2164,6 @@ public class StoryLineInstance : MonoBehaviour
                 counter++;
             }
 
-            yield return null;
-        }
-
-        while (!Input.GetButtonDown(buttonsJoy.X.ToString()) && !Input.GetButtonDown(buttonsPc.E.ToString()) && !dialogueSkip)
-        {
             yield return null;
         }
 
@@ -2170,7 +2343,8 @@ public class StoryLineInstance : MonoBehaviour
     
     public void OnValidate()
     {
-        //GameObject.FindGameObjectWithTag("GameController").GetComponent<SuperDataManager>().AddingStoryLineEditMode(this.CurrentStoryLine);
+       // GameObject.FindGameObjectWithTag("GameController").GetComponent<SuperDataManager>().AddingStoryLineEditMode(this.CurrentStoryLine);
+       // GameObject.FindGameObjectWithTag("GameController").GetComponent<QuestsManager>().AddToRepository(this.CurrentStoryLine);
     }
     
     #endregion

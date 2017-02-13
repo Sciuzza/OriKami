@@ -41,14 +41,14 @@ public class EnvInputs : MonoBehaviour
 
                 if (!onWaterFlag && !onWater)
                 {
-                    Debug.Log("Terra");
+                    //Debug.Log("Terra");
                     psChanged.Invoke(physicStates.onGround);
                     onWater = false;
                     onGround = true;
                 }
                 else if (onWaterFlag && !onWater)
                 {
-                    Debug.Log("Acqua");
+                    //Debug.Log("Acqua");
                     psChanged.Invoke(physicStates.onWater);
                     onWater = true;
                     onGround = false;
@@ -60,7 +60,7 @@ public class EnvInputs : MonoBehaviour
             {
                 if (!onWaterFlag && onWater && !onGround)
                 {
-                    Debug.Log("Terra");
+                    //Debug.Log("Terra");
                     psChanged.Invoke(physicStates.onGround);
                     onWater = false;
                     onGround = true;
@@ -68,7 +68,7 @@ public class EnvInputs : MonoBehaviour
                 }
                 else if (onWaterFlag && !onWater && onGround)
                 {
-                    Debug.Log("Acqua");
+                    // Debug.Log("Acqua");
                     psChanged.Invoke(physicStates.onWater);
                     onWater = true;
                     onGround = false;
@@ -78,7 +78,7 @@ public class EnvInputs : MonoBehaviour
         }
         else if ((ccLink.collisionFlags & CollisionFlags.Below) == 0 && !onAir)
         {
-            Debug.LogWarning("Aria");
+            //Debug.LogWarning("Aria");
             psChanged.Invoke(physicStates.onAir);
 
             onWater = false;
@@ -115,12 +115,16 @@ public class EnvInputs : MonoBehaviour
                 this.cameraOffRequest.Invoke(envTrigger.gameObject.GetComponentInChildren<CameraDirRef>().CameraDirRefObj);
                 break;
             case "Story Triggers":
-                if (!FSMChecker.storyMode)
-                storyActivationRequest.Invoke(envTrigger);
+                if (!FSMChecker.storyMode) this.storyActivationRequest.Invoke(envTrigger);
                 else
                 {
                     this.storyZoneEnter.Invoke(envTrigger);
                 }
+                break;
+            case "CheckPoint":
+                envTrigger.gameObject.SetActive(false);
+                GameObject.FindGameObjectWithTag("GameController").GetComponent<SuperDataManager>().RequestingSave();
+                Debug.Log("Saved");
                 break;
         }
 
@@ -150,8 +154,7 @@ public class EnvInputs : MonoBehaviour
                 this.cameraOnRequest.Invoke();
                 break;
             case "Story Triggers":
-                if (FSMChecker.storyMode)
-                    this.storyZoneExit.Invoke(envTrigger);
+                this.storyZoneExit.Invoke(envTrigger);
                 break;
         }
     }

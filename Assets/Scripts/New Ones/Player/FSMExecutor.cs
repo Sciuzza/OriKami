@@ -335,7 +335,7 @@ public class FSMExecutor : MonoBehaviour
 
                         vGuidanceFinPosition.y = this.transform.position.y;
                         distance = vGuidanceFinPosition - this.transform.position;
-                        Debug.Log(distance.sqrMagnitude);
+                        //Debug.Log(distance.sqrMagnitude);
 
                         if (distance.sqrMagnitude >= 0.1f)
                         {

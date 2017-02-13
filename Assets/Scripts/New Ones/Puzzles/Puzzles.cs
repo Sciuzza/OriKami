@@ -69,16 +69,16 @@ public class Puzzles : MonoBehaviour
     private Vector3 endPosRightDoor;
 
     private Vector3 startPosUpObject;
-    private Vector3 endPosUpObject;
+    private Vector3 endPosUpObject = new Vector3(10000, 10000, 10000);
 
     private Vector3 startDownObject;
-    private Vector3 endDownObject;
+    private Vector3 endDownObject = new Vector3(10000, 10000, 10000);
 
     private Vector3 startLeftObject;
-    private Vector3 endLeftObject;
+    private Vector3 endLeftObject = new Vector3(10000, 10000, 10000);
 
     private Vector3 startRightObject;
-    private Vector3 endRightObject;
+    private Vector3 endRightObject = new Vector3(10000, 10000, 10000);
 
     private float lerpTime = 5;
     private float currentLerpTime = 0;
@@ -193,6 +193,8 @@ public class Puzzles : MonoBehaviour
     IEnumerator DoorClosingCO()
     {
         keyHit = true;
+        this.currentLerpTime = 0;
+
         while ((endPosLeftDoor - this.transform.position).magnitude > 0.5f && (endPosRightDoor - this.transform.position).magnitude > 0.5f)
         {
 
@@ -214,13 +216,12 @@ public class Puzzles : MonoBehaviour
     IEnumerator ObjectMovingCO()
     {
         keyHit = true;
+        this.currentLerpTime = 0;
 
-        while ((endPosUpObject - this.transform.position).magnitude > 0.5f ||
-               (endDownObject - this.transform.position).magnitude > 0.5f ||
-               (endLeftObject - this.transform.position).magnitude > 0.5f ||
-               (endRightObject - this.transform.position).magnitude > 0.5f)
+        while (this.currentLerpTime < this.lerpTime)
         {
             currentLerpTime += Time.deltaTime;
+
             if (currentLerpTime >= lerpTime)
             {
                 currentLerpTime = lerpTime;
@@ -253,6 +254,7 @@ public class Puzzles : MonoBehaviour
 
 
     }
+
     IEnumerator RotateMe(Vector3 byAngles, float inTime)
     {
         var fromAngle = rotateObject.transform.rotation;
@@ -266,7 +268,7 @@ public class Puzzles : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag == "Player" && generateObject)
+        if (other.gameObject.tag == "Player" && generateObject && !this.keyHit)
         {
             if (generatedObject != null)
             {
@@ -275,7 +277,7 @@ public class Puzzles : MonoBehaviour
             }
 
         }
-        if (other.gameObject.tag == "ActivatorTrigger" && generateObject) //Attenzione l'oggetto DEVE Avere RigidBody !!!!!
+        if (other.gameObject.tag == "ActivatorTrigger" && generateObject && !this.keyHit) //Attenzione l'oggetto DEVE Avere RigidBody !!!!!
         {
             Debug.Log("TOCCATO");
             Instantiate(generatedObject);
@@ -283,40 +285,40 @@ public class Puzzles : MonoBehaviour
 
         }
 
-        if (other.gameObject.tag == "Player" && disableObject)
+        if (other.gameObject.tag == "Player" && disableObject && !this.keyHit)
         {
             if (disabledObject != null)
             {
                 disabledObject.gameObject.SetActive(false);
-                disableObject = false;
+                //disableObject = false;
             }
 
         }
-        if (other.gameObject.tag == "ActivatorTrigger" && disableObject)
+        if (other.gameObject.tag == "ActivatorTrigger" && disableObject && !this.keyHit)
         {
             if (disabledObject != null)
             {
                 disabledObject.gameObject.SetActive(false);
-                disableObject = false;
+                //disableObject = false;
             }
         }
 
-        if (other.gameObject.tag == "Player" && doorPuzzle && openDoor)
+        if (other.gameObject.tag == "Player" && doorPuzzle && openDoor && !this.keyHit)
         {
 
             StartCoroutine(DoorOpeningCO());
         }
-        if (other.gameObject.tag == "Player" && doorPuzzle && closeDoor)
+        if (other.gameObject.tag == "Player" && doorPuzzle && closeDoor && !this.keyHit)
         {
             StartCoroutine(DoorClosingCO());
         }
 
-        if (other.gameObject.tag == "Player" && moveObject)
+        if (other.gameObject.tag == "Player" && moveObject && !this.keyHit)
         {
             StartCoroutine(ObjectMovingCO());
         }
 
-        if (other.gameObject.tag == "Player" && rotate)
+        if (other.gameObject.tag == "Player" && rotate && !keyHit)
         {
             StartCoroutine(RotateMe(Vector3.up * degrees, 5));
         }
@@ -344,12 +346,12 @@ public class Puzzles : MonoBehaviour
         //    other.transform.SetParent(this.gameObject.transform);
         //}
     }
+
     void OnTriggerExit(Collider other)
     {
         if (other.gameObject.tag == "Player")
         {
-            other.transform.parent = null;
-            
+            other.transform.parent = null;   
         }
               
     }

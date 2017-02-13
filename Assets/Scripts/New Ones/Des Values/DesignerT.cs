@@ -267,6 +267,16 @@ public struct formsSettings
     public bool armaUnlocked;
     public bool dolphinUnlocked;
 }
+
+[System.Serializable]
+public class playerLegends
+{
+    public bool Legend1;
+    public bool Legend2;
+    public bool Legend3;
+    public bool Legend4;
+    public bool Legend5;
+}
 #endregion
 
 public class DesignerT : MonoBehaviour

@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 using UnityEngine.SceneManagement;
 
@@ -9,7 +10,7 @@ public class ButtonUpdateState : MonoBehaviour {
 
     public void OnValidate()
     {
-        //GameObject.FindGameObjectWithTag("GameController").GetComponent<SuperDataManager>().UpdatingButState(this.gameObject.GetComponent<Puzzles>());
+        //GameObject.FindGameObjectWithTag("GameController").GetComponent<SuperDataManager>().UpdatingButState(this.gameObject);
     }
     #endregion
 
@@ -31,7 +32,22 @@ public class ButtonUpdateState : MonoBehaviour {
         var butToUpdate = currentSceneData.ButState.Find(x => x.ButtonName == this.gameObject.name);
 
         if (butToUpdate != null)
-        butToUpdate.IsDisabled = this.gameObject.GetComponent<Puzzles>().keyHit;
+        {
+
+            var puzzleScripts = new List<Puzzles>();
+
+            butToUpdate.IsDisabled.Clear();
+            butToUpdate.IsDisabled.TrimExcess();
+
+            puzzleScripts.AddRange(this.gameObject.GetComponents<Puzzles>());
+
+            butToUpdate.IsDisabled = new List<bool>();
+
+            foreach (var puzzle in puzzleScripts)
+            {
+                butToUpdate.IsDisabled.Add(puzzle.keyHit);
+            }
+        }
         else
         {
             Debug.Log(this.gameObject.name + " not present in Temp Repo");
@@ -48,7 +64,15 @@ public class ButtonUpdateState : MonoBehaviour {
         var butToUpdate = currentSceneData.ButState.Find(x => x.ButtonName == this.gameObject.name);
 
         if (butToUpdate != null)
-        this.gameObject.GetComponent<Puzzles>().keyHit = butToUpdate.IsDisabled;
+        {
+            var puzzleScripts = this.gameObject.GetComponents<Puzzles>();
+
+            for (var index = 0; index < butToUpdate.IsDisabled.Count; index++)
+            {
+                puzzleScripts[index].keyHit = butToUpdate.IsDisabled[index];
+            }
+        }
+       
         else
         {
             Debug.Log(this.gameObject.name + " not present in Temp Repo");

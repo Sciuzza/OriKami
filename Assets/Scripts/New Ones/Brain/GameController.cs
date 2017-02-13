@@ -16,16 +16,22 @@ public class GameController : MonoBehaviour
     public event_Gb gpInitializer, gameSettingsChanged;
 
     public UnityEvent ngpInitializer;
+    public UnityEvent requestErase;
     #endregion
 
     #region Do not Destroy Behaviour
     void Awake()
     {
         
-        DontDestroyOnLoad(this.gameObject);
-        DontDestroyOnLoad(cameraRef.gameObject);
-        DontDestroyOnLoad(this.dLight);
-        
+        //DontDestroyOnLoad(this.gameObject);
+        //DontDestroyOnLoad(cameraRef.gameObject);
+        //DontDestroyOnLoad(this.dLight);
+    }
+
+    private void Start()
+    {
+        if (SceneManager.GetActiveScene().name != "Game Starter")
+            this.requestErase.Invoke();
     }
     #endregion
 
