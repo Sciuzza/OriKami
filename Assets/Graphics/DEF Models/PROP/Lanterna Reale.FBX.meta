@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: 8b136e260f5fcea41bd7bb060cda19ee
-timeCreated: 1486921020
+guid: f817a24296405b743961c336ef8d428f
+timeCreated: 1486972275
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
@@ -9,7 +9,7 @@ ModelImporter:
     400000: //RootNode
     2300000: //RootNode
     3300000: //RootNode
-    4300000: piano_ragnatela
+    4300000: Sphere001
   materials:
     importMaterials: 1
     materialName: 0
