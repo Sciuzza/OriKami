@@ -18,8 +18,8 @@ public class ButtonUpdateState : MonoBehaviour {
     {
         var sdmTempLink = GameObject.FindGameObjectWithTag("GameController").GetComponent<SuperDataManager>();
 
-        sdmTempLink.LocalDataRequest.AddListener(this.SavingCurrentState);
-        sdmTempLink.RequestUpdateByLoad.AddListener(this.LoadingCurrentState);
+        sdmTempLink.RequestLocalUpdateToRepo.AddListener(this.SavingCurrentState);
+        sdmTempLink.RequestLocalUpdateByRepo.AddListener(this.LoadingCurrentState);
     }
 
     private void SavingCurrentState()

@@ -399,7 +399,7 @@ public class StoryLineInstance : MonoBehaviour
     public event_bool IsStoryMode;
     public event_int_float MovieRequest;
     public UnityEvent eraseInputMemoryRequest;
-    public UnityEvent UpdateTempMemoryRequest;
+    public UnityEvent RequestRepoUpdateQuests;
     public event_int LegendsUpdateRequest;
     public event_abi TransfRequest;
     #endregion
@@ -446,7 +446,7 @@ public class StoryLineInstance : MonoBehaviour
 
         var sdmTempLink = GameObject.FindGameObjectWithTag("GameController").GetComponent<SuperDataManager>();
 
-        sdmTempLink.RequestUpdateByLoad.AddListener(this.LoadingCurrentState);
+        sdmTempLink.RequestLocalUpdateByRepo.AddListener(this.LoadingCurrentState);
     }
     #endregion
 
@@ -780,7 +780,7 @@ public class StoryLineInstance : MonoBehaviour
 
         this.CompletionEffects();
 
-        this.UpdateTempMemoryRequest.Invoke();
+        this.RequestRepoUpdateQuests.Invoke();
         this.ChangeCsExitRequest.Invoke(this.storySelected.EndControlEffect);
     }
 

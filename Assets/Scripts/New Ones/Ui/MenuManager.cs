@@ -19,7 +19,7 @@ public class MenuManager : MonoBehaviour
     #endregion
 
     #region Private Variables
-    private GameObject mainMenuPanel;
+    private MainMenuRepo mmRepo;
     private Button newGame, continueB, legends, options, exit;
 
     private GameObject levelSelPanel;
@@ -52,6 +52,11 @@ public class MenuManager : MonoBehaviour
         var scTempLink = this.GetComponent<SceneController>();
 
         scTempLink.ProgressUpdateRequest.AddListener(this.UpdatingProgressBar);
+
+        var sdManTempLink = this.gameObject.GetComponent<SuperDataManager>();
+
+        sdManTempLink.DisableContinueRequest.AddListener(this.DisablingContinue);
+
     }
 
     #endregion
@@ -76,43 +81,28 @@ public class MenuManager : MonoBehaviour
     #region Main Menu Handler
     public void InitializingMainMenuPanel()
     {
-        mainMenuPanel = GameObject.FindGameObjectWithTag("Menu Panel");
+        this.mmRepo = GameObject.FindGameObjectWithTag("MainMenu").GetComponent<MainMenuRepo>();
 
-        Button[] mmButtonRef = new Button[5];
+        this.mmRepo.NewGameB.onClick.AddListener(this.PlayNewGameSound);
+        this.mmRepo.NewGameB.onClick.AddListener(this.SendingNewDataRequestEvent);
 
-        mmButtonRef = mainMenuPanel.GetComponentsInChildren<Button>();
+        this.mmRepo.ContinueB.onClick.AddListener(this.PlayNewGameSound);
+        this.mmRepo.ContinueB.onClick.AddListener(this.SendingLoadDataRequestEvent);
 
-        List<Button> mmListButtonRef = new List<Button>();
+        //this.mmRepo.LegendsB.onClick.AddListener(this.PlayNewGameSound);
+        //this.mmRepo.LegendsB.onClick.AddListener(this.PlayNewGameSound);
 
-        mmListButtonRef.AddRange(mmButtonRef);
+        //this.mmRepo.OptionsB.onClick.AddListener(this.PlayNewGameSound);
+        //this.mmRepo.OptionsB.onClick.AddListener(this.PlayNewGameSound);
 
-        this.newGame = mmListButtonRef.Find(x => x.gameObject.name == "New Game");
-        this.continueB = mmListButtonRef.Find(x => x.gameObject.name == "Continue");
-        this.legends = mmListButtonRef.Find(x => x.gameObject.name == "Legends' Journal");
-        this.options = mmListButtonRef.Find(x => x.gameObject.name == "Options");
-        this.exit = mmListButtonRef.Find(x => x.gameObject.name == "Exit");
-
-        this.newGame.onClick.AddListener(PlayNewGameSound);
-        this.newGame.onClick.AddListener(this.SendingNewDataRequestEvent);
-        this.newGame.onClick.AddListener(InvokingNewGame);
-        this.continueB.onClick.AddListener(PlayNewGameSound);
-        this.continueB.onClick.AddListener(this.SendingLoadDataRequestEvent);
-        this.continueB.onClick.AddListener(InvokingLevelSel);
-        this.exit.onClick.AddListener(QuitGame);
- 
-        //EventSystem.current.SetSelectedGameObject(this.newGame.gameObject);
+        this.mmRepo.ExitB.onClick.AddListener(this.PlayNewGameSound);
+        this.mmRepo.ExitB.onClick.AddListener(this.QuitGame);
 
     }
 
-    private void InvokingNewGame()
+    private void DisablingContinue()
     {
-        changingSceneRequest.Invoke("Route 1");
-        
-    }
-
-    private void InvokingLevelSel()
-    {
-        switchSceneRequestByInt.Invoke(2);
+        this.continueB.interactable = false;
     }
 
     private void QuitGame()
@@ -139,25 +129,6 @@ public class MenuManager : MonoBehaviour
     {
         this.loadDataRequest.Invoke();
     }
-
-    ////VA SPOSTATO DA QUA RICKY
-    //public void GameStartSound()
-    //{
-    //    Debug.Log("START GAMESOUND");
-    //    currentScene = SceneManager.GetActiveScene().name;
-    //    if (currentScene == "Main Menu"||currentScene == "Route 1" || currentScene == "Route 2" || currentScene == "route 3" || currentScene == "Route 4")
-    //    {
-    //        GameObject.FindGameObjectWithTag("GameController").GetComponent<SoundManager>().PlaySound(1, 5);
-
-    //        if (!GameObject.FindGameObjectWithTag("GameController").GetComponent<AudioSource>().isPlaying)
-    //        {
-    //            GameObject.FindGameObjectWithTag("GameController").GetComponent<SoundManager>().PlaySound(1, 6);
-
-    //        }
-
-    //    }
-       
-    //}
     #endregion
 
     #region Level Selection Handler
