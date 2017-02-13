@@ -1905,8 +1905,7 @@ public class FSMChecker : MonoBehaviour
         {
             Debug.Log("Morto");
 
-
-            deathRequest.Invoke();
+            this.deathRequest.Invoke();
 
 
         }

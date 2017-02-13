@@ -225,7 +225,7 @@ public class SuperDataManager : MonoBehaviour
 
         currentSlInScene.RequestRepoUpdateQuests.AddListener(this.UpdatingQuestData);
 
-        player.GetComponent<FSMChecker>().deathRequest.AddListener(this.LoadingOnDiskData);
+        player.GetComponent<FSMChecker>().deathRequest.AddListener(this.LoadingHandler);
         player.GetComponent<EnvInputs>().SaveRequestByCheck.AddListener(this.SaveHandler);
 
         this.LoadingHandler();
