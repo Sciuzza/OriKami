@@ -7,7 +7,12 @@ public class GameController : MonoBehaviour
 {
     public Camera cameraRef;
     public GameObject dLight;
-  
+    public AudioSource AudiosourceRef;
+    public AudioClip audioRef;
+    public SoundManager soundRef;
+     public string currentScene;
+
+
     #region Private Variables
     private GameObject player; 
     #endregion
@@ -22,10 +27,11 @@ public class GameController : MonoBehaviour
     #region Do not Destroy Behaviour
     void Awake()
     {
-        
+
         //DontDestroyOnLoad(this.gameObject);
         //DontDestroyOnLoad(cameraRef.gameObject);
         //DontDestroyOnLoad(this.dLight);
+        soundRef = GameObject.FindGameObjectWithTag("GameController").GetComponent<SoundManager>();
     }
 
     private void Start()
@@ -54,12 +60,26 @@ public class GameController : MonoBehaviour
 
             gpInitializer.Invoke(player);
             StartCoroutine(this.player.GetComponent<MoveHandler>().MoveHandlerUpdate());
+            Scene scene = SceneManager.GetActiveScene();
+            if (scene.name==("Armadillos' Village") || scene.name == "Route 1" )
+            {
+                StartCoroutine(MusciCO());
+            }
+
+
         }
         else
         {
             Debug.Log("Not on Gameplay Scene");
             ngpInitializer.Invoke();
         }
+    }
+    IEnumerator MusciCO()
+    {
+        soundRef.PlaySound(1, 5);
+        yield return new WaitForSeconds(AudiosourceRef.clip.length);
+        soundRef.PlaySound(1, 6);
+
     }
 
     public bool FindingPlayer()

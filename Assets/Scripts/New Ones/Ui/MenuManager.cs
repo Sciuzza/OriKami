@@ -9,7 +9,7 @@ using UnityEngine.EventSystems;
 
 public class MenuManager : MonoBehaviour
 {
-    private string currentScene;
+    
     
     #region Public Variables
     public event_int switchSceneRequestByInt;
@@ -52,6 +52,8 @@ public class MenuManager : MonoBehaviour
         var scTempLink = this.GetComponent<SceneController>();
 
         scTempLink.ProgressUpdateRequest.AddListener(this.UpdatingProgressBar);
+
+       
     }
 
     #endregion
@@ -201,6 +203,7 @@ public class MenuManager : MonoBehaviour
     {
         switchSceneRequestByName.Invoke("Route 1");
         
+              
     }
 
     private void InvokingFrogsV()
@@ -216,6 +219,8 @@ public class MenuManager : MonoBehaviour
     private void InvokingArmaV()
     {
         switchSceneRequestByName.Invoke("Armadillos' Village");
+       
+
     }
 
     private void InvokingRoute3()
@@ -360,4 +365,6 @@ public class MenuManager : MonoBehaviour
     }
     #endregion
     #endregion
+
+    
 }
