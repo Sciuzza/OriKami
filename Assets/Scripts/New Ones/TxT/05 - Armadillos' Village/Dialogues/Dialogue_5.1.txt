@@ -1,9 +1,9 @@
 Elder/Left/Elder_Standard/So, why don't you stay a bit more?
 Iki/Right/Iki_Sad/...
-Elder/Left/Elder_Standard/I see. You still didn’t find yourself, and we can’t give you what you are looking for, but don’t lose heart!
-Elder/Left/Elder_Standard/World is based on balance and everyone have to find his one.*Just because you didn’t find yours yet, though, it doesn’t mean you’ll never do. 
+Elder/Left/Elder_Standard/I see. You still didn't find yourself, and we can't give you what you are looking for, but don't lose heart!
+Elder/Left/Elder_Standard/World is based on balance and everyone have to find his one.*Just because you didn't find yours yet, though, it doesn't mean you’ll never do. 
 Iki/Right/Iki_Standard/...
-Elder/Left/Elder_Standard/I lived for a long while, and I’ve seen ages come one after another.*However, in the last thousand years the balance of the whole world has faltered too. 
-Elder/Left/Elder_Standard/Back in my days, things like this wouldn’t have happened!
+Elder/Left/Elder_Standard/I lived for a long while, and I've seen ages come one after another.*However, in the last thousand years the balance of the whole world has faltered too. 
+Elder/Left/Elder_Standard/Back in my days, things like this wouldn't have happened!
 Iki/Right/Iki_Standard/...
-Elder/Left/Elder_Standard/Well, it’s time to let you go!*Come back to say hello whenever you want, and good luck with your journey!
+Elder/Left/Elder_Standard/Well, it's time to let you go!*Come back to say hello whenever you want, and good luck with your journey!

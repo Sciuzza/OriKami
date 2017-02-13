@@ -1,5 +1,5 @@
 Iki/Left/Iki_Concerned/...
-Jiraiya/Right/Jiraiya_Cry/sob sob
+Jiraiya/Right/Jiraiya_Cry/"sob sob""
 Koi/Left/Koi_Standard/Hey boy! Did something happen?
-Jiraiya/Right/Jiraiya_Cry/sob sob... I’m lost!
-Koi/Left/Koi_Standard/Well, this could be a problem, since we don’t know where we are either...*But don’t worry! We’ll help you!*What’s your name?
+Jiraiya/Right/Jiraiya_Cry/"sob sob"... I'm lost!
+Koi/Left/Koi_Standard/Well, this could be a problem, since we don't know where we are either...*But don't worry! We'll help you!*What's your name?

@@ -1,6 +1,6 @@
 Jiraiya's Mother/Left/JiraiyaMother_Concerned/You are the origami who helped Jiraiya before, right?
 Iki/Right/Iki_Standard/...
 Jiraiya's Mother/Left/JiraiyaMother_Concerned/My son told me about a carp and a weird origami with no voice who helped him when he got lost sooner...*But then his father started yelling at him.
-Jiraiya's Mother/Left/JiraiyaMother_Concerned/He’s a good boy, and my husband is a good father, but he knows that one day the village will rely on Jiraiya, and he wants him to become the best king the village can have.
+Jiraiya's Mother/Left/JiraiyaMother_Concerned/He's a good boy, and my husband is a good father, but he knows that one day the village will rely on Jiraiya, and he wants him to become the best king the village can have.
 Iki/Right/Iki_Concerned/...
-Jiraiya's Mother/Left/JiraiyaMother_Concerned/Please, find him and take him back...*I’m sure they will sort things out, sooner or later.
+Jiraiya's Mother/Left/JiraiyaMother_Concerned/Please, find him and take him back...*I'm sure they will sort things out, sooner or later.
