@@ -1,26 +1,36 @@
-﻿Shader "Custom/SciuzzaShader" {
-    Properties {
-        _Color ("Color", Color) = (1,1,1,1)
-        _MainTex ("Albedo (RGB)", 2D) = "white" {}
-        _EmissiveRatio("The Most Emissive Ratio", Range(0.1, 4.0)) = 0.7
-        _DetailTex("Ciccio", 2D) = "white" {}
+﻿Shader "Custom/SciuzzaShader"
+{
+	Properties
+	{
+		_Color1("Albedo1", Color) = (1,1,1,1)
+		_Color2("Albedo2", Color) = (1,1,1,1)
+		_LerpTime("Lerp TIme", Range(0.1,10)) = 1
+	}
 
-        _TestInt("Test Int", Int) = 4
-        _TestCube("Test Cube", Cube) = "DefaultTexture" {}
-        _Test3D("Test 3D", 3D) = "DefaultTexture" {}
-    }
-    SubShader {
-        Pass{
-            Material{
-            Diffuse[_Color]
-        }
-            Lighting On
+		SubShader
+	{
+	 Tags
+		{
+			"RenderType" = "Opaque"
+		}
 
-            SetTexture[_MainTex]{
-            combine previous - texture
-        }
-        }
-        
-    }
-    
+		CGPROGRAM
+		#pragma surface surf Standard
+
+		struct Input
+		{
+			float3 worldPos;
+		};
+
+		float4 _Color1;
+		float4 _Color2;
+		float _LerpTime;
+
+		void surf(Input IN, inout SurfaceOutputStandard o)
+		{
+			o.Albedo.rgb = lerp(_Color1, _Color2, +.5 * sin(_Time.y / _LerpTime) + .5);
+		}
+		ENDCG
+	}
+		Fallback "Diffuse"
 }

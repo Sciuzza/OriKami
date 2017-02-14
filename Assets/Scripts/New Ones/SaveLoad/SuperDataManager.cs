@@ -228,7 +228,7 @@ public class SuperDataManager : MonoBehaviour
         player.GetComponent<FSMChecker>().deathRequest.AddListener(this.LoadingHandler);
         player.GetComponent<EnvInputs>().SaveRequestByCheck.AddListener(this.SaveHandler);
 
-        this.LoadingHandler();
+        //this.LoadingHandler();
     } 
     #endregion
 
