@@ -7,7 +7,11 @@ public class GameController : MonoBehaviour
 {
     public Camera cameraRef;
     public GameObject dLight;
-  
+    private AudioClip audioRef;
+    private SoundManager soundRef;
+    public string currentScene;
+
+
     #region Private Variables
     private GameObject player; 
     #endregion
@@ -22,10 +26,11 @@ public class GameController : MonoBehaviour
     #region Do not Destroy Behaviour
     void Awake()
     {
-        
         //DontDestroyOnLoad(this.gameObject);
         //DontDestroyOnLoad(cameraRef.gameObject);
         //DontDestroyOnLoad(this.dLight);
+
+        soundRef = GameObject.FindGameObjectWithTag("GameController").GetComponent<SoundManager>();
     }
 
     private void Start()
@@ -54,12 +59,29 @@ public class GameController : MonoBehaviour
 
             gpInitializer.Invoke(player);
             StartCoroutine(this.player.GetComponent<MoveHandler>().MoveHandlerUpdate());
+
+            #region Background Music
+            Scene scene = SceneManager.GetActiveScene();
+            if (scene.name==("Armadillos' Village") || scene.name == "Dolphins and Swallows' Village" || scene.name == "Dragon's Spring Temple" )
+            {
+                StartCoroutine(MusciCO());
+            }
+            #endregion
+
         }
         else
         {
             Debug.Log("Not on Gameplay Scene");
             ngpInitializer.Invoke();
         }
+    }
+
+    IEnumerator MusciCO()
+    {
+        soundRef.PlaySound(1, 5);
+        yield return new WaitForSeconds(soundRef.PersistendAudio[1].AudioSourceRef.clip.length /*AudiosourceRef.clip.length*/);
+        soundRef.PlaySound(1, 6);
+
     }
 
     public bool FindingPlayer()
