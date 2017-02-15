@@ -259,6 +259,7 @@ public class FSMChecker : MonoBehaviour
     private bool isWalkingSound = false;
 
     private bool onGroundSwallow = false;
+    private bool onGroundDolphin = false;
     #endregion
 
     #region Events
@@ -277,6 +278,7 @@ public class FSMChecker : MonoBehaviour
     public UnityEvent switchingCameraToPlayer;
     public event_float_float_float plCameraMoveUsed;
     public event_bool swallowOnGround;
+    public event_bool dolphinOnGround;
     #endregion
 
     #region Initialization Methods
@@ -383,7 +385,7 @@ public class FSMChecker : MonoBehaviour
                     moveUsed.Invoke(abiDir, cPlayerState.currentForm, cPlayerState.currentPhState, this.cPlayerState.forms);
 
                     if (this.cPlayerState.currentForm == "Dragon Form" && this.onGroundSwallow) this.onGroundSwallow = false;
-
+                    if (this.cPlayerState.currentForm == "Dolphin Form" && this.onGroundDolphin) this.onGroundDolphin = false;
                     break;
                 case abilties.rotate:
                     rotationUsed.Invoke(abiDir, cPlayerState.currentPlState);
@@ -399,6 +401,13 @@ public class FSMChecker : MonoBehaviour
             this.onGroundSwallow = true;
             this.swallowOnGround.Invoke(this.onGroundSwallow);
         }
+        else if (abiReceived == abilties.move && this.cPlayerState.currentForm == "Dolphin Form" && !this.onGroundDolphin)
+        {
+            this.onGroundDolphin = true;
+            this.dolphinOnGround.Invoke(this.onGroundDolphin);
+        }
+
+
 
     }
 
