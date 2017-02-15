@@ -1,2 +1,2 @@
-Premi "A" per saltare!
-Blablabla
+When you are in "frog form" you can jump higher than you normally would.*In exchange, you'll be slower when you walk.
+To get back to your standard form, press "B".*You can change form whenever you want!
