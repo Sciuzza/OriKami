@@ -46,6 +46,7 @@ public class FSMExecutor : MonoBehaviour
         fsmCheckerTempLink.genAbiUsed.AddListener(this.ApplyingAbilityEffect);
         fsmCheckerTempLink.rotationUsed.AddListener(this.ApplyingRotationEffect);
         fsmCheckerTempLink.vFissureUsed.AddListener(this.ApplyingSpecialAniAbi);
+        fsmCheckerTempLink.swallowOnGround.AddListener(this.SettingSwallowOnGround);
 
         var moveHandTempLink = this.gameObject.GetComponent<MoveHandler>();
 
@@ -158,14 +159,14 @@ public class FSMExecutor : MonoBehaviour
                         {
                             this.moveSelected.Invoke(moveDirInput, this.generalValues.moveInWater);
                         }
-                        this.animatorLink.SetFloat("Moving", Mathf.InverseLerp(0, (float)Math.Pow(this.currentMoveValues.standMove.moveSpeed, 2), (moveDirInput * this.generalValues.moveInWater).sqrMagnitude));
+                        this.animatorLink.SetFloat("Moving", Mathf.InverseLerp(0, (float)Math.Pow(this.currentMoveValues.frogMove.moveSpeed, 2), (moveDirInput * this.generalValues.moveInWater).sqrMagnitude));
                         break;
                     case physicStates.onGround:
                         if (Math.Abs(moveDirInput.sqrMagnitude) > Tolerance)
                         {
                             this.moveSelected.Invoke(moveDirInput, this.currentMoveValues.standMove.moveSpeed);
                         }
-                        this.animatorLink.SetFloat("Moving", Mathf.InverseLerp(0, (float)Math.Pow(this.currentMoveValues.standMove.moveSpeed, 2), (moveDirInput * this.currentMoveValues.standMove.moveSpeed).sqrMagnitude));
+                        this.animatorLink.SetFloat("Moving", Mathf.InverseLerp(0, (float)Math.Pow(this.currentMoveValues.frogMove.moveSpeed, 2), (moveDirInput * this.currentMoveValues.frogMove.moveSpeed).sqrMagnitude));
                         break;
                 }
 
@@ -180,10 +181,18 @@ public class FSMExecutor : MonoBehaviour
 
                 break;
 
-            case ("Dragon Form"):
-                moveSelected.Invoke(moveDirInput, currentMoveValues.craneMove.glideSpeed);
+            case "Dragon Form":
+
+                this.animatorLink = forms[2].GetComponent<Animator>();
+
+                if (this.animatorLink.GetBool("Ground"))
+                    this.animatorLink.SetBool("Ground", false);
+
+                this.moveSelected.Invoke(moveDirInput, this.currentMoveValues.craneMove.glideSpeed);
+
+                this.animatorLink.SetFloat("Moving", Mathf.InverseLerp(0, (float)Math.Pow(this.currentMoveValues.craneMove.glideSpeed, 2), (moveDirInput * this.currentMoveValues.craneMove.glideSpeed).sqrMagnitude));
                 break;
-            case ("Armadillo Form"):
+            case "Armadillo Form":
 
                 switch (currentPHState)
                 {
@@ -636,6 +645,11 @@ public class FSMExecutor : MonoBehaviour
     private void TakingFinalMoveUpdated(Vector3 currentMove)
     {
         this.finalMoveDirTemp = currentMove;
+    }
+
+    private void SettingSwallowOnGround(bool isOnGround)
+    {
+        this.animatorLink.SetBool("Ground", isOnGround);
     }
     #endregion
 }

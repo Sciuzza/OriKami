@@ -257,6 +257,8 @@ public class FSMChecker : MonoBehaviour
     private bool isGlidingSound = false;
     private bool isRollingSound = false;
     private bool isWalkingSound = false;
+
+    private bool onGroundSwallow = false;
     #endregion
 
     #region Events
@@ -274,6 +276,7 @@ public class FSMChecker : MonoBehaviour
     public UnityEvent switchingCameraToStoryRequest;
     public UnityEvent switchingCameraToPlayer;
     public event_float_float_float plCameraMoveUsed;
+    public event_bool swallowOnGround;
     #endregion
 
     #region Initialization Methods
@@ -378,6 +381,9 @@ public class FSMChecker : MonoBehaviour
 
                 case abilties.move:
                     moveUsed.Invoke(abiDir, cPlayerState.currentForm, cPlayerState.currentPhState, this.cPlayerState.forms);
+
+                    if (this.cPlayerState.currentForm == "Dragon Form" && this.onGroundSwallow) this.onGroundSwallow = false;
+
                     break;
                 case abilties.rotate:
                     rotationUsed.Invoke(abiDir, cPlayerState.currentPlState);
@@ -387,6 +393,11 @@ public class FSMChecker : MonoBehaviour
                     break;
             }
 
+        }
+        else if (abiReceived == abilties.move && this.cPlayerState.currentForm == "Dragon Form" && !this.onGroundSwallow)
+        {
+            this.onGroundSwallow = true;
+            this.swallowOnGround.Invoke(this.onGroundSwallow);
         }
 
     }
