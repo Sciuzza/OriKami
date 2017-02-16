@@ -279,6 +279,7 @@ public class FSMChecker : MonoBehaviour
     public event_float_float_float plCameraMoveUsed;
     public event_bool swallowOnGround;
     public event_bool dolphinOnGround;
+    public event_bool armaRolling;
     #endregion
 
     #region Initialization Methods
@@ -424,6 +425,7 @@ public class FSMChecker : MonoBehaviour
                 case abilties.roll:
                     this.cPlayerState.currentPlState = playerStates.rolling;
                     this.UpdatingAbilityList();
+                    this.armaRolling.Invoke(true);
                     this.genAbiUsed.Invoke(abiReceived, this.cPlayerState.currentForm, this.cPlayerState.forms);
                     break;
                 case abilties.VFissure:
@@ -447,6 +449,8 @@ public class FSMChecker : MonoBehaviour
                 case abilties.toStd:
                     cPlayerState.previousForm = cPlayerState.currentForm;
                     cPlayerState.currentForm = "Standard Form";
+                    this.onGroundSwallow = false;
+                    this.onGroundDolphin = false;
                     formChangedInp.Invoke(cPlayerState.currentForm);
                     if (cPlayerState.currentPlState == playerStates.rolling)
                         EnablingMove();
@@ -460,6 +464,8 @@ public class FSMChecker : MonoBehaviour
                 case abilties.toFrog:
                     cPlayerState.previousForm = cPlayerState.currentForm;
                     cPlayerState.currentForm = "Frog Form";
+                    this.onGroundSwallow = false;
+                    this.onGroundDolphin = false;
                     formChangedInp.Invoke(cPlayerState.currentForm);
                     if (cPlayerState.currentPlState == playerStates.rolling)
                         EnablingMove();
@@ -473,6 +479,8 @@ public class FSMChecker : MonoBehaviour
                 case abilties.toCrane:
                     cPlayerState.previousForm = cPlayerState.currentForm;
                     cPlayerState.currentForm = "Dragon Form";
+                    this.onGroundSwallow = false;
+                    this.onGroundDolphin = false;
                     formChangedInp.Invoke(cPlayerState.currentForm);
                     if (cPlayerState.currentPlState == playerStates.rolling)
                         EnablingMove();
@@ -485,6 +493,8 @@ public class FSMChecker : MonoBehaviour
                 case abilties.toArma:
                     cPlayerState.previousForm = cPlayerState.currentForm;
                     cPlayerState.currentForm = "Armadillo Form";
+                    this.onGroundSwallow = false;
+                    this.onGroundDolphin = false;
                     formChangedInp.Invoke(cPlayerState.currentForm);
                     UpdatingAbilityList();
                     formChanged.Invoke(cPlayerState.currentForm, cPlayerState.previousForm, cPlayerState.forms);
@@ -495,6 +505,8 @@ public class FSMChecker : MonoBehaviour
                 case abilties.toDolp:
                     cPlayerState.previousForm = cPlayerState.currentForm;
                     cPlayerState.currentForm = "Dolphin Form";
+                    this.onGroundSwallow = false;
+                    this.onGroundDolphin = false;
                     formChangedInp.Invoke(cPlayerState.currentForm);
                     if (cPlayerState.currentPlState == playerStates.rolling)
                         EnablingMove();
@@ -510,6 +522,7 @@ public class FSMChecker : MonoBehaviour
         else
             Debug.Log("Requirements not met");
     }
+
 
     private void CheckingCamMoveReq(float currentX, float currentY, float currentDistance)
     {
@@ -1554,6 +1567,7 @@ public class FSMChecker : MonoBehaviour
         cPlayerState.currentPlState = playerStates.standingStill;
         //cPlayerState.currentClState = controlStates.totalControl;
         UpdatingAbilityList();
+        this.armaRolling.Invoke(false);
         stoppingRollLogic.Invoke();
     }
 

@@ -35,6 +35,9 @@ public class FSMExecutor : MonoBehaviour
     private List<bool> delayFlagRefFix = new List<bool>();
     private Animator animatorLink;
     private Coroutine dolphinFIx;
+    private Coroutine specialRollAni;
+
+    private Quaternion armaOriginarRot;
     #endregion
 
     #region Taking References and linking Events
@@ -49,6 +52,7 @@ public class FSMExecutor : MonoBehaviour
         fsmCheckerTempLink.vFissureUsed.AddListener(this.ApplyingSpecialAniAbi);
         fsmCheckerTempLink.swallowOnGround.AddListener(this.SettingAniOnGround);
         fsmCheckerTempLink.dolphinOnGround.AddListener(this.SettingAniDolphinOnGround);
+        fsmCheckerTempLink.armaRolling.AddListener(this.SettingRolling);
 
         var moveHandTempLink = this.gameObject.GetComponent<MoveHandler>();
 
@@ -86,7 +90,7 @@ public class FSMExecutor : MonoBehaviour
             case "Dragon Form":
                 this.animatorLink = formReferences[2].GetComponent<Animator>();
                 break;
-            case "Arma Form":
+            case "Armadillo Form":
                 this.animatorLink = formReferences[3].GetComponent<Animator>();
                 break;
             case "Dolphin Form":
@@ -199,7 +203,7 @@ public class FSMExecutor : MonoBehaviour
                     case physicStates.onGround:
                         if (Math.Abs(moveDirInput.sqrMagnitude) > Tolerance)
                         {
-                            this.moveSelected.Invoke(moveDirInput, this.currentMoveValues.standMove.moveSpeed);
+                            this.moveSelected.Invoke(moveDirInput, this.currentMoveValues.frogMove.moveSpeed);
                         }
                         this.animatorLink.SetFloat("Moving", Mathf.InverseLerp(0, (float)Math.Pow(this.currentMoveValues.frogMove.moveSpeed, 2), (moveDirInput * this.currentMoveValues.frogMove.moveSpeed).sqrMagnitude));
                         break;
@@ -233,13 +237,25 @@ public class FSMExecutor : MonoBehaviour
                 switch (currentPHState)
                 {
                     case physicStates.onAir:
-                        moveSelected.Invoke(moveDirInput, generalValues.moveInAir);
+                        if (Math.Abs(moveDirInput.sqrMagnitude) > Tolerance)
+                        {
+                        this.moveSelected.Invoke(moveDirInput, this.generalValues.moveInAir);
+                        }
+                        this.animatorLink.SetFloat("Moving", Mathf.InverseLerp(0, (float)Math.Pow(this.currentMoveValues.armaMove.moveSpeed, 2), (moveDirInput * this.generalValues.moveInAir).sqrMagnitude));
                         break;
                     case physicStates.onWater:
-                        moveSelected.Invoke(moveDirInput, generalValues.moveInWater);
+                        if (Math.Abs(moveDirInput.sqrMagnitude) > Tolerance)
+                        {
+                            this.moveSelected.Invoke(moveDirInput, this.generalValues.moveInWater);
+                        }
+                        this.animatorLink.SetFloat("Moving", Mathf.InverseLerp(0, (float)Math.Pow(this.currentMoveValues.armaMove.moveSpeed, 2), (moveDirInput * this.generalValues.moveInWater).sqrMagnitude));
                         break;
                     case physicStates.onGround:
-                        moveSelected.Invoke(moveDirInput, currentMoveValues.armaMove.moveSpeed);
+                        if (Math.Abs(moveDirInput.sqrMagnitude) > Tolerance)
+                        {
+                            this.moveSelected.Invoke(moveDirInput, this.currentMoveValues.armaMove.moveSpeed);
+                        }
+                        this.animatorLink.SetFloat("Moving", Mathf.InverseLerp(0, (float)Math.Pow(this.currentMoveValues.armaMove.moveSpeed, 2), (moveDirInput * this.currentMoveValues.armaMove.moveSpeed).sqrMagnitude));
                         break;
                 }
 
@@ -304,27 +320,27 @@ public class FSMExecutor : MonoBehaviour
             case abilties.jump:
                 switch (currentForm)
                 {
-                    case ("Standard Form"):
+                    case "Standard Form":
                         var aniTempStd = forms[0].GetComponent<Animator>();
                         aniTempStd.SetTrigger("Jumping");
-                        jumpSelected.Invoke(currentMoveValues.standMove.jumpStrength);
+                        this.jumpSelected.Invoke(this.currentMoveValues.standMove.jumpStrength);
                         break;
-                    case ("Frog Form"):
+                    case "Frog Form":
                         var aniTempFrog = forms[1].GetComponent<Animator>();
                         aniTempFrog.SetTrigger("Jumping");
-                        jumpSelected.Invoke(currentMoveValues.frogMove.jumpStrength);
+                        this.jumpSelected.Invoke(this.currentMoveValues.frogMove.jumpStrength);
                         break;
-                    case ("Dolphin Form"):
+                    case "Dolphin Form":
                         var aniTempDolphin = forms[4].GetComponent<Animator>();
                         aniTempDolphin.SetTrigger("Jumping");
-                        jumpSelected.Invoke(currentMoveValues.dolphinMove.jumpStrength);
+                        this.jumpSelected.Invoke(this.currentMoveValues.dolphinMove.jumpStrength);
                         break;
                 }
+
                 break;
             case abilties.roll:
-                rollSelected.Invoke(currentMoveValues.armaMove.rollingStrength);
+                this.rollSelected.Invoke(this.currentMoveValues.armaMove.rollingStrength);
                 break;
-
         }
     }
 
@@ -729,6 +745,77 @@ public class FSMExecutor : MonoBehaviour
     {
         this.animatorLink.SetBool("Ground", isOnGround);
         this.animatorLink.SetBool("Water", false);
+    }
+
+    private void SettingRolling(bool isRolling)
+    {
+        if (this.gameObject.GetComponentInChildren<Animator>().name == "Armadillo")
+        this.animatorLink.SetBool("Rolling", isRolling);
+
+        if (isRolling)
+        {
+            if (this.gameObject.GetComponentInChildren<Animator>().name == "Armadillo")
+                this.specialRollAni = this.StartCoroutine(this.SpecialRollingAni());
+
+        }
+        else
+        {
+            if (this.gameObject.GetComponentInChildren<Animator>().name == "Armadillo" && this.specialRollAni != null)
+            {
+                this.StopCoroutine(this.specialRollAni);
+            this.specialRollAni = null;
+            this.StartCoroutine(this.SpecialRollingAniReturn());
+                
+            }
+            else
+            {
+                if (this.specialRollAni != null)
+                {
+                    this.StopCoroutine(this.specialRollAni);
+                    this.specialRollAni = null;
+                }
+
+            }
+        }
+    }
+
+    private IEnumerator SpecialRollingAni()
+    {
+        var armadillo = GameObject.FindGameObjectWithTag("Armadillo Form");
+
+        var armaTransf = armadillo.transform;
+
+        this.armaOriginarRot = armaTransf.localRotation;
+
+        while (true)
+        {
+            armaTransf.RotateAround(armaTransf.position, armaTransf.right, Time.deltaTime * 1440f);
+
+            yield return null;
+        }
+    }
+
+    private IEnumerator SpecialRollingAniReturn()
+    {
+        var armadillo = GameObject.FindGameObjectWithTag("Armadillo Form");
+
+        var armaTransf = armadillo.transform;
+
+        var startingRot = armaTransf.localRotation;
+
+        var timePassed = 0f;
+
+        var timeTaken = 0.2f;
+
+        while (timePassed <= 1)
+        {
+            timePassed += Time.deltaTime / timeTaken;
+
+            armaTransf.localRotation = Quaternion.Slerp(startingRot, this.armaOriginarRot, timePassed);
+            yield return null;
+        }
+ 
+        armaTransf.localRotation = this.armaOriginarRot;
     }
     #endregion
 }
