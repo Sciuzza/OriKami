@@ -77,7 +77,7 @@ public class PlayerInputs : MonoBehaviour
                 GameObject.FindGameObjectWithTag("StoryLine").GetComponent<StoryLineInstance>();
 
             slTempLink.ActivateStoryInputRequest.AddListener(this.SettingStoryInputs);
-            slTempLink.eraseInputMemoryRequest.AddListener(this.DisablingStoryInputs);
+            slTempLink.EraseInputMemoryRequest.AddListener(this.DisablingStoryInputs);
         }
     }
     #endregion

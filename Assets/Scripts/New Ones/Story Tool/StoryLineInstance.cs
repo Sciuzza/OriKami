@@ -280,9 +280,16 @@ public class NormalSound
 [Serializable]
 public class AnimationEffect
 {
-    public int AnimationIndex;
-
+    public bool End;
     public GameObject GbRef;
+    public int AnimationIndex;
+    public float TimeTaken;
+    public bool CustomLooping;
+    public float CustomLoopBreak;
+    public int RepNum;
+    public bool CustomAniSlowMotion;
+    [Range(0.1f,1)]
+    public float SlowMotionMultiplier;
 }
 
 #endregion Animation Effect
@@ -398,7 +405,7 @@ public class StoryLineInstance : MonoBehaviour
     public UnityEvent DialogueEnded;
     public event_bool IsStoryMode;
     public event_int_float MovieRequest;
-    public UnityEvent eraseInputMemoryRequest;
+    public UnityEvent EraseInputMemoryRequest;
     public UnityEvent RequestRepoUpdateQuests;
     public event_int LegendsUpdateRequest;
     public event_abi TransfRequest;
@@ -582,7 +589,7 @@ public class StoryLineInstance : MonoBehaviour
     private void ErasingInputMemory(Collider trigger)
     {
         //if (this.storySelected.GenAccessCond.STriggerRef == trigger || this.storySelected.GenAccessCond.TriggerRef == trigger)
-            this.eraseInputMemoryRequest.Invoke();
+            this.EraseInputMemoryRequest.Invoke();
     }
 
     private void LoadingInputMemory(Collider trigger)
@@ -665,6 +672,7 @@ public class StoryLineInstance : MonoBehaviour
                 this.CameraEffectsHandler();
                 this.EnvEffectsHandler();
                 this.UiEffectsHandler();
+                this.AniEffectsHandler();
                 this.MovieEffectsHandler();
 
                 GameController.Debugging("Total Effects", this.totalEventEffects);
@@ -692,6 +700,7 @@ public class StoryLineInstance : MonoBehaviour
                     this.CameraEffectsHandler();
                     this.EnvEffectsHandler();
                     this.UiEffectsHandler();
+                    this.AniEffectsHandler();
                     this.MovieEffectsHandler();
 
                     GameController.Debugging("Total Effects", this.totalEventEffects);
@@ -710,6 +719,7 @@ public class StoryLineInstance : MonoBehaviour
                     this.CameraEffectsHandler();
                     this.EnvEffectsHandler();
                     this.UiEffectsHandler();
+                    this.AniEffectsHandler();
                     this.MovieEffectsHandler();
 
                     GameController.Debugging("Total Effects", this.totalEventEffects);
@@ -2314,6 +2324,88 @@ public class StoryLineInstance : MonoBehaviour
         uiObjMovEffect.End = true;
         this.effectCounter++;
         GameController.Debugging("Effect Counter", this.effectCounter);
+    }
+    #endregion
+
+    #region Animation Effects Methods
+
+    private void AniEffectsHandler()
+    {
+        var aniEffectToEvaluate = new List<AnimationEffect>();
+        aniEffectToEvaluate.AddRange(this.storySelected.Events[this.eventIndex].Effects.AniEffect);
+
+        var gbCheckTempRepo = new List<GameObject>();
+
+        if (aniEffectToEvaluate.Count == 0)
+        {
+        }
+        else
+        {
+            for (var index = 0; index < aniEffectToEvaluate.Count; index++)
+            {
+                if (index == 0)
+                {
+                    this.PlayAniEffect(aniEffectToEvaluate[index]);
+                    gbCheckTempRepo.Add(aniEffectToEvaluate[index].GbRef);
+                    this.totalEventEffects++;
+                    Debug.Log("Ani Effect");
+                }
+                else
+                {
+                    if (!gbCheckTempRepo.Contains(aniEffectToEvaluate[index].GbRef))
+                    {
+                        this.PlayAniEffect(aniEffectToEvaluate[index]);
+                        gbCheckTempRepo.Add(aniEffectToEvaluate[index].GbRef);
+                        this.totalEventEffects++;
+                        Debug.Log("Ani Effect");
+                    }
+                }
+            }
+        }
+    }
+
+    private void PlayAniEffect(AnimationEffect effectToPlay)
+    {
+        if (effectToPlay.GbRef.GetComponent<Animator>() == null)
+        {
+            Debug.Log("There is no Animator attached to the Gameobject");
+            effectToPlay.End = true;
+            this.effectCounter++;
+        }
+        else
+        {
+            Animator aniRef = effectToPlay.GbRef.GetComponent<Animator>();
+            var aniCountRef = effectToPlay.GbRef.GetComponent<AniInfo>();
+
+            if (effectToPlay.AnimationIndex > aniCountRef.AniCount - 1)
+            {
+                Debug.Log("Ani Index for this Gameobject doesn't lead to any animation");
+                effectToPlay.End = true;
+                this.effectCounter++;
+            }
+            else
+            {
+                aniRef.SetInteger("AniIndex", effectToPlay.AnimationIndex);
+                this.StartCoroutine(this.StoppingDefaultLoopinp(effectToPlay, aniRef));
+            }
+
+        }
+    }
+
+    private IEnumerator StoppingDefaultLoopinp(AnimationEffect aniEffect, Animator currentAni)
+    {
+
+        var timePassed = 0.0f;
+
+        while (timePassed <= aniEffect.TimeTaken)
+        {
+            timePassed += Time.deltaTime;
+            yield return null;
+        }
+
+        currentAni.SetInteger("AniIndex", 0);
+        aniEffect.End = true;
+        this.effectCounter++;
     }
     #endregion
 
