@@ -131,7 +131,7 @@ public class Puzzles : MonoBehaviour
 
         //}
 
-        else if (moveObject && moveUp)
+        else if (moveObject && moveUp && goUp != null)
         {
             startPosUpObject = goUp.transform.position;
             endPosUpObject = goUp.transform.position + goUp.transform.up * distance;
