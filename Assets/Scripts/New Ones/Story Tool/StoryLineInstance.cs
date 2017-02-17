@@ -409,6 +409,7 @@ public class StoryLineInstance : MonoBehaviour
     public UnityEvent RequestRepoUpdateQuests;
     public event_int LegendsUpdateRequest;
     public event_abi TransfRequest;
+    public event_int AniRequest;
     #endregion
 
     #region Private Variables
@@ -1120,7 +1121,6 @@ public class StoryLineInstance : MonoBehaviour
         else
         {
             this.StartCoroutine(this.MovingPlayer(effectToPlay));
-
         }
 
     }
@@ -1202,6 +1202,8 @@ public class StoryLineInstance : MonoBehaviour
 
         var timePassed = 0f;
 
+        this.AniRequest.Invoke(1);
+
         while (!posReached)
         {
             timePassed += Time.deltaTime / timeTaken;
@@ -1226,6 +1228,8 @@ public class StoryLineInstance : MonoBehaviour
         movingPlayerEffect.End = true;
         this.effectCounter++;
         GameController.Debugging("Effect Counter", this.effectCounter);
+
+        this.AniRequest.Invoke(0);
     }
 
     private IEnumerator PushBackPlayer(PlayerPushBack pushBackEffect)
@@ -1240,6 +1244,8 @@ public class StoryLineInstance : MonoBehaviour
         var posReached = false;
 
         var timePassed = 0f;
+
+        this.AniRequest.Invoke(1);
 
         while (!posReached)
         {
@@ -1261,6 +1267,8 @@ public class StoryLineInstance : MonoBehaviour
         pushBackEffect.End = true;
         this.effectCounter++;
         GameController.Debugging("Effect Counter", this.effectCounter);
+
+        this.AniRequest.Invoke(0);
     }
 
     private IEnumerator RotatePlayer(PlayerSee rotateEffect)
@@ -2328,7 +2336,6 @@ public class StoryLineInstance : MonoBehaviour
     #endregion
 
     #region Animation Effects Methods
-
     private void AniEffectsHandler()
     {
         var aniEffectToEvaluate = new List<AnimationEffect>();

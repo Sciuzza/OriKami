@@ -280,6 +280,7 @@ public class FSMChecker : MonoBehaviour
     public event_bool swallowOnGround;
     public event_bool dolphinOnGround;
     public event_bool armaRolling;
+    public UnityEvent aniStoryInitRequest, aniNormalInitRequest;
     #endregion
 
     #region Initialization Methods
@@ -1761,6 +1762,10 @@ public class FSMChecker : MonoBehaviour
         
         this.EnablingMove();
         this.UpdatingAbilityList();
+
+        if (this.cPlayerState.currentClState == controlStates.noControl)
+        this.aniStoryInitRequest.Invoke();
+
     }
 
     private void StoryCsExit(controlStates exitCs)
@@ -1777,6 +1782,8 @@ public class FSMChecker : MonoBehaviour
         }
 
         this.UpdatingAbilityList();
+
+        this.aniNormalInitRequest.Invoke();
     }
 
     private void SettingStoryMode(bool state)

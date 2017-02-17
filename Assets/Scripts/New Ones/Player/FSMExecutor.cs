@@ -3,6 +3,9 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+
+using UnityEditor.Animations;
+
 using UnityEngine.Events;
 
 public class FSMExecutor : MonoBehaviour
@@ -11,13 +14,17 @@ public class FSMExecutor : MonoBehaviour
     private const float Tolerance = 0.1f;
     #endregion
 
-
     #region Public Variables
     [HideInInspector]
     public moveValues currentMoveValues;
 
     [HideInInspector]
     public generalTweaks generalValues;
+
+    public AnimatorController[] StoryAni;
+    public Animator[] AnimatorRefs;
+
+    public List<GameObject> Forms;
     #endregion
 
     #region Events
@@ -38,6 +45,8 @@ public class FSMExecutor : MonoBehaviour
     private Coroutine specialRollAni;
 
     private Quaternion armaOriginarRot;
+
+    private bool noControlStory;
     #endregion
 
     #region Taking References and linking Events
@@ -53,12 +62,28 @@ public class FSMExecutor : MonoBehaviour
         fsmCheckerTempLink.swallowOnGround.AddListener(this.SettingAniOnGround);
         fsmCheckerTempLink.dolphinOnGround.AddListener(this.SettingAniDolphinOnGround);
         fsmCheckerTempLink.armaRolling.AddListener(this.SettingRolling);
+        fsmCheckerTempLink.aniStoryInitRequest.AddListener(this.SettingStoryAnimator);
+        fsmCheckerTempLink.aniNormalInitRequest.AddListener(this.SettingNormalAnimators);
 
         var moveHandTempLink = this.gameObject.GetComponent<MoveHandler>();
 
         moveHandTempLink.UpdatedFinalMoveRequest.AddListener(this.TakingFinalMoveUpdated);
 
         this.delayFlagRefFix.Add(true);
+
+        GameObject storyLineCheck = GameObject.FindGameObjectWithTag("StoryLine");
+
+        if (storyLineCheck != null)
+        {
+
+            StoryLineInstance slTempLink =
+                GameObject.FindGameObjectWithTag("StoryLine").GetComponent<StoryLineInstance>();
+
+            if (slTempLink != null)
+            {
+                slTempLink.AniRequest.AddListener(this.SettingAnimation);
+            }
+        }
     }
     #endregion
 
@@ -116,6 +141,7 @@ public class FSMExecutor : MonoBehaviour
 
     private void ApplyingMoveAbiEffect(Vector3 moveDirInput, string currentForm, physicStates currentPHState, List<GameObject> forms)
     {
+        if (this.noControlStory) return;
 
         switch (currentForm)
         {
@@ -816,6 +842,39 @@ public class FSMExecutor : MonoBehaviour
         }
  
         armaTransf.localRotation = this.armaOriginarRot;
+    }
+
+    private void SettingStoryAnimator()
+    {
+        this.noControlStory = true;
+
+        this.AnimatorRefs[0].runtimeAnimatorController = this.StoryAni[0];
+        this.AnimatorRefs[1].runtimeAnimatorController = this.StoryAni[1];
+        this.AnimatorRefs[2].runtimeAnimatorController = this.StoryAni[2];
+        this.AnimatorRefs[3].runtimeAnimatorController = this.StoryAni[3];
+        this.AnimatorRefs[4].runtimeAnimatorController = this.StoryAni[4];
+
+    }
+
+    private void SettingNormalAnimators()
+    {
+
+        this.AnimatorRefs[0].runtimeAnimatorController = this.StoryAni[5];
+        this.AnimatorRefs[1].runtimeAnimatorController = this.StoryAni[6];
+        this.AnimatorRefs[2].runtimeAnimatorController = this.StoryAni[7];
+        this.AnimatorRefs[3].runtimeAnimatorController = this.StoryAni[8];
+        this.AnimatorRefs[4].runtimeAnimatorController = this.StoryAni[9];
+
+        this.noControlStory = false;
+    }
+
+    private void SettingAnimation(int index)
+    {
+        var cForm = this.Forms.Find(x => x.activeInHierarchy == true);
+
+        var animator = cForm.GetComponent<Animator>();
+
+        animator.SetInteger("AniIndex", index);
     }
     #endregion
 }
