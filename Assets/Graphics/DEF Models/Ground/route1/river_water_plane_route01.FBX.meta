@@ -1,0 +1,118 @@
+fileFormatVersion: 2
+guid: 86e2e80a09b923e4e9d8df358aa0318f
+timeCreated: 1486979908
+licenseType: Free
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: piano_acqua_01
+    100002: piano_acqua_02
+    100004: piano_acqua_03
+    100006: piano_acqua_04
+    100008: piano_acqua_05
+    100010: piano_acqua_06
+    100012: piano_acqua_07
+    100014: piano_acqua_08
+    100016: piano_acqua_09
+    100018: //RootNode
+    400000: piano_acqua_01
+    400002: piano_acqua_02
+    400004: piano_acqua_03
+    400006: piano_acqua_04
+    400008: piano_acqua_05
+    400010: piano_acqua_06
+    400012: piano_acqua_07
+    400014: piano_acqua_08
+    400016: piano_acqua_09
+    400018: //RootNode
+    2300000: piano_acqua_01
+    2300002: piano_acqua_02
+    2300004: piano_acqua_03
+    2300006: piano_acqua_04
+    2300008: piano_acqua_05
+    2300010: piano_acqua_06
+    2300012: piano_acqua_07
+    2300014: piano_acqua_08
+    2300016: piano_acqua_09
+    3300000: piano_acqua_01
+    3300002: piano_acqua_02
+    3300004: piano_acqua_03
+    3300006: piano_acqua_04
+    3300008: piano_acqua_05
+    3300010: piano_acqua_06
+    3300012: piano_acqua_07
+    3300014: piano_acqua_08
+    3300016: piano_acqua_09
+    4300000: piano_acqua_09
+    4300002: piano_acqua_08
+    4300004: piano_acqua_07
+    4300006: piano_acqua_06
+    4300008: piano_acqua_05
+    4300010: piano_acqua_04
+    4300012: piano_acqua_03
+    4300014: piano_acqua_02
+    4300016: piano_acqua_01
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

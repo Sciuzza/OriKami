@@ -34,6 +34,10 @@ public class FSMExecutor : MonoBehaviour
     private Vector3 finalMoveDirTemp;
     private List<bool> delayFlagRefFix = new List<bool>();
     private Animator animatorLink;
+    private Coroutine dolphinFIx;
+    private Coroutine specialRollAni;
+
+    private Quaternion armaOriginarRot;
     #endregion
 
     #region Taking References and linking Events
@@ -46,6 +50,9 @@ public class FSMExecutor : MonoBehaviour
         fsmCheckerTempLink.genAbiUsed.AddListener(this.ApplyingAbilityEffect);
         fsmCheckerTempLink.rotationUsed.AddListener(this.ApplyingRotationEffect);
         fsmCheckerTempLink.vFissureUsed.AddListener(this.ApplyingSpecialAniAbi);
+        fsmCheckerTempLink.swallowOnGround.AddListener(this.SettingAniOnGround);
+        fsmCheckerTempLink.dolphinOnGround.AddListener(this.SettingAniDolphinOnGround);
+        fsmCheckerTempLink.armaRolling.AddListener(this.SettingRolling);
 
         var moveHandTempLink = this.gameObject.GetComponent<MoveHandler>();
 
@@ -74,6 +81,39 @@ public class FSMExecutor : MonoBehaviour
 
         formReferences.Find(x => x.tag == newForm).SetActive(true);
 
+        switch (newForm)
+        {
+            case "Standard Form":
+                this.animatorLink = formReferences[0].GetComponent<Animator>();
+                break;
+            case "Frog Form":
+                this.animatorLink = formReferences[1].GetComponent<Animator>();
+                break;
+            case "Dragon Form":
+                this.animatorLink = formReferences[2].GetComponent<Animator>();
+                break;
+            case "Armadillo Form":
+                this.animatorLink = formReferences[3].GetComponent<Animator>();
+                break;
+            case "Dolphin Form":
+                this.animatorLink = formReferences[4].GetComponent<Animator>();
+                this.dolphinFIx = this.StartCoroutine(this.FixingDolphinStuckAni());
+                break;
+        }
+       
+    }
+
+    private IEnumerator FixingDolphinStuckAni()
+    {
+        var timer = 0.05f;
+        var currentTime = 0.0f;
+
+        while (currentTime <= timer)
+        {
+            currentTime += Time.deltaTime;
+            yield return null;
+        }
+        this.dolphinFIx = null;
     }
 
     private void ApplyingMoveAbiEffect(Vector3 moveDirInput, string currentForm, physicStates currentPHState, List<GameObject> forms)
@@ -84,7 +124,7 @@ public class FSMExecutor : MonoBehaviour
             case "Standard Form":
 
 
-                this.animatorLink = forms[0].GetComponent<Animator>();
+                //this.animatorLink = forms[0].GetComponent<Animator>();
 
                 this.animatorLink.SetFloat("VerticalMove", this.finalMoveDirTemp.normalized.y);
 
@@ -131,42 +171,24 @@ public class FSMExecutor : MonoBehaviour
                 }
 
                 break;
+
             case "Frog Form":
 
-                switch (currentPHState)
+                //this.animatorLink = forms[1].GetComponent<Animator>();
+
+                this.animatorLink.SetFloat("VerticalMove", this.finalMoveDirTemp.normalized.y);
+
+                if (this.animatorLink.GetFloat("VerticalMove") == 0 && !this.animatorLink.GetBool("Ground"))
                 {
-                    case physicStates.onAir:
-                        moveSelected.Invoke(moveDirInput, generalValues.moveInAir);
-                        break;
-                    case physicStates.onWater:
-                        moveSelected.Invoke(moveDirInput, generalValues.moveInWater);
-                        break;
-                    case physicStates.onGround:
-                        moveSelected.Invoke(moveDirInput, currentMoveValues.frogMove.moveSpeed);
-                        break;
+                    this.animatorLink.SetBool("Ground", true);
+                    this.animatorLink.SetTrigger("Landing");
+                    this.StartCoroutine(this.EnablingVariableSpeed(this.delayFlagRefFix));
                 }
-
-                break;
-            case ("Dragon Form"):
-                moveSelected.Invoke(moveDirInput, currentMoveValues.craneMove.glideSpeed);
-                break;
-            case ("Armadillo Form"):
-
-                switch (currentPHState)
+                else if (this.animatorLink.GetFloat("VerticalMove") != 0 && this.animatorLink.GetBool("Ground"))
                 {
-                    case physicStates.onAir:
-                        moveSelected.Invoke(moveDirInput, generalValues.moveInAir);
-                        break;
-                    case physicStates.onWater:
-                        moveSelected.Invoke(moveDirInput, generalValues.moveInWater);
-                        break;
-                    case physicStates.onGround:
-                        moveSelected.Invoke(moveDirInput, currentMoveValues.armaMove.moveSpeed);
-                        break;
+                    this.animatorLink.SetBool("Ground", false);
+                    this.delayFlagRefFix[0] = false;
                 }
-
-                break;
-            case ("Dolphin Form"):
 
                 switch (currentPHState)
                 {
@@ -174,8 +196,117 @@ public class FSMExecutor : MonoBehaviour
                         this.moveSelected.Invoke(moveDirInput, this.generalValues.moveInAir);
                         break;
                     case physicStates.onWater:
-                        moveSelected.Invoke(moveDirInput, this.currentMoveValues.dolphinMove.swimSpeed);
+                        if (Math.Abs(moveDirInput.sqrMagnitude) > Tolerance)
+                        {
+                            this.moveSelected.Invoke(moveDirInput, this.generalValues.moveInWater);
+                        }
+                        this.animatorLink.SetFloat("Moving", Mathf.InverseLerp(0, (float)Math.Pow(this.currentMoveValues.frogMove.moveSpeed, 2), (moveDirInput * this.generalValues.moveInWater).sqrMagnitude));
                         break;
+                    case physicStates.onGround:
+                        if (Math.Abs(moveDirInput.sqrMagnitude) > Tolerance)
+                        {
+                            this.moveSelected.Invoke(moveDirInput, this.currentMoveValues.frogMove.moveSpeed);
+                        }
+                        this.animatorLink.SetFloat("Moving", Mathf.InverseLerp(0, (float)Math.Pow(this.currentMoveValues.frogMove.moveSpeed, 2), (moveDirInput * this.currentMoveValues.frogMove.moveSpeed).sqrMagnitude));
+                        break;
+                }
+
+                if (this.animatorLink.GetBool("Ground") && this.delayFlagRefFix[0])
+                {
+                    this.animatorLink.speed = Math.Abs(moveDirInput.sqrMagnitude) > Tolerance ? this.animatorLink.GetFloat("Moving") : 1;
+                }
+                else
+                {
+                    this.animatorLink.speed = 1;
+                }
+
+                break;
+
+            case "Dragon Form":
+
+                //this.animatorLink = forms[2].GetComponent<Animator>();
+
+                if (this.animatorLink.GetBool("Ground"))
+                    this.animatorLink.SetBool("Ground", false);
+
+                this.moveSelected.Invoke(moveDirInput, this.currentMoveValues.craneMove.glideSpeed);
+
+                this.animatorLink.SetFloat("Moving", Mathf.InverseLerp(0, (float)Math.Pow(this.currentMoveValues.craneMove.glideSpeed, 2), (moveDirInput * this.currentMoveValues.craneMove.glideSpeed).sqrMagnitude));
+
+                break;
+            case "Armadillo Form":
+
+                switch (currentPHState)
+                {
+                    case physicStates.onAir:
+                        if (Math.Abs(moveDirInput.sqrMagnitude) > Tolerance)
+                        {
+                        this.moveSelected.Invoke(moveDirInput, this.generalValues.moveInAir);
+                        }
+                        this.animatorLink.SetFloat("Moving", Mathf.InverseLerp(0, (float)Math.Pow(this.currentMoveValues.armaMove.moveSpeed, 2), (moveDirInput * this.generalValues.moveInAir).sqrMagnitude));
+                        break;
+                    case physicStates.onWater:
+                        if (Math.Abs(moveDirInput.sqrMagnitude) > Tolerance)
+                        {
+                            this.moveSelected.Invoke(moveDirInput, this.generalValues.moveInWater);
+                        }
+                        this.animatorLink.SetFloat("Moving", Mathf.InverseLerp(0, (float)Math.Pow(this.currentMoveValues.armaMove.moveSpeed, 2), (moveDirInput * this.generalValues.moveInWater).sqrMagnitude));
+                        break;
+                    case physicStates.onGround:
+                        if (Math.Abs(moveDirInput.sqrMagnitude) > Tolerance)
+                        {
+                            this.moveSelected.Invoke(moveDirInput, this.currentMoveValues.armaMove.moveSpeed);
+                        }
+                        this.animatorLink.SetFloat("Moving", Mathf.InverseLerp(0, (float)Math.Pow(this.currentMoveValues.armaMove.moveSpeed, 2), (moveDirInput * this.currentMoveValues.armaMove.moveSpeed).sqrMagnitude));
+                        break;
+                }
+
+                break;
+            case "Dolphin Form":
+
+                if (this.dolphinFIx != null) return;
+
+                //this.animatorLink = forms[4].GetComponent<Animator>();
+
+                this.animatorLink.SetFloat("VerticalMove", this.finalMoveDirTemp.normalized.y);
+
+                if (this.animatorLink.GetFloat("VerticalMove") == 0 && !this.animatorLink.GetBool("Water") && !this.animatorLink.GetBool("Ground"))
+                {
+                    this.animatorLink.SetBool("Water", true);
+                    this.animatorLink.SetTrigger("Landing");
+                    this.StartCoroutine(this.EnablingVariableSpeed(this.delayFlagRefFix));
+                }
+                else if (this.animatorLink.GetFloat("VerticalMove") != 0 && this.animatorLink.GetBool("Water"))
+                {
+                    this.animatorLink.SetBool("Water", false);
+                    this.delayFlagRefFix[0] = false;
+                }
+
+                switch (currentPHState)
+                {
+                    case physicStates.onAir:
+                        this.moveSelected.Invoke(moveDirInput, this.generalValues.moveInAir);
+                        break;
+                    case physicStates.onWater:
+
+                        if (!this.animatorLink.GetBool("Water"))
+                            this.animatorLink.SetBool("Water", true);
+
+                        if (Math.Abs(moveDirInput.sqrMagnitude) > Tolerance)
+                        {
+                            this.moveSelected.Invoke(moveDirInput, this.currentMoveValues.dolphinMove.swimSpeed);
+                        }
+                        this.animatorLink.SetFloat("Moving", Mathf.InverseLerp(0, (float)Math.Pow(this.currentMoveValues.dolphinMove.swimSpeed, 2), (moveDirInput * this.currentMoveValues.dolphinMove.swimSpeed).sqrMagnitude));
+                        break;
+                }
+
+                if (this.animatorLink.GetBool("Water") && this.delayFlagRefFix[0])
+                {
+                    this.animatorLink.speed = Math.Abs(moveDirInput.sqrMagnitude) > Tolerance ? this.animatorLink.GetFloat("Moving") : 1;
+                }
+                else
+                {
+                    this.animatorLink.speed = 1;
                 }
 
                 break;
@@ -191,6 +322,7 @@ public class FSMExecutor : MonoBehaviour
             case abilties.jump:
                 switch (currentForm)
                 {
+<<<<<<< HEAD
                     case ("Standard Form"):
                         var aniTemp = forms[0].GetComponent<Animator>();
                         aniTemp.SetTrigger("Jumping");
@@ -200,16 +332,29 @@ public class FSMExecutor : MonoBehaviour
                     case ("Frog Form"):
                         jumpSelected.Invoke(currentMoveValues.frogMove.jumpStrength);
                         playerref.JumpSound();
+=======
+                    case "Standard Form":
+                        var aniTempStd = forms[0].GetComponent<Animator>();
+                        aniTempStd.SetTrigger("Jumping");
+                        this.jumpSelected.Invoke(this.currentMoveValues.standMove.jumpStrength);
                         break;
-                    case ("Dolphin Form"):
-                        jumpSelected.Invoke(currentMoveValues.dolphinMove.jumpStrength);
+                    case "Frog Form":
+                        var aniTempFrog = forms[1].GetComponent<Animator>();
+                        aniTempFrog.SetTrigger("Jumping");
+                        this.jumpSelected.Invoke(this.currentMoveValues.frogMove.jumpStrength);
+>>>>>>> d540234321ad2081a3fbb74c118d261249fe49ee
+                        break;
+                    case "Dolphin Form":
+                        var aniTempDolphin = forms[4].GetComponent<Animator>();
+                        aniTempDolphin.SetTrigger("Jumping");
+                        this.jumpSelected.Invoke(this.currentMoveValues.dolphinMove.jumpStrength);
                         break;
                 }
+
                 break;
             case abilties.roll:
-                rollSelected.Invoke(currentMoveValues.armaMove.rollingStrength);
+                this.rollSelected.Invoke(this.currentMoveValues.armaMove.rollingStrength);
                 break;
-
         }
     }
 
@@ -603,6 +748,88 @@ public class FSMExecutor : MonoBehaviour
     private void TakingFinalMoveUpdated(Vector3 currentMove)
     {
         this.finalMoveDirTemp = currentMove;
+    }
+
+    private void SettingAniOnGround(bool isOnGround)
+    {
+        this.animatorLink.SetBool("Ground", isOnGround);
+    }
+
+    private void SettingAniDolphinOnGround(bool isOnGround)
+    {
+        this.animatorLink.SetBool("Ground", isOnGround);
+        this.animatorLink.SetBool("Water", false);
+    }
+
+    private void SettingRolling(bool isRolling)
+    {
+        if (this.gameObject.GetComponentInChildren<Animator>().name == "Armadillo")
+        this.animatorLink.SetBool("Rolling", isRolling);
+
+        if (isRolling)
+        {
+            if (this.gameObject.GetComponentInChildren<Animator>().name == "Armadillo")
+                this.specialRollAni = this.StartCoroutine(this.SpecialRollingAni());
+
+        }
+        else
+        {
+            if (this.gameObject.GetComponentInChildren<Animator>().name == "Armadillo" && this.specialRollAni != null)
+            {
+                this.StopCoroutine(this.specialRollAni);
+            this.specialRollAni = null;
+            this.StartCoroutine(this.SpecialRollingAniReturn());
+                
+            }
+            else
+            {
+                if (this.specialRollAni != null)
+                {
+                    this.StopCoroutine(this.specialRollAni);
+                    this.specialRollAni = null;
+                }
+
+            }
+        }
+    }
+
+    private IEnumerator SpecialRollingAni()
+    {
+        var armadillo = GameObject.FindGameObjectWithTag("Armadillo Form");
+
+        var armaTransf = armadillo.transform;
+
+        this.armaOriginarRot = armaTransf.localRotation;
+
+        while (true)
+        {
+            armaTransf.RotateAround(armaTransf.position, armaTransf.right, Time.deltaTime * 1440f);
+
+            yield return null;
+        }
+    }
+
+    private IEnumerator SpecialRollingAniReturn()
+    {
+        var armadillo = GameObject.FindGameObjectWithTag("Armadillo Form");
+
+        var armaTransf = armadillo.transform;
+
+        var startingRot = armaTransf.localRotation;
+
+        var timePassed = 0f;
+
+        var timeTaken = 0.2f;
+
+        while (timePassed <= 1)
+        {
+            timePassed += Time.deltaTime / timeTaken;
+
+            armaTransf.localRotation = Quaternion.Slerp(startingRot, this.armaOriginarRot, timePassed);
+            yield return null;
+        }
+ 
+        armaTransf.localRotation = this.armaOriginarRot;
     }
     #endregion
 }

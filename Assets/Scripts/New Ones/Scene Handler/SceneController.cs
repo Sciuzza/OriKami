@@ -39,6 +39,10 @@ public class SceneController : MonoBehaviour
 
         //this.SavingSceneRef();
 
+        SuperDataManager stmTempLink = this.gameObject.GetComponent<SuperDataManager>();
+
+        stmTempLink.SwitchSceneRequest.AddListener(this.ChangingScenehandler);
+
     }
 
 
@@ -72,16 +76,7 @@ public class SceneController : MonoBehaviour
     #region Gameplay Intialization
     private void GamePlayInitialization(GameObject player)
     {
-        FSMChecker fsmTempLink = player.GetComponent<FSMChecker>();
-
-      //  fsmTempLink.deathRequest.AddListener(ResettingCurrentScene);
-
-        MoveHandler mhTempLink = player.GetComponent<MoveHandler>();
-
-     //   mhTempLink.deathRequest.AddListener(ResettingCurrentScene);
-
-
-        PlayerInputs plTempLink = player.GetComponent<PlayerInputs>();
+        var plTempLink = player.GetComponent<PlayerInputs>();
 
         plTempLink.mainMenuRequest.AddListener(LoadingScenebyIndex);
         plTempLink.nextSceneRequest.AddListener(LoadingNextScene);
@@ -181,9 +176,6 @@ public class SceneController : MonoBehaviour
 
     private void ChangingScenehandler(string sceneName)
     {
-        var sceneIndex = SceneManager.GetSceneByName(sceneName).buildIndex;
-
-
         if (sceneName == "Main Menu")
         {
             this.stoppingLogicRequest.Invoke();

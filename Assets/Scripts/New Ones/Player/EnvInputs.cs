@@ -16,7 +16,7 @@ public class EnvInputs : MonoBehaviour
     public event_Gb cameraOffRequest;
 
     public event_collider storyActivationRequest, storyZoneExit, storyZoneEnter;
-
+    public UnityEvent SaveRequestByCheck;
     #endregion
 
     #region Taking References
@@ -123,7 +123,7 @@ public class EnvInputs : MonoBehaviour
                 break;
             case "CheckPoint":
                 envTrigger.gameObject.SetActive(false);
-                GameObject.FindGameObjectWithTag("GameController").GetComponent<SuperDataManager>().RequestingSave();
+                this.SaveRequestByCheck.Invoke();
                 Debug.Log("Saved");
                 break;
         }
