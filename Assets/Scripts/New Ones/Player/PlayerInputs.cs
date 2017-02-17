@@ -215,7 +215,7 @@ public class PlayerInputs : MonoBehaviour
         if (jumpPressed())
         {
             genAbiRequest.Invoke(abilties.jump);
-            JumpSound();
+            //JumpSound();
         }
         else if (toFrogPressed())
         {

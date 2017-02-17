@@ -52,6 +52,8 @@ public class FSMExecutor : MonoBehaviour
         moveHandTempLink.UpdatedFinalMoveRequest.AddListener(this.TakingFinalMoveUpdated);
 
         this.delayFlagRefFix.Add(true);
+
+        playerref =  GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerInputs>();
     }
     #endregion
 
@@ -193,9 +195,11 @@ public class FSMExecutor : MonoBehaviour
                         var aniTemp = forms[0].GetComponent<Animator>();
                         aniTemp.SetTrigger("Jumping");
                         jumpSelected.Invoke(currentMoveValues.standMove.jumpStrength);
+                        playerref.JumpSound();
                         break;
                     case ("Frog Form"):
                         jumpSelected.Invoke(currentMoveValues.frogMove.jumpStrength);
+                        playerref.JumpSound();
                         break;
                     case ("Dolphin Form"):
                         jumpSelected.Invoke(currentMoveValues.dolphinMove.jumpStrength);
