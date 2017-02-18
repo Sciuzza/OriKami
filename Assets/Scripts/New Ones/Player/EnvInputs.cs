@@ -40,7 +40,7 @@ public class EnvInputs : MonoBehaviour
             if (onAir)
             {
 
-                if (!onWaterFlag && !onWater && Physics.Raycast(new Ray(this.gameObject.transform.position, -this.gameObject.transform.up), 0.7f))
+                if (!onWaterFlag && !onWater)
                 {
                     //Debug.Log("Terra");
                     psChanged.Invoke(physicStates.onGround);
@@ -59,7 +59,7 @@ public class EnvInputs : MonoBehaviour
             }
             else
             {
-                if (!onWaterFlag && onWater && !onGround && Physics.Raycast(new Ray(this.gameObject.transform.position, -this.gameObject.transform.up), 0.7f))
+                if (!onWaterFlag && onWater && !onGround)
                 {
                     //Debug.Log("Terra");
                     psChanged.Invoke(physicStates.onGround);

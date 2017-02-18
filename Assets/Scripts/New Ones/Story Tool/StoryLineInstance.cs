@@ -2350,7 +2350,7 @@ public class StoryLineInstance : MonoBehaviour
         {
             for (var index = 0; index < aniEffectToEvaluate.Count; index++)
             {
-                if (index == 0)
+                if (index == 0 && aniEffectToEvaluate[index].GbRef != null)
                 {
                     this.PlayAniEffect(aniEffectToEvaluate[index]);
                     gbCheckTempRepo.Add(aniEffectToEvaluate[index].GbRef);
@@ -2359,7 +2359,7 @@ public class StoryLineInstance : MonoBehaviour
                 }
                 else
                 {
-                    if (!gbCheckTempRepo.Contains(aniEffectToEvaluate[index].GbRef))
+                    if (aniEffectToEvaluate[index].GbRef != null && !gbCheckTempRepo.Contains(aniEffectToEvaluate[index].GbRef))
                     {
                         this.PlayAniEffect(aniEffectToEvaluate[index]);
                         gbCheckTempRepo.Add(aniEffectToEvaluate[index].GbRef);

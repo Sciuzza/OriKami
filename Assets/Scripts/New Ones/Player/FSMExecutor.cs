@@ -124,7 +124,6 @@ public class FSMExecutor : MonoBehaviour
                 this.dolphinFIx = this.StartCoroutine(this.FixingDolphinStuckAni());
                 break;
         }
-       
     }
 
     private IEnumerator FixingDolphinStuckAni()
@@ -343,7 +342,6 @@ public class FSMExecutor : MonoBehaviour
     {
         switch (abiUsed)
         {
-
             case abilties.jump:
                 switch (currentForm)
                 {
@@ -375,25 +373,21 @@ public class FSMExecutor : MonoBehaviour
 
     private void ApplyingRotationEffect(Vector3 abiDirInput, playerStates currentPl)
     {
-
         switch (currentPl)
         {
 
             case playerStates.flying:
 
             case playerStates.movingBlock:
-                rotSelected.Invoke(abiDirInput, generalValues.rotateSpeed / 3);
+                this.rotSelected.Invoke(abiDirInput, this.generalValues.rotateSpeed / 3);
                 break;
             case playerStates.rolling:
-                specialRotSelected.Invoke(abiDirInput, generalValues.rotateSpeed / 3);
+                this.specialRotSelected.Invoke(abiDirInput, this.generalValues.rotateSpeed / 3);
                 break;
             default:
-                rotSelected.Invoke(abiDirInput, generalValues.rotateSpeed);
+                this.rotSelected.Invoke(abiDirInput, this.generalValues.rotateSpeed);
                 break;
-
-
         }
-
     }
     #endregion
 

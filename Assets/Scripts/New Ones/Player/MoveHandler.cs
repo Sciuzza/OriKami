@@ -20,6 +20,12 @@ public class MoveHandler : MonoBehaviour
     private float verticalVelocity = 0.0f;
     private CollisionFlags flags;
     private bool roofHit = false;
+
+    private RaycastHit hitInfo;
+    private Vector3 plCurrentPos;
+    private Ray rayTest;
+    public static bool sliding;
+    public LayerMask Env;
     #endregion
 
     #region Events
@@ -63,59 +69,85 @@ public class MoveHandler : MonoBehaviour
     {
         while (this.ccLink != null)
         {
-            float timeTakeThisFrame = Time.deltaTime;
+            this.plCurrentPos = this.gameObject.transform.position;
+            this.rayTest = new Ray(this.plCurrentPos, -Vector3.up);
 
-            if (rolling)
+            var timeTakeThisFrame = Time.deltaTime;
+
+            if (this.rolling)
             {
-                finalMove = Vector3.Slerp(finalMove.normalized, rollDir.normalized, timeTakeThisFrame);
+                this.finalMove = Vector3.Slerp(this.finalMove.normalized, this.rollDir.normalized, timeTakeThisFrame);
 
-                float height = finalMove.y;
+                float height = this.finalMove.y;
 
-                finalMove.y = 0;
+                this.finalMove.y = 0;
 
-                if ((ccLink.collisionFlags & CollisionFlags.Below) != 0)
-                    this.transform.rotation = Quaternion.LookRotation(finalMove, Vector3.up);
+                if ((this.ccLink.collisionFlags & CollisionFlags.Below) != 0)
+                    this.transform.rotation = Quaternion.LookRotation(this.finalMove, Vector3.up);
 
-                finalMove.y = height;
+                this.finalMove.y = height;
 
-                finalMove *= rollStrength;
+                this.finalMove *= this.rollStrength;
 
 
             }
 
+            this.finalMove *= timeTakeThisFrame;
 
+            if (!this.gliding) this.verticalVelocity += this.gravityStr * timeTakeThisFrame;
+            else this.verticalVelocity = -1;
 
-            finalMove *= timeTakeThisFrame;
+            this.finalMove.y = this.verticalVelocity * timeTakeThisFrame;
 
-            if (!gliding)
-                verticalVelocity += gravityStr * timeTakeThisFrame;
-            else
-                verticalVelocity = -1;
+            this.flags = this.ccLink.Move(this.finalMove);
 
-            finalMove.y = verticalVelocity * timeTakeThisFrame;
-
-            flags = ccLink.Move(finalMove);
-
-            if ((flags & CollisionFlags.Below) != 0 && Physics.Raycast(new Ray(this.gameObject.transform.position, -this.gameObject.transform.up), 0.7f))
+            if ((this.flags & CollisionFlags.Below) != 0)
             {
-                if (verticalVelocity <= -hitImpactVel) deathRequest.Invoke();
+                if (Physics.SphereCast(this.rayTest, 0.1f, out this.hitInfo, 100, this.Env.value))
+                {
+
+                    Debug.Log(Vector3.Dot(this.hitInfo.normal, Vector3.up));
+                    Debug.Log(this.hitInfo.transform.name);
+
+                    if (Vector3.Dot(this.hitInfo.normal, Vector3.up) >= 0 && Vector3.Dot(this.hitInfo.normal, Vector3.up) < 0.75f)
+                    {
+                        sliding = true;
+                        //this.finalMove = -this.gameObject.transform.forward * 3;
+                        var virtualGb = new GameObject();
+                        virtualGb.transform.position = this.plCurrentPos;
+                        virtualGb.transform.forward = -this.hitInfo.normal;
+                        this.finalMove = -virtualGb.transform.up * 3;
+
+                        Destroy(virtualGb);
+                    }
+                    else
+                    {
+                        sliding = false;
+                    }
+                }
                 else
                 {
-                    verticalVelocity = -3f;
+                    sliding = false;
+                }
+
+
+                if (this.verticalVelocity <= -this.hitImpactVel) this.deathRequest.Invoke();
+                else
+                {
+                    this.verticalVelocity = -3f;
                     this.finalMove.y = 0;
                 }
 
-                if (roofHit)
-                    roofHit = false;
+                if (this.roofHit) this.roofHit = false;
+
             }
-            else if ((flags & CollisionFlags.Above) != 0 && !roofHit)
+            else if ((this.flags & CollisionFlags.Above) != 0 && !this.roofHit)
             {
-                roofHit = true;
-                verticalVelocity = 0;
+                this.roofHit = true;
+                this.verticalVelocity = 0;
             }
 
             this.UpdatedFinalMoveRequest.Invoke(this.finalMove);
-            //Debug.Log(this.finalMove.y);
 
             yield return null;
         }
@@ -129,7 +161,7 @@ public class MoveHandler : MonoBehaviour
 
     private void HandlingMove(Vector3 inputDir, float moveSpeed)
     {
-        finalMove = inputDir * moveSpeed;
+        if (!sliding) this.finalMove = inputDir * moveSpeed;
     }
 
     private void HandlingRot(Vector3 inputDir, float rotSpeed)
@@ -173,6 +205,6 @@ public class MoveHandler : MonoBehaviour
     private void SettingNormalGravity()
     {
         gliding = false;
-    } 
+    }
     #endregion
 }

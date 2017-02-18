@@ -425,6 +425,7 @@ public class FSMChecker : MonoBehaviour
             {
 
                 case abilties.jump:
+                    if (!MoveHandler.sliding)
                     this.genAbiUsed.Invoke(abiReceived, this.cPlayerState.currentForm, this.cPlayerState.forms);
                     break;
                 case abilties.roll:
