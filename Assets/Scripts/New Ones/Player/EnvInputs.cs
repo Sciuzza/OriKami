@@ -17,6 +17,7 @@ public class EnvInputs : MonoBehaviour
 
     public event_collider storyActivationRequest, storyZoneExit, storyZoneEnter;
     public UnityEvent SaveRequestByCheck;
+    public event_Gb wallDCheckRequest;
     #endregion
 
     #region Taking References
@@ -125,6 +126,9 @@ public class EnvInputs : MonoBehaviour
                 envTrigger.gameObject.SetActive(false);
                 this.SaveRequestByCheck.Invoke();
                 Debug.Log("Saved");
+                break;
+            case "WallD":
+                this.wallDCheckRequest.Invoke(envTrigger.gameObject);
                 break;
         }
 

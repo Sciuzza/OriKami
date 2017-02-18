@@ -409,7 +409,7 @@ public class SuperDataManager : MonoBehaviour
         Collectibles clTempLink = player.GetComponent<Collectibles>();
 
         this.PlNsData.Collectible1 = clTempLink.GoldenCollectible;
-        this.PlNsData.Collectible2 = clTempLink.Collectible2;
+        this.PlNsData.Collectible2 = clTempLink.DWall;
         this.PlNsData.Collectible3 = clTempLink.Collectible3;
         this.PlNsData.Collectible4 = clTempLink.Collectible4;
     }

@@ -308,6 +308,7 @@ public class FSMChecker : MonoBehaviour
         enInputsTempLink.vFissureRequestOff.AddListener(RemovingVFissureAvailability);
         enInputsTempLink.cameraOffRequest.AddListener(this.ChangingCameraToOff);
         enInputsTempLink.cameraOnRequest.AddListener(this.ChangingCameraToOn);
+        enInputsTempLink.wallDCheckRequest.AddListener(this.WallDestructibleHandler);
 
         FSMExecutor fsmExeTempLink = this.gameObject.GetComponent<FSMExecutor>();
 
@@ -1673,6 +1674,15 @@ public class FSMChecker : MonoBehaviour
                 break;
         }
     }
+
+    private void WallDestructibleHandler(GameObject wall)
+    {
+        if (this.cPlayerState.currentPlState == playerStates.rolling)
+        {
+            DestroyImmediate(wall);
+
+        }
+    }
     #endregion
 
     #region Designer Camera Handler
@@ -1995,7 +2005,7 @@ public class FSMChecker : MonoBehaviour
         var clTempLink = this.gameObject.GetComponent<Collectibles>();
 
         plNsDataToUpdate.Collectible1 = clTempLink.GoldenCollectible;
-        plNsDataToUpdate.Collectible2 = clTempLink.Collectible2;
+        plNsDataToUpdate.Collectible2 = clTempLink.DWall;
         plNsDataToUpdate.Collectible3 = clTempLink.Collectible3;
         plNsDataToUpdate.Collectible4 = clTempLink.Collectible4;
 
@@ -2033,7 +2043,7 @@ public class FSMChecker : MonoBehaviour
         var clTempLink = this.gameObject.GetComponent<Collectibles>();
 
         clTempLink.GoldenCollectible = plNsDataToUpdate.Collectible1;
-        clTempLink.Collectible2 = plNsDataToUpdate.Collectible2;
+        clTempLink.DWall = plNsDataToUpdate.Collectible2;
         clTempLink.Collectible3 = plNsDataToUpdate.Collectible3;
         clTempLink.Collectible4 = plNsDataToUpdate.Collectible4;
 

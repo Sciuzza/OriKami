@@ -8,7 +8,7 @@ public class Collectibles : MonoBehaviour
 
 
     public int GoldenCollectible = 0;
-    public int Collectible2 = 0;
+    public int DWall = 0;
     public int Collectible3 = 0;
     public int Collectible4 = 0;
 
