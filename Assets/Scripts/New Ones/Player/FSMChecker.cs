@@ -220,6 +220,8 @@ public class FSMChecker : MonoBehaviour
     public formsSettings abiUnlocked;
     public playerLegends legUnlocked;
     public float drowTimerSetting;
+
+    public ParticleSystem ArmaRollingPart;
     #endregion
 
     #region Private Variables
@@ -281,6 +283,7 @@ public class FSMChecker : MonoBehaviour
     public event_bool dolphinOnGround;
     public event_bool armaRolling;
     public UnityEvent aniStoryInitRequest, aniNormalInitRequest;
+    public event_int IncrementCollectibleRequest;
     #endregion
 
     #region Initialization Methods
@@ -428,6 +431,7 @@ public class FSMChecker : MonoBehaviour
                     this.cPlayerState.currentPlState = playerStates.rolling;
                     this.UpdatingAbilityList();
                     this.armaRolling.Invoke(true);
+                    this.ArmaRollingPart.Play();
                     this.genAbiUsed.Invoke(abiReceived, this.cPlayerState.currentForm, this.cPlayerState.forms);
                     break;
                 case abilties.VFissure:
@@ -1570,6 +1574,7 @@ public class FSMChecker : MonoBehaviour
         //cPlayerState.currentClState = controlStates.totalControl;
         UpdatingAbilityList();
         this.armaRolling.Invoke(false);
+        this.ArmaRollingPart.Stop();
         stoppingRollLogic.Invoke();
     }
 
@@ -1679,8 +1684,8 @@ public class FSMChecker : MonoBehaviour
     {
         if (this.cPlayerState.currentPlState == playerStates.rolling)
         {
-            DestroyImmediate(wall);
-
+            Destroy(wall);
+            this.IncrementCollectibleRequest.Invoke(1);
         }
     }
     #endregion

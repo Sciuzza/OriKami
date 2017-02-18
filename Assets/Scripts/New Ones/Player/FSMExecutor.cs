@@ -831,7 +831,7 @@ public class FSMExecutor : MonoBehaviour
 
         var timePassed = 0f;
 
-        var timeTaken = 0.2f;
+        var timeTaken = 0.05f;
 
         while (timePassed <= 1)
         {

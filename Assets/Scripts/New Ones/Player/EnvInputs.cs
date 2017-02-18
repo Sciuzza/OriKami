@@ -127,9 +127,6 @@ public class EnvInputs : MonoBehaviour
                 this.SaveRequestByCheck.Invoke();
                 Debug.Log("Saved");
                 break;
-            case "WallD":
-                this.wallDCheckRequest.Invoke(envTrigger.gameObject);
-                break;
         }
 
     }
@@ -159,6 +156,28 @@ public class EnvInputs : MonoBehaviour
                 break;
             case "Story Triggers":
                 this.storyZoneExit.Invoke(envTrigger);
+                break;
+        }
+    }
+
+    void OnCollisionEnter(Collision envCollision)
+    {
+        switch (envCollision.gameObject.tag)
+        {
+                
+             case "WallD":
+                this.wallDCheckRequest.Invoke(envCollision.gameObject);
+        break;
+        }
+    }
+
+    void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+        switch (hit.collider.gameObject.tag)
+        {
+
+            case "WallD":
+                this.wallDCheckRequest.Invoke(hit.collider.gameObject);
                 break;
         }
     }

@@ -15,6 +15,13 @@ public class Collectibles : MonoBehaviour
     public Text countText;
 
 
+    private void Awake()
+    {
+        FSMChecker fsmTempLink = this.gameObject.GetComponent<FSMChecker>();
+
+        fsmTempLink.IncrementCollectibleRequest.AddListener(this.CollectibleHandler);
+    }
+
     void OnTriggerEnter(Collider other)
 
     {
@@ -27,7 +34,24 @@ public class Collectibles : MonoBehaviour
         }
     }
 
-
+    private void CollectibleHandler(int index)
+    {
+        switch (index)
+        {
+            case 0:
+                this.GoldenCollectible++;
+                break;
+            case 1:
+                this.DWall++;
+                break;
+            case 2:
+                this.Collectible3++;
+                break;
+            case 3:
+                this.Collectible4++;
+                break;
+        }
+    }
 }
 
 
