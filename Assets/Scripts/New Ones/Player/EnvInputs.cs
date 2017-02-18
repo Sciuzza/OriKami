@@ -40,7 +40,7 @@ public class EnvInputs : MonoBehaviour
             if (onAir)
             {
 
-                if (!onWaterFlag && !onWater)
+                if (!onWaterFlag && !onWater && Physics.Raycast(new Ray(this.gameObject.transform.position, -this.gameObject.transform.up), 0.7f))
                 {
                     //Debug.Log("Terra");
                     psChanged.Invoke(physicStates.onGround);
@@ -59,7 +59,7 @@ public class EnvInputs : MonoBehaviour
             }
             else
             {
-                if (!onWaterFlag && onWater && !onGround)
+                if (!onWaterFlag && onWater && !onGround && Physics.Raycast(new Ray(this.gameObject.transform.position, -this.gameObject.transform.up), 0.7f))
                 {
                     //Debug.Log("Terra");
                     psChanged.Invoke(physicStates.onGround);
@@ -157,17 +157,6 @@ public class EnvInputs : MonoBehaviour
             case "Story Triggers":
                 this.storyZoneExit.Invoke(envTrigger);
                 break;
-        }
-    }
-
-    void OnCollisionEnter(Collision envCollision)
-    {
-        switch (envCollision.gameObject.tag)
-        {
-                
-             case "WallD":
-                this.wallDCheckRequest.Invoke(envCollision.gameObject);
-        break;
         }
     }
 

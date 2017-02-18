@@ -96,7 +96,7 @@ public class MoveHandler : MonoBehaviour
 
             flags = ccLink.Move(finalMove);
 
-            if ((flags & CollisionFlags.Below) != 0)
+            if ((flags & CollisionFlags.Below) != 0 && Physics.Raycast(new Ray(this.gameObject.transform.position, -this.gameObject.transform.up), 0.7f))
             {
                 if (verticalVelocity <= -hitImpactVel) deathRequest.Invoke();
                 else
