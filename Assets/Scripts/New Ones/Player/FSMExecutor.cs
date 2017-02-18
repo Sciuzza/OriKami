@@ -322,27 +322,20 @@ public class FSMExecutor : MonoBehaviour
             case abilties.jump:
                 switch (currentForm)
                 {
-<<<<<<< HEAD
+
                     case ("Standard Form"):
                         var aniTemp = forms[0].GetComponent<Animator>();
                         aniTemp.SetTrigger("Jumping");
                         jumpSelected.Invoke(currentMoveValues.standMove.jumpStrength);
                         playerref.JumpSound();
-                        break;
-                    case ("Frog Form"):
-                        jumpSelected.Invoke(currentMoveValues.frogMove.jumpStrength);
-                        playerref.JumpSound();
-=======
-                    case "Standard Form":
-                        var aniTempStd = forms[0].GetComponent<Animator>();
-                        aniTempStd.SetTrigger("Jumping");
-                        this.jumpSelected.Invoke(this.currentMoveValues.standMove.jumpStrength);
-                        break;
+                        break; 
+                    
                     case "Frog Form":
                         var aniTempFrog = forms[1].GetComponent<Animator>();
+                        playerref.JumpSound();
                         aniTempFrog.SetTrigger("Jumping");
                         this.jumpSelected.Invoke(this.currentMoveValues.frogMove.jumpStrength);
->>>>>>> d540234321ad2081a3fbb74c118d261249fe49ee
+
                         break;
                     case "Dolphin Form":
                         var aniTempDolphin = forms[4].GetComponent<Animator>();
