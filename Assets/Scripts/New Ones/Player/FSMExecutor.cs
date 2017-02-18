@@ -52,6 +52,7 @@ public class FSMExecutor : MonoBehaviour
     #region Taking References and linking Events
     void Awake()
     {
+        playerref = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerInputs>();
         var fsmCheckerTempLink = this.gameObject.GetComponent<FSMChecker>();
 
         fsmCheckerTempLink.formChanged.AddListener(this.ApplyingFormEffect);
@@ -349,11 +350,13 @@ public class FSMExecutor : MonoBehaviour
                     case "Standard Form":
                         var aniTempStd = forms[0].GetComponent<Animator>();
                         aniTempStd.SetTrigger("Jumping");
+                        playerref.JumpSound();
                         this.jumpSelected.Invoke(this.currentMoveValues.standMove.jumpStrength);
                         break;
                     case "Frog Form":
                         var aniTempFrog = forms[1].GetComponent<Animator>();
                         aniTempFrog.SetTrigger("Jumping");
+                        playerref.JumpSound();
                         this.jumpSelected.Invoke(this.currentMoveValues.frogMove.jumpStrength);
                         break;
                     case "Dolphin Form":

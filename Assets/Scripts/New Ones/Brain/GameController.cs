@@ -61,11 +61,34 @@ public class GameController : MonoBehaviour
             StartCoroutine(this.player.GetComponent<MoveHandler>().MoveHandlerUpdate());
 
             #region Background Music
+
             Scene scene = SceneManager.GetActiveScene();
-            if (scene.name==("Armadillos' Village") || scene.name == "Dolphins and Swallows' Village" || scene.name == "Dragon's Spring Temple" )
+
+            if (scene.name=="Frogs' Village")
             {
-                StartCoroutine(MusciCO());
+                StartCoroutine(FrogVillageSoundTrack());
             }
+
+            else if (scene.name == "Dolphins and Swallows' Village")
+            {
+                StartCoroutine(DolphinVillageSoundTrackCO());
+            }
+
+            else if (scene.name == "Armadillos' Village")
+            {
+                StartCoroutine(ArmadilloVillageSoundTrackCO());
+            }
+
+            else if (scene.name == "Route 1" || scene.name == "Route 2" || scene.name == "route 3" || scene.name == "Route 4")
+            {
+                StartCoroutine(RouteSoundTrackCO());
+            }
+
+            else if (scene.name == "Dragon's Spring Temple")
+            {
+                StartCoroutine(DragonTempleSoundTrackCO());
+            }
+
             #endregion
 
         }
@@ -76,13 +99,40 @@ public class GameController : MonoBehaviour
         }
     }
 
-    IEnumerator MusciCO()
+    #region Coroutines for SoundTracks
+
+    IEnumerator FrogVillageSoundTrack()
     {
         soundRef.PlaySound(1, 5);
-        yield return new WaitForSeconds(soundRef.PersistendAudio[1].AudioSourceRef.clip.length /*AudiosourceRef.clip.length*/);
-        soundRef.PlaySound(1, 6);
-
+        yield return new WaitForSeconds(soundRef.PersistendAudio[1].AudioSourceRef.clip.length);
+        soundRef.PlaySound(0, 1);
     }
+    IEnumerator DolphinVillageSoundTrackCO()
+    {
+        soundRef.PlaySound(1, 5);
+        yield return new WaitForSeconds(soundRef.PersistendAudio[1].AudioSourceRef.clip.length);
+        soundRef.PlaySound(0, 2);
+    }
+    IEnumerator ArmadilloVillageSoundTrackCO()
+    {
+        soundRef.PlaySound(1, 5);
+        yield return new WaitForSeconds(soundRef.PersistendAudio[1].AudioSourceRef.clip.length);
+        soundRef.PlaySound(0, 3);
+    }
+    IEnumerator RouteSoundTrackCO()
+    {
+        soundRef.PlaySound(1, 5);
+        yield return new WaitForSeconds(soundRef.PersistendAudio[1].AudioSourceRef.clip.length);
+        soundRef.PlaySound(0, 4);
+    }
+    IEnumerator DragonTempleSoundTrackCO()
+    {
+        soundRef.PlaySound(1, 5);
+        yield return new WaitForSeconds(soundRef.PersistendAudio[1].AudioSourceRef.clip.length);
+        soundRef.PlaySound(0, 5);
+    }
+
+    #endregion
 
     public bool FindingPlayer()
     {
