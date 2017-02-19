@@ -673,6 +673,7 @@ public class StoryLineInstance : MonoBehaviour
                 this.CameraEffectsHandler();
                 this.EnvEffectsHandler();
                 this.UiEffectsHandler();
+                this.SoundEffectsHandler();
                 this.AniEffectsHandler();
                 this.MovieEffectsHandler();
 
@@ -701,6 +702,7 @@ public class StoryLineInstance : MonoBehaviour
                     this.CameraEffectsHandler();
                     this.EnvEffectsHandler();
                     this.UiEffectsHandler();
+                    this.SoundEffectsHandler();
                     this.AniEffectsHandler();
                     this.MovieEffectsHandler();
 
@@ -720,6 +722,7 @@ public class StoryLineInstance : MonoBehaviour
                     this.CameraEffectsHandler();
                     this.EnvEffectsHandler();
                     this.UiEffectsHandler();
+                    this.SoundEffectsHandler();
                     this.AniEffectsHandler();
                     this.MovieEffectsHandler();
 
@@ -1752,6 +1755,14 @@ public class StoryLineInstance : MonoBehaviour
 
         var timePassed = 0f;
 
+        var animated = false;
+
+        if (movingObjEffect.GbToMove.GetComponent<Animator>() != null)
+        {
+            animated = true;
+            movingObjEffect.GbToMove.GetComponent<Animator>().SetInteger("AniIndex", 1);
+        }
+
         while (!posReached)
         {
             timePassed += Time.deltaTime / timeTaken;
@@ -1772,6 +1783,10 @@ public class StoryLineInstance : MonoBehaviour
 
             yield return null;
         }
+
+
+        if (animated)
+            movingObjEffect.GbToMove.GetComponent<Animator>().SetInteger("AniIndex", 0);
 
         movingObjEffect.End = true;
         this.effectCounter++;
@@ -2338,6 +2353,10 @@ public class StoryLineInstance : MonoBehaviour
     #region Sound Effects Methods
     private void SoundEffectsHandler()
     {
+        var soundEffectToEvaluate = new List<SoundEffect>();
+        soundEffectToEvaluate.AddRange(this.storySelected.Events[this.eventIndex].Effects.SoundEffect);
+
+
 
     }
     #endregion
