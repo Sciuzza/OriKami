@@ -106,8 +106,8 @@ public class MoveHandler : MonoBehaviour
                 if (Physics.SphereCast(this.rayTest, 0.1f, out this.hitInfo, 100, this.Env.value))
                 {
 
-                    Debug.Log(Vector3.Dot(this.hitInfo.normal, Vector3.up));
-                    Debug.Log(this.hitInfo.transform.name);
+                   // Debug.Log(Vector3.Dot(this.hitInfo.normal, Vector3.up));
+                    //Debug.Log(this.hitInfo.transform.name);
 
                     if (Vector3.Dot(this.hitInfo.normal, Vector3.up) >= 0 && Vector3.Dot(this.hitInfo.normal, Vector3.up) < 0.75f)
                     {

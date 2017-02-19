@@ -288,7 +288,7 @@ public class AnimationEffect
     public float CustomLoopBreak;
     public int RepNum;
     public bool CustomAniSlowMotion;
-    [Range(0.1f,1)]
+    [Range(0.1f, 1)]
     public float SlowMotionMultiplier;
 }
 
@@ -590,7 +590,7 @@ public class StoryLineInstance : MonoBehaviour
     private void ErasingInputMemory(Collider trigger)
     {
         //if (this.storySelected.GenAccessCond.STriggerRef == trigger || this.storySelected.GenAccessCond.TriggerRef == trigger)
-            this.EraseInputMemoryRequest.Invoke();
+        this.EraseInputMemoryRequest.Invoke();
     }
 
     private void LoadingInputMemory(Collider trigger)
@@ -639,7 +639,7 @@ public class StoryLineInstance : MonoBehaviour
                  storyRef);
             }
         }
-        
+
     }
     #endregion
 
@@ -1285,7 +1285,7 @@ public class StoryLineInstance : MonoBehaviour
         var oriRot = this.player.transform.rotation;
         var targetRotation = tempObj.transform.rotation;
 
-        targetRotation = Quaternion.Euler(oriRot.eulerAngles.x, targetRotation.eulerAngles.y, oriRot.eulerAngles.z); 
+        targetRotation = Quaternion.Euler(oriRot.eulerAngles.x, targetRotation.eulerAngles.y, oriRot.eulerAngles.z);
 
         var posReached = false;
 
@@ -2335,6 +2335,13 @@ public class StoryLineInstance : MonoBehaviour
     }
     #endregion
 
+    #region Sound Effects Methods
+    private void SoundEffectsHandler()
+    {
+
+    }
+    #endregion
+
     #region Animation Effects Methods
     private void AniEffectsHandler()
     {
@@ -2392,6 +2399,8 @@ public class StoryLineInstance : MonoBehaviour
             }
             else
             {
+                if (effectToPlay.CustomAniSlowMotion) aniRef.speed = effectToPlay.SlowMotionMultiplier;
+
                 aniRef.SetInteger("AniIndex", effectToPlay.AnimationIndex);
                 this.StartCoroutine(this.StoppingDefaultLoopinp(effectToPlay, aniRef));
             }
@@ -2401,15 +2410,52 @@ public class StoryLineInstance : MonoBehaviour
 
     private IEnumerator StoppingDefaultLoopinp(AnimationEffect aniEffect, Animator currentAni)
     {
-
         var timePassed = 0.0f;
 
-        while (timePassed <= aniEffect.TimeTaken)
+        if (aniEffect.CustomLooping)
         {
-            timePassed += Time.deltaTime;
-            yield return null;
+
+            var timeCustomBreak = 0.0f;
+            var repCount = 1;
+
+            while (timePassed <= aniEffect.TimeTaken)
+            {
+
+                if (currentAni.GetCurrentAnimatorStateInfo(0).IsTag(currentAni.GetInteger("AniIndex").ToString()) && currentAni.GetInteger("AniIndex") != 0)
+                    currentAni.SetInteger("AniIndex", 0);
+
+                timeCustomBreak += Time.deltaTime;
+
+                if (timeCustomBreak >= aniEffect.CustomLoopBreak && repCount < aniEffect.RepNum)
+                {
+                    timeCustomBreak = 0.0f;
+                    repCount++;
+                    Debug.Log(repCount);
+
+                    if (currentAni.GetInteger("AniIndex") == 0)
+                        currentAni.SetInteger("AniIndex", aniEffect.AnimationIndex);
+                    else
+                    {
+                        currentAni.Play(currentAni.GetCurrentAnimatorStateInfo(0).fullPathHash, -1, 0f);
+                    }
+                }
+
+                timePassed += Time.deltaTime;
+                yield return null;
+            }
+        }
+        else
+        {
+
+            while (timePassed <= aniEffect.TimeTaken)
+            {
+                timePassed += Time.deltaTime;
+                yield return null;
+            }
         }
 
+
+        currentAni.speed = 1;
         currentAni.SetInteger("AniIndex", 0);
         aniEffect.End = true;
         this.effectCounter++;
@@ -2441,12 +2487,12 @@ public class StoryLineInstance : MonoBehaviour
     #endregion
 
     #region Edit Mode Methods
-    
+
     public void OnValidate()
     {
-       // GameObject.FindGameObjectWithTag("GameController").GetComponent<SuperDataManager>().AddingStoryLineEditMode(this.CurrentStoryLine);
-       // GameObject.FindGameObjectWithTag("GameController").GetComponent<QuestsManager>().AddToRepository(this.CurrentStoryLine);
+        // GameObject.FindGameObjectWithTag("GameController").GetComponent<SuperDataManager>().AddingStoryLineEditMode(this.CurrentStoryLine);
+        // GameObject.FindGameObjectWithTag("GameController").GetComponent<QuestsManager>().AddToRepository(this.CurrentStoryLine);
     }
-    
+
     #endregion
 }
