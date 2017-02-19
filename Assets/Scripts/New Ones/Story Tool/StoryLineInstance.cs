@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Xml.Schema;
+
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
@@ -251,25 +253,25 @@ public class UiDialogue
 public class SoundEffect
 {
     public NormalSound NormSoundEffect;
-
     public PersistentSound PerSoundEffect;
 }
 
 [Serializable]
 public class PersistentSound
 {
+
+    public bool End;
     public bool Active;
-
     public int SoundCategory;
-
     public int SoundIndex;
 }
 
 [Serializable]
 public class NormalSound
 {
+    public bool End;
     public GameObject GbRef;
-
+    public int SoundCategory;
     public int SoundIndex;
 }
 
@@ -2356,8 +2358,51 @@ public class StoryLineInstance : MonoBehaviour
         var soundEffectToEvaluate = new List<SoundEffect>();
         soundEffectToEvaluate.AddRange(this.storySelected.Events[this.eventIndex].Effects.SoundEffect);
 
+        var soundCatBusy = new bool[3];
 
+        var gbSel = new List<GameObject>();
 
+        if (soundEffectToEvaluate.Count == 0) return;
+
+        foreach (var sound in soundEffectToEvaluate)
+        {
+            if (sound.PerSoundEffect.Active && !soundCatBusy[sound.PerSoundEffect.SoundCategory])
+            {
+                soundCatBusy[sound.PerSoundEffect.SoundCategory] = true;
+                this.totalEventEffects++;
+                Debug.Log("Persistent Sound Effect");
+                this.PlayPersistentSoundEffect(sound.PerSoundEffect);
+            }
+
+            if (sound.NormSoundEffect.GbRef != null && !gbSel.Contains(sound.NormSoundEffect.GbRef))
+            {
+                gbSel.Add(sound.NormSoundEffect.GbRef);
+                this.totalEventEffects++;
+                Debug.Log("Normal Sound Effect");
+                this.PlayNormalSoundEffect(sound.NormSoundEffect);
+            }
+        }
+    }
+
+    private void PlayPersistentSoundEffect(PersistentSound effectToPlay)
+    {
+        GameObject.FindGameObjectWithTag("GameController").GetComponent<SoundManager>().PlaySound(effectToPlay.SoundCategory, effectToPlay.SoundIndex);
+        effectToPlay.End = true;
+        this.effectCounter++;
+    }
+
+    private void PlayNormalSoundEffect(NormalSound effectToPlay)
+    {
+        if (effectToPlay.GbRef.GetComponent<SoundManager>() == null)
+        {
+            Debug.Log("No Audio Handler Attached");
+            return;
+        }
+
+        effectToPlay.GbRef.GetComponent<SoundManager>().PlaySound(effectToPlay.SoundCategory, effectToPlay.SoundIndex);
+
+        effectToPlay.End = true;
+        this.effectCounter++;
     }
     #endregion
 
