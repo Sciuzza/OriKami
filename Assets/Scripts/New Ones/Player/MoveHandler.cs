@@ -103,6 +103,7 @@ public class MoveHandler : MonoBehaviour
 
             if ((this.flags & CollisionFlags.Below) != 0)
             {
+                /*
                 if (Physics.SphereCast(this.rayTest, 0.1f, out this.hitInfo, 100, this.Env.value))
                 {
 
@@ -129,7 +130,7 @@ public class MoveHandler : MonoBehaviour
                 {
                     sliding = false;
                 }
-
+                */
 
                 if (this.verticalVelocity <= -this.hitImpactVel) this.deathRequest.Invoke();
                 else
