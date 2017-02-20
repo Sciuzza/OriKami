@@ -87,8 +87,8 @@ public class MenuManager : MonoBehaviour
         this.mmRepo.ContinueB.onClick.AddListener(this.PlayNewGameSound);
         this.mmRepo.ContinueB.onClick.AddListener(this.SendingLoadDataRequestEvent);
 
-        //this.mmRepo.LegendsB.onClick.AddListener(this.PlayNewGameSound);
-        //this.mmRepo.LegendsB.onClick.AddListener(this.PlayNewGameSound);
+        this.mmRepo.LegendsB.onClick.AddListener(this.PlayNewGameSound);
+        this.mmRepo.LegendsB.onClick.AddListener(this.OpeningLegendsJornal);
 
         //this.mmRepo.OptionsB.onClick.AddListener(this.PlayNewGameSound);
         //this.mmRepo.OptionsB.onClick.AddListener(this.PlayNewGameSound);
@@ -101,6 +101,12 @@ public class MenuManager : MonoBehaviour
     private void DisablingContinue()
     {
         this.mmRepo.ContinueB.interactable = false;
+    }
+
+    private void OpeningLegendsJornal()
+    {
+        this.mmRepo.JournalG.SetActive(true);
+        this.esLink.SetSelectedGameObject(this.mmRepo.UbazakuraB.gameObject);
     }
 
     private void QuitGame()

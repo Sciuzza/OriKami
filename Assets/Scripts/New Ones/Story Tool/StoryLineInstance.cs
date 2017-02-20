@@ -441,6 +441,7 @@ public class StoryLineInstance : MonoBehaviour
     private MenuManager mmLink;
 
     private bool switchCooldown;
+    private List<Coroutine> baloonStories = new List<Coroutine>();
     #endregion
 
     #region Taking References and Linking Events
@@ -601,7 +602,15 @@ public class StoryLineInstance : MonoBehaviour
 
     private void RemovingBaloonStories()
     {
-        this.StopAllCoroutines();
+        //this.StopAllCoroutines();
+
+        foreach (var coro in this.baloonStories)
+        {
+            this.StopCoroutine(coro);
+        }
+
+        this.baloonStories.Clear();
+        this.baloonStories.TrimExcess();
 
         foreach (var bstory in this.baloonStory)
         {
@@ -1817,8 +1826,8 @@ public class StoryLineInstance : MonoBehaviour
 
     private void PlayBaloonStory(Baloon effectToPlay, SingleStory baloonStorySelected)
     {
-        this.StartCoroutine(this.BubbleAdjustRotStory(effectToPlay));
-        this.StartCoroutine(this.BaloonDialogueStory(effectToPlay, baloonStorySelected));
+        this.baloonStories.Add(this.StartCoroutine(this.BubbleAdjustRotStory(effectToPlay)));
+        this.baloonStories.Add(this.StartCoroutine(this.BaloonDialogueStory(effectToPlay, baloonStorySelected)));
     }
 
     private IEnumerator MovingObject(ObjectMoving movingObjEffect)
