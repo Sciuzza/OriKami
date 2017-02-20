@@ -1,2 +1,1 @@
-Press the "A" button to continue dialogues.
-Good job, you can read! Use the left analog stick to move the character and the right analog stick to move the camera.
+Koi/Left/Koi_Relieved/Use the left analog stick to move the character and the right analog stick to move the camera.
