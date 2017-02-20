@@ -406,12 +406,10 @@ public class SuperDataManager : MonoBehaviour
         this.PlNsData.Legend4Unlocked = fsmTempLink.legUnlocked.Legend4;
         this.PlNsData.Legend5Unlocked = fsmTempLink.legUnlocked.Legend5;
 
-        Collectibles clTempLink = player.GetComponent<Collectibles>();
-
-        this.PlNsData.Collectible1 = clTempLink.GoldenCollectible;
-        this.PlNsData.Collectible2 = clTempLink.DWall;
-        this.PlNsData.Collectible3 = clTempLink.Collectible3;
-        this.PlNsData.Collectible4 = clTempLink.Collectible4;
+        this.PlNsData.Collectible1 = fsmTempLink.GoldenCrane;
+        this.PlNsData.Collectible2 = fsmTempLink.DRocks;
+        this.PlNsData.Collectible3 = fsmTempLink.BlackSmith;
+        this.PlNsData.Collectible4 = fsmTempLink.V3;
     }
 
     public void UpdatingObjState(GameObject obj)

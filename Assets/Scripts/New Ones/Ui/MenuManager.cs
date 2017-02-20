@@ -20,7 +20,6 @@ public class MenuManager : MonoBehaviour
 
     #region Private Variables
     private MainMenuRepo mmRepo;
-    private Button newGame, continueB, legends, options, exit;
 
     private GameObject levelSelPanel;
     private Button route1, frogsV, route2, armaV, route3, dolphinsV, route4, back;
@@ -101,7 +100,7 @@ public class MenuManager : MonoBehaviour
 
     private void DisablingContinue()
     {
-        this.continueB.interactable = false;
+        this.mmRepo.ContinueB.interactable = false;
     }
 
     private void QuitGame()
@@ -223,6 +222,10 @@ public class MenuManager : MonoBehaviour
         slTempLink.UiDialogueWILRequest.AddListener(this.PoppingOutDialogueWIL);
         slTempLink.DialogueEnded.AddListener(this.ResettingDialogue);
         slTempLink.MovieRequest.AddListener(this.PoppingOutMovie);
+
+        var fsmTempLink = player.GetComponent<FSMChecker>();
+
+        fsmTempLink.updateUiCollRequest.AddListener(this.UpdatingCollectibleNumber);
     }
 
     private void PoppingOutDialogue(string name, string label, string sentence, string spritename)
@@ -326,7 +329,11 @@ public class MenuManager : MonoBehaviour
         this.gpUiRef.MovieRef.ImLink.color = colorLink;
 
         this.movieEndNotification.Invoke();
+    }
 
+    private void UpdatingCollectibleNumber(int goldenCraneNumber)
+    {
+        this.gpUiRef.CollectibleValue.text = goldenCraneNumber.ToString();
     }
     #endregion
 

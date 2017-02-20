@@ -18,6 +18,7 @@ public class EnvInputs : MonoBehaviour
     public event_collider storyActivationRequest, storyZoneExit, storyZoneEnter;
     public UnityEvent SaveRequestByCheck;
     public event_Gb wallDCheckRequest;
+    public event_int_gb IncrementNCollRequest;
     #endregion
 
     #region Taking References
@@ -127,6 +128,15 @@ public class EnvInputs : MonoBehaviour
                 this.SaveRequestByCheck.Invoke();
                 Debug.Log("Saved");
                 break;
+            case "GoldenCrane":
+                this.IncrementNCollRequest.Invoke(0, envTrigger.gameObject);
+                break;
+            case "BlackSmith":
+                this.IncrementNCollRequest.Invoke(2, envTrigger.gameObject);
+                break;
+            case "V3":
+                this.IncrementNCollRequest.Invoke(3, envTrigger.gameObject);
+                break;
         }
 
     }
@@ -164,8 +174,7 @@ public class EnvInputs : MonoBehaviour
     {
         switch (hit.collider.gameObject.tag)
         {
-
-            case "WallD":
+            case "DRocks":
                 this.wallDCheckRequest.Invoke(hit.collider.gameObject);
                 break;
         }

@@ -218,6 +218,12 @@ public class event_transform : UnityEvent<Transform>
 {
 
 }
+
+[System.Serializable]
+public class event_int_gb : UnityEvent<int, GameObject>
+{
+
+}
 #endregion
 
 public class FSMChecker : MonoBehaviour
@@ -228,6 +234,11 @@ public class FSMChecker : MonoBehaviour
     public float drowTimerSetting;
 
     public ParticleSystem ArmaRollingPart;
+
+    public int GoldenCrane = 0;
+    public int DRocks = 0;
+    public int BlackSmith = 0;
+    public int V3 = 0;
     #endregion
 
     #region Private Variables
@@ -289,8 +300,14 @@ public class FSMChecker : MonoBehaviour
     public event_bool dolphinOnGround;
     public event_bool armaRolling;
     public UnityEvent aniStoryInitRequest, aniNormalInitRequest;
-    public event_int IncrementCollectibleRequest;
+    public event_int updateUiCollRequest;
     #endregion
+
+
+
+
+
+
 
     #region Initialization Methods
     void Awake()
@@ -318,6 +335,7 @@ public class FSMChecker : MonoBehaviour
         enInputsTempLink.cameraOffRequest.AddListener(this.ChangingCameraToOff);
         enInputsTempLink.cameraOnRequest.AddListener(this.ChangingCameraToOn);
         enInputsTempLink.wallDCheckRequest.AddListener(this.WallDestructibleHandler);
+        enInputsTempLink.IncrementNCollRequest.AddListener(this.NormalCollectiblesHandler);
 
         FSMExecutor fsmExeTempLink = this.gameObject.GetComponent<FSMExecutor>();
 
@@ -1687,15 +1705,6 @@ public class FSMChecker : MonoBehaviour
                 break;
         }
     }
-
-    private void WallDestructibleHandler(GameObject wall)
-    {
-        if (this.cPlayerState.currentPlState == playerStates.rolling)
-        {
-            Destroy(wall);
-            this.IncrementCollectibleRequest.Invoke(1);
-        }
-    }
     #endregion
 
     #region Designer Camera Handler
@@ -1782,8 +1791,12 @@ public class FSMChecker : MonoBehaviour
             || this.cPlayerState.currentClState == controlStates.noCameraAndGenAbi
             || this.cPlayerState.currentClState == controlStates.noControl)
             this.switchingCameraToStoryRequest.Invoke();
-        
-        this.EnablingMove();
+
+        if (this.cPlayerState.currentClState == controlStates.noControl)
+        {
+            this.EnablingMove();
+        }
+
         this.UpdatingAbilityList();
 
         if (this.cPlayerState.currentClState == controlStates.noControl)
@@ -1993,6 +2006,36 @@ public class FSMChecker : MonoBehaviour
     }
     #endregion
 
+    #region Collectible Methods
+    private void NormalCollectiblesHandler(int collIndex, GameObject collTaken)
+    {
+        switch (collIndex)
+        {
+            case 0:
+                this.GoldenCrane++;
+                this.updateUiCollRequest.Invoke(this.GoldenCrane);
+                break;
+            case 2:
+                this.BlackSmith++;
+                break;
+            case 3:
+                this.V3++;
+                break;
+        }
+     
+      Destroy(collTaken);
+}
+
+    private void WallDestructibleHandler(GameObject wall)
+    {
+        if (this.cPlayerState.currentPlState == playerStates.rolling)
+        {
+            Destroy(wall);
+            this.DRocks++;
+        }
+    }
+    #endregion
+
     #region Saving and Loading State Methods
     private void SavingCurrentState()
     {
@@ -2015,12 +2058,10 @@ public class FSMChecker : MonoBehaviour
         var plNsDataToUpdate =
             GameObject.FindGameObjectWithTag("GameController").GetComponent<SuperDataManager>().PlNsData;
 
-        var clTempLink = this.gameObject.GetComponent<Collectibles>();
-
-        plNsDataToUpdate.Collectible1 = clTempLink.GoldenCollectible;
-        plNsDataToUpdate.Collectible2 = clTempLink.DWall;
-        plNsDataToUpdate.Collectible3 = clTempLink.Collectible3;
-        plNsDataToUpdate.Collectible4 = clTempLink.Collectible4;
+        plNsDataToUpdate.Collectible1 = this.GoldenCrane;
+        plNsDataToUpdate.Collectible2 = this.DRocks;
+        plNsDataToUpdate.Collectible3 = this.BlackSmith;
+        plNsDataToUpdate.Collectible4 = this.V3;
 
         plNsDataToUpdate.FrogUnlocked = this.abiUnlocked.frogUnlocked;
         plNsDataToUpdate.ArmaUnlocked = this.abiUnlocked.armaUnlocked;
@@ -2053,12 +2094,11 @@ public class FSMChecker : MonoBehaviour
         var plNsDataToUpdate =
             GameObject.FindGameObjectWithTag("GameController").GetComponent<SuperDataManager>().PlNsData;
 
-        var clTempLink = this.gameObject.GetComponent<Collectibles>();
 
-        clTempLink.GoldenCollectible = plNsDataToUpdate.Collectible1;
-        clTempLink.DWall = plNsDataToUpdate.Collectible2;
-        clTempLink.Collectible3 = plNsDataToUpdate.Collectible3;
-        clTempLink.Collectible4 = plNsDataToUpdate.Collectible4;
+        this.GoldenCrane = plNsDataToUpdate.Collectible1;
+        this.DRocks = plNsDataToUpdate.Collectible2;
+        this.BlackSmith = plNsDataToUpdate.Collectible3;
+        this.V3 = plNsDataToUpdate.Collectible4;
 
         this.abiUnlocked.frogUnlocked = plNsDataToUpdate.FrogUnlocked;
         this.abiUnlocked.armaUnlocked = plNsDataToUpdate.ArmaUnlocked;

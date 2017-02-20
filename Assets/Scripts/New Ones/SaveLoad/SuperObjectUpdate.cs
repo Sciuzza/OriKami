@@ -3,11 +3,9 @@ using System.Collections;
 
 using UnityEngine.SceneManagement;
 
-public class KoiSpecialUpdate : MonoBehaviour
+public class SuperObjectUpdate : MonoBehaviour
 {
-
-
-    private Transform KoiTransf;
+    private Transform memoryTarget;
 
     #region Edit Mode Methods
 
@@ -31,7 +29,7 @@ public class KoiSpecialUpdate : MonoBehaviour
 
     private void UpdatingLocalTransform(Transform newTransf)
     {
-        this.KoiTransf = newTransf;
+        this.memoryTarget = newTransf;
     }
 
     private void SavingCurrentState()
@@ -46,21 +44,21 @@ public class KoiSpecialUpdate : MonoBehaviour
         ObjectsData objToUpdate = currentSceneData.ObjState.Find(x => x.ObjName == this.gameObject.name);
 
 
-        if (objToUpdate != null && this.KoiTransf != null)
+        if (objToUpdate != null && this.memoryTarget != null)
         {
-            objToUpdate.ObjPosX = this.KoiTransf.position.x;
-            objToUpdate.ObjPosY = this.KoiTransf.position.y;
-            objToUpdate.ObjPosZ = this.KoiTransf.position.z;
+            objToUpdate.ObjPosX = this.memoryTarget.position.x;
+            objToUpdate.ObjPosY = this.memoryTarget.position.y;
+            objToUpdate.ObjPosZ = this.memoryTarget.position.z;
 
-            objToUpdate.ObjRotX = this.KoiTransf.eulerAngles.x;
-            objToUpdate.ObjRotY = this.KoiTransf.eulerAngles.y;
-            objToUpdate.ObjRotZ = this.KoiTransf.eulerAngles.z;
+            objToUpdate.ObjRotX = this.memoryTarget.eulerAngles.x;
+            objToUpdate.ObjRotY = this.memoryTarget.eulerAngles.y;
+            objToUpdate.ObjRotZ = this.memoryTarget.eulerAngles.z;
 
             objToUpdate.IsActive = this.gameObject.activeInHierarchy;
 
-            this.KoiTransf = null;
+            this.memoryTarget = null;
         }
-        else if (objToUpdate != null && this.KoiTransf == null)
+        else if (objToUpdate != null && this.memoryTarget == null)
         {
             objToUpdate.ObjPosX = thisTrans.position.x;
             objToUpdate.ObjPosY = thisTrans.position.y;

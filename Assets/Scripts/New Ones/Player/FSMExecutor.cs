@@ -583,13 +583,13 @@ public class FSMExecutor : MonoBehaviour
         if (vfTempLink == null)
             Debug.Log("Cazzo");
 
-        Quaternion vTriggerRotation, vGuidanceRotation;
-        Vector3 vTriggerMidPosition, vGuidanceFinPosition, vGuidanceDir;
+        Quaternion vTriggerRotation;
+        Vector3 vTriggerMidPosition, vGuidanceFinPosition;
 
         if (vfEntrance == "dAbilityta")
         {
             vTriggerRotation = vfTempLink.aTrigger.transform.rotation;
-            vGuidanceRotation = vfTempLink.mGuidance.transform.rotation;
+         
 
 
             vTriggerMidPosition = vfTempLink.aTrigger.transform.position;
@@ -598,13 +598,11 @@ public class FSMExecutor : MonoBehaviour
             vGuidanceFinPosition = vfTempLink.exitA.transform.position;
             vGuidanceFinPosition.y = this.transform.position.y;
 
-
-            vGuidanceDir = -vfTempLink.mGuidance.transform.right;
         }
         else
         {
             vTriggerRotation = vfTempLink.bTrigger.transform.rotation;
-            vGuidanceRotation = vfTempLink.mGuidance.transform.rotation;
+    
 
 
             vTriggerMidPosition = vfTempLink.bTrigger.transform.position;
@@ -613,8 +611,6 @@ public class FSMExecutor : MonoBehaviour
             vGuidanceFinPosition = vfTempLink.exitB.transform.position;
             vGuidanceFinPosition.y = this.transform.position.y;
 
-
-            vGuidanceDir = vfTempLink.mGuidance.transform.right;
         }
 
         while (vFissureAniOn)

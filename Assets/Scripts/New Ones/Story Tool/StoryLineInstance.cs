@@ -13,9 +13,10 @@ using Random = UnityEngine.Random;
 #region Enum Types
 public enum ItemType
 {
-    Item1,
-    Item2,
-    Item3
+    GoldenCrane,
+    DRocks,
+    BlackSmith,
+    V3
 }
 #endregion Enum Types
 
@@ -527,12 +528,27 @@ public class StoryLineInstance : MonoBehaviour
 
     private bool CheckItemConditions(SingleStory storyToCheck)
     {
-        /*
+
+        var fsmTempLink = this.player.GetComponent<FSMChecker>();
+
         foreach (var item in this.storySelected.ItemAccessCondition)
         {
-            // control logic achievement system based
+            switch (item.ItemDep)
+            {
+                case ItemType.GoldenCrane:
+                    if (item.ItemValue < fsmTempLink.GoldenCrane) return false;
+                    break;
+                case ItemType.DRocks:
+                    if (item.ItemValue < fsmTempLink.DRocks) return false;
+                    break;
+                case ItemType.BlackSmith:
+                    if (item.ItemValue < fsmTempLink.BlackSmith) return false;
+                    break;
+                case ItemType.V3:
+                    if (item.ItemValue < fsmTempLink.V3) return false;
+                    break;
+            }
         }
-        */
 
         return true;
     }
@@ -1700,12 +1716,12 @@ public class StoryLineInstance : MonoBehaviour
 
                 if (envEffect.BaloonEffect.NpcRef != null)
                 {
-                    
+
                     if (!this.IsGameobjectRefUnique(gbBaloonCheckTempRepo, envEffect.BaloonEffect.NpcRef))
                     {
                         continue;
                     }
-                    
+
                     this.totalEventEffects++;
                     GameController.Debugging("Baloon");
                     this.PlayBaloonEffect(envEffect.BaloonEffect);
@@ -2033,9 +2049,9 @@ public class StoryLineInstance : MonoBehaviour
 
         while (!baloonEffect.End)
         {
-                gbTargetTemp.transform.position = npcTempRef.transform.position;
-                gbTargetTemp.transform.rotation = npcTempRef.transform.rotation;
-                gbTargetTemp.transform.LookAt(Camera.main.transform);
+            gbTargetTemp.transform.position = npcTempRef.transform.position;
+            gbTargetTemp.transform.rotation = npcTempRef.transform.rotation;
+            gbTargetTemp.transform.LookAt(Camera.main.transform);
 
             if (!baloonEffect.OnlyCanvasFollowing)
             {
