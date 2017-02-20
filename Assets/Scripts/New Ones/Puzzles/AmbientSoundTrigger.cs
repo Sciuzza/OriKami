@@ -43,7 +43,7 @@ public class AmbientSoundTrigger : MonoBehaviour
 
     IEnumerator FadeOutCO()
     {
-        soundRef.PlaySound(2, Random.Range(0, 2));
+        
         float elapsedTime = 0.0f;
         float startVol = audioSourceRef.volume;
         while (elapsedTime < 1f)
