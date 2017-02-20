@@ -29,6 +29,13 @@ namespace Orikami
 
         }
 
+        IEnumerator DestroyingTimed()
+        {
+            print("On platform");
+            yield return new WaitForSeconds(disappearingTime);
+            this.platformCollider.gameObject.SetActive(false);
+        }
+
         IEnumerator MyCoroutineExit()
         {
             yield return new WaitForSeconds(1.5f);
@@ -68,7 +75,7 @@ namespace Orikami
 
             if (other.gameObject.tag == "Player" && destroyPlatforms)
             {
-                StartCoroutine(MyCoroutine());
+                StartCoroutine(this.DestroyingTimed());
             }
             if (other.gameObject.tag == "Player" && groupPlatforms)
             {
