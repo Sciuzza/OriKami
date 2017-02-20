@@ -10,7 +10,7 @@ using UnityEngine.EventSystems;
 public class MenuManager : MonoBehaviour
 {
     private string currentScene;
-    
+
     #region Public Variables
     public event_int switchSceneRequestByInt;
     public event_string switchSceneRequestByName;
@@ -47,7 +47,7 @@ public class MenuManager : MonoBehaviour
 
         gcTempLink.ngpInitializer.AddListener(this.InitializingNgpScene);
         gcTempLink.gpInitializer.AddListener(this.InitializingGpScene);
-        
+
 
         var scTempLink = this.GetComponent<SceneController>();
 
@@ -148,7 +148,7 @@ public class MenuManager : MonoBehaviour
         route4 = mmButtonRef[6];
         back = mmButtonRef[7];
 
-         
+
         route1.onClick.AddListener(InvokingRoute1);
         route1.onClick.AddListener(PlayNewGameSound);
         frogsV.onClick.AddListener(InvokingFrogsV);
@@ -170,7 +170,7 @@ public class MenuManager : MonoBehaviour
     private void InvokingRoute1()
     {
         switchSceneRequestByName.Invoke("Route 1");
-        
+
     }
 
     private void InvokingFrogsV()
@@ -220,6 +220,7 @@ public class MenuManager : MonoBehaviour
         if (storyLineCheck == null) return;
         var slTempLink = GameObject.FindGameObjectWithTag("StoryLine").GetComponent<StoryLineInstance>();
         slTempLink.UiDialogueRequest.AddListener(this.PoppingOutDialogue);
+        slTempLink.UiDialogueWILRequest.AddListener(this.PoppingOutDialogueWIL);
         slTempLink.DialogueEnded.AddListener(this.ResettingDialogue);
         slTempLink.MovieRequest.AddListener(this.PoppingOutMovie);
     }
@@ -250,6 +251,18 @@ public class MenuManager : MonoBehaviour
             if (this.gpUiRef.AvatarNames.Contains(spritename))
                 this.gpUiRef.leftImage.sprite = this.gpUiRef.Avatars[this.gpUiRef.AvatarNames.IndexOf(spritename)];
         }
+
+        this.gpUiRef.DialogueT.text = sentence;
+    }
+
+    private void PoppingOutDialogueWIL(string sentence)
+    {
+        this.gpUiRef.Dialogue.SetActive(true);
+
+        this.gpUiRef.RightLabel.SetActive(false);
+        this.gpUiRef.LeftLabel.SetActive(false);
+        this.gpUiRef.leftImageGb.SetActive(false);
+        this.gpUiRef.rightImageGb.SetActive(false);
 
         this.gpUiRef.DialogueT.text = sentence;
     }

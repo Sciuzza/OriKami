@@ -212,6 +212,12 @@ public class event_listEnvSens_plNsSens : UnityEvent<List<EnvDatas>, PlayerNsDat
 {
     
 }
+
+[System.Serializable]
+public class event_transform : UnityEvent<Transform>
+{
+
+}
 #endregion
 
 public class FSMChecker : MonoBehaviour

@@ -105,6 +105,8 @@ public class FSMExecutor : MonoBehaviour
 
         formReferences.Find(x => x.tag == newForm).SetActive(true);
 
+        // qui il suono
+
         switch (newForm)
         {
             case "Standard Form":
@@ -397,29 +399,26 @@ public class FSMExecutor : MonoBehaviour
         bool vFissureAniOn = true;
 
         if (vfTag == "vAbilityta" || vfTag == "vAbilitytb")
-            StartCoroutine(VFissureExecution(vFissureAniOn, vfTempLink, vfTag));
+            StartCoroutine(this.VFissureNewExecution(vFissureAniOn, vfTempLink, vfTag));
         else if (vfTag == "hAbilityta" || vfTag == "hAbilitytb")
-            StartCoroutine(HFissureExecution(vFissureAniOn, vfTempLink, vfTag));
+            StartCoroutine(HFissureNewExecution(vFissureAniOn, vfTempLink, vfTag));
         else
             StartCoroutine(DolpSwimBExecution(vFissureAniOn, vfTempLink, vfTag));
     }
 
-    private IEnumerator VFissureExecution(bool vFissureAniOn, VFissure vfTempLink, string vfEntrance)
+    private IEnumerator VFissureNewExecution(bool vFissureAniOn, VFissure vfTempLink, string vfEntrance)
     {
-
         CharacterController ccTempLink = this.gameObject.GetComponent<CharacterController>();
 
         float radius = ccTempLink.radius;
 
         ccTempLink.radius = 0;
 
-        bool secondRotationisOn = false, moveFinished = false, secondMoveIsOn = false;
-
         if (vfTempLink == null)
             Debug.Log("Cazzo");
 
         Quaternion vTriggerRotation, vGuidanceRotation;
-        Vector3 vTriggerMidPosition, vGuidanceFinPosition, vGuidanceDir;
+        Vector3 vTriggerMidPosition, vGuidanceFinPosition;
 
         if (vfEntrance == "vAbilityta")
         {
@@ -432,9 +431,6 @@ public class FSMExecutor : MonoBehaviour
 
             vGuidanceFinPosition = vfTempLink.exitA.transform.position;
             vGuidanceFinPosition.y = this.transform.position.y;
-
-
-            vGuidanceDir = vfTempLink.mGuidance.transform.right;
         }
         else
         {
@@ -447,189 +443,130 @@ public class FSMExecutor : MonoBehaviour
 
             vGuidanceFinPosition = vfTempLink.exitB.transform.position;
             vGuidanceFinPosition.y = this.transform.position.y;
-
-
-            vGuidanceDir = -vfTempLink.mGuidance.transform.right;
         }
 
-        while (vFissureAniOn)
+
+        var timePassed = 0.0f;
+        var timeTaken = 0.5f;
+        var oriRot = this.gameObject.transform.rotation;
+        var oriPos = this.gameObject.transform.position;
+
+
+        while (timePassed <= 1)
         {
-            if (Quaternion.Angle(this.transform.rotation, vTriggerRotation) > 0.1f && !secondRotationisOn)
-            {
-
-                this.transform.localRotation = Quaternion.Slerp(this.transform.rotation, vTriggerRotation, Time.deltaTime * 5);
-                //Debug.Log(Quaternion.Angle(this.transform.rotation, coreLink.vTriggerRotation));
-            }
-            else if (moveFinished)
-            {
-                vFissureAniOn = false;
-                moveFinished = false;
-                secondMoveIsOn = false;
-            }
-            else
-            {
-
-
-
-                Vector3 distance = vTriggerMidPosition - this.transform.position;
-                //Debug.Log(distance.sqrMagnitude);
-                if (distance.sqrMagnitude >= 0.05f && !secondMoveIsOn)
-                {
-
-                    Vector3 direction = (vTriggerMidPosition - this.transform.position).normalized;
-                    direction.y = 0;
-                    this.transform.position += direction * Time.deltaTime * 4;
-                }
-                else
-                {
-                    secondRotationisOn = true;
-
-                    if (Quaternion.Angle(this.transform.rotation, vGuidanceRotation) > 0.1f)
-
-                        this.transform.rotation = Quaternion.Slerp(this.transform.localRotation, vGuidanceRotation, Time.deltaTime * 5);
-                    else
-                    {
-                        secondMoveIsOn = true;
-
-                        vGuidanceFinPosition.y = this.transform.position.y;
-                        distance = vGuidanceFinPosition - this.transform.position;
-                        //Debug.Log(distance.sqrMagnitude);
-
-                        if (distance.sqrMagnitude >= 0.1f)
-                        {
-
-                            // Vector3 direction = (coreLink.vGuidanceFinPosition - this.transform.position).normalized;
-                            Vector3 direction = vGuidanceDir.normalized;
-                            direction.y = 0;
-                            this.transform.position += direction * Time.deltaTime * 4;
-                        }
-                        else
-                        {
-                            moveFinished = true;
-                            secondRotationisOn = false;
-                        }
-
-                    }
-                }
-            }
-            yield return new WaitForSeconds(Time.deltaTime);
+            timePassed += Time.deltaTime / timeTaken;
+            this.transform.rotation = Quaternion.Slerp(oriRot, vTriggerRotation, timePassed);
+            yield return null;
         }
-        vFissureAniOn = false;
-        vFissureAniEnded.Invoke();
+
+        timePassed = 0.0f;
+        oriPos = this.gameObject.transform.position;
+
+        while (timePassed <= 1)
+        {
+            timePassed += Time.deltaTime / timeTaken;
+            this.transform.position = Vector3.Lerp(oriPos, vTriggerMidPosition, timePassed);
+            yield return null;
+        }
+
+        timePassed = 0.0f;
+        oriRot = this.gameObject.transform.rotation;
+
+        while (timePassed <= 1)
+        {
+            timePassed += Time.deltaTime / timeTaken;
+            this.transform.rotation = Quaternion.Slerp(oriRot, vGuidanceRotation, timePassed);
+            yield return null;
+        }
+
+        timePassed = 0.0f;
+        timeTaken = 1f;
+        oriPos = this.gameObject.transform.position;
+
+        while (timePassed <= 1)
+        {
+            timePassed += Time.deltaTime / timeTaken;
+            this.transform.position = Vector3.Lerp(oriPos, vGuidanceFinPosition, timePassed);
+            yield return null;
+        }
+
+        this.vFissureAniEnded.Invoke();
         ccTempLink.radius = radius;
     }
 
-    private IEnumerator HFissureExecution(bool vFissureAniOn, VFissure vfTempLink, string vfEntrance)
+    private IEnumerator HFissureNewExecution(bool vFissureAniOn, VFissure vfTempLink, string vfEntrance)
     {
 
         CharacterController ccTempLink = this.gameObject.GetComponent<CharacterController>();
 
-        float radius = ccTempLink.radius;
 
         ccTempLink.enableOverlapRecovery = false;
 
-        //ccTempLink.radius = 0;
-        //ccTempLink.height = 0;
-
-        bool moveFinished = false, secondMoveIsOn = false;
-
         if (vfTempLink == null)
-            Debug.Log("Cazzo");
+            yield break;
 
-        Quaternion vTriggerRotation, vGuidanceRotation;
-        Vector3 vTriggerMidPosition, vGuidanceFinPosition, vGuidanceDir;
+        Quaternion vTriggerRotation;
+        Vector3 vTriggerMidPosition, vGuidanceFinPosition;
 
         if (vfEntrance == "hAbilityta")
         {
             vTriggerRotation = vfTempLink.aTrigger.transform.rotation;
-            vGuidanceRotation = vfTempLink.mGuidance.transform.rotation;
-
-
+ 
             vTriggerMidPosition = vfTempLink.aTrigger.transform.position;
             vTriggerMidPosition.y = this.transform.position.y;
 
             vGuidanceFinPosition = vfTempLink.exitA.transform.position;
             vGuidanceFinPosition.y = this.transform.position.y;
-
-
-            vGuidanceDir = vfTempLink.mGuidance.transform.right;
         }
         else
         {
             vTriggerRotation = vfTempLink.bTrigger.transform.rotation;
-            vGuidanceRotation = vfTempLink.mGuidance.transform.rotation;
-
 
             vTriggerMidPosition = vfTempLink.bTrigger.transform.position;
             vTriggerMidPosition.y = this.transform.position.y;
 
             vGuidanceFinPosition = vfTempLink.exitB.transform.position;
             vGuidanceFinPosition.y = this.transform.position.y;
-
-
-            vGuidanceDir = -vfTempLink.mGuidance.transform.right;
         }
 
-        while (vFissureAniOn)
+        var timePassed = 0.0f;
+        var timeTaken = 0.5f;
+        var oriRot = this.gameObject.transform.rotation;
+        Vector3 oriPos;
+
+
+        while (timePassed <= 1)
         {
-            if (Quaternion.Angle(this.transform.rotation, vTriggerRotation) > 0.1f)
-            {
-
-                this.transform.localRotation = Quaternion.Slerp(this.transform.rotation, vTriggerRotation, Time.deltaTime * 5);
-                //Debug.Log(Quaternion.Angle(this.transform.rotation, coreLink.vTriggerRotation));
-            }
-            else if (moveFinished)
-            {
-                vFissureAniOn = false;
-                moveFinished = false;
-                secondMoveIsOn = false;
-            }
-            else
-            {
-
-
-
-                Vector3 distance = vTriggerMidPosition - this.transform.position;
-
-                if (distance.sqrMagnitude >= 0.5f && !secondMoveIsOn)
-                {
-                    //Debug.Log(distance.sqrMagnitude);
-                    Vector3 direction = (vTriggerMidPosition - this.transform.position).normalized;
-                    direction.y = 0;
-                    this.transform.position += direction * Time.deltaTime * 4;
-                }
-                else
-                {
-
-                    secondMoveIsOn = true;
-
-                    distance = vGuidanceFinPosition - this.transform.position;
-
-                    if (distance.sqrMagnitude >= 0.55f)
-                    {
-
-                        // Vector3 direction = (coreLink.vGuidanceFinPosition - this.transform.position).normalized;
-                        Vector3 direction = vGuidanceDir.normalized;
-                        direction.y = 0;
-                        this.transform.position += direction * Time.deltaTime * 4;
-                    }
-                    else
-                    {
-                        moveFinished = true;
-
-                    }
-
-
-                }
-            }
-            yield return new WaitForSeconds(Time.deltaTime);
+            timePassed += Time.deltaTime / timeTaken;
+            this.transform.rotation = Quaternion.Slerp(oriRot, vTriggerRotation, timePassed);
+            yield return null;
         }
-        vFissureAniOn = false;
-        vFissureAniEnded.Invoke();
+
+        timePassed = 0.0f;
+        oriPos = this.gameObject.transform.position;
+        vTriggerMidPosition = (vTriggerMidPosition + oriPos) / 2;
+
+        while (timePassed <= 1)
+        {
+            timePassed += Time.deltaTime / timeTaken;
+            this.transform.position = Vector3.Lerp(oriPos, vTriggerMidPosition, timePassed);
+            yield return null;
+        }
+
+        timePassed = 0.0f;
+        timeTaken = 1f;
+        oriPos = this.gameObject.transform.position;
+
+        while (timePassed <= 1)
+        {
+            timePassed += Time.deltaTime / timeTaken;
+            this.transform.position = Vector3.Lerp(oriPos, vGuidanceFinPosition, timePassed);
+            yield return null;
+        }
+
+        this.vFissureAniEnded.Invoke();
 
         ccTempLink.enableOverlapRecovery = true;
-        //ccTempLink.radius = radius;
-        //ccTempLink.height = 0.7f;
     }
 
     private IEnumerator DolpSwimBExecution(bool vFissureAniOn, VFissure vfTempLink, string vfEntrance)

@@ -153,6 +153,7 @@ public class EnvironmentEffect
 public class ObjectMoving
 {
     public bool End;
+    public bool SpecialKoi;
     public GameObject GbToMove;
     public GameObject GbTarget;
     public float TimeTaken;
@@ -191,6 +192,7 @@ public class Baloon
 {
     public bool End;
     public GameObject NpcRef;
+    public bool OnlyCanvasFollowing;
     public float BaloonSpeed;
     public int StartLine;
     public int EndLine;
@@ -239,6 +241,7 @@ public class UiObjectDeActivation
 public class UiDialogue
 {
     public bool End;
+    public bool WithoutIL;
     public TextAsset DialogueRef;
     public List<string> Name;
     public List<string> Label;
@@ -412,6 +415,8 @@ public class StoryLineInstance : MonoBehaviour
     public event_int LegendsUpdateRequest;
     public event_abi TransfRequest;
     public event_int AniRequest;
+    public event_string UiDialogueWILRequest;
+    public event_transform KoiNewTransfRequest;
     #endregion
 
     #region Private Variables
@@ -433,6 +438,8 @@ public class StoryLineInstance : MonoBehaviour
 
     private QuestsManager questRepo;
     private MenuManager mmLink;
+
+    private bool switchCooldown;
     #endregion
 
     #region Taking References and Linking Events
@@ -694,7 +701,7 @@ public class StoryLineInstance : MonoBehaviour
                 if (this.storySelected.Events[this.eventIndex].PlayerInputJoy != buttonsJoy.none
                     && this.storySelected.Events[this.eventIndex].PlayerInputPc != buttonsPc.none)
                 {
-                    while (!Input.GetButtonDown(this.storySelected.Events[this.eventIndex].PlayerInputJoy.ToString())
+                    while (!this.EventInputJoyHandler()
                         && !Input.GetButtonDown(this.storySelected.Events[this.eventIndex].PlayerInputPc.ToString()))
                     {
                         yield return null;
@@ -761,6 +768,52 @@ public class StoryLineInstance : MonoBehaviour
         this.IsStoryMode.Invoke(false);
         this.ApplyingLivingEffects();
         this.ResettingStoryCommonVariables();
+    }
+
+    private bool EventInputJoyHandler()
+    {
+
+
+        if (this.storySelected.Events[this.eventIndex].PlayerInputJoy.ToString() != "LT" &&
+            this.storySelected.Events[this.eventIndex].PlayerInputJoy.ToString() != "RT")
+        {
+            if (Input.GetButtonDown(this.storySelected.Events[this.eventIndex].PlayerInputJoy.ToString()))
+                return true;
+            else
+                return false;
+        }
+        else
+        {
+            if (this.storySelected.Events[this.eventIndex].PlayerInputJoy.ToString() == "LT")
+            {
+                if (Input.GetAxis("LRT") > 0 && !this.switchCooldown)
+                {
+                    this.switchCooldown = true;
+                    this.StartCoroutine(this.SwitchingCooldown());
+                    return true;
+                }
+                else
+                    return false;
+            }
+            else
+            {
+                if (Input.GetAxis("LRT") < 0 && !this.switchCooldown)
+                {
+                    this.switchCooldown = true;
+                    this.StartCoroutine(this.SwitchingCooldown());
+                    return true;
+                }
+                else
+                    return false;
+            }
+        }
+
+    }
+
+    private IEnumerator SwitchingCooldown()
+    {
+        yield return new WaitForSeconds(0.5f);
+        this.switchCooldown = false;
     }
 
     private void LivingBaloonStory()
@@ -1584,6 +1637,7 @@ public class StoryLineInstance : MonoBehaviour
         envEffectToEvaluate.AddRange(this.storySelected.Events[this.eventIndex].Effects.EnvEffect);
 
         var gbCheckTempRepo = new List<GameObject>();
+        var gbBaloonCheckTempRepo = new List<GameObject>();
 
         if (envEffectToEvaluate.Count == 0)
         {
@@ -1646,15 +1700,16 @@ public class StoryLineInstance : MonoBehaviour
 
                 if (envEffect.BaloonEffect.NpcRef != null)
                 {
-                    if (!this.IsGameobjectRefUnique(gbCheckTempRepo, envEffect.BaloonEffect.NpcRef))
+                    
+                    if (!this.IsGameobjectRefUnique(gbBaloonCheckTempRepo, envEffect.BaloonEffect.NpcRef))
                     {
                         continue;
                     }
-
+                    
                     this.totalEventEffects++;
                     GameController.Debugging("Baloon");
                     this.PlayBaloonEffect(envEffect.BaloonEffect);
-                    gbCheckTempRepo.Add(envEffect.BaloonEffect.NpcRef);
+                    gbBaloonCheckTempRepo.Add(envEffect.BaloonEffect.NpcRef);
                 }
             }
         }
@@ -1684,6 +1739,14 @@ public class StoryLineInstance : MonoBehaviour
         }
         else
         {
+            if (effectToPlay.SpecialKoi)
+            {
+                this.KoiNewTransfRequest.Invoke(effectToPlay.GbTarget.transform);
+                effectToPlay.End = true;
+                this.effectCounter++;
+                GameController.Debugging("Effect Counter", this.effectCounter);
+            }
+
             this.StartCoroutine(this.MovingObject(effectToPlay));
         }
     }
@@ -1790,9 +1853,12 @@ public class StoryLineInstance : MonoBehaviour
         if (animated)
             movingObjEffect.GbToMove.GetComponent<Animator>().SetInteger("AniIndex", 0);
 
-        movingObjEffect.End = true;
-        this.effectCounter++;
-        GameController.Debugging("Effect Counter", this.effectCounter);
+        if (!movingObjEffect.SpecialKoi)
+        {
+            movingObjEffect.End = true;
+            this.effectCounter++;
+            GameController.Debugging("Effect Counter", this.effectCounter);
+        }
     }
 
     private IEnumerator TimedActivation(ObjectActivation actiObjEffect)
@@ -1961,15 +2027,31 @@ public class StoryLineInstance : MonoBehaviour
     private IEnumerator BubbleAdjustRot(Baloon baloonEffect)
     {
         var npcTempRef = baloonEffect.NpcRef;
+        var baloonTempLink = baloonEffect.NpcRef.GetComponentInChildren<BaloonBeha>(true);
 
         var gbTargetTemp = new GameObject();
 
         while (!baloonEffect.End)
         {
-            gbTargetTemp.transform.position = npcTempRef.transform.position;
-            gbTargetTemp.transform.rotation = npcTempRef.transform.rotation;
-            gbTargetTemp.transform.LookAt(Camera.main.transform);
-            npcTempRef.transform.rotation = Quaternion.Slerp(npcTempRef.transform.rotation, gbTargetTemp.transform.rotation, 5 * Time.deltaTime);
+                gbTargetTemp.transform.position = npcTempRef.transform.position;
+                gbTargetTemp.transform.rotation = npcTempRef.transform.rotation;
+                gbTargetTemp.transform.LookAt(Camera.main.transform);
+
+            if (!baloonEffect.OnlyCanvasFollowing)
+            {
+                npcTempRef.transform.rotation = Quaternion.Slerp(npcTempRef.transform.rotation, gbTargetTemp.transform.rotation, 5 * Time.deltaTime);
+
+            }
+            else
+            {
+                gbTargetTemp.transform.forward = -gbTargetTemp.transform.forward;
+                baloonTempLink.gameObject.transform.rotation =
+                    Quaternion.Slerp(
+                        baloonTempLink.gameObject.transform.rotation,
+                        gbTargetTemp.transform.rotation,
+                        5 * Time.deltaTime);
+            }
+
             yield return null;
         }
 
@@ -2000,6 +2082,7 @@ public class StoryLineInstance : MonoBehaviour
     private IEnumerator BubbleAdjustRotStory(Baloon baloonEffect)
     {
         var npcTempRef = baloonEffect.NpcRef;
+        var baloonTempLink = baloonEffect.NpcRef.GetComponentInChildren<BaloonBeha>(true);
 
         var gbTargetTemp = new GameObject();
 
@@ -2008,7 +2091,22 @@ public class StoryLineInstance : MonoBehaviour
             gbTargetTemp.transform.position = npcTempRef.transform.position;
             gbTargetTemp.transform.rotation = npcTempRef.transform.rotation;
             gbTargetTemp.transform.LookAt(Camera.main.transform);
-            npcTempRef.transform.rotation = Quaternion.Slerp(npcTempRef.transform.rotation, gbTargetTemp.transform.rotation, 5 * Time.deltaTime);
+
+            if (!baloonEffect.OnlyCanvasFollowing)
+            {
+                npcTempRef.transform.rotation = Quaternion.Slerp(npcTempRef.transform.rotation, gbTargetTemp.transform.rotation, 5 * Time.deltaTime);
+
+            }
+            else
+            {
+                gbTargetTemp.transform.forward = -gbTargetTemp.transform.forward;
+                baloonTempLink.gameObject.transform.rotation =
+                    Quaternion.Slerp(
+                        baloonTempLink.gameObject.transform.rotation,
+                        gbTargetTemp.transform.rotation,
+                        5 * Time.deltaTime);
+            }
+
             yield return null;
         }
 
@@ -2185,24 +2283,36 @@ public class StoryLineInstance : MonoBehaviour
 
     private IEnumerator LivingDialogue(UiDialogue dialogueEffect)
     {
-        this.UiDialogueRequest.Invoke(dialogueEffect.Name[0], dialogueEffect.Label[0], dialogueEffect.Sentence[0], dialogueEffect.Sprite[0]);
+        if (!dialogueEffect.WithoutIL)
+            this.UiDialogueRequest.Invoke(dialogueEffect.Name[0], dialogueEffect.Label[0], dialogueEffect.Sentence[0], dialogueEffect.Sprite[0]);
+        else
+        {
+            this.UiDialogueWILRequest.Invoke(dialogueEffect.Sentence[0]);
+        }
         var counter = 0;
 
-        while (counter < dialogueEffect.Name.Count)
+        while (counter < dialogueEffect.Name.Count - 1)
         {
             if (Input.GetButtonDown(buttonsJoy.Y.ToString()))
             {
                 break;
             }
 
-            if (Input.GetButtonDown(buttonsJoy.X.ToString()) || Input.GetButtonDown(buttonsPc.E.ToString()))
+            if (Input.GetButtonDown(buttonsJoy.A.ToString()) || Input.GetButtonDown(buttonsPc.E.ToString()))
             {
-                this.UiDialogueRequest.Invoke(dialogueEffect.Name[counter], dialogueEffect.Label[counter], dialogueEffect.Sentence[counter], dialogueEffect.Sprite[counter]);
                 counter++;
+                if (!dialogueEffect.WithoutIL)
+                    this.UiDialogueRequest.Invoke(dialogueEffect.Name[counter], dialogueEffect.Label[counter], dialogueEffect.Sentence[counter], dialogueEffect.Sprite[counter]);
+                else
+                {
+                    this.UiDialogueWILRequest.Invoke(dialogueEffect.Sentence[counter]);
+                }
             }
 
             yield return null;
         }
+
+        while (!Input.GetButtonDown(buttonsJoy.A.ToString()) && !Input.GetButtonDown(buttonsPc.E.ToString())) yield return null;
 
         this.DialogueEnded.Invoke();
         dialogueEffect.End = true;
