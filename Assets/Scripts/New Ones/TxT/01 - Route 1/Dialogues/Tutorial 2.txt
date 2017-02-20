@@ -1,2 +1,2 @@
-The items surrounded by blue sparkles can be used!*Jump on them to activate them!
-Be careful when you walk near water though, if you fall in you'll slowly die!
+Koi/Left/Koi_Relieved/The items surrounded by blue sparkles can be used!*Jump on them to activate them!
+Koi/Left/Koi_Relieved/Be careful when you walk near water though, if you fall in you'll slowly die!
