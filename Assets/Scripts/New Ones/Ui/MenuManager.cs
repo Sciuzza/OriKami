@@ -106,7 +106,8 @@ public class MenuManager : MonoBehaviour
     private void OpeningLegendsJornal()
     {
         this.mmRepo.JournalG.SetActive(true);
-        this.esLink.SetSelectedGameObject(this.mmRepo.UbazakuraB.gameObject);
+        EventSystem.current.SetSelectedGameObject(this.mmRepo.UbazakuraB.gameObject);
+        //this.esLink.SetSelectedGameObject(this.mmRepo.UbazakuraB.gameObject);
     }
 
     private void QuitGame()
