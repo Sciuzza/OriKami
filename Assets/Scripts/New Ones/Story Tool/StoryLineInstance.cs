@@ -614,7 +614,7 @@ public class StoryLineInstance : MonoBehaviour
 
         foreach (var bstory in this.baloonStory)
         {
-            bstory.Events[0].Effects.EnvEffect[0].BaloonEffect.NpcRef.GetComponentInChildren<BaloonBeha>().gameObject.SetActive(false);
+            bstory.Events[0].Effects.EnvEffect[0].BaloonEffect.NpcRef.GetComponentInChildren<BaloonBeha>(true).gameObject.SetActive(false);
         }
 
         this.baloonStory.Clear();
@@ -2323,7 +2323,7 @@ public class StoryLineInstance : MonoBehaviour
                 break;
             }
 
-            if (Input.GetButtonDown(buttonsJoy.A.ToString()) || Input.GetButtonDown(buttonsPc.E.ToString()))
+            if (Input.GetButtonDown(buttonsJoy.X.ToString()) || Input.GetButtonDown(buttonsPc.E.ToString()))
             {
                 counter++;
                 if (!dialogueEffect.WithoutIL)
@@ -2337,7 +2337,7 @@ public class StoryLineInstance : MonoBehaviour
             yield return null;
         }
 
-        while (!Input.GetButtonDown(buttonsJoy.A.ToString()) && !Input.GetButtonDown(buttonsPc.E.ToString())) yield return null;
+        while (!Input.GetButtonDown(buttonsJoy.X.ToString()) && !Input.GetButtonDown(buttonsPc.E.ToString())) yield return null;
 
         this.DialogueEnded.Invoke();
         dialogueEffect.End = true;

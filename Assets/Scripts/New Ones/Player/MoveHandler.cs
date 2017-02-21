@@ -88,8 +88,6 @@ public class MoveHandler : MonoBehaviour
                 this.finalMove.y = height;
 
                 this.finalMove *= this.rollStrength;
-
-
             }
 
             this.finalMove *= timeTakeThisFrame;
