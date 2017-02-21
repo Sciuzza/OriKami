@@ -3,13 +3,17 @@ using System.Collections;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 
+
 public class GameController : MonoBehaviour
 {
     public Camera cameraRef;
     public GameObject dLight;
     private AudioClip audioRef;
     private SoundManager soundRef;
+    private AudioSource audioSourceRef;
     public string currentScene;
+    
+    
 
 
     #region Private Variables
@@ -55,41 +59,53 @@ public class GameController : MonoBehaviour
         {
             Debug.Log("Initializer Invoked Once");
 
-            this.SettingDLight();
+            //this.SettingDLight();
 
             gpInitializer.Invoke(player);
-            StartCoroutine(this.player.GetComponent<MoveHandler>().MoveHandlerUpdate());
 
             #region Background Music
 
             Scene scene = SceneManager.GetActiveScene();
-
+            StopAllCoroutines();
             if (scene.name=="Frogs' Village")
             {
+                soundRef.PersistendAudio[0].AudioSourceRef.Stop();
+                soundRef.PersistendAudio[1].AudioSourceRef.Stop();
+
                 StartCoroutine(FrogVillageSoundTrack());
             }
 
             else if (scene.name == "Dolphins and Swallows' Village")
             {
+                soundRef.PersistendAudio[0].AudioSourceRef.Stop();
+                soundRef.PersistendAudio[1].AudioSourceRef.Stop();
                 StartCoroutine(DolphinVillageSoundTrackCO());
             }
 
             else if (scene.name == "Armadillos' Village")
             {
+                soundRef.PersistendAudio[0].AudioSourceRef.Stop();
+                soundRef.PersistendAudio[1].AudioSourceRef.Stop();
                 StartCoroutine(ArmadilloVillageSoundTrackCO());
             }
 
             else if (scene.name == "Route 1" || scene.name == "Route 2" || scene.name == "route 3" || scene.name == "Route 4")
             {
+                soundRef.PersistendAudio[0].AudioSourceRef.Stop();
+                soundRef.PersistendAudio[1].AudioSourceRef.Stop();
                 StartCoroutine(RouteSoundTrackCO());
             }
 
             else if (scene.name == "Dragon's Spring Temple")
             {
+                soundRef.PersistendAudio[0].AudioSourceRef.Stop();
+                soundRef.PersistendAudio[1].AudioSourceRef.Stop();
                 StartCoroutine(DragonTempleSoundTrackCO());
             }
 
             #endregion
+
+            StartCoroutine(this.player.GetComponent<MoveHandler>().MoveHandlerUpdate());
 
         }
         else
@@ -103,19 +119,19 @@ public class GameController : MonoBehaviour
 
     IEnumerator FrogVillageSoundTrack()
     {
-        soundRef.PlaySound(1, 5);
+        soundRef.PlaySound(1, 6);
         yield return new WaitForSeconds(soundRef.PersistendAudio[1].AudioSourceRef.clip.length);
         soundRef.PlaySound(0, 1);
     }
     IEnumerator DolphinVillageSoundTrackCO()
     {
-        soundRef.PlaySound(1, 5);
+        soundRef.PlaySound(1, 6);
         yield return new WaitForSeconds(soundRef.PersistendAudio[1].AudioSourceRef.clip.length);
         soundRef.PlaySound(0, 2);
     }
     IEnumerator ArmadilloVillageSoundTrackCO()
     {
-        soundRef.PlaySound(1, 5);
+        soundRef.PlaySound(1, 6);
         yield return new WaitForSeconds(soundRef.PersistendAudio[1].AudioSourceRef.clip.length);
         soundRef.PlaySound(0, 3);
     }
@@ -123,13 +139,19 @@ public class GameController : MonoBehaviour
     {
         soundRef.PlaySound(1, 5);
         yield return new WaitForSeconds(soundRef.PersistendAudio[1].AudioSourceRef.clip.length);
+
         soundRef.PlaySound(0, 4);
     }
     IEnumerator DragonTempleSoundTrackCO()
     {
-        soundRef.PlaySound(1, 5);
+        soundRef.PlaySound(1, 7);
         yield return new WaitForSeconds(soundRef.PersistendAudio[1].AudioSourceRef.clip.length);
         soundRef.PlaySound(0, 5);
+    }
+
+    IEnumerator StopOverlapingCO()
+    {
+        yield return new WaitForSeconds(soundRef.PersistendAudio[1].AudioSourceRef.clip.length);
     }
 
     #endregion

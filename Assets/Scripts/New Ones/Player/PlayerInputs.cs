@@ -220,27 +220,27 @@ public class PlayerInputs : MonoBehaviour
         else if (toFrogPressed())
         {
             genAbiRequest.Invoke(abilties.toFrog);
-            FormSound();
+           // FormSound();
         }
         else if (toArmaPressed())
         {
             genAbiRequest.Invoke(abilties.toArma);
-            FormSound();
+            
         }
         else if (toCranePressed())
         {
             genAbiRequest.Invoke(abilties.toCrane);
-            FormSound();
+         
         }
         else if (toDolpPressed())
         {
             genAbiRequest.Invoke(abilties.toDolp);
-            FormSound();
+            
         }
         else if (toStdPressed())
         {
             genAbiRequest.Invoke(abilties.toStd);
-            FormSound();
+            
         }
         else if (rollPressed())
         {
@@ -281,11 +281,11 @@ public class PlayerInputs : MonoBehaviour
     }
     public void CraneGlide()
     {
-        GameObject.FindGameObjectWithTag("Player").GetComponent<SoundManager>().PlaySound(1, 1);
+        GameObject.FindGameObjectWithTag("Player").GetComponent<SoundManager>().PlaySound(1, 0);
     }
     public void StopCraneGlide()
     {
-        GameObject.FindGameObjectWithTag("Player").GetComponent<SoundManager>().StopSound(1, 1);
+        GameObject.FindGameObjectWithTag("Player").GetComponent<SoundManager>().StopSound(1, 0);
     }
     public void StandardWalk()
     {
