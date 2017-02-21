@@ -111,18 +111,23 @@ public class FSMExecutor : MonoBehaviour
         {
             case "Standard Form":
                 this.animatorLink = formReferences[0].GetComponent<Animator>();
+                playerref.FormSound();
                 break;
             case "Frog Form":
                 this.animatorLink = formReferences[1].GetComponent<Animator>();
+                playerref.FormSound();
                 break;
             case "Dragon Form":
                 this.animatorLink = formReferences[2].GetComponent<Animator>();
+                playerref.FormSound();
                 break;
             case "Armadillo Form":
                 this.animatorLink = formReferences[3].GetComponent<Animator>();
+                playerref.FormSound();
                 break;
             case "Dolphin Form":
                 this.animatorLink = formReferences[4].GetComponent<Animator>();
+                playerref.FormSound();
                 this.dolphinFIx = this.StartCoroutine(this.FixingDolphinStuckAni());
                 break;
         }

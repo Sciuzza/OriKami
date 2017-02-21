@@ -18,7 +18,6 @@ public class SoundManager : MonoBehaviour
     public void PlaySound(int catIndex, int clipIndex)
     {
 
-
         this.PersistendAudio[catIndex].AudioSourceRef.clip = this.PersistendAudio[catIndex].PossibleSounds[clipIndex];
         this.PersistendAudio[catIndex].AudioSourceRef.Play();
     }
