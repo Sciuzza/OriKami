@@ -59,15 +59,13 @@ public class GameController : MonoBehaviour
         {
             Debug.Log("Initializer Invoked Once");
 
-            this.SettingDLight();
+            //this.SettingDLight();
 
             gpInitializer.Invoke(player);
-            StartCoroutine(this.player.GetComponent<MoveHandler>().MoveHandlerUpdate());
 
             #region Background Music
 
             Scene scene = SceneManager.GetActiveScene();
-
             StopAllCoroutines();
             if (scene.name=="Frogs' Village")
             {
@@ -107,7 +105,7 @@ public class GameController : MonoBehaviour
 
             #endregion
 
-     
+            StartCoroutine(this.player.GetComponent<MoveHandler>().MoveHandlerUpdate());
 
         }
         else
