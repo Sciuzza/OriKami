@@ -36,6 +36,8 @@ public class FSMExecutor : MonoBehaviour
 
     #region Private Variables
     PlayerInputs playerref;
+    FSMChecker fsmLinker;
+    
 
     //Animator Manager variables
     private Vector3 finalMoveDirTemp;
@@ -43,6 +45,7 @@ public class FSMExecutor : MonoBehaviour
     private Animator animatorLink;
     private Coroutine dolphinFIx;
     private Coroutine specialRollAni;
+    
 
     private Quaternion armaOriginarRot;
 
@@ -53,6 +56,7 @@ public class FSMExecutor : MonoBehaviour
     void Awake()
     {
         playerref = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerInputs>();
+        fsmLinker = GameObject.FindGameObjectWithTag("Player").GetComponent<FSMChecker>();
         var fsmCheckerTempLink = this.gameObject.GetComponent<FSMChecker>();
 
         fsmCheckerTempLink.formChanged.AddListener(this.ApplyingFormEffect);
@@ -145,15 +149,16 @@ public class FSMExecutor : MonoBehaviour
         }
         this.dolphinFIx = null;
     }
-
+    private bool asd = true;
+    private bool asdf = true;
     private void ApplyingMoveAbiEffect(Vector3 moveDirInput, string currentForm, physicStates currentPHState, List<GameObject> forms)
     {
+        
         if (this.noControlStory) return;
 
         switch (currentForm)
         {
             case "Standard Form":
-
 
                 //this.animatorLink = forms[0].GetComponent<Animator>();
 
@@ -184,6 +189,21 @@ public class FSMExecutor : MonoBehaviour
                         this.animatorLink.SetFloat("Moving", Mathf.InverseLerp(0, (float)Math.Pow(this.currentMoveValues.standMove.moveSpeed, 2), (moveDirInput * this.generalValues.moveInWater).sqrMagnitude));
                         break;
                     case physicStates.onGround:
+
+                        //if (moveDirInput.sqrMagnitude == 0 && fsmLinker.isWalkingSound && asd)
+                        //{
+
+                        //    Debug.Log("magnitude"+moveDirInput.sqrMagnitude);
+                        //    playerref.StopStandardWalk();
+                        //    fsmLinker.isWalkingSound = true;
+                        //    asd = false;
+                        //}
+                        //else if (moveDirInput.sqrMagnitude != 0 /*&& !fsmLinker.isWalkingSound*/)
+                        //{
+                        //    Debug.Log("magnitude2" + moveDirInput.sqrMagnitude);
+                        //    playerref.StandardWalk();
+                        //    fsmLinker.isWalkingSound = false;                   
+                        //}
                         if (Math.Abs(moveDirInput.sqrMagnitude) > Tolerance)
                         {
                             this.moveSelected.Invoke(moveDirInput, this.currentMoveValues.standMove.moveSpeed);

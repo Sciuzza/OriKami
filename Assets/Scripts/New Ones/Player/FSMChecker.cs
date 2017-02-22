@@ -275,7 +275,7 @@ public class FSMChecker : MonoBehaviour
 
     private bool isGlidingSound = false;
     private bool isRollingSound = false;
-    private bool isWalkingSound = false;
+    public bool isWalkingSound = false;
 
     private bool onGroundSwallow = false;
     private bool onGroundDolphin = false;
@@ -320,7 +320,7 @@ public class FSMChecker : MonoBehaviour
 
 
         PlayerInputs plInputsTempLink = this.gameObject.GetComponent<PlayerInputs>();
-
+       
 
         plInputsTempLink.dirAbiRequest.AddListener(CheckingDirAbiRequirements);
         plInputsTempLink.genAbiRequest.AddListener(CheckingAbiRequirements);
@@ -398,6 +398,20 @@ public class FSMChecker : MonoBehaviour
         cPlayerState.currentClState = controlStates.totalControl;
 
         SettingCapsuleCollider(0.15f, 0.3f, 0.2f);
+
+        if ((cPlayerState.currentForm == "Standard Form" || cPlayerState.currentForm == "Armadillo Form") && cPlayerState.currentPhState == physicStates.onGround && /*cPlayerState.currentPlState == playerStates.moving &&*/ !isWalkingSound)
+        {
+            Debug.Log("SUONOREF");
+            this.GetComponent<PlayerInputs>().StandardWalk();
+            isWalkingSound = true;
+        }
+        else if ((cPlayerState.currentForm == "Standard Form" || cPlayerState.currentForm == "Armadillo Form") && cPlayerState.currentPhState == physicStates.onGround || cPlayerState.currentPhState == physicStates.onAir || cPlayerState.currentPlState != playerStates.moving && isWalkingSound)
+        {
+            
+            this.GetComponent<PlayerInputs>().StopStandardWalk();
+            isWalkingSound = false;
+        }
+
 
     }
     #endregion
@@ -1943,8 +1957,9 @@ public class FSMChecker : MonoBehaviour
             isGlidingSound = false;
         }
 
-        if (cPlayerState.currentForm == "Armadillo Form" && cPlayerState.currentPhState == physicStates.onGround && this.GetComponent<PlayerInputs>().rollPressed() && !isRollingSound)
+        if (cPlayerState.currentForm == "Armadillo Form" && cPlayerState.currentPhState == physicStates.onGround &&  this.GetComponent<PlayerInputs>().rollPressed() && !isRollingSound)
         {
+            
             this.GetComponent<PlayerInputs>().RollingSound();
             isRollingSound = true;
         }
@@ -1959,17 +1974,7 @@ public class FSMChecker : MonoBehaviour
             isRollingSound = false;
         }
 
-        //if ((cPlayerState.currentForm == "Standard Form" || cPlayerState.currentForm == "Armadillo Form") && cPlayerState.currentPhState == physicStates.onGround && cPlayerState.currentPlState == playerStates.moving &&!isWalkingSound)
-        //{
-        //    this.GetComponent<PlayerInputs>().StandardWalk();
-        //    isWalkingSound = true;
-        //}
-        //else if ((cPlayerState.currentForm != "Standard Form" || cPlayerState.currentForm != "Armadillo Form") || cPlayerState.currentPhState != physicStates.onGround || cPlayerState.currentPlState != playerStates.moving && isWalkingSound)
-        //{
-        //    this.GetComponent<PlayerInputs>().StopStandardWalk();
-        //    isWalkingSound = false;
-        //}
-
+      
 
         #endregion
 
