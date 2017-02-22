@@ -64,11 +64,11 @@ public class PlayerInputs : MonoBehaviour
 
         fsmCheckerTempLink.formChangedInp.AddListener(this.UpdatingCurrentFormInputs);
 
-        GameObject storyLineCheck = GameObject.FindGameObjectWithTag("StoryLine");
-
         CameraManager cmTempLink = GameObject.FindGameObjectWithTag("GameController").GetComponent<CameraManager>();
 
         cmTempLink.reAdjustingCamValues.AddListener(this.FixingCamValues);
+
+        GameObject storyLineCheck = GameObject.FindGameObjectWithTag("StoryLine");
 
         if (storyLineCheck != null)
         {

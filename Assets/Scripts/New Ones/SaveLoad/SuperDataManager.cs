@@ -224,6 +224,7 @@ public class SuperDataManager : MonoBehaviour
           GameObject.FindGameObjectWithTag("StoryLine").GetComponent<StoryLineInstance>();
 
         currentSlInScene.RequestRepoUpdateQuests.AddListener(this.UpdatingQuestData);
+        currentSlInScene.SaveRequest.AddListener(this.SaveHandler);
 
         player.GetComponent<FSMChecker>().deathRequest.AddListener(this.LoadingHandler);
         player.GetComponent<EnvInputs>().SaveRequestByCheck.AddListener(this.SaveHandler);

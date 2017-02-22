@@ -393,9 +393,20 @@ public class StoryLine
     public List<string> StoryCompleteOnCompletion;
     public List<string> StoryLineCompleteOnCompletion;
 
+    public bool TriggerSave;
+
     public List<SingleStory> Stories;
 }
 #endregion Story Element
+
+#region QueueMemorySystem
+[System.Serializable]
+public class QueueMemory
+{
+    public string ObjName;
+    public List<ObjectMoving> QueuedMoves;
+}
+#endregion
 
 public class StoryLineInstance : MonoBehaviour
 {
@@ -418,6 +429,7 @@ public class StoryLineInstance : MonoBehaviour
     public event_int AniRequest;
     public event_string UiDialogueWILRequest;
     public event_transform KoiNewTransfRequest;
+    public UnityEvent SaveRequest;
     #endregion
 
     #region Private Variables
@@ -425,7 +437,7 @@ public class StoryLineInstance : MonoBehaviour
 
     private SingleStory storySelected;
 
-
+    private List<QueueMemory> queObjs = new List<QueueMemory>();
 
     private List<SingleStory> baloonStory = new List<SingleStory>();
 
@@ -466,6 +478,35 @@ public class StoryLineInstance : MonoBehaviour
         var sdmTempLink = GameObject.FindGameObjectWithTag("GameController").GetComponent<SuperDataManager>();
 
         sdmTempLink.RequestLocalUpdateByRepo.AddListener(this.LoadingCurrentState);
+
+        GameObject[] goldenCrane = GameObject.FindGameObjectsWithTag("GoldenCrane");
+
+        foreach (var coll in goldenCrane)
+        {
+            coll.GetComponent<CollTrigger>().CheckStoryAccessRequest.AddListener(this.CheckingAECTriggeredByItem);
+        }
+
+        GameObject[] dRocks = GameObject.FindGameObjectsWithTag("DRocks");
+
+        foreach (var coll in goldenCrane)
+        {
+            coll.GetComponent<CollTrigger>().CheckStoryAccessRequest.AddListener(this.CheckingAECTriggeredByItem);
+        }
+
+        GameObject[] blackSmith = GameObject.FindGameObjectsWithTag("BlackSmith");
+
+        foreach (var coll in goldenCrane)
+        {
+            coll.GetComponent<CollTrigger>().CheckStoryAccessRequest.AddListener(this.CheckingAECTriggeredByItem);
+        }
+
+        GameObject[] v3 = GameObject.FindGameObjectsWithTag("V3");
+
+        foreach (var coll in goldenCrane)
+        {
+            coll.GetComponent<CollTrigger>().CheckStoryAccessRequest.AddListener(this.CheckingAECTriggeredByItem);
+        }
+
     }
     #endregion
 
@@ -525,6 +566,11 @@ public class StoryLineInstance : MonoBehaviour
             this.LivingBaloonStory();
         }
         else Debug.Log("No Story is accessible through this Trigger " + trigger.name);
+    }
+
+    private void CheckingAECTriggeredByItem(string storyToCheck)
+    {
+ 
     }
 
     private bool CheckItemConditions(SingleStory storyToCheck)
@@ -587,12 +633,12 @@ public class StoryLineInstance : MonoBehaviour
 
     private void TriggeringStoryByInput(SingleStory storyToTrigger)
     {
-        if (this.storySelected == storyToTrigger)
+        if (this.storySelected == storyToTrigger && !this.storySelected.Completed)
         {
             this.LivingStoryEvent();
             Debug.Log("prima");
         }
-        else
+        else if (!storyToTrigger.Completed)
         {
             Debug.Log("seconda");
             this.storySelected = storyToTrigger;
@@ -873,9 +919,15 @@ public class StoryLineInstance : MonoBehaviour
         if (this.storySelected.AutoComplete) this.storySelected.Completed = true;
 
         this.CompletionEffects();
-
+       
         this.RequestRepoUpdateQuests.Invoke();
+
+        if (this.CurrentStoryLine.TriggerSave)
+        this.SaveRequest.Invoke();
+
         this.ChangeCsExitRequest.Invoke(this.storySelected.EndControlEffect);
+
+
     }
 
     private void ActivationEffects()
@@ -1770,9 +1822,33 @@ public class StoryLineInstance : MonoBehaviour
                 effectToPlay.End = true;
                 this.effectCounter++;
                 GameController.Debugging("Effect Counter", this.effectCounter);
+
+                if (this.queObjs.Find(x => x.ObjName == effectToPlay.GbToMove.name) == null)
+                {
+                    QueueMemory newObj = new QueueMemory();
+                    newObj.QueuedMoves = new List<ObjectMoving>();
+                    newObj.ObjName = effectToPlay.GbToMove.name;
+                    newObj.QueuedMoves.Add(effectToPlay);
+
+                    this.queObjs.Add(newObj);
+
+                    this.StartCoroutine(this.MovingObject(effectToPlay));
+                    Debug.Log("first move");
+                }
+                else
+                {
+                    Debug.Log("queued");
+                    QueueMemory objFound = this.queObjs.Find(x => x.ObjName == effectToPlay.GbToMove.name);
+                    objFound.QueuedMoves.Add(effectToPlay);
+                }
+
+            }
+            else
+            {
+
+                this.StartCoroutine(this.MovingObject(effectToPlay));
             }
 
-            this.StartCoroutine(this.MovingObject(effectToPlay));
         }
     }
 
@@ -1883,6 +1959,27 @@ public class StoryLineInstance : MonoBehaviour
             movingObjEffect.End = true;
             this.effectCounter++;
             GameController.Debugging("Effect Counter", this.effectCounter);
+        }
+        else
+        {
+            this.QueuedMoveHandler(movingObjEffect);
+        }
+    }
+
+    private void QueuedMoveHandler(ObjectMoving justEndedMove)
+    {
+        QueueMemory objToHandle = this.queObjs.Find(x => x.ObjName == justEndedMove.GbToMove.name);
+        int indexToRemove = objToHandle.QueuedMoves.FindIndex(y => y == justEndedMove);
+
+        int indexToSearch = this.queObjs.FindIndex(x => x == objToHandle);
+
+        this.queObjs[indexToSearch].QueuedMoves.RemoveAt(indexToRemove);
+
+        if (this.queObjs[indexToSearch].QueuedMoves.Count != 0)
+        this.StartCoroutine(this.MovingObject(this.queObjs[indexToSearch].QueuedMoves[0]));
+        else
+        {
+            this.queObjs.Remove(objToHandle);
         }
     }
 
