@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: e840e3c56a173dc41b4ba5771455b209
-timeCreated: 1487750980
+guid: b096d7ea1dca4694089ebbb2731b49cb
+timeCreated: 1487759806
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
@@ -9,7 +9,7 @@ ModelImporter:
     400000: //RootNode
     2300000: //RootNode
     3300000: //RootNode
-    4300000: stelo2
+    4300000: ground_r4_part2
   materials:
     importMaterials: 1
     materialName: 0
