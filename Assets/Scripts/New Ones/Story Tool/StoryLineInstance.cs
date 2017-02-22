@@ -483,28 +483,40 @@ public class StoryLineInstance : MonoBehaviour
 
         foreach (var coll in goldenCrane)
         {
-            coll.GetComponent<CollTrigger>().CheckStoryAccessRequest.AddListener(this.CheckingAECTriggeredByItem);
+            CollTrigger ctTempLink = coll.GetComponent<CollTrigger>();
+
+            if (ctTempLink.TriggerStory)
+            ctTempLink.CheckStoryAccessRequest.AddListener(this.CheckingAECTriggeredByItem);
         }
 
         GameObject[] dRocks = GameObject.FindGameObjectsWithTag("DRocks");
 
         foreach (var coll in goldenCrane)
         {
-            coll.GetComponent<CollTrigger>().CheckStoryAccessRequest.AddListener(this.CheckingAECTriggeredByItem);
+            CollTrigger ctTempLink = coll.GetComponent<CollTrigger>();
+
+            if (ctTempLink.TriggerStory)
+                ctTempLink.CheckStoryAccessRequest.AddListener(this.CheckingAECTriggeredByItem);
         }
 
         GameObject[] blackSmith = GameObject.FindGameObjectsWithTag("BlackSmith");
 
         foreach (var coll in goldenCrane)
         {
-            coll.GetComponent<CollTrigger>().CheckStoryAccessRequest.AddListener(this.CheckingAECTriggeredByItem);
+            CollTrigger ctTempLink = coll.GetComponent<CollTrigger>();
+
+            if (ctTempLink.TriggerStory)
+                ctTempLink.CheckStoryAccessRequest.AddListener(this.CheckingAECTriggeredByItem);
         }
 
         GameObject[] v3 = GameObject.FindGameObjectsWithTag("V3");
 
         foreach (var coll in goldenCrane)
         {
-            coll.GetComponent<CollTrigger>().CheckStoryAccessRequest.AddListener(this.CheckingAECTriggeredByItem);
+            CollTrigger ctTempLink = coll.GetComponent<CollTrigger>();
+
+            if (ctTempLink.TriggerStory)
+                ctTempLink.CheckStoryAccessRequest.AddListener(this.CheckingAECTriggeredByItem);
         }
 
     }
@@ -570,7 +582,21 @@ public class StoryLineInstance : MonoBehaviour
 
     private void CheckingAECTriggeredByItem(string storyToCheck)
     {
- 
+        if (this.CurrentStoryLine.Stories.Find(x => x.StoryName == storyToCheck) == null)
+        {
+            Debug.Log("Story Name is Wrong");
+        }
+        else
+        {
+            var storyToAnalyze = this.CurrentStoryLine.Stories.Find(x => x.StoryName == storyToCheck);
+
+            if (this.CheckItemConditions(storyToAnalyze))
+            {
+                this.storySelected = storyToAnalyze;
+                this.InitializingStory();
+            }
+                
+        }
     }
 
     private bool CheckItemConditions(SingleStory storyToCheck)
