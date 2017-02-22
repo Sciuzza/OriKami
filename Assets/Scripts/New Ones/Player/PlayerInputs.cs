@@ -281,27 +281,27 @@ public class PlayerInputs : MonoBehaviour
     }
     public void CraneGlide()
     {
-        GameObject.FindGameObjectWithTag("Player").GetComponent<SoundManager>().PlaySound(1, 0);
+        GameObject.FindGameObjectWithTag("Player").GetComponent<SoundManager>().PlaySound(1, 1);
     }
     public void StopCraneGlide()
     {
-        GameObject.FindGameObjectWithTag("Player").GetComponent<SoundManager>().StopSound(1, 0);
+        GameObject.FindGameObjectWithTag("Player").GetComponent<SoundManager>().StopSound(1, 1);
     }
     public void StandardWalk()
     {
-        GameObject.FindGameObjectWithTag("Player").GetComponent<SoundManager>().PlaySound(1, 2);
+        GameObject.FindGameObjectWithTag("Player").GetComponent<SoundManager>().PlaySound(1, 3);
     }
     public void StopStandardWalk()
     {
-        GameObject.FindGameObjectWithTag("Player").GetComponent<SoundManager>().StopSound(1, 2);
+        GameObject.FindGameObjectWithTag("Player").GetComponent<SoundManager>().StopSound(1, 3);
     }
     public void FrogWalk()
     {
-        GameObject.FindGameObjectWithTag("Player").GetComponent<SoundManager>().PlaySound(1, 3);
+        GameObject.FindGameObjectWithTag("Player").GetComponent<SoundManager>().PlaySound(1, 2);
     }
     public void StopFrogWalk()
     {
-        GameObject.FindGameObjectWithTag("Player").GetComponent<SoundManager>().StopSound(1, 3);
+        GameObject.FindGameObjectWithTag("Player").GetComponent<SoundManager>().StopSound(1, 2);
     }
 
     #endregion
