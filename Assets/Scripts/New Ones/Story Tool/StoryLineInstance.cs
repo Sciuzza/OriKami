@@ -537,16 +537,16 @@ public class StoryLineInstance : MonoBehaviour
             switch (item.ItemDep)
             {
                 case ItemType.GoldenCrane:
-                    if (item.ItemValue < fsmTempLink.GoldenCrane) return false;
+                    if (item.ItemValue > fsmTempLink.GoldenCrane) return false;
                     break;
                 case ItemType.DRocks:
-                    if (item.ItemValue < fsmTempLink.DRocks) return false;
+                    if (item.ItemValue > fsmTempLink.DRocks) return false;
                     break;
                 case ItemType.BlackSmith:
-                    if (item.ItemValue < fsmTempLink.BlackSmith) return false;
+                    if (item.ItemValue > fsmTempLink.BlackSmith) return false;
                     break;
                 case ItemType.V3:
-                    if (item.ItemValue < fsmTempLink.V3) return false;
+                    if (item.ItemValue > fsmTempLink.V3) return false;
                     break;
             }
         }
@@ -2315,11 +2315,13 @@ public class StoryLineInstance : MonoBehaviour
             this.UiDialogueWILRequest.Invoke(dialogueEffect.Sentence[0]);
         }
         var counter = 0;
+        var skipped = false;
 
         while (counter < dialogueEffect.Name.Count - 1)
         {
             if (Input.GetButtonDown(buttonsJoy.Y.ToString()))
             {
+                skipped = true;
                 break;
             }
 
@@ -2337,7 +2339,7 @@ public class StoryLineInstance : MonoBehaviour
             yield return null;
         }
 
-        while (!Input.GetButtonDown(buttonsJoy.X.ToString()) && !Input.GetButtonDown(buttonsPc.E.ToString())) yield return null;
+        while (!Input.GetButtonDown(buttonsJoy.X.ToString()) && !Input.GetButtonDown(buttonsPc.E.ToString()) && !skipped && !Input.GetButtonDown(buttonsJoy.Y.ToString())) yield return null;
 
         this.DialogueEnded.Invoke();
         dialogueEffect.End = true;
