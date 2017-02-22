@@ -7,6 +7,7 @@ public class EnvInputs : MonoBehaviour
     #region Private Variables
     private CharacterController ccLink;
     private bool onWaterFlag = false, onAir = false, onWater = false, onGround = false;
+    private CollTrigger ctTempLink;
     #endregion
 
     #region Events
@@ -130,12 +131,24 @@ public class EnvInputs : MonoBehaviour
                 break;
             case "GoldenCrane":
                 this.IncrementNCollRequest.Invoke(0, envTrigger.gameObject);
+
+                this.ctTempLink = envTrigger.gameObject.GetComponent<CollTrigger>();
+                if (this.ctTempLink.TriggerStory) this.ctTempLink.CheckingStoryCondition();
+
                 break;
             case "BlackSmith":
                 this.IncrementNCollRequest.Invoke(2, envTrigger.gameObject);
+
+                this.ctTempLink = envTrigger.gameObject.GetComponent<CollTrigger>();
+                if (this.ctTempLink.TriggerStory) this.ctTempLink.CheckingStoryCondition();
+
                 break;
             case "V3":
                 this.IncrementNCollRequest.Invoke(3, envTrigger.gameObject);
+
+                this.ctTempLink = envTrigger.gameObject.GetComponent<CollTrigger>();
+                if (this.ctTempLink.TriggerStory) this.ctTempLink.CheckingStoryCondition();
+
                 break;
         }
 
@@ -176,6 +189,10 @@ public class EnvInputs : MonoBehaviour
         {
             case "DRocks":
                 this.wallDCheckRequest.Invoke(hit.collider.gameObject);
+
+                this.ctTempLink = hit.gameObject.GetComponent<CollTrigger>();
+                if (this.ctTempLink.TriggerStory) this.ctTempLink.CheckingStoryCondition();
+
                 break;
         }
     }
