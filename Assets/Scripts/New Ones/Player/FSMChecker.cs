@@ -233,6 +233,7 @@ public class FSMChecker : MonoBehaviour
     public playerLegends legUnlocked;
     public float drowTimerSetting;
 
+    public Projector fakeShadow;
     public ParticleSystem ArmaRollingPart;
 
     public int GoldenCrane = 0;
@@ -279,6 +280,22 @@ public class FSMChecker : MonoBehaviour
 
     private bool onGroundSwallow = false;
     private bool onGroundDolphin = false;
+
+    private Coroutine fakeShadowHandler;
+
+    private readonly float ortFakeShadowStd = 0.4f;
+    private readonly float ortFakeShadowFrog = 0.6f;
+    private readonly float ortFakeShadowArma = 0.6f;
+    private readonly float ortFakeShadowSwallow = 0.6f;
+    private readonly float ortFakeShadowDolphin = 0.6f;
+
+
+    private readonly Vector3 fakePosStd = new Vector3(0, 0.1f, -0.02f);
+    private Vector3 fakePosFrog = new Vector3(0, 0.1f, -0.15f);
+    private Vector3 fakePosArma = new Vector3(0, 0.1f, -0.2f);
+    private Vector3 fakePosSwal = new Vector3(0, 0.1f, -0.2f);
+    private Vector3 fakePosDolp = new Vector3(0, 0.1f, -0.2f);
+
     #endregion
 
     #region Events
@@ -302,12 +319,6 @@ public class FSMChecker : MonoBehaviour
     public UnityEvent aniStoryInitRequest, aniNormalInitRequest;
     public event_int updateUiCollRequest;
     #endregion
-
-
-
-
-
-
 
     #region Initialization Methods
     void Awake()
@@ -398,6 +409,8 @@ public class FSMChecker : MonoBehaviour
         cPlayerState.currentClState = controlStates.totalControl;
 
         SettingCapsuleCollider(0.15f, 0.3f, 0.2f);
+        this.fakeShadow.orthographicSize = this.ortFakeShadowStd;
+        this.fakeShadow.gameObject.transform.localPosition = this.fakePosStd;
 
     }
     #endregion
@@ -491,6 +504,8 @@ public class FSMChecker : MonoBehaviour
                     if (cPlayerState.previousForm == "Dragon Form")
                         stopGlideLogic.Invoke();
                     SettingCapsuleCollider(0.15f, 0.3f, 0.2f);
+                    this.fakeShadow.orthographicSize = this.ortFakeShadowStd;
+                    this.fakeShadow.gameObject.transform.localPosition = this.fakePosStd;
                     break;
                 case abilties.toFrog:
                     cPlayerState.previousForm = cPlayerState.currentForm;
@@ -506,6 +521,8 @@ public class FSMChecker : MonoBehaviour
                     if (cPlayerState.previousForm == "Dragon Form")
                         stopGlideLogic.Invoke();
                     SettingCapsuleCollider(0.15f, 0.3f, 0.2f);
+                    this.fakeShadow.orthographicSize = this.ortFakeShadowFrog;
+                    this.fakeShadow.gameObject.transform.localPosition = this.fakePosFrog;
                     break;
                 case abilties.toCrane:
                     cPlayerState.previousForm = cPlayerState.currentForm;
@@ -520,6 +537,8 @@ public class FSMChecker : MonoBehaviour
                     formChanged.Invoke(cPlayerState.currentForm, cPlayerState.previousForm, cPlayerState.forms);
                     enableGlideLogic.Invoke();
                     SettingCapsuleCollider(0.15f, 0.3f, 0.2f);
+                    this.fakeShadow.orthographicSize = this.ortFakeShadowSwallow;
+                    this.fakeShadow.gameObject.transform.localPosition = this.fakePosSwal;
                     break;
                 case abilties.toArma:
                     cPlayerState.previousForm = cPlayerState.currentForm;
@@ -532,6 +551,8 @@ public class FSMChecker : MonoBehaviour
                     if (cPlayerState.previousForm == "Dragon Form")
                         stopGlideLogic.Invoke();
                     SettingCapsuleCollider(0.15f, 0.3f, 0.2f);
+                    this.fakeShadow.orthographicSize = this.ortFakeShadowArma;
+                    this.fakeShadow.gameObject.transform.localPosition = this.fakePosArma;
                     break;
                 case abilties.toDolp:
                     cPlayerState.previousForm = cPlayerState.currentForm;
@@ -547,6 +568,8 @@ public class FSMChecker : MonoBehaviour
                     if (cPlayerState.previousForm == "Dragon Form")
                         stopGlideLogic.Invoke();
                     SettingCapsuleCollider(0.15f, 0.3f, 0.2f);
+                    this.fakeShadow.orthographicSize = this.ortFakeShadowDolphin;
+                    this.fakeShadow.gameObject.transform.localPosition = this.fakePosDolp;
                     break;
             }
         }
@@ -576,6 +599,36 @@ public class FSMChecker : MonoBehaviour
         cPlayerState.currentPhState = stateToGo;
         UpdatingAbilityList();
 
+        if ((stateToGo == physicStates.onGround || stateToGo == physicStates.onWater))
+        {
+
+            if (this.fakeShadowHandler != null)
+            this.StopCoroutine(this.fakeShadowHandler);
+            this.fakeShadowHandler = null;
+            this.fakeShadow.farClipPlane = 1;
+        }
+        else
+        {
+            this.fakeShadowHandler = this.StartCoroutine(this.HandlingFakeShadow());
+        }
+    }
+
+    private IEnumerator HandlingFakeShadow()
+    {
+        RaycastHit hitInfo;
+            Ray rayDown;
+
+        while (true)
+        {
+            rayDown = new Ray(this.gameObject.transform.position, -this.gameObject.transform.up);
+
+            if (Physics.Raycast(rayDown, out hitInfo))
+            {
+                this.fakeShadow.farClipPlane = 1 + hitInfo.distance;
+            }
+
+        yield return null;
+        }
 
     }
 
@@ -1843,7 +1896,9 @@ public class FSMChecker : MonoBehaviour
                     if (cPlayerState.previousForm == "Dragon Form")
                         stopGlideLogic.Invoke();
                     SettingCapsuleCollider(0.15f, 0.3f, 0.2f);
-                    break;
+                this.fakeShadow.orthographicSize = this.ortFakeShadowStd;
+                this.fakeShadow.gameObject.transform.localPosition = this.fakePosStd;
+                break;
                 case abilties.toFrog:
                     cPlayerState.previousForm = cPlayerState.currentForm;
                     cPlayerState.currentForm = "Frog Form";
@@ -1856,7 +1911,9 @@ public class FSMChecker : MonoBehaviour
                     if (cPlayerState.previousForm == "Dragon Form")
                         stopGlideLogic.Invoke();
                     SettingCapsuleCollider(0.15f, 0.3f, 0.2f);
-                    break;
+                this.fakeShadow.orthographicSize = this.ortFakeShadowFrog;
+                this.fakeShadow.gameObject.transform.localPosition = this.fakePosFrog;
+                break;
                 case abilties.toCrane:
                     cPlayerState.previousForm = cPlayerState.currentForm;
                     cPlayerState.currentForm = "Dragon Form";
@@ -1868,7 +1925,9 @@ public class FSMChecker : MonoBehaviour
                     formChanged.Invoke(cPlayerState.currentForm, cPlayerState.previousForm, cPlayerState.forms);
                     enableGlideLogic.Invoke();
                     SettingCapsuleCollider(0.15f, 0.3f, 0.2f);
-                    break;
+                this.fakeShadow.orthographicSize = this.ortFakeShadowSwallow;
+                this.fakeShadow.gameObject.transform.localPosition = this.fakePosSwal;
+                break;
                 case abilties.toArma:
                     cPlayerState.previousForm = cPlayerState.currentForm;
                     cPlayerState.currentForm = "Armadillo Form";
@@ -1878,7 +1937,9 @@ public class FSMChecker : MonoBehaviour
                     if (cPlayerState.previousForm == "Dragon Form")
                         stopGlideLogic.Invoke();
                     SettingCapsuleCollider(0.15f, 0.3f, 0.2f);
-                    break;
+                this.fakeShadow.orthographicSize = this.ortFakeShadowArma;
+                this.fakeShadow.gameObject.transform.localPosition = this.fakePosArma;
+                break;
                 case abilties.toDolp:
                     cPlayerState.previousForm = cPlayerState.currentForm;
                     cPlayerState.currentForm = "Dolphin Form";
@@ -1891,7 +1952,9 @@ public class FSMChecker : MonoBehaviour
                     if (cPlayerState.previousForm == "Dragon Form")
                         stopGlideLogic.Invoke();
                     SettingCapsuleCollider(0.15f, 0.3f, 0.2f);
-                    break;
+                this.fakeShadow.orthographicSize = this.ortFakeShadowDolphin;
+                this.fakeShadow.gameObject.transform.localPosition = this.fakePosDolp;
+                break;
             }
     }
     #endregion
