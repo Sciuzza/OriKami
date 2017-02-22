@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: e840e3c56a173dc41b4ba5771455b209
-timeCreated: 1487750980
+guid: cc77e7885c3eaa542a00a8cdf68a1109
+timeCreated: 1487776680
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
@@ -9,7 +9,7 @@ ModelImporter:
     400000: //RootNode
     2300000: //RootNode
     3300000: //RootNode
-    4300000: stelo2
+    4300000: testa001
   materials:
     importMaterials: 1
     materialName: 0
