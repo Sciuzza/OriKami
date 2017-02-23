@@ -16,7 +16,7 @@ namespace Orikami
         public bool destroyPlatforms;
         public bool timedPlatforms;
         public bool groupPlatforms;
-
+        public float ReAppearingTime;
      
 
         IEnumerator MyCoroutine()
@@ -38,7 +38,7 @@ namespace Orikami
 
         IEnumerator MyCoroutineExit()
         {
-            yield return new WaitForSeconds(1.5f);
+            yield return new WaitForSeconds(this.ReAppearingTime);
             PlatformMesh.enabled = true;
             platformCollider.isTrigger = false;
 
