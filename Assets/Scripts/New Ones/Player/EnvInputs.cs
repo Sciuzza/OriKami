@@ -133,21 +133,21 @@ public class EnvInputs : MonoBehaviour
                 this.IncrementNCollRequest.Invoke(0, envTrigger.gameObject);
 
                 this.ctTempLink = envTrigger.gameObject.GetComponent<CollTrigger>();
-                if (this.ctTempLink.TriggerStory) this.ctTempLink.CheckingStoryCondition();
+                if (this.ctTempLink != null && this.ctTempLink.TriggerStory) this.ctTempLink.CheckingStoryCondition();
 
                 break;
             case "BlackSmith":
                 this.IncrementNCollRequest.Invoke(2, envTrigger.gameObject);
 
                 this.ctTempLink = envTrigger.gameObject.GetComponent<CollTrigger>();
-                if (this.ctTempLink.TriggerStory) this.ctTempLink.CheckingStoryCondition();
+                if (this.ctTempLink != null && this.ctTempLink.TriggerStory) this.ctTempLink.CheckingStoryCondition();
 
                 break;
             case "V3":
                 this.IncrementNCollRequest.Invoke(3, envTrigger.gameObject);
 
                 this.ctTempLink = envTrigger.gameObject.GetComponent<CollTrigger>();
-                if (this.ctTempLink.TriggerStory) this.ctTempLink.CheckingStoryCondition();
+                if (this.ctTempLink != null && this.ctTempLink.TriggerStory) this.ctTempLink.CheckingStoryCondition();
 
                 break;
         }
@@ -191,7 +191,7 @@ public class EnvInputs : MonoBehaviour
                 this.wallDCheckRequest.Invoke(hit.collider.gameObject);
 
                 this.ctTempLink = hit.gameObject.GetComponent<CollTrigger>();
-                if (this.ctTempLink.TriggerStory) this.ctTempLink.CheckingStoryCondition();
+                if (this.ctTempLink != null && this.ctTempLink.TriggerStory) this.ctTempLink.CheckingStoryCondition();
 
                 break;
         }

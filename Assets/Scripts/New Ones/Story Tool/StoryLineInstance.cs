@@ -485,7 +485,7 @@ public class StoryLineInstance : MonoBehaviour
         {
             CollTrigger ctTempLink = coll.GetComponent<CollTrigger>();
 
-            if (ctTempLink.TriggerStory)
+            if (ctTempLink != null && ctTempLink.TriggerStory)
             ctTempLink.CheckStoryAccessRequest.AddListener(this.CheckingAECTriggeredByItem);
         }
 
@@ -495,7 +495,7 @@ public class StoryLineInstance : MonoBehaviour
         {
             CollTrigger ctTempLink = coll.GetComponent<CollTrigger>();
 
-            if (ctTempLink.TriggerStory)
+            if (ctTempLink != null && ctTempLink.TriggerStory)
                 ctTempLink.CheckStoryAccessRequest.AddListener(this.CheckingAECTriggeredByItem);
         }
 
@@ -505,7 +505,7 @@ public class StoryLineInstance : MonoBehaviour
         {
             CollTrigger ctTempLink = coll.GetComponent<CollTrigger>();
 
-            if (ctTempLink.TriggerStory)
+            if (ctTempLink != null && ctTempLink.TriggerStory)
                 ctTempLink.CheckStoryAccessRequest.AddListener(this.CheckingAECTriggeredByItem);
         }
 
@@ -515,7 +515,7 @@ public class StoryLineInstance : MonoBehaviour
         {
             CollTrigger ctTempLink = coll.GetComponent<CollTrigger>();
 
-            if (ctTempLink.TriggerStory)
+            if (ctTempLink != null && ctTempLink.TriggerStory)
                 ctTempLink.CheckStoryAccessRequest.AddListener(this.CheckingAECTriggeredByItem);
         }
 
