@@ -37,7 +37,8 @@ public class FSMExecutor : MonoBehaviour
     #region Private Variables
     PlayerInputs playerref;
     FSMChecker fsmLinker;
-    
+    SoundManager soundManagerLinker;
+
 
     //Animator Manager variables
     private Vector3 finalMoveDirTemp;
@@ -45,7 +46,7 @@ public class FSMExecutor : MonoBehaviour
     private Animator animatorLink;
     private Coroutine dolphinFIx;
     private Coroutine specialRollAni;
-    
+
 
     private Quaternion armaOriginarRot;
 
@@ -57,6 +58,8 @@ public class FSMExecutor : MonoBehaviour
     {
         playerref = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerInputs>();
         fsmLinker = GameObject.FindGameObjectWithTag("Player").GetComponent<FSMChecker>();
+        soundManagerLinker = GameObject.FindGameObjectWithTag("Player").GetComponent<SoundManager>();
+
         var fsmCheckerTempLink = this.gameObject.GetComponent<FSMChecker>();
 
         fsmCheckerTempLink.formChanged.AddListener(this.ApplyingFormEffect);
@@ -109,29 +112,30 @@ public class FSMExecutor : MonoBehaviour
 
         formReferences.Find(x => x.tag == newForm).SetActive(true);
 
-        // qui il suono
+        playerref.FormSound();
+        soundManagerLinker.PersistendAudio[1].AudioSourceRef.Stop();
 
         switch (newForm)
         {
             case "Standard Form":
                 this.animatorLink = formReferences[0].GetComponent<Animator>();
-                playerref.FormSound();
+                
                 break;
             case "Frog Form":
                 this.animatorLink = formReferences[1].GetComponent<Animator>();
-                playerref.FormSound();
+                
                 break;
             case "Dragon Form":
                 this.animatorLink = formReferences[2].GetComponent<Animator>();
-                playerref.FormSound();
+               
                 break;
             case "Armadillo Form":
                 this.animatorLink = formReferences[3].GetComponent<Animator>();
-                playerref.FormSound();
+               
                 break;
             case "Dolphin Form":
                 this.animatorLink = formReferences[4].GetComponent<Animator>();
-                playerref.FormSound();
+                
                 this.dolphinFIx = this.StartCoroutine(this.FixingDolphinStuckAni());
                 break;
         }
@@ -149,11 +153,10 @@ public class FSMExecutor : MonoBehaviour
         }
         this.dolphinFIx = null;
     }
-    private bool asd = true;
-    private bool asdf = true;
+
     private void ApplyingMoveAbiEffect(Vector3 moveDirInput, string currentForm, physicStates currentPHState, List<GameObject> forms)
     {
-        
+
         if (this.noControlStory) return;
 
         switch (currentForm)
@@ -189,21 +192,18 @@ public class FSMExecutor : MonoBehaviour
                         this.animatorLink.SetFloat("Moving", Mathf.InverseLerp(0, (float)Math.Pow(this.currentMoveValues.standMove.moveSpeed, 2), (moveDirInput * this.generalValues.moveInWater).sqrMagnitude));
                         break;
                     case physicStates.onGround:
-
-                        //if (moveDirInput.sqrMagnitude == 0 && fsmLinker.isWalkingSound && asd)
-                        //{
-
-                        //    Debug.Log("magnitude"+moveDirInput.sqrMagnitude);
-                        //    playerref.StopStandardWalk();
-                        //    fsmLinker.isWalkingSound = true;
-                        //    asd = false;
-                        //}
-                        //else if (moveDirInput.sqrMagnitude != 0 /*&& !fsmLinker.isWalkingSound*/)
-                        //{
-                        //    Debug.Log("magnitude2" + moveDirInput.sqrMagnitude);
-                        //    playerref.StandardWalk();
-                        //    fsmLinker.isWalkingSound = false;                   
-                        //}
+                        if (moveDirInput.sqrMagnitude == 0 && fsmLinker.isWalkingSound)
+                        {
+                            Debug.Log("STANDARD FERMO");
+                            playerref.StopStandardWalk();
+                            fsmLinker.isWalkingSound = false;
+                        }
+                        else if (moveDirInput.sqrMagnitude > 0.1f && !fsmLinker.isWalkingSound)
+                        {
+                            Debug.Log("STANDARD MUOVO");
+                            playerref.StandardWalk();
+                            fsmLinker.isWalkingSound = true;
+                        }
                         if (Math.Abs(moveDirInput.sqrMagnitude) > Tolerance)
                         {
                             this.moveSelected.Invoke(moveDirInput, this.currentMoveValues.standMove.moveSpeed);
@@ -254,6 +254,20 @@ public class FSMExecutor : MonoBehaviour
                         this.animatorLink.SetFloat("Moving", Mathf.InverseLerp(0, (float)Math.Pow(this.currentMoveValues.frogMove.moveSpeed, 2), (moveDirInput * this.generalValues.moveInWater).sqrMagnitude));
                         break;
                     case physicStates.onGround:
+                        if (moveDirInput.sqrMagnitude == 0 && fsmLinker.isWalkingSound)
+                        {
+
+                            Debug.Log("magnitude" + moveDirInput.sqrMagnitude);
+                            playerref.StopFrogWalk();
+                            fsmLinker.isWalkingSound = false;
+
+                        }
+                        else if (moveDirInput.sqrMagnitude > 0.1f && !fsmLinker.isWalkingSound)
+                        {
+                            Debug.Log("magnitude2" + moveDirInput.sqrMagnitude);
+                            playerref.FrogWalk();
+                            fsmLinker.isWalkingSound = true;
+                        }
                         if (Math.Abs(moveDirInput.sqrMagnitude) > Tolerance)
                         {
                             this.moveSelected.Invoke(moveDirInput, this.currentMoveValues.frogMove.moveSpeed);
@@ -275,6 +289,7 @@ public class FSMExecutor : MonoBehaviour
 
             case "Dragon Form":
 
+            
                 //this.animatorLink = forms[2].GetComponent<Animator>();
 
                 if (this.animatorLink.GetBool("Ground"))
@@ -290,20 +305,37 @@ public class FSMExecutor : MonoBehaviour
                 switch (currentPHState)
                 {
                     case physicStates.onAir:
+
                         if (Math.Abs(moveDirInput.sqrMagnitude) > Tolerance)
                         {
-                        this.moveSelected.Invoke(moveDirInput, this.generalValues.moveInAir);
+                            this.moveSelected.Invoke(moveDirInput, this.generalValues.moveInAir);
                         }
                         this.animatorLink.SetFloat("Moving", Mathf.InverseLerp(0, (float)Math.Pow(this.currentMoveValues.armaMove.moveSpeed, 2), (moveDirInput * this.generalValues.moveInAir).sqrMagnitude));
                         break;
+
                     case physicStates.onWater:
+
                         if (Math.Abs(moveDirInput.sqrMagnitude) > Tolerance)
                         {
                             this.moveSelected.Invoke(moveDirInput, this.generalValues.moveInWater);
                         }
                         this.animatorLink.SetFloat("Moving", Mathf.InverseLerp(0, (float)Math.Pow(this.currentMoveValues.armaMove.moveSpeed, 2), (moveDirInput * this.generalValues.moveInWater).sqrMagnitude));
                         break;
+
                     case physicStates.onGround:
+
+                        if (moveDirInput.sqrMagnitude == 0 && fsmLinker.isWalkingSound)
+                        {
+                            Debug.Log("magnitude" + moveDirInput.sqrMagnitude);
+                            playerref.StopStandardWalk();
+                            fsmLinker.isWalkingSound = false;
+                        }
+                        else if (moveDirInput.sqrMagnitude > 0.1f && !fsmLinker.isWalkingSound)
+                        {
+                            Debug.Log("magnitude2" + moveDirInput.sqrMagnitude);
+                            playerref.StandardWalk();
+                            fsmLinker.isWalkingSound = true;
+                        }
                         if (Math.Abs(moveDirInput.sqrMagnitude) > Tolerance)
                         {
                             this.moveSelected.Invoke(moveDirInput, this.currentMoveValues.armaMove.moveSpeed);
@@ -335,6 +367,22 @@ public class FSMExecutor : MonoBehaviour
 
                 switch (currentPHState)
                 {
+                    case physicStates.onGround:
+                        if (moveDirInput.sqrMagnitude == 0 && fsmLinker.isDolphinIdle)
+                        {
+                            Debug.Log("magnitude" + moveDirInput.sqrMagnitude);
+                            playerref.DolphinIdle();
+                            fsmLinker.isDolphinIdle = false;
+                        }
+                        
+                        else if (moveDirInput.sqrMagnitude > 0.1f && !fsmLinker.isDolphinIdle)
+                        {
+                            Debug.Log("magnitude2" + moveDirInput.sqrMagnitude);
+                            playerref.StopDolphinIdle();
+                            fsmLinker.isDolphinIdle = true;
+                        }
+                        break;
+
                     case physicStates.onAir:
                         this.moveSelected.Invoke(moveDirInput, this.generalValues.moveInAir);
                         break;
@@ -536,7 +584,7 @@ public class FSMExecutor : MonoBehaviour
         if (vfEntrance == "hAbilityta")
         {
             vTriggerRotation = vfTempLink.aTrigger.transform.rotation;
- 
+
             vTriggerMidPosition = vfTempLink.aTrigger.transform.position;
             vTriggerMidPosition.y = this.transform.position.y;
 
@@ -614,7 +662,7 @@ public class FSMExecutor : MonoBehaviour
         if (vfEntrance == "dAbilityta")
         {
             vTriggerRotation = vfTempLink.aTrigger.transform.rotation;
-         
+
 
 
             vTriggerMidPosition = vfTempLink.aTrigger.transform.position;
@@ -627,7 +675,7 @@ public class FSMExecutor : MonoBehaviour
         else
         {
             vTriggerRotation = vfTempLink.bTrigger.transform.rotation;
-    
+
 
 
             vTriggerMidPosition = vfTempLink.bTrigger.transform.position;
@@ -731,7 +779,7 @@ public class FSMExecutor : MonoBehaviour
     private void SettingRolling(bool isRolling)
     {
         if (this.gameObject.GetComponentInChildren<Animator>().name == "Armadillo")
-        this.animatorLink.SetBool("Rolling", isRolling);
+            this.animatorLink.SetBool("Rolling", isRolling);
 
         if (isRolling)
         {
@@ -744,9 +792,9 @@ public class FSMExecutor : MonoBehaviour
             if (this.gameObject.GetComponentInChildren<Animator>().name == "Armadillo" && this.specialRollAni != null)
             {
                 this.StopCoroutine(this.specialRollAni);
-            this.specialRollAni = null;
-            this.StartCoroutine(this.SpecialRollingAniReturn());
-                
+                this.specialRollAni = null;
+                this.StartCoroutine(this.SpecialRollingAniReturn());
+
             }
             else
             {
@@ -795,7 +843,7 @@ public class FSMExecutor : MonoBehaviour
             armaTransf.localRotation = Quaternion.Slerp(startingRot, this.armaOriginarRot, timePassed);
             yield return null;
         }
- 
+
         armaTransf.localRotation = this.armaOriginarRot;
     }
 

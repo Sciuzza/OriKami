@@ -277,6 +277,9 @@ public class FSMChecker : MonoBehaviour
     private bool isGlidingSound = false;
     private bool isRollingSound = false;
     public bool isWalkingSound = false;
+    public bool isCraneIdle = false;
+    public bool isDolphinIdle = false;
+
 
     private bool onGroundSwallow = false;
     private bool onGroundDolphin = false;
@@ -295,6 +298,10 @@ public class FSMChecker : MonoBehaviour
     private Vector3 fakePosArma = new Vector3(0, 0.1f, -0.2f);
     private Vector3 fakePosSwal = new Vector3(0, 0.1f, -0.2f);
     private Vector3 fakePosDolp = new Vector3(0, 0.1f, -0.2f);
+
+    private PlayerInputs playerRef;
+    private FSMExecutor fsmLinker;
+    
 
     #endregion
 
@@ -323,6 +330,8 @@ public class FSMChecker : MonoBehaviour
     #region Initialization Methods
     void Awake()
     {
+        playerRef = this.gameObject.GetComponent<PlayerInputs>();
+        fsmLinker = this.gameObject.GetComponent<FSMExecutor>();
 
         ccLink = this.gameObject.GetComponent<CharacterController>();
 
@@ -1701,7 +1710,7 @@ public class FSMChecker : MonoBehaviour
                 if (abiUnlocked.dolphinUnlocked)
                     AddAbility(abilties.toDolp);
                 break;
-            case "Armadillo Form":
+            case "Armadillo Form":            
                 if (abiUnlocked.frogUnlocked)
                     AddAbility(abilties.toFrog);
                 if (abiUnlocked.craneUnlocked)
@@ -2037,7 +2046,22 @@ public class FSMChecker : MonoBehaviour
             isRollingSound = false;
         }
 
-      
+       else if((cPlayerState.currentForm == "Dragon Form" && cPlayerState.currentPhState == physicStates.onGround) && !isCraneIdle)
+        {
+            Debug.Log("ENTRATA"); 
+            playerRef.CraneIdle();
+            isCraneIdle = true;
+        }
+        else if ((cPlayerState.currentForm != "Dragon Form" && cPlayerState.currentPhState == physicStates.onGround) && isCraneIdle)
+        {
+            Debug.Log("USCITA");
+            playerRef.StopCraneGlide();
+            isCraneIdle = false;
+        }
+
+
+
+
 
         #endregion
 
