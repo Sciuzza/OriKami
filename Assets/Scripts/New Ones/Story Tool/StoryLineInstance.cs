@@ -491,7 +491,7 @@ public class StoryLineInstance : MonoBehaviour
 
         GameObject[] dRocks = GameObject.FindGameObjectsWithTag("DRocks");
 
-        foreach (var coll in goldenCrane)
+        foreach (var coll in dRocks)
         {
             CollTrigger ctTempLink = coll.GetComponent<CollTrigger>();
 
@@ -501,7 +501,7 @@ public class StoryLineInstance : MonoBehaviour
 
         GameObject[] blackSmith = GameObject.FindGameObjectsWithTag("BlackSmith");
 
-        foreach (var coll in goldenCrane)
+        foreach (var coll in blackSmith)
         {
             CollTrigger ctTempLink = coll.GetComponent<CollTrigger>();
 
@@ -511,7 +511,7 @@ public class StoryLineInstance : MonoBehaviour
 
         GameObject[] v3 = GameObject.FindGameObjectsWithTag("V3");
 
-        foreach (var coll in goldenCrane)
+        foreach (var coll in v3)
         {
             CollTrigger ctTempLink = coll.GetComponent<CollTrigger>();
 
@@ -590,10 +590,14 @@ public class StoryLineInstance : MonoBehaviour
         {
             var storyToAnalyze = this.CurrentStoryLine.Stories.Find(x => x.StoryName == storyToCheck);
 
-            if (this.CheckItemConditions(storyToAnalyze))
+            if (this.CheckItemConditions(storyToAnalyze) && this.storySelected == null)
             {
                 this.storySelected = storyToAnalyze;
                 this.InitializingStory();
+            }
+            else
+            {
+                Debug.Log("Not Enough Collectibles");
             }
                 
         }
@@ -604,7 +608,7 @@ public class StoryLineInstance : MonoBehaviour
 
         var fsmTempLink = this.player.GetComponent<FSMChecker>();
 
-        foreach (var item in this.storySelected.ItemAccessCondition)
+        foreach (var item in storyToCheck.ItemAccessCondition)
         {
             switch (item.ItemDep)
             {
