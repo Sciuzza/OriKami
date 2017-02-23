@@ -1,0 +1,427 @@
+fileFormatVersion: 2
+guid: 4abf85d81cc629845aa172c14043856b
+timeCreated: 1487892752
+licenseType: Free
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: Bone002
+    100002: Bone005
+    100004: Bone007
+    100006: Bone008
+    100008: Bone032
+    100010: IK Chain001
+    100012: IK Chain002
+    100014: IK Chain003
+    100016: IK Chain004
+    100018: IK Chain005
+    100020: IK Chain006
+    100022: IK Chain007
+    100024: IK Chain008
+    100026: IK Chain009
+    100028: IK Chain010
+    100030: IK Chain011
+    100032: IK Chain012
+    100034: IK Chain013
+    100036: IK Chain014
+    100038: IK Chain015
+    100040: IK Chain016
+    100042: IK Chain017
+    100044: IK Chain018
+    100046: IK Chain019
+    100048: IK Chain020
+    100050: IK Chain021
+    100052: IK Chain022
+    100054: IK Chain023
+    100056: IK Chain024
+    100058: IK Chain025
+    100060: IK Chain026
+    100062: IK Chain027
+    100064: IK Chain028
+    100066: IK Chain029
+    100068: IK Chain030
+    100070: IK Chain031
+    100072: IK Chain032
+    100074: //RootNode
+    100076: spider
+    100078: spider_culo
+    100080: spider_testa
+    100082: spider_zampa_sx
+    100084: spider_zampa_sx(mirrored)
+    100086: spider_zampa_sx01
+    100088: spider_zampa_sx01(mirrored)
+    100090: spider_zampa_sx02
+    100092: spider_zampa_sx02(mirrored)
+    100094: spider_zampa_sx03
+    100096: spider_zampa_sx03(mirrored)
+    100098: spider_zampa_sx04
+    100100: spider_zampa_sx04(mirrored)
+    100102: spider_zampa_sx05
+    100104: spider_zampa_sx05(mirrored)
+    100106: spider_zampa_sx06
+    100108: spider_zampa_sx06(mirrored)
+    100110: spider_zampa_sx07
+    100112: spider_zampa_sx07(mirrored)
+    100114: spider_zampa_sx08
+    100116: spider_zampa_sx08(mirrored)
+    100118: spider_zampa_sx09
+    100120: spider_zampa_sx09(mirrored)
+    100122: spider_zampa_sx10
+    100124: spider_zampa_sx10(mirrored)
+    100126: spider_zampa_sx11
+    100128: spider_zampa_sx11(mirrored)
+    100130: spider_zampa_sx12
+    100132: spider_zampa_sx12(mirrored)
+    100134: spider_zampa_sx13
+    100136: spider_zampa_sx13(mirrored)
+    100138: spider_zampa_sx14
+    100140: spider_zampa_sx14(mirrored)
+    100142: spider_zampa_sx15
+    100144: spider_zampa_sx15(mirrored)
+    100146: spider_zampa_sx16
+    100148: spider_zampa_sx16(mirrored)
+    100150: spider_zampa_sx17
+    100152: spider_zampa_sx17(mirrored)
+    100154: spider_zampa_sx18
+    100156: spider_zampa_sx18(mirrored)
+    100158: spider_zampa_sx19
+    100160: spider_zampa_sx19(mirrored)
+    400000: Bone002
+    400002: Bone005
+    400004: Bone007
+    400006: Bone008
+    400008: Bone032
+    400010: IK Chain001
+    400012: IK Chain002
+    400014: IK Chain003
+    400016: IK Chain004
+    400018: IK Chain005
+    400020: IK Chain006
+    400022: IK Chain007
+    400024: IK Chain008
+    400026: IK Chain009
+    400028: IK Chain010
+    400030: IK Chain011
+    400032: IK Chain012
+    400034: IK Chain013
+    400036: IK Chain014
+    400038: IK Chain015
+    400040: IK Chain016
+    400042: IK Chain017
+    400044: IK Chain018
+    400046: IK Chain019
+    400048: IK Chain020
+    400050: IK Chain021
+    400052: IK Chain022
+    400054: IK Chain023
+    400056: IK Chain024
+    400058: IK Chain025
+    400060: IK Chain026
+    400062: IK Chain027
+    400064: IK Chain028
+    400066: IK Chain029
+    400068: IK Chain030
+    400070: IK Chain031
+    400072: IK Chain032
+    400074: //RootNode
+    400076: spider
+    400078: spider_culo
+    400080: spider_testa
+    400082: spider_zampa_sx
+    400084: spider_zampa_sx(mirrored)
+    400086: spider_zampa_sx01
+    400088: spider_zampa_sx01(mirrored)
+    400090: spider_zampa_sx02
+    400092: spider_zampa_sx02(mirrored)
+    400094: spider_zampa_sx03
+    400096: spider_zampa_sx03(mirrored)
+    400098: spider_zampa_sx04
+    400100: spider_zampa_sx04(mirrored)
+    400102: spider_zampa_sx05
+    400104: spider_zampa_sx05(mirrored)
+    400106: spider_zampa_sx06
+    400108: spider_zampa_sx06(mirrored)
+    400110: spider_zampa_sx07
+    400112: spider_zampa_sx07(mirrored)
+    400114: spider_zampa_sx08
+    400116: spider_zampa_sx08(mirrored)
+    400118: spider_zampa_sx09
+    400120: spider_zampa_sx09(mirrored)
+    400122: spider_zampa_sx10
+    400124: spider_zampa_sx10(mirrored)
+    400126: spider_zampa_sx11
+    400128: spider_zampa_sx11(mirrored)
+    400130: spider_zampa_sx12
+    400132: spider_zampa_sx12(mirrored)
+    400134: spider_zampa_sx13
+    400136: spider_zampa_sx13(mirrored)
+    400138: spider_zampa_sx14
+    400140: spider_zampa_sx14(mirrored)
+    400142: spider_zampa_sx15
+    400144: spider_zampa_sx15(mirrored)
+    400146: spider_zampa_sx16
+    400148: spider_zampa_sx16(mirrored)
+    400150: spider_zampa_sx17
+    400152: spider_zampa_sx17(mirrored)
+    400154: spider_zampa_sx18
+    400156: spider_zampa_sx18(mirrored)
+    400158: spider_zampa_sx19
+    400160: spider_zampa_sx19(mirrored)
+    4300000: spider
+    7400000: Take 001
+    9500000: //RootNode
+    13700000: spider
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: Take 001
+      takeName: Take 001
+      firstFrame: 0
+      lastFrame: 59
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: IK Chain001
+        weight: 1
+      - path: IK Chain002
+        weight: 1
+      - path: IK Chain003
+        weight: 1
+      - path: IK Chain004
+        weight: 1
+      - path: IK Chain005
+        weight: 1
+      - path: IK Chain006
+        weight: 1
+      - path: IK Chain007
+        weight: 1
+      - path: IK Chain008
+        weight: 1
+      - path: IK Chain009
+        weight: 1
+      - path: IK Chain010
+        weight: 1
+      - path: IK Chain011
+        weight: 1
+      - path: IK Chain012
+        weight: 1
+      - path: IK Chain013
+        weight: 1
+      - path: IK Chain014
+        weight: 1
+      - path: IK Chain015
+        weight: 1
+      - path: IK Chain016
+        weight: 1
+      - path: IK Chain017
+        weight: 1
+      - path: IK Chain018
+        weight: 1
+      - path: IK Chain019
+        weight: 1
+      - path: IK Chain020
+        weight: 1
+      - path: IK Chain021
+        weight: 1
+      - path: IK Chain022
+        weight: 1
+      - path: IK Chain023
+        weight: 1
+      - path: IK Chain024
+        weight: 1
+      - path: IK Chain025
+        weight: 1
+      - path: IK Chain026
+        weight: 1
+      - path: IK Chain027
+        weight: 1
+      - path: IK Chain028
+        weight: 1
+      - path: IK Chain029
+        weight: 1
+      - path: IK Chain030
+        weight: 1
+      - path: IK Chain031
+        weight: 1
+      - path: IK Chain032
+        weight: 1
+      - path: spider
+        weight: 1
+      - path: spider_culo
+        weight: 1
+      - path: spider_culo/Bone002
+        weight: 1
+      - path: spider_culo/Bone002/Bone007
+        weight: 1
+      - path: spider_culo/Bone002/Bone007/Bone008
+        weight: 1
+      - path: spider_culo/spider_testa
+        weight: 1
+      - path: spider_culo/spider_testa/Bone005
+        weight: 1
+      - path: spider_culo/spider_testa/Bone005/Bone032
+        weight: 1
+      - path: spider_culo/spider_testa/spider_zampa_sx
+        weight: 1
+      - path: spider_culo/spider_testa/spider_zampa_sx/spider_zampa_sx01
+        weight: 1
+      - path: spider_culo/spider_testa/spider_zampa_sx/spider_zampa_sx01/spider_zampa_sx02
+        weight: 1
+      - path: spider_culo/spider_testa/spider_zampa_sx/spider_zampa_sx01/spider_zampa_sx02/spider_zampa_sx03
+        weight: 1
+      - path: spider_culo/spider_testa/spider_zampa_sx/spider_zampa_sx01/spider_zampa_sx02/spider_zampa_sx03/spider_zampa_sx04
+        weight: 1
+      - path: spider_culo/spider_testa/spider_zampa_sx(mirrored)
+        weight: 1
+      - path: spider_culo/spider_testa/spider_zampa_sx(mirrored)/spider_zampa_sx01(mirrored)
+        weight: 1
+      - path: spider_culo/spider_testa/spider_zampa_sx(mirrored)/spider_zampa_sx01(mirrored)/spider_zampa_sx02(mirrored)
+        weight: 1
+      - path: spider_culo/spider_testa/spider_zampa_sx(mirrored)/spider_zampa_sx01(mirrored)/spider_zampa_sx02(mirrored)/spider_zampa_sx03(mirrored)
+        weight: 1
+      - path: spider_culo/spider_testa/spider_zampa_sx(mirrored)/spider_zampa_sx01(mirrored)/spider_zampa_sx02(mirrored)/spider_zampa_sx03(mirrored)/spider_zampa_sx04(mirrored)
+        weight: 1
+      - path: spider_culo/spider_testa/spider_zampa_sx05
+        weight: 1
+      - path: spider_culo/spider_testa/spider_zampa_sx05/spider_zampa_sx06
+        weight: 1
+      - path: spider_culo/spider_testa/spider_zampa_sx05/spider_zampa_sx06/spider_zampa_sx07
+        weight: 1
+      - path: spider_culo/spider_testa/spider_zampa_sx05/spider_zampa_sx06/spider_zampa_sx07/spider_zampa_sx08
+        weight: 1
+      - path: spider_culo/spider_testa/spider_zampa_sx05/spider_zampa_sx06/spider_zampa_sx07/spider_zampa_sx08/spider_zampa_sx09
+        weight: 1
+      - path: spider_culo/spider_testa/spider_zampa_sx05(mirrored)
+        weight: 1
+      - path: spider_culo/spider_testa/spider_zampa_sx05(mirrored)/spider_zampa_sx06(mirrored)
+        weight: 1
+      - path: spider_culo/spider_testa/spider_zampa_sx05(mirrored)/spider_zampa_sx06(mirrored)/spider_zampa_sx07(mirrored)
+        weight: 1
+      - path: spider_culo/spider_testa/spider_zampa_sx05(mirrored)/spider_zampa_sx06(mirrored)/spider_zampa_sx07(mirrored)/spider_zampa_sx08(mirrored)
+        weight: 1
+      - path: spider_culo/spider_testa/spider_zampa_sx05(mirrored)/spider_zampa_sx06(mirrored)/spider_zampa_sx07(mirrored)/spider_zampa_sx08(mirrored)/spider_zampa_sx09(mirrored)
+        weight: 1
+      - path: spider_culo/spider_testa/spider_zampa_sx10
+        weight: 1
+      - path: spider_culo/spider_testa/spider_zampa_sx10/spider_zampa_sx11
+        weight: 1
+      - path: spider_culo/spider_testa/spider_zampa_sx10/spider_zampa_sx11/spider_zampa_sx12
+        weight: 1
+      - path: spider_culo/spider_testa/spider_zampa_sx10/spider_zampa_sx11/spider_zampa_sx12/spider_zampa_sx13
+        weight: 1
+      - path: spider_culo/spider_testa/spider_zampa_sx10/spider_zampa_sx11/spider_zampa_sx12/spider_zampa_sx13/spider_zampa_sx14
+        weight: 1
+      - path: spider_culo/spider_testa/spider_zampa_sx10(mirrored)
+        weight: 1
+      - path: spider_culo/spider_testa/spider_zampa_sx10(mirrored)/spider_zampa_sx11(mirrored)
+        weight: 1
+      - path: spider_culo/spider_testa/spider_zampa_sx10(mirrored)/spider_zampa_sx11(mirrored)/spider_zampa_sx12(mirrored)
+        weight: 1
+      - path: spider_culo/spider_testa/spider_zampa_sx10(mirrored)/spider_zampa_sx11(mirrored)/spider_zampa_sx12(mirrored)/spider_zampa_sx13(mirrored)
+        weight: 1
+      - path: spider_culo/spider_testa/spider_zampa_sx10(mirrored)/spider_zampa_sx11(mirrored)/spider_zampa_sx12(mirrored)/spider_zampa_sx13(mirrored)/spider_zampa_sx14(mirrored)
+        weight: 1
+      - path: spider_culo/spider_testa/spider_zampa_sx15
+        weight: 1
+      - path: spider_culo/spider_testa/spider_zampa_sx15/spider_zampa_sx16
+        weight: 1
+      - path: spider_culo/spider_testa/spider_zampa_sx15/spider_zampa_sx16/spider_zampa_sx17
+        weight: 1
+      - path: spider_culo/spider_testa/spider_zampa_sx15/spider_zampa_sx16/spider_zampa_sx17/spider_zampa_sx18
+        weight: 1
+      - path: spider_culo/spider_testa/spider_zampa_sx15/spider_zampa_sx16/spider_zampa_sx17/spider_zampa_sx18/spider_zampa_sx19
+        weight: 1
+      - path: spider_culo/spider_testa/spider_zampa_sx15(mirrored)
+        weight: 1
+      - path: spider_culo/spider_testa/spider_zampa_sx15(mirrored)/spider_zampa_sx16(mirrored)
+        weight: 1
+      - path: spider_culo/spider_testa/spider_zampa_sx15(mirrored)/spider_zampa_sx16(mirrored)/spider_zampa_sx17(mirrored)
+        weight: 1
+      - path: spider_culo/spider_testa/spider_zampa_sx15(mirrored)/spider_zampa_sx16(mirrored)/spider_zampa_sx17(mirrored)/spider_zampa_sx18(mirrored)
+        weight: 1
+      - path: spider_culo/spider_testa/spider_zampa_sx15(mirrored)/spider_zampa_sx16(mirrored)/spider_zampa_sx17(mirrored)/spider_zampa_sx18(mirrored)/spider_zampa_sx19(mirrored)
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
