@@ -272,69 +272,11 @@ public class PlayerInputs : MonoBehaviour
     {
         GameObject.FindGameObjectWithTag("Player").GetComponent<SoundManager>().StopSound(audioSourceParam, audioClipParam);
     }
-
-    public void RollingSound()
-    {
-
-        GameObject.FindGameObjectWithTag("Player").GetComponent<SoundManager>().PlaySound(1, 0);
-    }
-    public void StopRollingSound()
-    {
-        GameObject.FindGameObjectWithTag("Player").GetComponent<SoundManager>().StopSound(1, 0);
-    }
-    public void FormSound()
-    {
-        GameObject.FindGameObjectWithTag("Player").GetComponent<SoundManager>().PlaySound(0, 1);
-    }
-    public void CraneGlide()
-    {
-        GameObject.FindGameObjectWithTag("Player").GetComponent<SoundManager>().PlaySound(1, 1);
-    }
-    public void StopCraneGlide()
-    {
-        GameObject.FindGameObjectWithTag("Player").GetComponent<SoundManager>().StopSound(1, 1);
-    }
-    public void StandardWalk()
-    {
-        GameObject.FindGameObjectWithTag("Player").GetComponent<SoundManager>().PlaySound(1, 3);
-    }
-    public void StopStandardWalk()
-    {
-        GameObject.FindGameObjectWithTag("Player").GetComponent<SoundManager>().StopSound(1, 3);
-    }
-    //public void FrogWalk()
-    //{
-    //    GameObject.FindGameObjectWithTag("Player").GetComponent<SoundManager>().PlaySound(1, 2);
-    //}
-    public void StopFrogWalk()
-    {
-        GameObject.FindGameObjectWithTag("Player").GetComponent<SoundManager>().StopSound(1, 2);
-    }
-    public void DolphinIdle()
-    {
-        GameObject.FindGameObjectWithTag("Player").GetComponent<SoundManager>().PlaySound(1, 4);
-    }
-    public void StopDolphinIdle()
-    {
-        GameObject.FindGameObjectWithTag("Player").GetComponent<SoundManager>().StopSound(1, 4);
-    }
-    public void CraneIdle()
-    {
-        GameObject.FindGameObjectWithTag("Player").GetComponent<SoundManager>().PlaySound(1, 7);
-    }
-    public void StopCraneIdle()
-    {
-        GameObject.FindGameObjectWithTag("Player").GetComponent<SoundManager>().StopSound(1, 7);
-    }
     public void FallOnGround()
     {
         GameObject.FindGameObjectWithTag("Player").GetComponent<SoundManager>().PlaySound(1, 2);
     }
     public void FallInWater()
-    {
-        GameObject.FindGameObjectWithTag("Player").GetComponent<SoundManager>().PlaySound(1, 2);
-    }
-    public void DolphinSwim()
     {
         GameObject.FindGameObjectWithTag("Player").GetComponent<SoundManager>().PlaySound(1, 2);
     }

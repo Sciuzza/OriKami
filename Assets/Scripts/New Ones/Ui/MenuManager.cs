@@ -10,6 +10,7 @@ using UnityEngine.EventSystems;
 public class MenuManager : MonoBehaviour
 {
     private string currentScene;
+    private SoundManager playerRef;
 
     #region Public Variables
     public event_int switchSceneRequestByInt;
@@ -42,6 +43,7 @@ public class MenuManager : MonoBehaviour
     #region Taking References and linking Events
     void Awake()
     {
+        playerRef = GameObject.FindGameObjectWithTag("Player").GetComponent<SoundManager>();
         var gcTempLink = this.GetComponent<GameController>();
 
         gcTempLink.ngpInitializer.AddListener(this.InitializingNgpScene);
@@ -237,7 +239,9 @@ public class MenuManager : MonoBehaviour
 
     private void PoppingOutDialogue(string name, string label, string sentence, string spritename)
     {
+
         this.gpUiRef.Dialogue.SetActive(true);
+     
 
         if (label == "Right")
         {
