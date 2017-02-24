@@ -11,8 +11,6 @@ public class AudioRepository
 
 public class SoundManager : MonoBehaviour
 {
-
-
     public AudioRepository[] PersistendAudio;
 
     public void PlaySound(int catIndex, int clipIndex)
