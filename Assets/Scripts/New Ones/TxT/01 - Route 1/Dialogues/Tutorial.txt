@@ -1,1 +1,1 @@
-Koi/Left/Koi_Relieved/Use the left analog stickto move the character and the right analog stick to move the camera.
+Koi/Left/Koi_Relieved/Use the left analog stick to move the character and the right analog stick to move the camera.
