@@ -642,6 +642,8 @@ public class StoryLineInstance : MonoBehaviour
              this.storySelected.GenAccessCond.PlayerInputJoy,
              this.storySelected.GenAccessCond.PlayerInputPc,
              this.storySelected);
+
+            Debug.Log("1");
         }
         else if (this.IsNeededInput(this.storySelected.Events[0].PlayerInputJoy, this.storySelected.Events[0].PlayerInputPc))
         {
@@ -649,9 +651,12 @@ public class StoryLineInstance : MonoBehaviour
              this.storySelected.Events[0].PlayerInputJoy,
              this.storySelected.Events[0].PlayerInputPc,
              this.storySelected);
+
+            Debug.Log("2");
         }
         else
         {
+            Debug.Log("3");
             this.LivingStoryEvent();
         }
     }
@@ -2443,6 +2448,24 @@ public class StoryLineInstance : MonoBehaviour
         }
         var counter = 0;
         var skipped = false;
+
+        int counterFix = 0;
+        int counterFixMax = 0;
+
+        if (this.storySelected.GenAccessCond.PlayerInputJoy != buttonsJoy.none
+            && this.storySelected.GenAccessCond.PlayerInputPc != buttonsPc.none && this.eventIndex == 0) counterFixMax++;
+
+
+        while (counterFix < counterFixMax)
+        {
+            if (Input.GetButtonDown(this.storySelected.GenAccessCond.PlayerInputJoy.ToString()) ||
+               Input.GetButtonDown(this.storySelected.GenAccessCond.PlayerInputJoy.ToString()))
+            {
+                counterFix++;
+            }
+
+            yield return null;
+        }
 
         while (counter < dialogueEffect.Name.Count - 1)
         {
