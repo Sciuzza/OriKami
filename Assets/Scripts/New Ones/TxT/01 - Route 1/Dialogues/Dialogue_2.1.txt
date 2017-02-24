@@ -3,5 +3,3 @@ Koi/Left/Koi_Standard/I'm Koi! And he's my friend of few words, Iki!*And no, unl
 Koi/Left/Koi_Standard/We were just passing by. How did you get lost?
 Jiraiya/Right/Jiraiya_Standard/"sniff"... I ran away from the village...*But I can't find the road to get back anymore.
 Iki/Left/Iki_Concerned/...
-Koi/Left/Koi_Standard/Ok... Uhm...*Maybe if we push this rice field up like the other one he'll be able to go back home!
-Jiraiya/Right/Jiraiya_Standard/"sniff sniff""
