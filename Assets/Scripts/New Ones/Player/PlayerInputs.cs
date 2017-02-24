@@ -262,10 +262,17 @@ public class PlayerInputs : MonoBehaviour
 
     }
     #region SoundAbilities
-    public void JumpSound()
+
+    public void PlayerSounds(int audioSourceParam, int audioclipParam)
     {
-        GameObject.FindGameObjectWithTag("Player").GetComponent<SoundManager>().PlaySound(0, 0);
+        GameObject.FindGameObjectWithTag("Player").GetComponent<SoundManager>().PlaySound(audioSourceParam, audioclipParam);
     }
+
+    public void StopPlayerSounds(int audioSourceParam, int audioClipParam)
+    {
+        GameObject.FindGameObjectWithTag("Player").GetComponent<SoundManager>().StopSound(audioSourceParam, audioClipParam);
+    }
+
     public void RollingSound()
     {
 
@@ -295,10 +302,10 @@ public class PlayerInputs : MonoBehaviour
     {
         GameObject.FindGameObjectWithTag("Player").GetComponent<SoundManager>().StopSound(1, 3);
     }
-    public void FrogWalk()
-    {
-        GameObject.FindGameObjectWithTag("Player").GetComponent<SoundManager>().PlaySound(1, 2);
-    }
+    //public void FrogWalk()
+    //{
+    //    GameObject.FindGameObjectWithTag("Player").GetComponent<SoundManager>().PlaySound(1, 2);
+    //}
     public void StopFrogWalk()
     {
         GameObject.FindGameObjectWithTag("Player").GetComponent<SoundManager>().StopSound(1, 2);

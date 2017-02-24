@@ -265,7 +265,7 @@ public class FSMExecutor : MonoBehaviour
                         else if (moveDirInput.sqrMagnitude > 0.1f && !fsmLinker.isWalkingSound)
                         {
                             Debug.Log("magnitude2" + moveDirInput.sqrMagnitude);
-                            playerref.FrogWalk();
+                            playerref.PlayerSounds(1, 2);
                             fsmLinker.isWalkingSound = true;
                         }
                         if (Math.Abs(moveDirInput.sqrMagnitude) > Tolerance)
@@ -423,13 +423,13 @@ public class FSMExecutor : MonoBehaviour
                     case "Standard Form":
                         var aniTempStd = forms[0].GetComponent<Animator>();
                         aniTempStd.SetTrigger("Jumping");
-                        playerref.JumpSound();
+                        playerref.PlayerSounds(0, 0);
                         this.jumpSelected.Invoke(this.currentMoveValues.standMove.jumpStrength);
                         break;
                     case "Frog Form":
                         var aniTempFrog = forms[1].GetComponent<Animator>();
                         aniTempFrog.SetTrigger("Jumping");
-                        playerref.JumpSound();
+                        playerref.PlayerSounds(0, 0);
                         this.jumpSelected.Invoke(this.currentMoveValues.frogMove.jumpStrength);
                         break;
                     case "Dolphin Form":
