@@ -279,6 +279,8 @@ public class FSMChecker : MonoBehaviour
     public bool isWalkingSound = false;
     public bool isCraneIdle = false;
     public bool isDolphinIdle = false;
+    public bool isDolphinSwimming = false;
+    public bool isStandardSwimming = false; 
 
 
     private bool onGroundSwallow = false;
@@ -424,13 +426,13 @@ public class FSMChecker : MonoBehaviour
         if ((cPlayerState.currentForm == "Standard Form" || cPlayerState.currentForm == "Armadillo Form") && cPlayerState.currentPhState == physicStates.onGround && /*cPlayerState.currentPlState == playerStates.moving &&*/ !isWalkingSound)
         {
             Debug.Log("SUONOREF");
-            this.GetComponent<PlayerInputs>().StandardWalk();
+            this.GetComponent<PlayerInputs>().PlayerSounds(1, 3);
             isWalkingSound = true;
         }
         else if ((cPlayerState.currentForm == "Standard Form" || cPlayerState.currentForm == "Armadillo Form") && cPlayerState.currentPhState == physicStates.onGround || cPlayerState.currentPhState == physicStates.onAir || cPlayerState.currentPlState != playerStates.moving && isWalkingSound)
         {
-            
-            this.GetComponent<PlayerInputs>().StopStandardWalk();
+
+            this.GetComponent<PlayerInputs>().StopPlayerSounds(1, 3);
             isWalkingSound = false;
         }
 
@@ -2020,51 +2022,57 @@ public class FSMChecker : MonoBehaviour
         #region SoundForms
         if (cPlayerState.currentForm == "Dragon Form" && cPlayerState.currentPhState == physicStates.onAir && !isGlidingSound)
         {
-            this.GetComponent<PlayerInputs>().CraneGlide();
+            this.GetComponent<PlayerInputs>().PlayerSounds(1, 1);
             isGlidingSound = true;
         }
         else if ((cPlayerState.currentForm != "Dragon Form" || cPlayerState.currentPhState != physicStates.onAir) && isGlidingSound)
         {
-            this.GetComponent<PlayerInputs>().StopCraneGlide();
+            this.GetComponent<PlayerInputs>().StopPlayerSounds(1, 1);
             isGlidingSound = false;
         }
 
         if (cPlayerState.currentForm == "Armadillo Form" && cPlayerState.currentPhState == physicStates.onGround &&  this.GetComponent<PlayerInputs>().rollPressed() && !isRollingSound)
         {
-            
-            this.GetComponent<PlayerInputs>().RollingSound();
+
+            this.GetComponent<PlayerInputs>().PlayerSounds(1, 0);
             isRollingSound = true;
         }
         else if (cPlayerState.currentForm == "Armadillo Form" && cPlayerState.currentPhState == physicStates.onGround && this.GetComponent<PlayerInputs>().rollReleased() && isRollingSound)
         {
-            this.GetComponent<PlayerInputs>().StopRollingSound();
+            this.GetComponent<PlayerInputs>().StopPlayerSounds(1,0);
             isRollingSound = false;
         }
         else if ((cPlayerState.currentForm != "Armadillo Form" || cPlayerState.currentPhState != physicStates.onGround) && isRollingSound)
         {
-            this.GetComponent<PlayerInputs>().StopRollingSound();
+            this.GetComponent<PlayerInputs>().StopPlayerSounds(1,0);
             isRollingSound = false;
         }
 
        else if((cPlayerState.currentForm == "Dragon Form" && cPlayerState.currentPhState == physicStates.onGround) && !isCraneIdle)
         {
-            Debug.Log("ENTRATA"); 
-            playerRef.CraneIdle();
+            
+            playerRef.PlayerSounds(1, 7);
             isCraneIdle = true;
         }
         else if ((cPlayerState.currentForm != "Dragon Form" && cPlayerState.currentPhState == physicStates.onGround) && isCraneIdle)
         {
-            Debug.Log("USCITA");
-            playerRef.StopCraneGlide();
+           
+            playerRef.StopPlayerSounds(1, 7);
             isCraneIdle = false;
         }
 
-
-
-
+        else if ((cPlayerState.currentForm == "Dolphin Form" && cPlayerState.currentPhState == physicStates.onGround) && !isDolphinIdle)
+        {
+            playerRef.PlayerSounds(1, 4);
+            isDolphinIdle = true;
+        }
+        else if ((cPlayerState.currentForm != "Dolphin Form" && cPlayerState.currentPhState == physicStates.onGround) && isDolphinIdle)
+        {
+            playerRef.StopPlayerSounds(1, 4);
+            isDolphinIdle = false;
+        }
 
         #endregion
-
 
     }
 
