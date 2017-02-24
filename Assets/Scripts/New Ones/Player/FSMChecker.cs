@@ -210,7 +210,7 @@ public class event_string_string_string_string : UnityEvent<string, string, stri
 [System.Serializable]
 public class event_listEnvSens_plNsSens : UnityEvent<List<EnvDatas>, PlayerNsData>
 {
-    
+
 }
 
 [System.Serializable]
@@ -235,6 +235,8 @@ public class FSMChecker : MonoBehaviour
 
     public Projector fakeShadow;
     public ParticleSystem ArmaRollingPart;
+    public ParticleSystem TransfEffect;
+    public ParticleSystem DRocksEffect;
 
     public int GoldenCrane = 0;
     public int DRocks = 0;
@@ -280,7 +282,7 @@ public class FSMChecker : MonoBehaviour
     public bool isCraneIdle = false;
     public bool isDolphinIdle = false;
     public bool isDolphinSwimming = false;
-    public bool isStandardSwimming = false; 
+    public bool isStandardSwimming = false;
 
 
     private bool onGroundSwallow = false;
@@ -303,7 +305,7 @@ public class FSMChecker : MonoBehaviour
 
     private PlayerInputs playerRef;
     private FSMExecutor fsmLinker;
-    
+
 
     #endregion
 
@@ -342,7 +344,7 @@ public class FSMChecker : MonoBehaviour
 
 
         PlayerInputs plInputsTempLink = this.gameObject.GetComponent<PlayerInputs>();
-       
+
 
         plInputsTempLink.dirAbiRequest.AddListener(CheckingDirAbiRequirements);
         plInputsTempLink.genAbiRequest.AddListener(CheckingAbiRequirements);
@@ -488,7 +490,7 @@ public class FSMChecker : MonoBehaviour
 
                 case abilties.jump:
                     if (!MoveHandler.sliding)
-                    this.genAbiUsed.Invoke(abiReceived, this.cPlayerState.currentForm, this.cPlayerState.forms);
+                        this.genAbiUsed.Invoke(abiReceived, this.cPlayerState.currentForm, this.cPlayerState.forms);
                     break;
                 case abilties.roll:
                     this.cPlayerState.currentPlState = playerStates.rolling;
@@ -516,6 +518,7 @@ public class FSMChecker : MonoBehaviour
                     vFissureUsed.Invoke(vfLink, vFissureEntrance);
                     break;
                 case abilties.toStd:
+                    this.TransfEffect.Play();
                     cPlayerState.previousForm = cPlayerState.currentForm;
                     cPlayerState.currentForm = "Standard Form";
                     this.onGroundSwallow = false;
@@ -533,6 +536,7 @@ public class FSMChecker : MonoBehaviour
                     this.fakeShadow.gameObject.transform.localPosition = this.fakePosStd;
                     break;
                 case abilties.toFrog:
+                    this.TransfEffect.Play();
                     cPlayerState.previousForm = cPlayerState.currentForm;
                     cPlayerState.currentForm = "Frog Form";
                     this.onGroundSwallow = false;
@@ -550,6 +554,7 @@ public class FSMChecker : MonoBehaviour
                     this.fakeShadow.gameObject.transform.localPosition = this.fakePosFrog;
                     break;
                 case abilties.toCrane:
+                    this.TransfEffect.Play();
                     cPlayerState.previousForm = cPlayerState.currentForm;
                     cPlayerState.currentForm = "Dragon Form";
                     this.onGroundSwallow = false;
@@ -566,6 +571,7 @@ public class FSMChecker : MonoBehaviour
                     this.fakeShadow.gameObject.transform.localPosition = this.fakePosSwal;
                     break;
                 case abilties.toArma:
+                    this.TransfEffect.Play();
                     cPlayerState.previousForm = cPlayerState.currentForm;
                     cPlayerState.currentForm = "Armadillo Form";
                     this.onGroundSwallow = false;
@@ -580,6 +586,7 @@ public class FSMChecker : MonoBehaviour
                     this.fakeShadow.gameObject.transform.localPosition = this.fakePosArma;
                     break;
                 case abilties.toDolp:
+                    this.TransfEffect.Play();
                     cPlayerState.previousForm = cPlayerState.currentForm;
                     cPlayerState.currentForm = "Dolphin Form";
                     this.onGroundSwallow = false;
@@ -628,7 +635,7 @@ public class FSMChecker : MonoBehaviour
         {
 
             if (this.fakeShadowHandler != null)
-            this.StopCoroutine(this.fakeShadowHandler);
+                this.StopCoroutine(this.fakeShadowHandler);
             this.fakeShadowHandler = null;
             this.fakeShadow.farClipPlane = 1;
         }
@@ -641,7 +648,7 @@ public class FSMChecker : MonoBehaviour
     private IEnumerator HandlingFakeShadow()
     {
         RaycastHit hitInfo;
-            Ray rayDown;
+        Ray rayDown;
 
         while (true)
         {
@@ -652,7 +659,7 @@ public class FSMChecker : MonoBehaviour
                 this.fakeShadow.farClipPlane = 1 + hitInfo.distance;
             }
 
-        yield return null;
+            yield return null;
         }
 
     }
@@ -1712,7 +1719,7 @@ public class FSMChecker : MonoBehaviour
                 if (abiUnlocked.dolphinUnlocked)
                     AddAbility(abilties.toDolp);
                 break;
-            case "Armadillo Form":            
+            case "Armadillo Form":
                 if (abiUnlocked.frogUnlocked)
                     AddAbility(abilties.toFrog);
                 if (abiUnlocked.craneUnlocked)
@@ -1878,7 +1885,7 @@ public class FSMChecker : MonoBehaviour
         this.UpdatingAbilityList();
 
         if (this.cPlayerState.currentClState == controlStates.noControl)
-        this.aniStoryInitRequest.Invoke();
+            this.aniStoryInitRequest.Invoke();
 
     }
 
@@ -1905,82 +1912,87 @@ public class FSMChecker : MonoBehaviour
         storyMode = state;
     }
 
-     private void CallingTransformation(abilties abiReceived)
+    private void CallingTransformation(abilties abiReceived)
     {
-            switch (abiReceived)
-            {
-                case abilties.toStd:
-                    cPlayerState.previousForm = cPlayerState.currentForm;
-                    cPlayerState.currentForm = "Standard Form";
-                    formChangedInp.Invoke(cPlayerState.currentForm);
-                    if (cPlayerState.currentPlState == playerStates.rolling)
-                        EnablingMove();
-                    else
-                        UpdatingAbilityList();
-                    formChanged.Invoke(cPlayerState.currentForm, cPlayerState.previousForm, cPlayerState.forms);
-                    if (cPlayerState.previousForm == "Dragon Form")
-                        stopGlideLogic.Invoke();
-                    SettingCapsuleCollider(0.15f, 0.3f, 0.2f);
+        switch (abiReceived)
+        {
+            case abilties.toStd:
+                this.TransfEffect.Play();
+                cPlayerState.previousForm = cPlayerState.currentForm;
+                cPlayerState.currentForm = "Standard Form";
+                formChangedInp.Invoke(cPlayerState.currentForm);
+                if (cPlayerState.currentPlState == playerStates.rolling)
+                    EnablingMove();
+                else
+                    UpdatingAbilityList();
+                formChanged.Invoke(cPlayerState.currentForm, cPlayerState.previousForm, cPlayerState.forms);
+                if (cPlayerState.previousForm == "Dragon Form")
+                    stopGlideLogic.Invoke();
+                SettingCapsuleCollider(0.15f, 0.3f, 0.2f);
                 this.fakeShadow.orthographicSize = this.ortFakeShadowStd;
                 this.fakeShadow.gameObject.transform.localPosition = this.fakePosStd;
                 break;
-                case abilties.toFrog:
-                    cPlayerState.previousForm = cPlayerState.currentForm;
-                    cPlayerState.currentForm = "Frog Form";
-                    formChangedInp.Invoke(cPlayerState.currentForm);
-                    if (cPlayerState.currentPlState == playerStates.rolling)
-                        EnablingMove();
-                    else
-                        UpdatingAbilityList();
-                    formChanged.Invoke(cPlayerState.currentForm, cPlayerState.previousForm, cPlayerState.forms);
-                    if (cPlayerState.previousForm == "Dragon Form")
-                        stopGlideLogic.Invoke();
-                    SettingCapsuleCollider(0.15f, 0.3f, 0.2f);
+            case abilties.toFrog:
+                this.TransfEffect.Play();
+                cPlayerState.previousForm = cPlayerState.currentForm;
+                cPlayerState.currentForm = "Frog Form";
+                formChangedInp.Invoke(cPlayerState.currentForm);
+                if (cPlayerState.currentPlState == playerStates.rolling)
+                    EnablingMove();
+                else
+                    UpdatingAbilityList();
+                formChanged.Invoke(cPlayerState.currentForm, cPlayerState.previousForm, cPlayerState.forms);
+                if (cPlayerState.previousForm == "Dragon Form")
+                    stopGlideLogic.Invoke();
+                SettingCapsuleCollider(0.15f, 0.3f, 0.2f);
                 this.fakeShadow.orthographicSize = this.ortFakeShadowFrog;
                 this.fakeShadow.gameObject.transform.localPosition = this.fakePosFrog;
                 break;
-                case abilties.toCrane:
-                    cPlayerState.previousForm = cPlayerState.currentForm;
-                    cPlayerState.currentForm = "Dragon Form";
-                    formChangedInp.Invoke(cPlayerState.currentForm);
-                    if (cPlayerState.currentPlState == playerStates.rolling)
-                        EnablingMove();
-                    else
-                        UpdatingAbilityList();
-                    formChanged.Invoke(cPlayerState.currentForm, cPlayerState.previousForm, cPlayerState.forms);
-                    enableGlideLogic.Invoke();
-                    SettingCapsuleCollider(0.15f, 0.3f, 0.2f);
+            case abilties.toCrane:
+                this.TransfEffect.Play();
+                cPlayerState.previousForm = cPlayerState.currentForm;
+                cPlayerState.currentForm = "Dragon Form";
+                formChangedInp.Invoke(cPlayerState.currentForm);
+                if (cPlayerState.currentPlState == playerStates.rolling)
+                    EnablingMove();
+                else
+                    UpdatingAbilityList();
+                formChanged.Invoke(cPlayerState.currentForm, cPlayerState.previousForm, cPlayerState.forms);
+                enableGlideLogic.Invoke();
+                SettingCapsuleCollider(0.15f, 0.3f, 0.2f);
                 this.fakeShadow.orthographicSize = this.ortFakeShadowSwallow;
                 this.fakeShadow.gameObject.transform.localPosition = this.fakePosSwal;
                 break;
-                case abilties.toArma:
-                    cPlayerState.previousForm = cPlayerState.currentForm;
-                    cPlayerState.currentForm = "Armadillo Form";
-                    formChangedInp.Invoke(cPlayerState.currentForm);
-                    UpdatingAbilityList();
-                    formChanged.Invoke(cPlayerState.currentForm, cPlayerState.previousForm, cPlayerState.forms);
-                    if (cPlayerState.previousForm == "Dragon Form")
-                        stopGlideLogic.Invoke();
-                    SettingCapsuleCollider(0.15f, 0.3f, 0.2f);
+            case abilties.toArma:
+                this.TransfEffect.Play();
+                cPlayerState.previousForm = cPlayerState.currentForm;
+                cPlayerState.currentForm = "Armadillo Form";
+                formChangedInp.Invoke(cPlayerState.currentForm);
+                UpdatingAbilityList();
+                formChanged.Invoke(cPlayerState.currentForm, cPlayerState.previousForm, cPlayerState.forms);
+                if (cPlayerState.previousForm == "Dragon Form")
+                    stopGlideLogic.Invoke();
+                SettingCapsuleCollider(0.15f, 0.3f, 0.2f);
                 this.fakeShadow.orthographicSize = this.ortFakeShadowArma;
                 this.fakeShadow.gameObject.transform.localPosition = this.fakePosArma;
                 break;
-                case abilties.toDolp:
-                    cPlayerState.previousForm = cPlayerState.currentForm;
-                    cPlayerState.currentForm = "Dolphin Form";
-                    formChangedInp.Invoke(cPlayerState.currentForm);
-                    if (cPlayerState.currentPlState == playerStates.rolling)
-                        EnablingMove();
-                    else
-                        UpdatingAbilityList();
-                    formChanged.Invoke(cPlayerState.currentForm, cPlayerState.previousForm, cPlayerState.forms);
-                    if (cPlayerState.previousForm == "Dragon Form")
-                        stopGlideLogic.Invoke();
-                    SettingCapsuleCollider(0.15f, 0.3f, 0.2f);
+            case abilties.toDolp:
+                this.TransfEffect.Play();
+                cPlayerState.previousForm = cPlayerState.currentForm;
+                cPlayerState.currentForm = "Dolphin Form";
+                formChangedInp.Invoke(cPlayerState.currentForm);
+                if (cPlayerState.currentPlState == playerStates.rolling)
+                    EnablingMove();
+                else
+                    UpdatingAbilityList();
+                formChanged.Invoke(cPlayerState.currentForm, cPlayerState.previousForm, cPlayerState.forms);
+                if (cPlayerState.previousForm == "Dragon Form")
+                    stopGlideLogic.Invoke();
+                SettingCapsuleCollider(0.15f, 0.3f, 0.2f);
                 this.fakeShadow.orthographicSize = this.ortFakeShadowDolphin;
                 this.fakeShadow.gameObject.transform.localPosition = this.fakePosDolp;
                 break;
-            }
+        }
     }
     #endregion
 
@@ -2031,7 +2043,7 @@ public class FSMChecker : MonoBehaviour
             isGlidingSound = false;
         }
 
-        if (cPlayerState.currentForm == "Armadillo Form" && cPlayerState.currentPhState == physicStates.onGround &&  this.GetComponent<PlayerInputs>().rollPressed() && !isRollingSound)
+        if (cPlayerState.currentForm == "Armadillo Form" && cPlayerState.currentPhState == physicStates.onGround && this.GetComponent<PlayerInputs>().rollPressed() && !isRollingSound)
         {
 
             this.GetComponent<PlayerInputs>().PlayerSounds(1, 0);
@@ -2039,24 +2051,24 @@ public class FSMChecker : MonoBehaviour
         }
         else if (cPlayerState.currentForm == "Armadillo Form" && cPlayerState.currentPhState == physicStates.onGround && this.GetComponent<PlayerInputs>().rollReleased() && isRollingSound)
         {
-            this.GetComponent<PlayerInputs>().StopPlayerSounds(1,0);
+            this.GetComponent<PlayerInputs>().StopPlayerSounds(1, 0);
             isRollingSound = false;
         }
         else if ((cPlayerState.currentForm != "Armadillo Form" || cPlayerState.currentPhState != physicStates.onGround) && isRollingSound)
         {
-            this.GetComponent<PlayerInputs>().StopPlayerSounds(1,0);
+            this.GetComponent<PlayerInputs>().StopPlayerSounds(1, 0);
             isRollingSound = false;
         }
 
-       else if((cPlayerState.currentForm == "Dragon Form" && cPlayerState.currentPhState == physicStates.onGround) && !isCraneIdle)
+        else if ((cPlayerState.currentForm == "Dragon Form" && cPlayerState.currentPhState == physicStates.onGround) && !isCraneIdle)
         {
-            
+
             playerRef.PlayerSounds(1, 7);
             isCraneIdle = true;
         }
         else if ((cPlayerState.currentForm != "Dragon Form" && cPlayerState.currentPhState == physicStates.onGround) && isCraneIdle)
         {
-           
+
             playerRef.StopPlayerSounds(1, 7);
             isCraneIdle = false;
         }
@@ -2093,16 +2105,14 @@ public class FSMChecker : MonoBehaviour
     {
         float drowningTimer = drowTimerSetting;
 
-        while (cPlayerState.currentForm != "Dolphin Form" && cPlayerState.currentPhState == physicStates.onWater && drowningTimer > 0)
+        while (this.cPlayerState.currentForm != "Dolphin Form" && this.cPlayerState.currentPhState == physicStates.onWater && drowningTimer > 0)
         {
             drowningTimer -= Time.deltaTime;
             yield return null;
         }
 
-        if (drowningTimer <= 0)
-            deathRequest.Invoke();
-        else
-            dying = false;
+        if (drowningTimer <= 0) this.deathRequest.Invoke();
+        else this.dying = false;
     }
     #endregion
 
@@ -2122,14 +2132,17 @@ public class FSMChecker : MonoBehaviour
                 this.V3++;
                 break;
         }
-     
-      Destroy(collTaken);
-}
+
+        Destroy(collTaken);
+    }
 
     private void WallDestructibleHandler(GameObject wall)
     {
         if (this.cPlayerState.currentPlState == playerStates.rolling)
         {
+            DRocksEffect.gameObject.transform.position = wall.transform.position;
+            DRocksEffect.gameObject.transform.rotation = wall.transform.rotation;
+            DRocksEffect.Play(); 
             Destroy(wall);
             this.DRocks++;
         }
@@ -2212,6 +2225,9 @@ public class FSMChecker : MonoBehaviour
         this.legUnlocked.Legend3 = plNsDataToUpdate.Legend3Unlocked;
         this.legUnlocked.Legend4 = plNsDataToUpdate.Legend4Unlocked;
         this.legUnlocked.Legend5 = plNsDataToUpdate.Legend5Unlocked;
+
+
+        this.dying = false;
 
     }
     #endregion

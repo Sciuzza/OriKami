@@ -290,6 +290,7 @@ public class AnimationEffect
     public GameObject GbRef;
     public int AnimationIndex;
     public float TimeTaken;
+    public float DelayBeginTime;
     public bool CustomLooping;
     public float CustomLoopBreak;
     public int RepNum;
@@ -486,7 +487,7 @@ public class StoryLineInstance : MonoBehaviour
             CollTrigger ctTempLink = coll.GetComponent<CollTrigger>();
 
             if (ctTempLink != null && ctTempLink.TriggerStory)
-            ctTempLink.CheckStoryAccessRequest.AddListener(this.CheckingAECTriggeredByItem);
+                ctTempLink.CheckStoryAccessRequest.AddListener(this.CheckingAECTriggeredByItem);
         }
 
         GameObject[] dRocks = GameObject.FindGameObjectsWithTag("DRocks");
@@ -599,7 +600,7 @@ public class StoryLineInstance : MonoBehaviour
             {
                 Debug.Log("Not Enough Collectibles");
             }
-                
+
         }
     }
 
@@ -954,15 +955,23 @@ public class StoryLineInstance : MonoBehaviour
         if (this.storySelected.AutoComplete) this.storySelected.Completed = true;
 
         this.CompletionEffects();
-       
+
         this.RequestRepoUpdateQuests.Invoke();
 
         if (this.CurrentStoryLine.TriggerSave)
-        this.SaveRequest.Invoke();
+            this.SaveRequest.Invoke();
 
         this.ChangeCsExitRequest.Invoke(this.storySelected.EndControlEffect);
+    }
 
+    private void ApplyingLivingBaloonStoryEffects()
+    {
+        if (this.baloonStory[this.baloonStory.Count - 1].AutoComplete) this.baloonStory[this.baloonStory.Count - 1].Completed = true;
 
+        this.RequestRepoUpdateQuests.Invoke();
+
+        if (this.CurrentStoryLine.TriggerSave)
+            this.SaveRequest.Invoke();
     }
 
     private void ActivationEffects()
@@ -2011,7 +2020,7 @@ public class StoryLineInstance : MonoBehaviour
         this.queObjs[indexToSearch].QueuedMoves.RemoveAt(indexToRemove);
 
         if (this.queObjs[indexToSearch].QueuedMoves.Count != 0)
-        this.StartCoroutine(this.MovingObject(this.queObjs[indexToSearch].QueuedMoves[0]));
+            this.StartCoroutine(this.MovingObject(this.queObjs[indexToSearch].QueuedMoves[0]));
         else
         {
             this.queObjs.Remove(objToHandle);
@@ -2231,8 +2240,9 @@ public class StoryLineInstance : MonoBehaviour
 
         baloonTempLink.gameObject.SetActive(false);
         baloonEffect.End = true;
-        this.baloonStory.Remove(baloonStorySelected);
 
+        this.ApplyingLivingBaloonStoryEffects();
+        this.baloonStory.Remove(baloonStorySelected);
         Debug.Log("Baloon Story Ended");
     }
 
@@ -2752,8 +2762,13 @@ public class StoryLineInstance : MonoBehaviour
             {
                 if (effectToPlay.CustomAniSlowMotion) aniRef.speed = effectToPlay.SlowMotionMultiplier;
 
+
                 aniRef.SetInteger("AniIndex", effectToPlay.AnimationIndex);
+               
+
                 this.StartCoroutine(this.StoppingDefaultLoopinp(effectToPlay, aniRef));
+
+
             }
 
         }
@@ -2765,6 +2780,30 @@ public class StoryLineInstance : MonoBehaviour
 
         if (aniEffect.CustomLooping)
         {
+
+            if (aniEffect.DelayBeginTime > 0)
+            {
+                var timeTransitionPassed = 0.0f;
+
+                while (timeTransitionPassed <= 0.2f)
+                {
+                    timeTransitionPassed += Time.deltaTime;
+                    yield return null;
+                }
+
+                var timeDelayPassed = 0.0f;
+                currentAni.speed = 0;
+
+                while (timeDelayPassed <= aniEffect.DelayBeginTime)
+                {
+                    timeDelayPassed += Time.deltaTime;
+                    Debug.Log(timeDelayPassed);
+                    yield return null;
+                }
+
+                currentAni.speed = 1;
+            }
+
 
             var timeCustomBreak = 0.0f;
             var repCount = 1;
@@ -2794,20 +2833,48 @@ public class StoryLineInstance : MonoBehaviour
                 timePassed += Time.deltaTime;
                 yield return null;
             }
+
+            currentAni.speed = 1;
+            currentAni.SetInteger("AniIndex", 0);
         }
-        else
+        else if (aniEffect.TimeTaken > 0)
         {
+            if (aniEffect.DelayBeginTime > 0)
+            {
+
+                var timeTransitionPassed = 0.0f;
+
+                while (timeTransitionPassed <= 0.2f)
+                {
+                    timeTransitionPassed += Time.deltaTime;
+                    yield return null;
+                }
+
+                var timeDelayPassed = 0.0f;
+                currentAni.speed = 0;
+
+                while (timeDelayPassed <= aniEffect.DelayBeginTime)
+                {
+                    timeDelayPassed += Time.deltaTime;
+                    Debug.Log(timeDelayPassed);
+                    yield return null;
+                }
+
+                currentAni.speed = 1;
+            }
 
             while (timePassed <= aniEffect.TimeTaken)
             {
                 timePassed += Time.deltaTime;
                 yield return null;
             }
+
+            currentAni.speed = 1;
+            currentAni.SetInteger("AniIndex", 0);
         }
 
 
-        currentAni.speed = 1;
-        currentAni.SetInteger("AniIndex", 0);
+
         aniEffect.End = true;
         this.effectCounter++;
     }
