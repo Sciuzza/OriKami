@@ -1,0 +1,183 @@
+fileFormatVersion: 2
+guid: 9ccab7eab0e0e574aba167a141f98669
+timeCreated: 1487886600
+licenseType: Free
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: bones01
+    100002: bones02
+    100004: bones03
+    100006: bones04
+    100008: bones05
+    100010: bones06
+    100012: bones07
+    100014: bones08
+    100016: bones09
+    100018: bones10
+    100020: bones11
+    100022: bones12
+    100024: bones13
+    100026: bones14
+    100028: bones15
+    100030: bones16
+    100032: ctrlrro
+    100034: Dummy001
+    100036: Frogemperor
+    100038: //RootNode
+    400000: bones01
+    400002: bones02
+    400004: bones03
+    400006: bones04
+    400008: bones05
+    400010: bones06
+    400012: bones07
+    400014: bones08
+    400016: bones09
+    400018: bones10
+    400020: bones11
+    400022: bones12
+    400024: bones13
+    400026: bones14
+    400028: bones15
+    400030: bones16
+    400032: ctrlrro
+    400034: Dummy001
+    400036: Frogemperor
+    400038: //RootNode
+    4300000: Frogemperor
+    7400000: Take 001
+    9500000: //RootNode
+    13700000: Frogemperor
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: Take 001
+      takeName: Take 001
+      firstFrame: 71
+      lastFrame: 120
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Dummy001
+        weight: 1
+      - path: Dummy001/ctrlrro
+        weight: 1
+      - path: Dummy001/ctrlrro/bones06
+        weight: 1
+      - path: Dummy001/ctrlrro/bones06/bones01
+        weight: 1
+      - path: Dummy001/ctrlrro/bones06/bones01/bones04
+        weight: 1
+      - path: Dummy001/ctrlrro/bones06/bones01/bones04/bones03
+        weight: 1
+      - path: Dummy001/ctrlrro/bones06/bones01/bones04/bones03/bones14
+        weight: 1
+      - path: Dummy001/ctrlrro/bones06/bones01/bones04/bones03/bones14/bones13
+        weight: 1
+      - path: Dummy001/ctrlrro/bones06/bones01/bones12
+        weight: 1
+      - path: Dummy001/ctrlrro/bones06/bones01/bones12/bones11
+        weight: 1
+      - path: Dummy001/ctrlrro/bones06/bones01/bones16
+        weight: 1
+      - path: Dummy001/ctrlrro/bones06/bones01/bones16/bones15
+        weight: 1
+      - path: Dummy001/ctrlrro/bones06/bones01/bones16/bones15/bones10
+        weight: 1
+      - path: Dummy001/ctrlrro/bones06/bones01/bones16/bones15/bones10/bones09
+        weight: 1
+      - path: Dummy001/ctrlrro/bones06/bones05
+        weight: 1
+      - path: Dummy001/ctrlrro/bones06/bones05/bones08
+        weight: 1
+      - path: Dummy001/ctrlrro/bones06/bones07
+        weight: 1
+      - path: Dummy001/ctrlrro/bones06/bones07/bones02
+        weight: 1
+      - path: Frogemperor
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

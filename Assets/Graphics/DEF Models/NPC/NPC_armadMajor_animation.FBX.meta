@@ -1,0 +1,713 @@
+fileFormatVersion: 2
+guid: 480d16f173d296a47984feb036b08559
+timeCreated: 1487876583
+licenseType: Free
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: armadillomajor
+    100002: armadillomajor_hat
+    100004: attacco_orecchio_dx
+    100006: attacco_orecchio_sx
+    100008: coccige
+    100010: coda1
+    100012: coda2
+    100014: coda3
+    100016: coda_fine
+    100018: collo
+    100020: ctrl_main
+    100022: IK zampa_anteriore_dx
+    100024: IK zampa_anteriore_dx_fine
+    100026: IK zampa_anteriore_sx
+    100028: IK zampa_anteriore_sx_fine
+    100030: IK zampa_posteriore_dx
+    100032: IK zampa_posteriore_dx_fine
+    100034: IK zampa_posteriore_sx
+    100036: IK zampa_posteriore_sx_fine
+    100038: //RootNode
+    100040: orecchio2_dx
+    100042: orecchio2_sx
+    100044: orecchio_dx
+    100046: orecchio_dx_fine
+    100048: orecchio_sx
+    100050: orecchio_sx_fine
+    100052: route
+    100054: route_a_zero
+    100056: schiena
+    100058: testa
+    100060: testa2
+    100062: testa_fine
+    100064: zampa_anteriore_dx
+    100066: zampa_anteriore_dx01
+    100068: zampa_anteriore_dx02
+    100070: zampa_anteriore_dx03
+    100072: zampa_anteriore_dx04
+    100074: zampa_anteriore_sx
+    100076: zampa_anteriore_sx01
+    100078: zampa_anteriore_sx02
+    100080: zampa_anteriore_sx03
+    100082: zampa_anteriore_sx04
+    100084: zampa_posteriore_dx
+    100086: zampa_posteriore_dx01
+    100088: zampa_posteriore_dx02
+    100090: zampa_posteriore_dx03
+    100092: zampa_posteriore_dx04
+    100094: zampa_posteriore_sx
+    100096: zampa_posteriore_sx01
+    100098: zampa_posteriore_sx02
+    100100: zampa_posteriore_sx03
+    100102: zampa_posteriore_sx04
+    400000: armadillomajor
+    400002: armadillomajor_hat
+    400004: attacco_orecchio_dx
+    400006: attacco_orecchio_sx
+    400008: coccige
+    400010: coda1
+    400012: coda2
+    400014: coda3
+    400016: coda_fine
+    400018: collo
+    400020: ctrl_main
+    400022: IK zampa_anteriore_dx
+    400024: IK zampa_anteriore_dx_fine
+    400026: IK zampa_anteriore_sx
+    400028: IK zampa_anteriore_sx_fine
+    400030: IK zampa_posteriore_dx
+    400032: IK zampa_posteriore_dx_fine
+    400034: IK zampa_posteriore_sx
+    400036: IK zampa_posteriore_sx_fine
+    400038: //RootNode
+    400040: orecchio2_dx
+    400042: orecchio2_sx
+    400044: orecchio_dx
+    400046: orecchio_dx_fine
+    400048: orecchio_sx
+    400050: orecchio_sx_fine
+    400052: route
+    400054: route_a_zero
+    400056: schiena
+    400058: testa
+    400060: testa2
+    400062: testa_fine
+    400064: zampa_anteriore_dx
+    400066: zampa_anteriore_dx01
+    400068: zampa_anteriore_dx02
+    400070: zampa_anteriore_dx03
+    400072: zampa_anteriore_dx04
+    400074: zampa_anteriore_sx
+    400076: zampa_anteriore_sx01
+    400078: zampa_anteriore_sx02
+    400080: zampa_anteriore_sx03
+    400082: zampa_anteriore_sx04
+    400084: zampa_posteriore_dx
+    400086: zampa_posteriore_dx01
+    400088: zampa_posteriore_dx02
+    400090: zampa_posteriore_dx03
+    400092: zampa_posteriore_dx04
+    400094: zampa_posteriore_sx
+    400096: zampa_posteriore_sx01
+    400098: zampa_posteriore_sx02
+    400100: zampa_posteriore_sx03
+    400102: zampa_posteriore_sx04
+    2300000: armadillomajor_hat
+    3300000: armadillomajor_hat
+    4300000: armadillomajor_hat
+    4300002: armadillomajor
+    7400000: Armadillo_Major_walk
+    7400002: Armadillo_Major_idle
+    7400004: Take 001
+    7400006: Armadillo_Major_rollup
+    9500000: //RootNode
+    13700000: armadillomajor
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: Armadillo_Major_walk
+      takeName: Take 001
+      firstFrame: 11
+      lastFrame: 70
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: armadillomajor
+        weight: 1
+      - path: IK zampa_anteriore_dx
+        weight: 1
+      - path: IK zampa_anteriore_dx_fine
+        weight: 1
+      - path: IK zampa_anteriore_sx
+        weight: 1
+      - path: IK zampa_anteriore_sx_fine
+        weight: 1
+      - path: IK zampa_posteriore_dx
+        weight: 1
+      - path: IK zampa_posteriore_dx_fine
+        weight: 1
+      - path: IK zampa_posteriore_sx
+        weight: 1
+      - path: IK zampa_posteriore_sx_fine
+        weight: 1
+      - path: route_a_zero
+        weight: 1
+      - path: route_a_zero/ctrl_main
+        weight: 1
+      - path: route_a_zero/ctrl_main/route
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/coccige
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/coccige/coda1
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/coccige/coda1/coda2
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/coccige/coda1/coda2/coda3
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/coccige/coda1/coda2/coda3/coda_fine
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/schiena
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/schiena/collo
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/schiena/collo/attacco_orecchio_dx
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/schiena/collo/attacco_orecchio_dx/orecchio_dx
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/schiena/collo/attacco_orecchio_dx/orecchio_dx/orecchio2_dx
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/schiena/collo/attacco_orecchio_dx/orecchio_dx/orecchio2_dx/orecchio_dx_fine
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/schiena/collo/attacco_orecchio_sx
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/schiena/collo/attacco_orecchio_sx/orecchio_sx
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/schiena/collo/attacco_orecchio_sx/orecchio_sx/orecchio2_sx
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/schiena/collo/attacco_orecchio_sx/orecchio_sx/orecchio2_sx/orecchio_sx_fine
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/schiena/collo/testa
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/schiena/collo/testa/armadillomajor_hat
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/schiena/collo/testa/testa2
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/schiena/collo/testa/testa2/testa_fine
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/schiena/zampa_anteriore_dx
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/schiena/zampa_anteriore_dx/zampa_anteriore_dx01
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/schiena/zampa_anteriore_dx/zampa_anteriore_dx01/zampa_anteriore_dx02
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/schiena/zampa_anteriore_dx/zampa_anteriore_dx01/zampa_anteriore_dx02/zampa_anteriore_dx03
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/schiena/zampa_anteriore_dx/zampa_anteriore_dx01/zampa_anteriore_dx02/zampa_anteriore_dx03/zampa_anteriore_dx04
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/schiena/zampa_anteriore_sx
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/schiena/zampa_anteriore_sx/zampa_anteriore_sx01
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/schiena/zampa_anteriore_sx/zampa_anteriore_sx01/zampa_anteriore_sx02
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/schiena/zampa_anteriore_sx/zampa_anteriore_sx01/zampa_anteriore_sx02/zampa_anteriore_sx03
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/schiena/zampa_anteriore_sx/zampa_anteriore_sx01/zampa_anteriore_sx02/zampa_anteriore_sx03/zampa_anteriore_sx04
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/zampa_posteriore_dx
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/zampa_posteriore_dx/zampa_posteriore_dx03
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/zampa_posteriore_dx/zampa_posteriore_dx03/zampa_posteriore_dx04
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/zampa_posteriore_dx/zampa_posteriore_dx03/zampa_posteriore_dx04/zampa_posteriore_dx01
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/zampa_posteriore_dx/zampa_posteriore_dx03/zampa_posteriore_dx04/zampa_posteriore_dx01/zampa_posteriore_dx02
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/zampa_posteriore_sx
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/zampa_posteriore_sx/zampa_posteriore_sx01
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/zampa_posteriore_sx/zampa_posteriore_sx01/zampa_posteriore_sx02
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/zampa_posteriore_sx/zampa_posteriore_sx01/zampa_posteriore_sx02/zampa_posteriore_sx03
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/zampa_posteriore_sx/zampa_posteriore_sx01/zampa_posteriore_sx02/zampa_posteriore_sx03/zampa_posteriore_sx04
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Armadillo_Major_idle
+      takeName: Take 001
+      firstFrame: 81
+      lastFrame: 140
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: armadillomajor
+        weight: 1
+      - path: IK zampa_anteriore_dx
+        weight: 1
+      - path: IK zampa_anteriore_dx_fine
+        weight: 1
+      - path: IK zampa_anteriore_sx
+        weight: 1
+      - path: IK zampa_anteriore_sx_fine
+        weight: 1
+      - path: IK zampa_posteriore_dx
+        weight: 1
+      - path: IK zampa_posteriore_dx_fine
+        weight: 1
+      - path: IK zampa_posteriore_sx
+        weight: 1
+      - path: IK zampa_posteriore_sx_fine
+        weight: 1
+      - path: route_a_zero
+        weight: 1
+      - path: route_a_zero/ctrl_main
+        weight: 1
+      - path: route_a_zero/ctrl_main/route
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/coccige
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/coccige/coda1
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/coccige/coda1/coda2
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/coccige/coda1/coda2/coda3
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/coccige/coda1/coda2/coda3/coda_fine
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/schiena
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/schiena/collo
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/schiena/collo/attacco_orecchio_dx
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/schiena/collo/attacco_orecchio_dx/orecchio_dx
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/schiena/collo/attacco_orecchio_dx/orecchio_dx/orecchio2_dx
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/schiena/collo/attacco_orecchio_dx/orecchio_dx/orecchio2_dx/orecchio_dx_fine
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/schiena/collo/attacco_orecchio_sx
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/schiena/collo/attacco_orecchio_sx/orecchio_sx
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/schiena/collo/attacco_orecchio_sx/orecchio_sx/orecchio2_sx
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/schiena/collo/attacco_orecchio_sx/orecchio_sx/orecchio2_sx/orecchio_sx_fine
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/schiena/collo/testa
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/schiena/collo/testa/armadillomajor_hat
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/schiena/collo/testa/testa2
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/schiena/collo/testa/testa2/testa_fine
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/schiena/zampa_anteriore_dx
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/schiena/zampa_anteriore_dx/zampa_anteriore_dx01
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/schiena/zampa_anteriore_dx/zampa_anteriore_dx01/zampa_anteriore_dx02
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/schiena/zampa_anteriore_dx/zampa_anteriore_dx01/zampa_anteriore_dx02/zampa_anteriore_dx03
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/schiena/zampa_anteriore_dx/zampa_anteriore_dx01/zampa_anteriore_dx02/zampa_anteriore_dx03/zampa_anteriore_dx04
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/schiena/zampa_anteriore_sx
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/schiena/zampa_anteriore_sx/zampa_anteriore_sx01
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/schiena/zampa_anteriore_sx/zampa_anteriore_sx01/zampa_anteriore_sx02
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/schiena/zampa_anteriore_sx/zampa_anteriore_sx01/zampa_anteriore_sx02/zampa_anteriore_sx03
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/schiena/zampa_anteriore_sx/zampa_anteriore_sx01/zampa_anteriore_sx02/zampa_anteriore_sx03/zampa_anteriore_sx04
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/zampa_posteriore_dx
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/zampa_posteriore_dx/zampa_posteriore_dx03
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/zampa_posteriore_dx/zampa_posteriore_dx03/zampa_posteriore_dx04
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/zampa_posteriore_dx/zampa_posteriore_dx03/zampa_posteriore_dx04/zampa_posteriore_dx01
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/zampa_posteriore_dx/zampa_posteriore_dx03/zampa_posteriore_dx04/zampa_posteriore_dx01/zampa_posteriore_dx02
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/zampa_posteriore_sx
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/zampa_posteriore_sx/zampa_posteriore_sx01
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/zampa_posteriore_sx/zampa_posteriore_sx01/zampa_posteriore_sx02
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/zampa_posteriore_sx/zampa_posteriore_sx01/zampa_posteriore_sx02/zampa_posteriore_sx03
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/zampa_posteriore_sx/zampa_posteriore_sx01/zampa_posteriore_sx02/zampa_posteriore_sx03/zampa_posteriore_sx04
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Take 001
+      takeName: Take 001
+      firstFrame: 0
+      lastFrame: 210
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: armadillomajor
+        weight: 1
+      - path: IK zampa_anteriore_dx
+        weight: 1
+      - path: IK zampa_anteriore_dx_fine
+        weight: 1
+      - path: IK zampa_anteriore_sx
+        weight: 1
+      - path: IK zampa_anteriore_sx_fine
+        weight: 1
+      - path: IK zampa_posteriore_dx
+        weight: 1
+      - path: IK zampa_posteriore_dx_fine
+        weight: 1
+      - path: IK zampa_posteriore_sx
+        weight: 1
+      - path: IK zampa_posteriore_sx_fine
+        weight: 1
+      - path: route_a_zero
+        weight: 1
+      - path: route_a_zero/ctrl_main
+        weight: 1
+      - path: route_a_zero/ctrl_main/route
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/coccige
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/coccige/coda1
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/coccige/coda1/coda2
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/coccige/coda1/coda2/coda3
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/coccige/coda1/coda2/coda3/coda_fine
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/schiena
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/schiena/collo
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/schiena/collo/attacco_orecchio_dx
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/schiena/collo/attacco_orecchio_dx/orecchio_dx
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/schiena/collo/attacco_orecchio_dx/orecchio_dx/orecchio2_dx
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/schiena/collo/attacco_orecchio_dx/orecchio_dx/orecchio2_dx/orecchio_dx_fine
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/schiena/collo/attacco_orecchio_sx
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/schiena/collo/attacco_orecchio_sx/orecchio_sx
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/schiena/collo/attacco_orecchio_sx/orecchio_sx/orecchio2_sx
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/schiena/collo/attacco_orecchio_sx/orecchio_sx/orecchio2_sx/orecchio_sx_fine
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/schiena/collo/testa
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/schiena/collo/testa/armadillomajor_hat
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/schiena/collo/testa/testa2
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/schiena/collo/testa/testa2/testa_fine
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/schiena/zampa_anteriore_dx
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/schiena/zampa_anteriore_dx/zampa_anteriore_dx01
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/schiena/zampa_anteriore_dx/zampa_anteriore_dx01/zampa_anteriore_dx02
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/schiena/zampa_anteriore_dx/zampa_anteriore_dx01/zampa_anteriore_dx02/zampa_anteriore_dx03
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/schiena/zampa_anteriore_dx/zampa_anteriore_dx01/zampa_anteriore_dx02/zampa_anteriore_dx03/zampa_anteriore_dx04
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/schiena/zampa_anteriore_sx
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/schiena/zampa_anteriore_sx/zampa_anteriore_sx01
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/schiena/zampa_anteriore_sx/zampa_anteriore_sx01/zampa_anteriore_sx02
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/schiena/zampa_anteriore_sx/zampa_anteriore_sx01/zampa_anteriore_sx02/zampa_anteriore_sx03
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/schiena/zampa_anteriore_sx/zampa_anteriore_sx01/zampa_anteriore_sx02/zampa_anteriore_sx03/zampa_anteriore_sx04
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/zampa_posteriore_dx
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/zampa_posteriore_dx/zampa_posteriore_dx03
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/zampa_posteriore_dx/zampa_posteriore_dx03/zampa_posteriore_dx04
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/zampa_posteriore_dx/zampa_posteriore_dx03/zampa_posteriore_dx04/zampa_posteriore_dx01
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/zampa_posteriore_dx/zampa_posteriore_dx03/zampa_posteriore_dx04/zampa_posteriore_dx01/zampa_posteriore_dx02
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/zampa_posteriore_sx
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/zampa_posteriore_sx/zampa_posteriore_sx01
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/zampa_posteriore_sx/zampa_posteriore_sx01/zampa_posteriore_sx02
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/zampa_posteriore_sx/zampa_posteriore_sx01/zampa_posteriore_sx02/zampa_posteriore_sx03
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/zampa_posteriore_sx/zampa_posteriore_sx01/zampa_posteriore_sx02/zampa_posteriore_sx03/zampa_posteriore_sx04
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Armadillo_Major_rollup
+      takeName: Take 001
+      firstFrame: 151
+      lastFrame: 210
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: armadillomajor
+        weight: 1
+      - path: IK zampa_anteriore_dx
+        weight: 1
+      - path: IK zampa_anteriore_dx_fine
+        weight: 1
+      - path: IK zampa_anteriore_sx
+        weight: 1
+      - path: IK zampa_anteriore_sx_fine
+        weight: 1
+      - path: IK zampa_posteriore_dx
+        weight: 1
+      - path: IK zampa_posteriore_dx_fine
+        weight: 1
+      - path: IK zampa_posteriore_sx
+        weight: 1
+      - path: IK zampa_posteriore_sx_fine
+        weight: 1
+      - path: route_a_zero
+        weight: 1
+      - path: route_a_zero/ctrl_main
+        weight: 1
+      - path: route_a_zero/ctrl_main/route
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/coccige
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/coccige/coda1
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/coccige/coda1/coda2
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/coccige/coda1/coda2/coda3
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/coccige/coda1/coda2/coda3/coda_fine
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/schiena
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/schiena/collo
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/schiena/collo/attacco_orecchio_dx
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/schiena/collo/attacco_orecchio_dx/orecchio_dx
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/schiena/collo/attacco_orecchio_dx/orecchio_dx/orecchio2_dx
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/schiena/collo/attacco_orecchio_dx/orecchio_dx/orecchio2_dx/orecchio_dx_fine
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/schiena/collo/attacco_orecchio_sx
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/schiena/collo/attacco_orecchio_sx/orecchio_sx
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/schiena/collo/attacco_orecchio_sx/orecchio_sx/orecchio2_sx
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/schiena/collo/attacco_orecchio_sx/orecchio_sx/orecchio2_sx/orecchio_sx_fine
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/schiena/collo/testa
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/schiena/collo/testa/armadillomajor_hat
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/schiena/collo/testa/testa2
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/schiena/collo/testa/testa2/testa_fine
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/schiena/zampa_anteriore_dx
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/schiena/zampa_anteriore_dx/zampa_anteriore_dx01
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/schiena/zampa_anteriore_dx/zampa_anteriore_dx01/zampa_anteriore_dx02
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/schiena/zampa_anteriore_dx/zampa_anteriore_dx01/zampa_anteriore_dx02/zampa_anteriore_dx03
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/schiena/zampa_anteriore_dx/zampa_anteriore_dx01/zampa_anteriore_dx02/zampa_anteriore_dx03/zampa_anteriore_dx04
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/schiena/zampa_anteriore_sx
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/schiena/zampa_anteriore_sx/zampa_anteriore_sx01
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/schiena/zampa_anteriore_sx/zampa_anteriore_sx01/zampa_anteriore_sx02
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/schiena/zampa_anteriore_sx/zampa_anteriore_sx01/zampa_anteriore_sx02/zampa_anteriore_sx03
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/schiena/zampa_anteriore_sx/zampa_anteriore_sx01/zampa_anteriore_sx02/zampa_anteriore_sx03/zampa_anteriore_sx04
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/zampa_posteriore_dx
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/zampa_posteriore_dx/zampa_posteriore_dx03
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/zampa_posteriore_dx/zampa_posteriore_dx03/zampa_posteriore_dx04
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/zampa_posteriore_dx/zampa_posteriore_dx03/zampa_posteriore_dx04/zampa_posteriore_dx01
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/zampa_posteriore_dx/zampa_posteriore_dx03/zampa_posteriore_dx04/zampa_posteriore_dx01/zampa_posteriore_dx02
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/zampa_posteriore_sx
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/zampa_posteriore_sx/zampa_posteriore_sx01
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/zampa_posteriore_sx/zampa_posteriore_sx01/zampa_posteriore_sx02
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/zampa_posteriore_sx/zampa_posteriore_sx01/zampa_posteriore_sx02/zampa_posteriore_sx03
+        weight: 1
+      - path: route_a_zero/ctrl_main/route/zampa_posteriore_sx/zampa_posteriore_sx01/zampa_posteriore_sx02/zampa_posteriore_sx03/zampa_posteriore_sx04
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
