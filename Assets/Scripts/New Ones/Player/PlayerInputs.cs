@@ -303,6 +303,46 @@ public class PlayerInputs : MonoBehaviour
     {
         GameObject.FindGameObjectWithTag("Player").GetComponent<SoundManager>().StopSound(1, 2);
     }
+    public void DolphinIdle()
+    {
+        GameObject.FindGameObjectWithTag("Player").GetComponent<SoundManager>().PlaySound(1, 4);
+    }
+    public void StopDolphinIdle()
+    {
+        GameObject.FindGameObjectWithTag("Player").GetComponent<SoundManager>().StopSound(1, 4);
+    }
+    public void CraneIdle()
+    {
+        GameObject.FindGameObjectWithTag("Player").GetComponent<SoundManager>().PlaySound(1, 7);
+    }
+    public void StopCraneIdle()
+    {
+        GameObject.FindGameObjectWithTag("Player").GetComponent<SoundManager>().StopSound(1, 7);
+    }
+    public void FallOnGround()
+    {
+        GameObject.FindGameObjectWithTag("Player").GetComponent<SoundManager>().PlaySound(1, 2);
+    }
+    public void FallInWater()
+    {
+        GameObject.FindGameObjectWithTag("Player").GetComponent<SoundManager>().PlaySound(1, 2);
+    }
+    public void DolphinSwim()
+    {
+        GameObject.FindGameObjectWithTag("Player").GetComponent<SoundManager>().PlaySound(1, 2);
+    }
+    public void WalkInWater()
+    {
+        GameObject.FindGameObjectWithTag("Player").GetComponent<SoundManager>().PlaySound(1, 2);
+    }
+    public void FissureSound()
+    {
+        GameObject.FindGameObjectWithTag("Player").GetComponent<SoundManager>().PlaySound(1, 2);
+    }
+    public void RespawnSound()
+    {
+        GameObject.FindGameObjectWithTag("Player").GetComponent<SoundManager>().PlaySound(1, 2);
+    }
 
     #endregion
 
