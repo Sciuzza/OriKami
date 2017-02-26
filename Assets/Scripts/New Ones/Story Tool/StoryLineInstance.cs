@@ -301,6 +301,43 @@ public class AnimationEffect
 
 #endregion Animation Effect
 
+#region Fx Effects
+
+[Serializable]
+public class FxEffect
+{
+    public ParticleActivation ParticleEffect;
+    public PointLightActivation PointLightActiEffect;
+    public PointLightDeActivation PointLightDeActiEffect;
+}
+
+[Serializable]
+public class ParticleActivation
+{
+    public bool End;
+    public GameObject GbRef;
+}
+
+[Serializable]
+public class PointLightActivation
+{
+    public bool End;
+    public GameObject GbRef;
+    public float FadingInTime;
+    public float Time;
+    public float FadingOutTime;
+}
+
+[Serializable]
+public class PointLightDeActivation
+{
+    public bool End;
+    public GameObject GbRef;
+    public float Time;
+    public float FadingOutTime;
+}
+#endregion
+
 #region Movie Effect
 [Serializable]
 public class MovieEffect
@@ -321,6 +358,7 @@ public class EvEffects
     public List<UiEffect> UiEffect;
     public List<SoundEffect> SoundEffect;
     public List<AnimationEffect> AniEffect;
+    public List<FxEffect> FxSuperEffect;
     public MovieEffect MovieEffect;
 }
 
@@ -791,6 +829,7 @@ public class StoryLineInstance : MonoBehaviour
                 this.UiEffectsHandler();
                 this.SoundEffectsHandler();
                 this.AniEffectsHandler();
+                this.FxEffectsHandler();
                 this.MovieEffectsHandler();
 
                 GameController.Debugging("Total Effects", this.totalEventEffects);
@@ -820,6 +859,7 @@ public class StoryLineInstance : MonoBehaviour
                     this.UiEffectsHandler();
                     this.SoundEffectsHandler();
                     this.AniEffectsHandler();
+                    this.FxEffectsHandler();
                     this.MovieEffectsHandler();
 
                     GameController.Debugging("Total Effects", this.totalEventEffects);
@@ -840,6 +880,7 @@ public class StoryLineInstance : MonoBehaviour
                     this.UiEffectsHandler();
                     this.SoundEffectsHandler();
                     this.AniEffectsHandler();
+                    this.FxEffectsHandler();
                     this.MovieEffectsHandler();
 
                     GameController.Debugging("Total Effects", this.totalEventEffects);
@@ -2764,7 +2805,7 @@ public class StoryLineInstance : MonoBehaviour
 
 
                 aniRef.SetInteger("AniIndex", effectToPlay.AnimationIndex);
-               
+
 
                 this.StartCoroutine(this.StoppingDefaultLoopinp(effectToPlay, aniRef));
 
@@ -2877,6 +2918,203 @@ public class StoryLineInstance : MonoBehaviour
 
         aniEffect.End = true;
         this.effectCounter++;
+    }
+    #endregion
+
+    #region Fx Effects Methods
+    private void FxEffectsHandler()
+    {
+        var fxEffectToEvaluate = new List<FxEffect>();
+        fxEffectToEvaluate.AddRange(this.storySelected.Events[this.eventIndex].Effects.FxSuperEffect);
+
+        var gbParticleCheckTempRepo = new List<GameObject>();
+        var gbPointCheckTempRepo = new List<GameObject>();
+
+        if (fxEffectToEvaluate.Count == 0)
+        {
+        }
+        else
+        {
+            for (var index = 0; index < fxEffectToEvaluate.Count; index++)
+            {
+                if (fxEffectToEvaluate[index].ParticleEffect != null && !gbParticleCheckTempRepo.Contains(fxEffectToEvaluate[index].ParticleEffect.GbRef))
+                {
+                    this.PlayParticleActiEffect(fxEffectToEvaluate[index].ParticleEffect);
+                    gbParticleCheckTempRepo.Add(fxEffectToEvaluate[index].ParticleEffect.GbRef);
+                    this.totalEventEffects++;
+                    Debug.Log("Particle Effect");
+                }
+
+                if (fxEffectToEvaluate[index].PointLightActiEffect.GbRef != null && !gbPointCheckTempRepo.Contains(fxEffectToEvaluate[index].PointLightActiEffect.GbRef))
+                {
+                    this.PlayPointLightActiEffect(fxEffectToEvaluate[index].PointLightActiEffect);
+                    gbPointCheckTempRepo.Add(fxEffectToEvaluate[index].PointLightActiEffect.GbRef);
+                    this.totalEventEffects++;
+                    Debug.Log("Point Light Acti Effect");
+                }
+
+                if (fxEffectToEvaluate[index].PointLightDeActiEffect.GbRef != null && !gbPointCheckTempRepo.Contains(fxEffectToEvaluate[index].PointLightDeActiEffect.GbRef))
+                {
+                    this.PlayPointLightDeActiEffect(fxEffectToEvaluate[index].PointLightDeActiEffect);
+                    gbPointCheckTempRepo.Add(fxEffectToEvaluate[index].PointLightDeActiEffect.GbRef);
+                    this.totalEventEffects++;
+                    Debug.Log("Point Light DeActi Effect");
+                }
+
+            }
+        }
+    }
+
+    private void PlayParticleActiEffect(ParticleActivation effectToPlay)
+    {
+        if (effectToPlay.GbRef.GetComponent<ParticleSystem>() != null)
+        {
+          effectToPlay.GbRef.GetComponent<ParticleSystem>().Play();
+            
+        }
+        else
+        {
+            Debug.Log("Particle System not Attached to GbRef");
+        }
+
+        effectToPlay.End = true;
+        this.effectCounter++;
+    }
+
+    private void PlayPointLightActiEffect(PointLightActivation effectToPlay)
+    {
+        if (effectToPlay.Time == 0 && effectToPlay.FadingInTime == 0 && effectToPlay.FadingOutTime == 0)
+        {
+            effectToPlay.GbRef.SetActive(true);
+            effectToPlay.End = true;
+            this.effectCounter++;
+        }
+        else
+        {
+            this.StartCoroutine(this.LightTimedActi(effectToPlay));
+        }
+    }
+
+    private void PlayPointLightDeActiEffect(PointLightDeActivation effectToPlay)
+    {
+        if (effectToPlay.Time == 0 && effectToPlay.FadingOutTime == 0)
+        {
+            effectToPlay.GbRef.SetActive(false);
+            effectToPlay.End = true;
+            this.effectCounter++;
+        }
+        else
+        {
+            this.StartCoroutine(this.LightTimedDeActi(effectToPlay));
+        }
+    }
+
+    private IEnumerator LightTimedActi(PointLightActivation pointLightActiEffect)
+    {
+        var lightTempLink = pointLightActiEffect.GbRef.GetComponent<Light>();
+        var intOriginal = lightTempLink.intensity;
+
+
+
+        if (pointLightActiEffect.FadingInTime == 0)
+        {
+            pointLightActiEffect.GbRef.SetActive(true);
+        }
+        else
+        {
+            float intConvFactor = intOriginal / pointLightActiEffect.FadingInTime;
+            lightTempLink.intensity = 0;
+            pointLightActiEffect.GbRef.SetActive(true);
+
+            while (lightTempLink.intensity < intOriginal)
+            {
+                lightTempLink.intensity += intConvFactor * Time.deltaTime;
+                yield return null;
+            }
+        }
+
+        lightTempLink.intensity = intOriginal;
+
+        var timer = 0.0f;
+
+        while (timer < pointLightActiEffect.Time)
+        {
+            timer += Time.deltaTime;
+            yield return null;
+        }
+
+        if (pointLightActiEffect.FadingOutTime == 0)
+        {
+            pointLightActiEffect.GbRef.SetActive(false);
+            lightTempLink.intensity = intOriginal;
+        }
+        else
+        {
+            float intConvFactor = intOriginal / pointLightActiEffect.FadingOutTime;
+            
+
+            while (lightTempLink.intensity > 0)
+            {
+                lightTempLink.intensity -= intConvFactor * Time.deltaTime;
+                yield return null;
+            }
+
+            pointLightActiEffect.GbRef.SetActive(false);
+            lightTempLink.intensity = intOriginal;
+        }
+
+
+
+
+        if (uiObjActiEffect.Time != 0 && uiObjActiEffect.FadingOutTime != 0)
+        {
+            uiObjActiEffect.GbRef.SetActive(false);
+        }
+        intOriginal.a = 1;
+        lightTempLink.color = intOriginal;
+        uiObjActiEffect.End = true;
+        this.effectCounter++;
+        GameController.Debugging("Effect Counter", this.effectCounter);
+    }
+
+    private IEnumerator LightTimedDeActi(PointLightDeActivation pointLightDeActiEffect)
+    {
+
+        var imTempLink = uiObjDeActiEffect.GbRef.GetComponent<Image>();
+        var coOriginal = imTempLink.color;
+        var coTempCopy = imTempLink.color;
+
+        var timer = 0.0f;
+
+        while (timer < uiObjDeActiEffect.Time)
+        {
+            timer += Time.deltaTime;
+            yield return null;
+        }
+
+        if (uiObjDeActiEffect.FadingOutTime == 0)
+        {
+            coTempCopy.a = 0;
+            imTempLink.color = coTempCopy;
+        }
+        else
+        {
+            var alphaDelta = 1f / uiObjDeActiEffect.FadingOutTime;
+
+            while (imTempLink.color.a > 0)
+            {
+                coTempCopy.a -= alphaDelta * Time.deltaTime;
+                imTempLink.color = coTempCopy;
+                yield return null;
+            }
+        }
+
+
+        uiObjDeActiEffect.GbRef.SetActive(false);
+        imTempLink.color = coOriginal;
+        uiObjDeActiEffect.End = true;
+        this.effectCounter++;
+        GameController.Debugging("Effect Counter", this.effectCounter);
     }
     #endregion
 

@@ -43,7 +43,7 @@ public class MenuManager : MonoBehaviour
     #region Taking References and linking Events
     void Awake()
     {
-        playerRef = GameObject.FindGameObjectWithTag("Player").GetComponent<SoundManager>();
+        //playerRef = GameObject.FindGameObjectWithTag("Player").GetComponent<SoundManager>();
         var gcTempLink = this.GetComponent<GameController>();
 
         gcTempLink.ngpInitializer.AddListener(this.InitializingNgpScene);
@@ -221,6 +221,8 @@ public class MenuManager : MonoBehaviour
     #region Menu In Game Handler
     private void InitializingGpScene(GameObject player)
     {
+        this.playerRef = player.GetComponent<SoundManager>();
+
         this.gpUiRef = GameObject.FindGameObjectWithTag("Gameplay Ui").GetComponent<HudRefRepo>();
 
         var storyLineCheck = GameObject.FindGameObjectWithTag("StoryLine");
