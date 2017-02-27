@@ -37,6 +37,8 @@ public class Puzzles : MonoBehaviour
 
     // x raotione in gradi
     public bool rotate;
+
+
     public bool keyHit = false;
 
     // di quanti gradi si muove l'oggetto 
@@ -259,7 +261,7 @@ public class Puzzles : MonoBehaviour
     {
         var fromAngle = rotateObject.transform.rotation;
         var toAngle = Quaternion.Euler(rotateObject.transform.eulerAngles + byAngles);
-        for (var t = 0f; t < 1; t += Time.deltaTime / inTime)
+        for (var t = 0f; t < 1; t += rotationSpeed* Time.deltaTime / inTime)
         {
             rotateObject.transform.rotation = Quaternion.Lerp(fromAngle, toAngle, t);
             yield return null;
