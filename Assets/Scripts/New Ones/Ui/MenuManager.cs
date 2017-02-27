@@ -38,6 +38,7 @@ public class MenuManager : MonoBehaviour
     public event_string changingSceneRequest;
     public UnityEvent movieEndNotification;
     public UnityEvent newDataRequest, loadDataRequest;
+    public UnityAction<GameObject, bool> panelHandlingRequest; 
     #endregion
 
     #region Taking References and linking Events
@@ -92,12 +93,61 @@ public class MenuManager : MonoBehaviour
         this.mmRepo.LegendsB.onClick.AddListener(this.PlayNewGameSound);
         this.mmRepo.LegendsB.onClick.AddListener(this.OpeningLegendsJornal);
 
-        //this.mmRepo.OptionsB.onClick.AddListener(this.PlayNewGameSound);
-        //this.mmRepo.OptionsB.onClick.AddListener(this.PlayNewGameSound);
+        this.mmRepo.OptionsB.onClick.AddListener(this.PlayNewGameSound);
+        this.mmRepo.OptionsB.onClick.AddListener(this.OpeningOptions);
 
         this.mmRepo.ExitB.onClick.AddListener(this.PlayNewGameSound);
         this.mmRepo.ExitB.onClick.AddListener(this.QuitGame);
 
+
+        this.mmRepo.Legend1B.GetComponent<PointerHandler>().ActivationRequest.AddListener(this.ActivatingGb);
+        this.mmRepo.Legend1B.GetComponent<PointerHandler>().DeActivationRequest.AddListener(this.DeActivatingGb);
+
+        this.mmRepo.Legend2B.GetComponent<PointerHandler>().ActivationRequest.AddListener(this.ActivatingGb);
+        this.mmRepo.Legend2B.GetComponent<PointerHandler>().DeActivationRequest.AddListener(this.DeActivatingGb);
+
+        this.mmRepo.Legend3B.GetComponent<PointerHandler>().ActivationRequest.AddListener(this.ActivatingGb);
+        this.mmRepo.Legend3B.GetComponent<PointerHandler>().DeActivationRequest.AddListener(this.DeActivatingGb);
+
+        this.mmRepo.Legend4B.GetComponent<PointerHandler>().ActivationRequest.AddListener(this.ActivatingGb);
+        this.mmRepo.Legend4B.GetComponent<PointerHandler>().DeActivationRequest.AddListener(this.DeActivatingGb);
+
+        this.mmRepo.Legend5B.GetComponent<PointerHandler>().ActivationRequest.AddListener(this.ActivatingGb);
+        this.mmRepo.Legend5B.GetComponent<PointerHandler>().DeActivationRequest.AddListener(this.DeActivatingGb);
+
+        this.mmRepo.Legend6B.GetComponent<PointerHandler>().ActivationRequest.AddListener(this.ActivatingGb);
+        this.mmRepo.Legend6B.GetComponent<PointerHandler>().DeActivationRequest.AddListener(this.DeActivatingGb);
+
+        this.mmRepo.Legend7B.GetComponent<PointerHandler>().ActivationRequest.AddListener(this.ActivatingGb);
+        this.mmRepo.Legend7B.GetComponent<PointerHandler>().DeActivationRequest.AddListener(this.DeActivatingGb);
+
+        this.mmRepo.Legend8B.GetComponent<PointerHandler>().ActivationRequest.AddListener(this.ActivatingGb);
+        this.mmRepo.Legend8B.GetComponent<PointerHandler>().DeActivationRequest.AddListener(this.DeActivatingGb);
+
+
+        // Options Listeners on Select
+
+        /*
+        this.mmRepo.GameplayMenuB.GetComponent<PointerHandler>().ActivationRequest.AddListener(this.ActivatingGb);
+        this.mmRepo.GameplayMenuB.GetComponent<PointerHandler>().DeActivationRequest.AddListener(this.DeActivatingGb);
+
+        this.mmRepo.VideoMenuB.GetComponent<PointerHandler>().ActivationRequest.AddListener(this.ActivatingGb);
+        this.mmRepo.VideoMenuB.GetComponent<PointerHandler>().DeActivationRequest.AddListener(this.DeActivatingGb);
+
+        this.mmRepo.AudioMenuB.GetComponent<PointerHandler>().ActivationRequest.AddListener(this.ActivatingGb);
+        this.mmRepo.AudioMenuB.GetComponent<PointerHandler>().DeActivationRequest.AddListener(this.DeActivatingGb);
+
+        this.mmRepo.KeyBindingsMenuB.GetComponent<PointerHandler>().ActivationRequest.AddListener(this.ActivatingGb);
+        this.mmRepo.KeyBindingsMenuB.GetComponent<PointerHandler>().DeActivationRequest.AddListener(this.DeActivatingGb);
+        */
+
+        this.mmRepo.GameplayMenuB.onClick.AddListener(this.ManagingAction(this.mmRepo.GameplayG, true));
+    }
+
+    private UnityAction ManagingAction(GameObject gg, bool activate)
+    {
+        gg.SetActive(activate);
+        return null;
     }
 
     private void DisablingContinue()
@@ -108,8 +158,27 @@ public class MenuManager : MonoBehaviour
     private void OpeningLegendsJornal()
     {
         this.mmRepo.JournalG.SetActive(true);
-        EventSystem.current.SetSelectedGameObject(this.mmRepo.UbazakuraB.gameObject);
-        //this.esLink.SetSelectedGameObject(this.mmRepo.UbazakuraB.gameObject);
+        EventSystem.current.SetSelectedGameObject(this.mmRepo.Legend1B.gameObject);
+        this.mmRepo.MainPageG.SetActive(false);
+        //this.esLink.SetSelectedGameObject(this.mmRepo.Legend1B.gameObject);
+    }
+
+    private void OpeningOptions()
+    {
+        this.mmRepo.OptionsG.SetActive(true);
+        EventSystem.current.SetSelectedGameObject(this.mmRepo.GameplayMenuB.gameObject);
+        this.mmRepo.MainPageG.SetActive(false);
+        //this.esLink.SetSelectedGameObject(this.mmRepo.Legend1B.gameObject);
+    }
+
+    private void ActivatingGb(GameObject gbToActivate)
+    {
+        gbToActivate.SetActive(true);
+    }
+
+    private void DeActivatingGb(GameObject gbToDeActivate)
+    {
+        gbToDeActivate.SetActive(false);
     }
 
     private void QuitGame()
@@ -135,6 +204,28 @@ public class MenuManager : MonoBehaviour
     public void SendingLoadDataRequestEvent()
     {
         this.loadDataRequest.Invoke();
+    }
+
+    private void Update()
+    {
+        if (Input.GetButtonDown("B") && this.mmRepo.JournalG.activeInHierarchy)
+        {
+            this.mmRepo.MainPageG.SetActive(true);
+            this.mmRepo.JournalG.SetActive(false);
+            EventSystem.current.SetSelectedGameObject(this.mmRepo.LegendsB.gameObject);
+        }
+        if (Input.GetButtonDown("B") && this.mmRepo.OptionsG.activeInHierarchy)
+        {
+            this.mmRepo.MainPageG.SetActive(true);
+            this.mmRepo.OptionsG.SetActive(false);
+            EventSystem.current.SetSelectedGameObject(this.mmRepo.OptionsB.gameObject);
+        }
+        if (Input.GetButtonDown("B") && this.mmRepo.GameplayG.activeInHierarchy)
+        {
+            this.mmRepo.GameplayG.SetActive(false);
+            EventSystem.current.SetSelectedGameObject(this.mmRepo.GameplayMenuB.gameObject);
+        }
+
     }
     #endregion
 
