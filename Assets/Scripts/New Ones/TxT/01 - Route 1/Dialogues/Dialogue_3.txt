@@ -1,5 +1,5 @@
 Iki/Left/Iki_Standard/...
-Jiraiya/Right/Jiraiya_Standard/"sniff sniff""
+Jiraiya/Right/Jiraiya_Standard/"sniff sniff"
 Koi/Left/Koi_Standard/Hey kid! The road's open!*You can go back home!
 Jiraiya/Right/Jiraiya_Standard/Thanks...
 Koi/Left/Koi_Standard/How far is the village from here?*Can you do it on your own?
