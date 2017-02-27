@@ -3063,16 +3063,7 @@ public class StoryLineInstance : MonoBehaviour
             lightTempLink.intensity = intOriginal;
         }
 
-
-
-
-        if (uiObjActiEffect.Time != 0 && uiObjActiEffect.FadingOutTime != 0)
-        {
-            uiObjActiEffect.GbRef.SetActive(false);
-        }
-        intOriginal.a = 1;
-        lightTempLink.color = intOriginal;
-        uiObjActiEffect.End = true;
+        pointLightActiEffect.End = true;
         this.effectCounter++;
         GameController.Debugging("Effect Counter", this.effectCounter);
     }
@@ -3080,39 +3071,38 @@ public class StoryLineInstance : MonoBehaviour
     private IEnumerator LightTimedDeActi(PointLightDeActivation pointLightDeActiEffect)
     {
 
-        var imTempLink = uiObjDeActiEffect.GbRef.GetComponent<Image>();
-        var coOriginal = imTempLink.color;
-        var coTempCopy = imTempLink.color;
+        var lightTempLink = pointLightDeActiEffect.GbRef.GetComponent<Light>();
+        var intOriginal = lightTempLink.intensity;
 
         var timer = 0.0f;
 
-        while (timer < uiObjDeActiEffect.Time)
+        while (timer < pointLightDeActiEffect.Time)
         {
             timer += Time.deltaTime;
             yield return null;
         }
 
-        if (uiObjDeActiEffect.FadingOutTime == 0)
+        if (pointLightDeActiEffect.FadingOutTime == 0)
         {
-            coTempCopy.a = 0;
-            imTempLink.color = coTempCopy;
+            pointLightDeActiEffect.GbRef.SetActive(false);
+            lightTempLink.intensity = intOriginal;
         }
         else
         {
-            var alphaDelta = 1f / uiObjDeActiEffect.FadingOutTime;
+            float intConvFactor = intOriginal / pointLightDeActiEffect.FadingOutTime;
 
-            while (imTempLink.color.a > 0)
+
+            while (lightTempLink.intensity > 0)
             {
-                coTempCopy.a -= alphaDelta * Time.deltaTime;
-                imTempLink.color = coTempCopy;
+                lightTempLink.intensity -= intConvFactor * Time.deltaTime;
                 yield return null;
             }
+
+            pointLightDeActiEffect.GbRef.SetActive(false);
+            lightTempLink.intensity = intOriginal;
         }
 
-
-        uiObjDeActiEffect.GbRef.SetActive(false);
-        imTempLink.color = coOriginal;
-        uiObjDeActiEffect.End = true;
+        pointLightDeActiEffect.End = true;
         this.effectCounter++;
         GameController.Debugging("Effect Counter", this.effectCounter);
     }
