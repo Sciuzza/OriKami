@@ -31,6 +31,8 @@ public class MenuManager : MonoBehaviour
 
 
     private HudRefRepo gpUiRef;
+
+    private string sectionTempRef;
     #endregion
 
     #region Public variables
@@ -38,7 +40,6 @@ public class MenuManager : MonoBehaviour
     public event_string changingSceneRequest;
     public UnityEvent movieEndNotification;
     public UnityEvent newDataRequest, loadDataRequest;
-    public UnityAction<GameObject, bool> panelHandlingRequest; 
     #endregion
 
     #region Taking References and linking Events
@@ -91,7 +92,7 @@ public class MenuManager : MonoBehaviour
         this.mmRepo.ContinueB.onClick.AddListener(this.SendingLoadDataRequestEvent);
 
         this.mmRepo.LegendsB.onClick.AddListener(this.PlayNewGameSound);
-        this.mmRepo.LegendsB.onClick.AddListener(this.OpeningLegendsJornal);
+        this.mmRepo.LegendsB.onClick.AddListener(this.OpeningLegendsJournal);
 
         this.mmRepo.OptionsB.onClick.AddListener(this.PlayNewGameSound);
         this.mmRepo.OptionsB.onClick.AddListener(this.OpeningOptions);
@@ -141,39 +142,135 @@ public class MenuManager : MonoBehaviour
         this.mmRepo.KeyBindingsMenuB.GetComponent<PointerHandler>().DeActivationRequest.AddListener(this.DeActivatingGb);
         */
 
-        this.mmRepo.GameplayMenuB.onClick.AddListener(this.ManagingAction(this.mmRepo.GameplayG, true));
+        this.mmRepo.GameplayMenuB.onClick.AddListener(() => this.ActivatingOptionsPanel(this.mmRepo.GameplayG, this.mmRepo.GameplayOptionsB.gameObject, "Gameplay"));
+        this.mmRepo.VideoMenuB.onClick.AddListener(() => this.ActivatingOptionsPanel(this.mmRepo.VideoG, this.mmRepo.GraphicSettingsB.gameObject, "Graphics"));
+        this.mmRepo.AudioMenuB.onClick.AddListener(() => this.ActivatingOptionsPanel(this.mmRepo.AudioG, this.mmRepo.MasterB.gameObject, "Audio"));
+        this.mmRepo.KeyBindingsMenuB.onClick.AddListener(() => this.ActivatingOptionsPanel(this.mmRepo.KeyBindingsG, this.mmRepo.Form1B.gameObject, "Keys"));
+
+
+        this.mmRepo.GameplayOptionsB.GetComponent<PointerHandler>().ActivationRequest.AddListener(this.ActivatingGb);
+        this.mmRepo.GameplayOptionsB.GetComponent<PointerHandler>().DeActivationRequest.AddListener(this.DeActivatingGb);
+        this.mmRepo.GameplayOptionsB.onClick.AddListener(() => this.ActivatingOptionSetting(this.mmRepo.LeftArrowGpoB.gameObject, this.mmRepo.RightArrowGpoB.gameObject, "Gp1"));
+
+        this.mmRepo.CameraSpeedB.GetComponent<PointerHandler>().ActivationRequest.AddListener(this.ActivatingGb);
+        this.mmRepo.CameraSpeedB.GetComponent<PointerHandler>().DeActivationRequest.AddListener(this.DeActivatingGb);
+        this.mmRepo.CameraSpeedB.onClick.AddListener(() => this.ActivatingOptionSetting(this.mmRepo.LeftArrowCsB.gameObject, this.mmRepo.RightArrowCsB.gameObject, "Gp2"));
+
+
+        this.mmRepo.GraphicSettingsB.GetComponent<PointerHandler>().ActivationRequest.AddListener(this.ActivatingGb);
+        this.mmRepo.GraphicSettingsB.GetComponent<PointerHandler>().DeActivationRequest.AddListener(this.DeActivatingGb);
+        this.mmRepo.GraphicSettingsB.onClick.AddListener(() => this.ActivatingOptionSetting(this.mmRepo.LeftArrowGsB.gameObject, this.mmRepo.RightArrowGsB.gameObject, "Gs1"));
+
+
+        this.mmRepo.MasterB.GetComponent<PointerHandler>().ActivationRequest.AddListener(this.ActivatingGb);
+        this.mmRepo.MasterB.GetComponent<PointerHandler>().DeActivationRequest.AddListener(this.DeActivatingGb);
+        this.mmRepo.MasterB.onClick.AddListener(() => this.ActivatingOptionSetting(this.mmRepo.LeftArrowMsB.gameObject, this.mmRepo.RightArrowMsB.gameObject, "Audio1"));
+
+        this.mmRepo.MusicB.GetComponent<PointerHandler>().ActivationRequest.AddListener(this.ActivatingGb);
+        this.mmRepo.MusicB.GetComponent<PointerHandler>().DeActivationRequest.AddListener(this.DeActivatingGb);
+        this.mmRepo.MusicB.onClick.AddListener(() => this.ActivatingOptionSetting(this.mmRepo.LeftArrowMuB.gameObject, this.mmRepo.RightArrowMuB.gameObject, "Audio2"));
+
+        this.mmRepo.EffectsB.GetComponent<PointerHandler>().ActivationRequest.AddListener(this.ActivatingGb);
+        this.mmRepo.EffectsB.GetComponent<PointerHandler>().DeActivationRequest.AddListener(this.DeActivatingGb);
+        this.mmRepo.EffectsB.onClick.AddListener(() => this.ActivatingOptionSetting(this.mmRepo.LeftArrowEfB.gameObject, this.mmRepo.RightArrowEfB.gameObject, "Audio3"));
+
+
+        this.mmRepo.Form1B.GetComponent<PointerHandler>().ActivationRequest.AddListener(this.ActivatingGb);
+        this.mmRepo.Form1B.GetComponent<PointerHandler>().DeActivationRequest.AddListener(this.DeActivatingGb);
+        this.mmRepo.Form1B.onClick.AddListener(() => this.ActivatingOptionSetting(this.mmRepo.LeftArrowF1B.gameObject, this.mmRepo.RightArrowF2B.gameObject, "Keys1"));
+
+        this.mmRepo.Form2B.GetComponent<PointerHandler>().ActivationRequest.AddListener(this.ActivatingGb);
+        this.mmRepo.Form2B.GetComponent<PointerHandler>().DeActivationRequest.AddListener(this.DeActivatingGb);
+        this.mmRepo.Form2B.onClick.AddListener(() => this.ActivatingOptionSetting(this.mmRepo.LeftArrowF2B.gameObject, this.mmRepo.RightArrowF2B.gameObject, "Keys2"));
+
+        this.mmRepo.Form3B.GetComponent<PointerHandler>().ActivationRequest.AddListener(this.ActivatingGb);
+        this.mmRepo.Form3B.GetComponent<PointerHandler>().DeActivationRequest.AddListener(this.DeActivatingGb);
+        this.mmRepo.Form3B.onClick.AddListener(() => this.ActivatingOptionSetting(this.mmRepo.LeftArrowF3B.gameObject, this.mmRepo.RightArrowF3B.gameObject, "Keys3"));
+
+        this.mmRepo.Form4B.GetComponent<PointerHandler>().ActivationRequest.AddListener(this.ActivatingGb);
+        this.mmRepo.Form4B.GetComponent<PointerHandler>().DeActivationRequest.AddListener(this.DeActivatingGb);
+        this.mmRepo.Form4B.onClick.AddListener(() => this.ActivatingOptionSetting(this.mmRepo.LeftArrowF4B.gameObject, this.mmRepo.RightArrowF4B.gameObject, "Keys4"));
+
+        this.mmRepo.StdFormB.GetComponent<PointerHandler>().ActivationRequest.AddListener(this.ActivatingGb);
+        this.mmRepo.StdFormB.GetComponent<PointerHandler>().DeActivationRequest.AddListener(this.DeActivatingGb);
+        this.mmRepo.StdFormB.onClick.AddListener(() => this.ActivatingOptionSetting(this.mmRepo.LeftArrowStB.gameObject, this.mmRepo.RightArrowStB.gameObject, "Keys5"));
+
+        this.mmRepo.JumpDashB.GetComponent<PointerHandler>().ActivationRequest.AddListener(this.ActivatingGb);
+        this.mmRepo.JumpDashB.GetComponent<PointerHandler>().DeActivationRequest.AddListener(this.DeActivatingGb);
+        this.mmRepo.JumpDashB.onClick.AddListener(() => this.ActivatingOptionSetting(this.mmRepo.LeftArrowJdB.gameObject, this.mmRepo.RightArrowJdB.gameObject, "Keys6"));
+
+        this.mmRepo.PasstB.GetComponent<PointerHandler>().ActivationRequest.AddListener(this.ActivatingGb);
+        this.mmRepo.PasstB.GetComponent<PointerHandler>().DeActivationRequest.AddListener(this.DeActivatingGb);
+        this.mmRepo.PasstB.onClick.AddListener(() => this.ActivatingOptionSetting(this.mmRepo.LeftArrowPtB.gameObject, this.mmRepo.RightArrowPtB.gameObject, "Keys7"));
+
+        this.mmRepo.EpicViewB.GetComponent<PointerHandler>().ActivationRequest.AddListener(this.ActivatingGb);
+        this.mmRepo.EpicViewB.GetComponent<PointerHandler>().DeActivationRequest.AddListener(this.DeActivatingGb);
+        this.mmRepo.EpicViewB.onClick.AddListener(() => this.ActivatingOptionSetting(this.mmRepo.LeftArrowEwB.gameObject, this.mmRepo.RightArrowEwB.gameObject, "Keys8"));
     }
 
-    private UnityAction ManagingAction(GameObject gg, bool activate)
-    {
-        gg.SetActive(activate);
-        return null;
-    }
 
     private void DisablingContinue()
     {
         this.mmRepo.ContinueB.interactable = false;
     }
 
-    private void OpeningLegendsJornal()
+    private void OpeningLegendsJournal()
     {
         this.mmRepo.JournalG.SetActive(true);
         EventSystem.current.SetSelectedGameObject(this.mmRepo.Legend1B.gameObject);
         this.mmRepo.MainPageG.SetActive(false);
-        //this.esLink.SetSelectedGameObject(this.mmRepo.Legend1B.gameObject);
     }
 
     private void OpeningOptions()
     {
         this.mmRepo.OptionsG.SetActive(true);
         EventSystem.current.SetSelectedGameObject(this.mmRepo.GameplayMenuB.gameObject);
+        this.mmRepo.GameplayG.SetActive(false);
         this.mmRepo.MainPageG.SetActive(false);
-        //this.esLink.SetSelectedGameObject(this.mmRepo.Legend1B.gameObject);
+        this.sectionTempRef = "Out";
     }
 
     private void ActivatingGb(GameObject gbToActivate)
     {
         gbToActivate.SetActive(true);
+    }
+
+    private void ActivatingOptionsPanel(GameObject gbToActivate, GameObject activeButton, string section)
+    {
+        gbToActivate.SetActive(true);
+        EventSystem.current.SetSelectedGameObject(activeButton);
+
+        switch (section)
+        {
+            case "Gameplay":
+                this.mmRepo.CsArrow.SetActive(false);
+                break;
+            case "Graphics":
+                break;
+            case "Audio":
+                this.mmRepo.MuArrow.SetActive(false);
+                this.mmRepo.EfArrow.SetActive(false);
+                break;
+            case "Keys":
+                this.mmRepo.F2Arrow.SetActive(false);
+                this.mmRepo.F3Arrow.SetActive(false);
+                this.mmRepo.F4Arrow.SetActive(false);
+                this.mmRepo.StdArrow.SetActive(false);
+                this.mmRepo.JdArrow.SetActive(false);
+                this.mmRepo.PtArrow.SetActive(false);
+                this.mmRepo.EvArrow.SetActive(false);
+                break;
+        }
+
+        this.sectionTempRef = section;
+    }
+
+    private void ActivatingOptionSetting(GameObject leftAr, GameObject rightAr, string innerSection)
+    {
+        leftAr.SetActive(true);
+        rightAr.SetActive(true);
+        EventSystem.current.SetSelectedGameObject(leftAr);
+        this.sectionTempRef = innerSection;
     }
 
     private void DeActivatingGb(GameObject gbToDeActivate)
@@ -214,16 +311,35 @@ public class MenuManager : MonoBehaviour
             this.mmRepo.JournalG.SetActive(false);
             EventSystem.current.SetSelectedGameObject(this.mmRepo.LegendsB.gameObject);
         }
-        if (Input.GetButtonDown("B") && this.mmRepo.OptionsG.activeInHierarchy)
+        else if (Input.GetButtonDown("B") && this.mmRepo.GameplayG.activeInHierarchy)
+        {
+            this.mmRepo.GameplayG.SetActive(false);
+            EventSystem.current.SetSelectedGameObject(this.mmRepo.GameplayMenuB.gameObject);
+            this.sectionTempRef = "Out";
+        }
+        else if (Input.GetButtonDown("B") && this.mmRepo.VideoG.activeInHierarchy)
+        {
+            this.mmRepo.VideoG.SetActive(false);
+            EventSystem.current.SetSelectedGameObject(this.mmRepo.VideoMenuB.gameObject);
+            this.sectionTempRef = "Out";
+        }
+        else if (Input.GetButtonDown("B") && this.mmRepo.AudioG.activeInHierarchy)
+        {
+            this.mmRepo.AudioG.SetActive(false);
+            EventSystem.current.SetSelectedGameObject(this.mmRepo.AudioMenuB.gameObject);
+            this.sectionTempRef = "Out";
+        }
+        else if (Input.GetButtonDown("B") && this.mmRepo.KeyBindingsG.activeInHierarchy)
+        {
+            this.mmRepo.KeyBindingsG.SetActive(false);
+            EventSystem.current.SetSelectedGameObject(this.mmRepo.KeyBindingsMenuB.gameObject);
+            this.sectionTempRef = "Out";
+        }
+        else if (Input.GetButtonDown("B") && this.mmRepo.OptionsG.activeInHierarchy)
         {
             this.mmRepo.MainPageG.SetActive(true);
             this.mmRepo.OptionsG.SetActive(false);
             EventSystem.current.SetSelectedGameObject(this.mmRepo.OptionsB.gameObject);
-        }
-        if (Input.GetButtonDown("B") && this.mmRepo.GameplayG.activeInHierarchy)
-        {
-            this.mmRepo.GameplayG.SetActive(false);
-            EventSystem.current.SetSelectedGameObject(this.mmRepo.GameplayMenuB.gameObject);
         }
 
     }

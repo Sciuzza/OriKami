@@ -28,6 +28,7 @@ public class PointerHandler : MonoBehaviour, IPointerEnterHandler, ISelectHandle
                 this.ActivationRequest.Invoke(this.GbRef);
                 break;
             case "But3":
+                this.ActivationRequest.Invoke(this.GbRef);
                 break;
         }
     }
@@ -43,6 +44,7 @@ public class PointerHandler : MonoBehaviour, IPointerEnterHandler, ISelectHandle
                 this.DeActivationRequest.Invoke(this.GbRef);
                 break;
             case "But3":
+                this.DeActivationRequest.Invoke(this.GbRef);
                 break;
         }
     }
