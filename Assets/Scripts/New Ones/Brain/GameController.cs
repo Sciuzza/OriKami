@@ -12,6 +12,8 @@ public class GameController : MonoBehaviour
     private SoundManager soundRef;
     private AudioSource audioSourceRef;
     public string currentScene;
+    private AudioListener audioListenerRef;
+
     
     
 
@@ -35,6 +37,7 @@ public class GameController : MonoBehaviour
         //DontDestroyOnLoad(this.dLight);
 
         soundRef = GameObject.FindGameObjectWithTag("GameController").GetComponent<SoundManager>();
+        audioListenerRef = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<AudioListener>();
     }
 
     private void Start()
@@ -67,6 +70,18 @@ public class GameController : MonoBehaviour
 
             Scene scene = SceneManager.GetActiveScene();
             StopAllCoroutines();
+
+            if (scene.name == "Game Starter" || scene.name == "Main Menu")
+            {
+                audioListenerRef.enabled = true;
+            }
+
+            else {
+                audioListenerRef.enabled = false;
+            }
+
+            
+
             if (scene.name=="Frogs' Village")
             {
                 soundRef.PersistendAudio[0].AudioSourceRef.Stop();

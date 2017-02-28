@@ -17,6 +17,13 @@ namespace Orikami
         public bool timedPlatforms;
         public bool groupPlatforms;
         public float ReAppearingTime;
+        private SoundManager soundRef;
+
+        void Awake()
+        {
+            soundRef = GameObject.FindGameObjectWithTag("GameController").GetComponent<SoundManager>();
+        }
+
      
 
         IEnumerator MyCoroutine()
@@ -38,9 +45,11 @@ namespace Orikami
 
         IEnumerator MyCoroutineExit()
         {
+            soundRef.PlaySound(1, 10);
             yield return new WaitForSeconds(this.ReAppearingTime);
             PlatformMesh.enabled = true;
             platformCollider.isTrigger = false;
+            
 
         }
 
@@ -87,6 +96,7 @@ namespace Orikami
 
             if (other.gameObject.tag == "Player" && timedPlatforms)
             {
+             
                 StartCoroutine(MyCoroutineExit());
             }
 

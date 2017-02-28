@@ -8,6 +8,7 @@ public class EnvInputs : MonoBehaviour
     private CharacterController ccLink;
     private bool onWaterFlag = false, onAir = false, onWater = false, onGround = false;
     private CollTrigger ctTempLink;
+    private SoundManager soundRef;
     #endregion
 
     #region Events
@@ -26,6 +27,7 @@ public class EnvInputs : MonoBehaviour
     void Awake()
     {
         ccLink = this.GetComponent<CharacterController>();
+        soundRef = GameObject.FindGameObjectWithTag("GameController").GetComponent<SoundManager>();
     }
     #endregion
 
@@ -127,10 +129,12 @@ public class EnvInputs : MonoBehaviour
             case "CheckPoint":
                 envTrigger.gameObject.SetActive(false);
                 this.SaveRequestByCheck.Invoke();
+                soundRef.PlaySound(1, 9);
                 Debug.Log("Saved");
                 break;
-            case "GoldenCrane":
+            case "GoldenCrane":                
                 this.IncrementNCollRequest.Invoke(0, envTrigger.gameObject);
+                soundRef.PlaySound(1, 8);
 
                 this.ctTempLink = envTrigger.gameObject.GetComponent<CollTrigger>();
                 if (this.ctTempLink != null && this.ctTempLink.TriggerStory) this.ctTempLink.CheckingStoryCondition();

@@ -5,6 +5,8 @@ using System.Collections;
 public class Puzzles : MonoBehaviour
 {
     public bool isPlatform;
+    private bool soundTrigger = true;
+    private SoundManager soundRef;
 
     //Gestione Movimento oggetti  
     public bool moveObject;
@@ -84,6 +86,11 @@ public class Puzzles : MonoBehaviour
 
     private float lerpTime = 5;
     private float currentLerpTime = 0;
+
+    void Awake()
+    {
+       soundRef = GameObject.FindGameObjectWithTag("GameController").GetComponent<SoundManager>();
+    }
 
     void Start()
     {
@@ -270,12 +277,19 @@ public class Puzzles : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
+
         if (other.gameObject.tag == "Player" && generateObject && !this.keyHit)
         {
-            if (generatedObject != null)
+            
+
+            if (generatedObject != null && soundTrigger)
             {
+                               
+                soundRef.PlaySound(1, 11);
                 Instantiate(generatedObject);
                 generateObject = false;
+                soundTrigger = false;
+
             }
 
         }
@@ -322,6 +336,7 @@ public class Puzzles : MonoBehaviour
 
         if (other.gameObject.tag == "Player" && rotate && !keyHit)
         {
+            soundRef.PlaySound(1, 12);
             StartCoroutine(RotateMe(Vector3.up * degrees, 5));
         }
 
