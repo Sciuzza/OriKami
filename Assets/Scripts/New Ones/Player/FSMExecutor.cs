@@ -182,6 +182,12 @@ public class FSMExecutor : MonoBehaviour
                 switch (currentPHState)
                 {
                     case physicStates.onAir:
+                        fsmLinker.isWalkingSound = false;
+                        if (moveDirInput.sqrMagnitude > 0.1f && currentForm == "Standard Form")
+                        {
+                            playerref.StopPlayerSounds(1,3);
+                        }
+                       
                         this.moveSelected.Invoke(moveDirInput, this.generalValues.moveInAir);
                         break;
                     case physicStates.onWater:
@@ -255,6 +261,11 @@ public class FSMExecutor : MonoBehaviour
                 switch (currentPHState)
                 {
                     case physicStates.onAir:
+                        fsmLinker.isWalkingSound = false;
+                        if (moveDirInput.sqrMagnitude > 0.1f && currentForm == "Frog Form")
+                        {
+                            playerref.StopPlayerSounds(1, 2);
+                        }
                         this.moveSelected.Invoke(moveDirInput, this.generalValues.moveInAir);
                         break;
                     case physicStates.onWater:
@@ -437,7 +448,7 @@ public class FSMExecutor : MonoBehaviour
                     case "Frog Form":
                         var aniTempFrog = forms[1].GetComponent<Animator>();
                         aniTempFrog.SetTrigger("Jumping");
-                        playerref.PlayerSounds(0, 0);
+                        playerref.PlayerSounds(0, 2);
                         this.jumpSelected.Invoke(this.currentMoveValues.frogMove.jumpStrength);
                         break;
                     case "Dolphin Form":
