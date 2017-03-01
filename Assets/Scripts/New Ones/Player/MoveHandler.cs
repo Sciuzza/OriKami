@@ -20,12 +20,15 @@ public class MoveHandler : MonoBehaviour
     private float verticalVelocity = 0.0f;
     private CollisionFlags flags;
     private bool roofHit = false;
+    
 
     private RaycastHit hitInfo;
     private Vector3 plCurrentPos;
     private Ray rayTest;
     public static bool sliding;
     public LayerMask Env;
+    private FSMChecker fsmCheckerLinker;
+    private SoundManager soundRef;
     #endregion
 
     #region Events
@@ -36,6 +39,8 @@ public class MoveHandler : MonoBehaviour
     #region Taking References and Linking Events
     void Awake()
     {
+        fsmCheckerLinker = GameObject.FindGameObjectWithTag("Player").GetComponent<FSMChecker>();
+        soundRef = GameObject.FindGameObjectWithTag("Player").GetComponent<SoundManager>();
 
         FSMExecutor fsmExecTempLink = this.gameObject.GetComponent<FSMExecutor>();
 
@@ -129,7 +134,17 @@ public class MoveHandler : MonoBehaviour
                     sliding = false;
                 }
                 */
+                
+                if (this.verticalVelocity <=-4f && fsmCheckerLinker.cPlayerState.currentPhState == physicStates.onGround)
+                {                 
+                    soundRef.PlaySound(0, 1);                                     
+                }
 
+                if (this.verticalVelocity <= -4f && fsmCheckerLinker.cPlayerState.currentPhState == physicStates.onWater)
+                {
+                    Debug.LogWarning("ACQUA");
+                    soundRef.PlaySound(0, 0);
+                }
                 if (this.verticalVelocity <= -this.hitImpactVel) this.deathRequest.Invoke();
                 else
                 {
@@ -151,8 +166,7 @@ public class MoveHandler : MonoBehaviour
             yield return null;
         }
     }
-
-
+   
     private void StoppingCoroutines()
     {
         this.StopCoroutine(this.MoveHandlerUpdate());

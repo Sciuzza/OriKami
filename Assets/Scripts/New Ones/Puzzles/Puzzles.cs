@@ -282,14 +282,10 @@ public class Puzzles : MonoBehaviour
         {
             
 
-            if (generatedObject != null && soundTrigger)
-            {
-                               
-                soundRef.PlaySound(1, 11);
+            if (generatedObject != null )
+            {                                             
                 Instantiate(generatedObject);
-                generateObject = false;
-                soundTrigger = false;
-
+                generateObject = false;              
             }
 
         }
@@ -329,9 +325,12 @@ public class Puzzles : MonoBehaviour
             StartCoroutine(DoorClosingCO());
         }
 
-        if (other.gameObject.tag == "Player" && moveObject && !this.keyHit)
+        if (other.gameObject.tag == "Player" && moveObject && !this.keyHit && soundTrigger)
         {
+            
+            soundRef.PlaySound(1, 11);
             StartCoroutine(ObjectMovingCO());
+            soundTrigger = false;
         }
 
         if (other.gameObject.tag == "Player" && rotate && !keyHit)
