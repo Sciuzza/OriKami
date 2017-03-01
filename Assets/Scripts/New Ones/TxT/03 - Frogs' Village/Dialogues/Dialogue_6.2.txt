@@ -1,4 +1,4 @@
-Frogs King/Left/FrogsKing_Standard/Oh, I see. Even though you can transform into a frog you still don't feel like one of us.*You know, I've traveled a lot when I was younger, all around the world.
-Frogs King/Left/FrogsKing_Standard/I've met hundreds of different species, but I've never seen anyone like you.*I guess it must be hard, but don't lose your hope, I'm sure you'll be able to find what you are looking for.
+Frogs EmperorLeft/FrogsEmperor_Standard/Oh, I see. Even though you can transform into a frog you still don't feel like one of us.*You know, I've traveled a lot when I was younger, all around the world.
+Frogs Emperor/Left/FrogsEmperor_Standard/I've met hundreds of different species, but I've never seen anyone like you.*I guess it must be hard, but don't lose your hope, I'm sure you'll be able to find what you are looking for.
 Iki/Right/Iki_Standard/...
-Frogs King/Left/FrogsKing_Standard/Good luck with everything!
+Frogs Emperor/Left/FrogsEmperor_Standard/Good luck with everything!
