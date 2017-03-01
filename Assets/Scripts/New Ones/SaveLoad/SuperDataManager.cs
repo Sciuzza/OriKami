@@ -91,6 +91,41 @@ public class PlayerNsData
 
     public string SceneToLoad;
 }
+
+[System.Serializable]
+public class TweakableSettings
+{
+    [Range(0, 1)]
+    public int DifficultyIndex;
+    [Range(0.5f, 1.5f)]
+    public float CurCamValue;
+    [Range(0, 1)]
+    public int QualityIndex;
+
+    [Range(0.5f, 1.5f)]
+    public float MasterValue;
+    [Range(0.5f, 1.5f)]
+    public float MusicValue;
+    [Range(0.5f, 1.5f)]
+    public float EffectsValue;
+
+    [Range(0, 3)]
+    public int Form1Index;
+    [Range(0, 3)]
+    public int Form2Index;
+    [Range(0, 3)]
+    public int Form3Index;
+    [Range(0, 3)]
+    public int Form4Index;
+    [Range(0, 3)]
+    public int StdFormIndex;
+    [Range(0, 3)]
+    public int JdIndex;
+    [Range(0, 3)]
+    public int PtIndex;
+    [Range(0, 3)]
+    public int EwIndex;
+}
 #endregion
 
 public class SuperDataManager : MonoBehaviour
@@ -101,6 +136,9 @@ public class SuperDataManager : MonoBehaviour
 
     [SerializeField]
     public PlayerNsData PlNsData;
+
+    [SerializeField]
+    public TweakableSettings TwkSettings;
     #endregion
 
     #region Private Variables
@@ -108,19 +146,22 @@ public class SuperDataManager : MonoBehaviour
     #endregion
 
     #region Events
-    public UnityEvent RequestLocalUpdateToRepo, RequestLocalUpdateByRepo, DisableContinueRequest;
+    public UnityEvent RequestLocalUpdateToRepo, RequestLocalUpdateByRepo, DisableContinueRequest, menuInitRequest;
     public event_string SwitchSceneRequest;
     #endregion
 
     #region Taking References and Linking Events and ReWriting Default Data
     private void Awake()
     {
-        this.InitializingOriginalData();
+        this.ErasingData();
+
+        this.InitializeOriginalData();
 
         var mmTempLink = this.gameObject.GetComponent<MenuManager>();
 
         mmTempLink.newDataRequest.AddListener(this.NewGameHandler);
         mmTempLink.loadDataRequest.AddListener(this.ContinueHandler);
+        mmTempLink.SaveDataRequest.AddListener(this.SaveHandler);
 
         var gcTempLink = this.gameObject.GetComponent<GameController>();
 
@@ -128,29 +169,30 @@ public class SuperDataManager : MonoBehaviour
         gcTempLink.ngpInitializer.AddListener(this.InitializingNgpScene);
     }
 
-    private void InitializingOriginalData()
+    private void InitializeOriginalData()
     {
         var bf = new BinaryFormatter();
 
-        if (File.Exists(Application.persistentDataPath + "/EnvSensOriData.dat"))
+        if (!File.Exists(Application.persistentDataPath + "/EnvSensOriData.dat"))
         {
-            File.Delete(Application.persistentDataPath + "/EnvSensOriData.dat");
+            var envSensFile = File.Create(Application.persistentDataPath + "/EnvSensOriData.dat");
+            bf.Serialize(envSensFile, this.EnvSensData);
+            envSensFile.Close();
         }
 
-        if (File.Exists(Application.persistentDataPath + "/PlNsOriData.dat"))
+        if (!File.Exists(Application.persistentDataPath + "/PlNsOriData.dat"))
         {
-            File.Delete(Application.persistentDataPath + "/PlNsOriData.dat");
+            var plSensFile = File.Create(Application.persistentDataPath + "/PlNsOriData.dat");
+            bf.Serialize(plSensFile, this.PlNsData);
+            plSensFile.Close();
         }
 
-        var envSensFile = File.Create(Application.persistentDataPath + "/EnvSensOriData.dat");
-        var plSensFile = File.Create(Application.persistentDataPath + "/PlNsOriData.dat");
-
-
-        bf.Serialize(envSensFile, this.EnvSensData);
-        bf.Serialize(plSensFile, this.PlNsData);
-
-        plSensFile.Close();
-        envSensFile.Close();
+        if (!File.Exists(Application.persistentDataPath + "/TweaksOriData.dat"))
+        {
+            var tweaksFile = File.Create(Application.persistentDataPath + "/TweaksData.dat");
+            bf.Serialize(tweaksFile, this.TwkSettings);
+            tweaksFile.Close();
+        }
     }
     #endregion
 
@@ -161,6 +203,7 @@ public class SuperDataManager : MonoBehaviour
         {
             case "Main Menu":
                 this.LoadingOnDiskData();
+                this.menuInitRequest.Invoke();
                 if (!this.checkSave1 || !this.checkSave2)
                     this.DisableContinueRequest.Invoke();
                 break;
@@ -236,6 +279,7 @@ public class SuperDataManager : MonoBehaviour
     #region Save Handler
     private void SaveHandler()
     {
+        Debug.Log("Saving");
         this.RequestLocalUpdateToRepo.Invoke();
         this.SavingOnDiskData();
     }
@@ -254,16 +298,22 @@ public class SuperDataManager : MonoBehaviour
             File.Delete(Application.persistentDataPath + "/PlNsData.dat");
         }
 
+        if (File.Exists(Application.persistentDataPath + "/TweaksData.dat"))
+        {
+            File.Delete(Application.persistentDataPath + "/TweaksData.dat");
+        }
+
         var envSensFile = File.Create(Application.persistentDataPath + "/EnvSensData.dat");
         var plSensFile = File.Create(Application.persistentDataPath + "/PlNsData.dat");
-
+        var tweaksFile = File.Create(Application.persistentDataPath + "/TweaksData.dat");
 
         bf.Serialize(envSensFile, this.EnvSensData);
         bf.Serialize(plSensFile, this.PlNsData);
+        bf.Serialize(tweaksFile, this.TwkSettings);
 
         plSensFile.Close();
         envSensFile.Close();
-
+        tweaksFile.Close();
     }
 
     private void UpdatingQuestData()
@@ -295,6 +345,7 @@ public class SuperDataManager : MonoBehaviour
 
     private void LoadingHandler()
     {
+        Debug.Log("Loading");
         this.LoadingOnDiskData();
         this.RequestLocalUpdateByRepo.Invoke();
     }
@@ -338,6 +389,56 @@ public class SuperDataManager : MonoBehaviour
             Debug.Log("PlNsData not Found");
         }
 
+        if (File.Exists(Application.persistentDataPath + "/TweaksData.dat"))
+        {
+            var tweakFile = File.Open(Application.persistentDataPath + "/TweaksData.dat", FileMode.Open);
+
+            this.TwkSettings = null;
+
+            this.TwkSettings = (TweakableSettings)bf.Deserialize(tweakFile);
+
+            tweakFile.Close();
+        }
+        else
+        {
+           Debug.Log("TweaksData not Found");
+        }
+
+    }
+
+    private bool LoadByFile(string fileName, int fileType)
+    {
+        var bf = new BinaryFormatter();
+
+        if (File.Exists(Application.persistentDataPath + fileName))
+        {
+            var fileRef = File.Open(Application.persistentDataPath + fileName, FileMode.Open);
+
+            switch (fileType)
+            {
+                case 0:
+                    this.EnvSensData.Clear();
+                    this.EnvSensData.TrimExcess();
+                    this.EnvSensData = (List<EnvDatas>)bf.Deserialize(fileRef);
+                    break;
+                case 1:
+                    this.PlNsData = null;
+                    this.PlNsData = (PlayerNsData)bf.Deserialize(fileRef);
+                    break;
+                case 2:
+                    this.TwkSettings = null;
+                    this.TwkSettings = (TweakableSettings)bf.Deserialize(fileRef);
+                    break;
+            }
+            
+            fileRef.Close();
+            return true;
+        }
+        else
+        {
+            Debug.Log("EnvSensData not Found");
+            return false;
+        }
     }
     #endregion
 
@@ -534,6 +635,26 @@ public class SuperDataManager : MonoBehaviour
         if (File.Exists(Application.persistentDataPath + "/PlNsData.dat"))
         {
             File.Delete(Application.persistentDataPath + "/PlNsData.dat");
+        }
+
+        if (File.Exists(Application.persistentDataPath + "/TweaksData.dat"))
+        {
+            File.Delete(Application.persistentDataPath + "/TweaksData.dat");
+        }
+
+        if (File.Exists(Application.persistentDataPath + "/EnvSensOriData.dat"))
+        {
+            File.Delete(Application.persistentDataPath + "/EnvSensOriData.dat");
+        }
+
+        if (File.Exists(Application.persistentDataPath + "/PlNsOriData.dat"))
+        {
+            File.Delete(Application.persistentDataPath + "/PlNsOriData.dat");
+        }
+
+        if (File.Exists(Application.persistentDataPath + "/TweaksOriData.dat"))
+        {
+            File.Delete(Application.persistentDataPath + "/TweaksOriData.dat");
         }
     } 
     #endregion
