@@ -4,5 +4,5 @@ Orihime/Right/Orihime_Standard/You do not speak.*I know who you are.*You are the
 Iki/Left/Iki_Standard/...
 Orihime/Right/Orihime_Standard/Please forgive my impoliteness, I did not introduce myself. My name is Orihime.*I am the daughter of the king of this village, composed by both dolphins in the lower zone and swallows in the higher zone.
 Iki/Left/Iki_Standard/...
-Orihime/Right/Orihime_Standard/Are you here for you wish to speak to father?*I fear that he is not here, at the moment, therefore I cannot introduce you.
+Orihime/Right/Orihime_Standard/Are you here for you wish to speak to father?*I'm afraid he is not here, at the moment, therefore I cannot introduce you.
 Orihime/Right/Orihime_Standard/I would like to accompany you to him, but unfortunately I have some urgent work to fulfil here.
