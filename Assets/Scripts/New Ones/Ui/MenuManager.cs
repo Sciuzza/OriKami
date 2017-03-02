@@ -9,7 +9,9 @@ using UnityEngine.UI;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 
+#if UNITY_STANDALONE_WIN
 using WindowsInput;
+#endif
 
 
 public class MenuManager : MonoBehaviour
@@ -432,11 +434,14 @@ public class MenuManager : MonoBehaviour
 
                 this.mmRepo.Quality.text = this.Quality[this.LocalGbSettings.QualityIndex];
 
+#if UNITY_STANDALONE
                 if (this.LocalGbSettings.QualityIndex == 1)
                 {
+                    
                     Debug.Log("Sweetfx");
                     InputSimulator.SimulateKeyDown(VirtualKeyCode.SCROLL);
                 }
+#endif
                 break;
             case "OAdFirst":
                 if (direction > 0)

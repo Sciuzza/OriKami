@@ -33,3 +33,6 @@ sysinfo.txt
 .vs/Supercharger/Orikami Local/codemap.dat
 .vs/Supercharger/Orikami Local/global_history.dat
 Assets/UnityVS.meta
+Assets/UnityVS/Editor/SyntaxTree.Mono.Cecil.dll.meta
+Assets/UnityVS/Editor/SyntaxTree.VisualStudio.Unity.Bridge.dll.meta
+Assets/UnityVS/Editor/SyntaxTree.VisualStudio.Unity.Messaging.dll.meta
