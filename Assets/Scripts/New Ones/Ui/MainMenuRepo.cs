@@ -5,6 +5,18 @@ using UnityEngine.UI;
 
 public class MainMenuRepo : MonoBehaviour
 {
+    private SoundManager soundRef;
+    void Awake()
+    {
+        soundRef = GameObject.FindGameObjectWithTag("GameController").GetComponent<SoundManager>();
+        StartCoroutine(MainMenuCO());
+    }
+    IEnumerator MainMenuCO()
+    {
+        soundRef.PlaySound(3, 0);
+        yield return new WaitForSeconds(soundRef.PersistendAudio[3].AudioSourceRef.clip.length);
+        soundRef.PlaySound(0, 6);
+    }
 
     // Main Menu Section
     public Button NewGameB, ContinueB, LegendsB, OptionsB, ExitB;
