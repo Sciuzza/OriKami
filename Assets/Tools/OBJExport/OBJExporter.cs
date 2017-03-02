@@ -335,7 +335,7 @@ public class OBJExporter : ScriptableWizard
         }
         catch (System.Exception ex)
         {
-            Debug.Log("Could not export texture : " + t.name + ". is it readable?");
+            Debug.Log("Could not export texture : " + t.name + ". is it readable?" + ex);
             return "null";
         }
 

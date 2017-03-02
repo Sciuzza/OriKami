@@ -304,7 +304,7 @@ public class FSMChecker : MonoBehaviour
     private Vector3 fakePosDolp = new Vector3(0, 0.1f, -0.2f);
 
     private PlayerInputs playerRef;
-    private FSMExecutor fsmLinker;
+    //private FSMExecutor fsmLinker;
 
 
     #endregion
@@ -335,7 +335,7 @@ public class FSMChecker : MonoBehaviour
     void Awake()
     {
         playerRef = this.gameObject.GetComponent<PlayerInputs>();
-        fsmLinker = this.gameObject.GetComponent<FSMExecutor>();
+       // fsmLinker = this.gameObject.GetComponent<FSMExecutor>();
 
         ccLink = this.gameObject.GetComponent<CharacterController>();
 

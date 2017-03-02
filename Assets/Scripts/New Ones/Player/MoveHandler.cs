@@ -23,8 +23,8 @@ public class MoveHandler : MonoBehaviour
     
 
     private RaycastHit hitInfo;
-    private Vector3 plCurrentPos;
-    private Ray rayTest;
+    //private Vector3 plCurrentPos;
+    //private Ray rayTest;
     public static bool sliding;
     public LayerMask Env;
     private FSMChecker fsmCheckerLinker;
@@ -74,8 +74,8 @@ public class MoveHandler : MonoBehaviour
     {
         while (this.ccLink != null)
         {
-            this.plCurrentPos = this.gameObject.transform.position;
-            this.rayTest = new Ray(this.plCurrentPos, -Vector3.up);
+            //this.plCurrentPos = this.gameObject.transform.position;
+            //this.rayTest = new Ray(this.plCurrentPos, -Vector3.up);
 
             var timeTakeThisFrame = Time.deltaTime;
 

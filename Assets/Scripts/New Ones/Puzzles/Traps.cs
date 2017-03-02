@@ -15,11 +15,11 @@ public class Traps : MonoBehaviour
     public Transform B;
     Transform targetTr;
     Transform rotationSphere;
-    Transform playerLinker;
+    //Transform playerLinker;
 
     void Awake()
     {
-        playerLinker = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
+        //playerLinker = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
     }
 
 

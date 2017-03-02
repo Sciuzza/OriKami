@@ -34,7 +34,7 @@ public class CameraManager : MonoBehaviour
     private Coroutine plCamMoving;
 
     // Variables needed for Designer Style Camera
-    private Coroutine deCamMoving;
+    //private Coroutine deCamMoving;
     private GameObject lastDesignCamera;
     private float camSpeed = 6;
     #endregion Private Variables
@@ -132,7 +132,8 @@ public class CameraManager : MonoBehaviour
         this.currentCamera = CameraStyle.designer;
         this.lastDesignCamera = cameraDir;
 
-        this.deCamMoving = this.StartCoroutine(this.LerpOnDesignerCamera(cameraDir));
+        //this.deCamMoving = 
+        this.StartCoroutine(this.LerpOnDesignerCamera(cameraDir));
         GameController.Debugging("Designer Camera On");
 
     }
@@ -155,7 +156,7 @@ public class CameraManager : MonoBehaviour
             yield return null;
         }
         GameController.Debugging("Coroutine Designer Camera Ended");
-        this.deCamMoving = null;
+        //this.deCamMoving = null;
     }
 
     private void SwitchByDeCameraToPlCamera()

@@ -17,7 +17,7 @@ using WindowsInput;
 public class MenuManager : MonoBehaviour
 {
     private string currentScene;
-    private SoundManager playerRef;
+    //private SoundManager playerRef;
 
     #region Public Variables
     public event_int switchSceneRequestByInt;
@@ -1017,7 +1017,7 @@ public class MenuManager : MonoBehaviour
     #region Menu In Game Handler
     private void InitializingGpScene(GameObject player)
     {
-        this.playerRef = player.GetComponent<SoundManager>();
+        //this.playerRef = player.GetComponent<SoundManager>();
 
         this.gpUiRef = GameObject.FindGameObjectWithTag("Gameplay Ui").GetComponent<HudRefRepo>();
 
