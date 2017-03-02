@@ -1,2 +1,2 @@
-Josh/Left/Villager/You're looking for the Emperor's son, right?*His name's Jiraiya. He often hides when he argues with his father.*He just ran past me, did something happen?
+Josh/Left/Villager/You're looking for the Emperor's son, right?*His name's Jiraiya. He often hides when he argues with his father.*I saw him running toward the Palace, did something happen?
 Iki/Right/Iki_Standard/...
