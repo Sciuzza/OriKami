@@ -9,7 +9,7 @@ using UnityEngine.UI;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 
-using WindowsInput;
+//using WindowsInput;
 
 
 public class MenuManager : MonoBehaviour
@@ -435,7 +435,7 @@ public class MenuManager : MonoBehaviour
                 if (this.LocalGbSettings.QualityIndex == 1)
                 {
                     Debug.Log("Sweetfx");
-                    InputSimulator.SimulateKeyDown(VirtualKeyCode.SCROLL);
+                    //InputSimulator.SimulateKeyDown(VirtualKeyCode.SCROLL);
                 }
                 break;
             case "OAdFirst":
