@@ -232,9 +232,9 @@ public struct generalTweaks
 [System.Serializable]
 public struct CameraPlayer
 {
-    [Range(5, 50)]
+    [Range(2, 8)]
     public float distanceMin;
-    [Range(10, 150)]
+    [Range(10, 50)]
     public float distanceMax;
     [Range(5, 20)]
     public float currentDistance;
@@ -340,7 +340,7 @@ public class DesignerT : MonoBehaviour
 
     private void OnValidate()
     {
-        Physics.gravity = -GeneralTweaks.globalGravity * Vector3.up;
+       // Physics.gravity = -GeneralTweaks.globalGravity * Vector3.up;
     }
 }
 

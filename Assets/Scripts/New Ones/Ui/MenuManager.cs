@@ -1,3 +1,5 @@
+using System;
+
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
@@ -6,6 +8,9 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
+
+using WindowsInput;
+
 
 public class MenuManager : MonoBehaviour
 {
@@ -74,8 +79,6 @@ public class MenuManager : MonoBehaviour
 
         sdManTempLink.DisableContinueRequest.AddListener(this.DisablingContinue);
         sdManTempLink.menuInitRequest.AddListener(this.InitializingMainMenuPanel);
-
-        this.LocalGbSettings = sdManTempLink.TwkSettings;
     }
     #endregion
 
@@ -84,10 +87,7 @@ public class MenuManager : MonoBehaviour
     {
         switch (SceneManager.GetActiveScene().buildIndex)
         {
-            case 2:
-                InitializingLevelSelection();
-                break;
-            case 11:
+            case 10:
                 this.InitializingLoadingScreen();
                 break;
         }
@@ -99,6 +99,7 @@ public class MenuManager : MonoBehaviour
     {
         this.mmRepo = GameObject.FindGameObjectWithTag("MainMenu").GetComponent<MainMenuRepo>();
         this.sectionTempRef = "MainMenu";
+        this.LocalGbSettings = this.gameObject.GetComponent<SuperDataManager>().TwkSettings;
 
         this.InitializingMainMenu();
         this.InitializingJournal();
@@ -191,7 +192,7 @@ public class MenuManager : MonoBehaviour
         this.mmRepo.GraphicSettingsB.GetComponent<PointerHandler>().DeActivationRequest.AddListener(this.DeActivatingGb);
         this.mmRepo.GraphicSettingsB.onClick.AddListener(() => this.ActivatingOptionSetting(this.mmRepo.LeftArrowGsB.gameObject, this.mmRepo.RightArrowGsB.gameObject, "OGrFirst"));
         this.mmRepo.LeftArrowGsB.onClick.AddListener(() => this.SettingsHandler(-1));
-        this.mmRepo.RightArrowGpoB.onClick.AddListener(() => this.SettingsHandler(1));
+        this.mmRepo.RightArrowGsB.onClick.AddListener(() => this.SettingsHandler(1));
 
 
         this.mmRepo.MasterB.GetComponent<PointerHandler>().ActivationRequest.AddListener(this.ActivatingGb);
@@ -254,12 +255,6 @@ public class MenuManager : MonoBehaviour
         this.mmRepo.PasstB.onClick.AddListener(() => this.ActivatingOptionSetting(this.mmRepo.LeftArrowPtB.gameObject, this.mmRepo.RightArrowPtB.gameObject, "OKeSeventh"));
         this.mmRepo.LeftArrowPtB.onClick.AddListener(() => this.SettingsHandler(-1));
         this.mmRepo.RightArrowPtB.onClick.AddListener(() => this.SettingsHandler(1));
-
-        this.mmRepo.EpicViewB.GetComponent<PointerHandler>().ActivationRequest.AddListener(this.ActivatingGb);
-        this.mmRepo.EpicViewB.GetComponent<PointerHandler>().DeActivationRequest.AddListener(this.DeActivatingGb);
-        this.mmRepo.EpicViewB.onClick.AddListener(() => this.ActivatingOptionSetting(this.mmRepo.LeftArrowEwB.gameObject, this.mmRepo.RightArrowEwB.gameObject, "OKeEighth"));
-        this.mmRepo.LeftArrowEwB.onClick.AddListener(() => this.SettingsHandler(-1));
-        this.mmRepo.RightArrowEwB.onClick.AddListener(() => this.SettingsHandler(1));
     }
 
     private void InitializingValues()
@@ -277,10 +272,9 @@ public class MenuManager : MonoBehaviour
         this.mmRepo.Form2T.text = this.PossibleFormKeys[this.LocalGbSettings.Form2Index];
         this.mmRepo.Form3T.text = this.PossibleFormKeys[this.LocalGbSettings.Form3Index];
         this.mmRepo.Form4T.text = this.PossibleFormKeys[this.LocalGbSettings.Form4Index];
-        this.mmRepo.StdT.text = this.PossibleFormKeys[this.LocalGbSettings.StdFormIndex];
-        this.mmRepo.JumpDashT.text = this.PossibleFormKeys[this.LocalGbSettings.JdIndex];
-        this.mmRepo.PasstT.text = this.PossibleFormKeys[this.LocalGbSettings.PtIndex];
-        this.mmRepo.EpicViewT.text = this.PossibleFormKeys[this.LocalGbSettings.EwIndex];
+        this.mmRepo.StdT.text = this.PossibleGenAbiKeys[this.LocalGbSettings.StdFormIndex];
+        this.mmRepo.JumpDashT.text = this.PossibleGenAbiKeys[this.LocalGbSettings.JdIndex];
+        this.mmRepo.PasstT.text = this.PossibleGenAbiKeys[this.LocalGbSettings.PtIndex];
 
     }
 
@@ -335,7 +329,6 @@ public class MenuManager : MonoBehaviour
                 this.mmRepo.StdArrow.SetActive(false);
                 this.mmRepo.JdArrow.SetActive(false);
                 this.mmRepo.PtArrow.SetActive(false);
-                this.mmRepo.EvArrow.SetActive(false);
                 break;
         }
 
@@ -406,30 +399,337 @@ public class MenuManager : MonoBehaviour
                 this.mmRepo.Difficulty.text = this.Difficulty[this.LocalGbSettings.DifficultyIndex];
                 break;
             case "OGpSecond":
+                if (direction > 0)
+                {
+                    this.LocalGbSettings.CurCamValue += 0.1f;
+                }
+                else
+                {
+                    this.LocalGbSettings.CurCamValue -= 0.1f;
+                }
+
+                this.LocalGbSettings.CurCamValue = (float)Math.Round(this.LocalGbSettings.CurCamValue, 1);
+                this.LocalGbSettings.CurCamValue = Mathf.Clamp(this.LocalGbSettings.CurCamValue, 0.5f, 1.5f);
+
+                this.mmRepo.CameraBar.fillAmount = Mathf.InverseLerp(0.5f, 1.5f, this.LocalGbSettings.CurCamValue);
                 break;
             case "OGrFirst":
+                if (this.LocalGbSettings.QualityIndex + direction >= 0 && this.LocalGbSettings.QualityIndex + direction < this.Quality.Length)
+                {
+                    this.LocalGbSettings.QualityIndex += direction;
+                }
+                else
+                {
+                    if (direction < 0)
+                    {
+                        this.LocalGbSettings.QualityIndex = this.Quality.Length - 1;
+                    }
+                    else
+                    {
+                        this.LocalGbSettings.QualityIndex = 0;
+                    }
+                }
+
+                this.mmRepo.Quality.text = this.Quality[this.LocalGbSettings.QualityIndex];
+
+                if (this.LocalGbSettings.QualityIndex == 1)
+                {
+                    Debug.Log("Sweetfx");
+                    InputSimulator.SimulateKeyDown(VirtualKeyCode.SCROLL);
+                }
                 break;
             case "OAdFirst":
+                if (direction > 0)
+                {
+                    this.LocalGbSettings.MasterValue += 0.1f;
+                }
+                else
+                {
+                    this.LocalGbSettings.MasterValue -= 0.1f;
+                }
+
+                this.LocalGbSettings.MasterValue = (float)Math.Round(this.LocalGbSettings.MasterValue, 1);
+                this.LocalGbSettings.MasterValue = Mathf.Clamp(this.LocalGbSettings.MasterValue, 0, 1);
+
+                this.mmRepo.MasterBar.fillAmount = this.LocalGbSettings.MasterValue;
                 break;
             case "OAdSecond":
+                if (direction > 0)
+                {
+                    this.LocalGbSettings.MusicValue += 0.1f;
+                }
+                else
+                {
+                    this.LocalGbSettings.MusicValue -= 0.1f;
+                }
+
+                this.LocalGbSettings.MusicValue = (float)Math.Round(this.LocalGbSettings.MusicValue, 1);
+                this.LocalGbSettings.MusicValue = Mathf.Clamp(this.LocalGbSettings.MusicValue, 0, 1);
+
+                this.mmRepo.MusicBar.fillAmount = this.LocalGbSettings.MusicValue;
                 break;
             case "OAdThird":
+                if (direction > 0)
+                {
+                    this.LocalGbSettings.EffectsValue += 0.1f;
+                }
+                else
+                {
+                    this.LocalGbSettings.EffectsValue -= 0.1f;
+                }
+
+                this.LocalGbSettings.EffectsValue = (float)Math.Round(this.LocalGbSettings.EffectsValue, 1);
+                this.LocalGbSettings.EffectsValue = Mathf.Clamp(this.LocalGbSettings.EffectsValue, 0, 1);
+
+                this.mmRepo.EffectsBar.fillAmount = this.LocalGbSettings.EffectsValue;
                 break;
             case "OKeFirst":
+
+                var form1TempIndex = this.LocalGbSettings.Form1Index;
+
+                if (this.LocalGbSettings.Form1Index + direction >= 0 && this.LocalGbSettings.Form1Index + direction < this.PossibleFormKeys.Length)
+                {
+                    this.LocalGbSettings.Form1Index += direction;
+                }
+                else
+                {
+                    if (direction < 0)
+                    {
+                        this.LocalGbSettings.Form1Index = this.PossibleFormKeys.Length - 1;
+                    }
+                    else
+                    {
+                        this.LocalGbSettings.Form1Index = 0;
+                    }
+                }
+
+                if (this.LocalGbSettings.Form2Index == this.LocalGbSettings.Form1Index)
+                {
+                    this.LocalGbSettings.Form2Index = form1TempIndex;
+                    this.mmRepo.Form2T.text = this.PossibleFormKeys[this.LocalGbSettings.Form2Index];
+                }
+                else if (this.LocalGbSettings.Form3Index == this.LocalGbSettings.Form1Index)
+                {
+                    this.LocalGbSettings.Form3Index = form1TempIndex;
+                    this.mmRepo.Form3T.text = this.PossibleFormKeys[this.LocalGbSettings.Form3Index];
+                }
+                if (this.LocalGbSettings.Form4Index == this.LocalGbSettings.Form1Index)
+                {
+                    this.LocalGbSettings.Form4Index = form1TempIndex;
+                    this.mmRepo.Form4T.text = this.PossibleFormKeys[this.LocalGbSettings.Form4Index];
+                }
+
+                this.mmRepo.Form1T.text = this.PossibleFormKeys[this.LocalGbSettings.Form1Index];
                 break;
             case "OKeSecond":
+                var form2TempIndex = this.LocalGbSettings.Form2Index;
+
+                if (this.LocalGbSettings.Form2Index + direction >= 0 && this.LocalGbSettings.Form2Index + direction < this.PossibleFormKeys.Length)
+                {
+                    this.LocalGbSettings.Form2Index += direction;
+                }
+                else
+                {
+                    if (direction < 0)
+                    {
+                        this.LocalGbSettings.Form2Index = this.PossibleFormKeys.Length - 1;
+                    }
+                    else
+                    {
+                        this.LocalGbSettings.Form2Index = 0;
+                    }
+                }
+
+                if (this.LocalGbSettings.Form1Index == this.LocalGbSettings.Form2Index)
+                {
+                    this.LocalGbSettings.Form1Index = form2TempIndex;
+                    this.mmRepo.Form1T.text = this.PossibleFormKeys[this.LocalGbSettings.Form1Index];
+                }
+                else if (this.LocalGbSettings.Form3Index == this.LocalGbSettings.Form2Index)
+                {
+                    this.LocalGbSettings.Form3Index = form2TempIndex;
+                    this.mmRepo.Form3T.text = this.PossibleFormKeys[this.LocalGbSettings.Form3Index];
+                }
+                if (this.LocalGbSettings.Form4Index == this.LocalGbSettings.Form2Index)
+                {
+                    this.LocalGbSettings.Form4Index = form2TempIndex;
+                    this.mmRepo.Form4T.text = this.PossibleFormKeys[this.LocalGbSettings.Form4Index];
+                }
+
+                this.mmRepo.Form2T.text = this.PossibleFormKeys[this.LocalGbSettings.Form2Index];
                 break;
             case "OKeThird":
+                var form3TempIndex = this.LocalGbSettings.Form3Index;
+
+                if (this.LocalGbSettings.Form3Index + direction >= 0 && this.LocalGbSettings.Form3Index + direction < this.PossibleFormKeys.Length)
+                {
+                    this.LocalGbSettings.Form3Index += direction;
+                }
+                else
+                {
+                    if (direction < 0)
+                    {
+                        this.LocalGbSettings.Form3Index = this.PossibleFormKeys.Length - 1;
+                    }
+                    else
+                    {
+                        this.LocalGbSettings.Form3Index = 0;
+                    }
+                }
+
+                if (this.LocalGbSettings.Form1Index == this.LocalGbSettings.Form3Index)
+                {
+                    this.LocalGbSettings.Form1Index = form3TempIndex;
+                    this.mmRepo.Form1T.text = this.PossibleFormKeys[this.LocalGbSettings.Form1Index];
+                }
+                else if (this.LocalGbSettings.Form2Index == this.LocalGbSettings.Form3Index)
+                {
+                    this.LocalGbSettings.Form2Index = form3TempIndex;
+                    this.mmRepo.Form2T.text = this.PossibleFormKeys[this.LocalGbSettings.Form2Index];
+                }
+                if (this.LocalGbSettings.Form4Index == this.LocalGbSettings.Form3Index)
+                {
+                    this.LocalGbSettings.Form4Index = form3TempIndex;
+                    this.mmRepo.Form4T.text = this.PossibleFormKeys[this.LocalGbSettings.Form4Index];
+                }
+
+                this.mmRepo.Form3T.text = this.PossibleFormKeys[this.LocalGbSettings.Form3Index];
                 break;
             case "OKeFourth":
+                var form4TempIndex = this.LocalGbSettings.Form4Index;
+
+                if (this.LocalGbSettings.Form4Index + direction >= 0 && this.LocalGbSettings.Form4Index + direction < this.PossibleFormKeys.Length)
+                {
+                    this.LocalGbSettings.Form4Index += direction;
+                }
+                else
+                {
+                    if (direction < 0)
+                    {
+                        this.LocalGbSettings.Form4Index = this.PossibleFormKeys.Length - 1;
+                    }
+                    else
+                    {
+                        this.LocalGbSettings.Form4Index = 0;
+                    }
+                }
+
+                if (this.LocalGbSettings.Form1Index == this.LocalGbSettings.Form4Index)
+                {
+                    this.LocalGbSettings.Form1Index = form4TempIndex;
+                    this.mmRepo.Form1T.text = this.PossibleFormKeys[this.LocalGbSettings.Form1Index];
+                }
+                else if (this.LocalGbSettings.Form2Index == this.LocalGbSettings.Form4Index)
+                {
+                    this.LocalGbSettings.Form2Index = form4TempIndex;
+                    this.mmRepo.Form2T.text = this.PossibleFormKeys[this.LocalGbSettings.Form2Index];
+                }
+                if (this.LocalGbSettings.Form3Index == this.LocalGbSettings.Form4Index)
+                {
+                    this.LocalGbSettings.Form3Index = form4TempIndex;
+                    this.mmRepo.Form3T.text = this.PossibleFormKeys[this.LocalGbSettings.Form3Index];
+                }
+
+                this.mmRepo.Form4T.text = this.PossibleFormKeys[this.LocalGbSettings.Form4Index];
                 break;
             case "OKeFifth":
+                var stdTempIndex = this.LocalGbSettings.StdFormIndex;
+
+                if (this.LocalGbSettings.StdFormIndex + direction >= 0 && this.LocalGbSettings.StdFormIndex + direction < this.PossibleGenAbiKeys.Length)
+                {
+                    this.LocalGbSettings.StdFormIndex += direction;
+                }
+                else
+                {
+                    if (direction < 0)
+                    {
+                        this.LocalGbSettings.StdFormIndex = this.PossibleGenAbiKeys.Length - 1;
+                    }
+                    else
+                    {
+                        this.LocalGbSettings.StdFormIndex = 0;
+                    }
+                }
+
+                if (this.LocalGbSettings.JdIndex == this.LocalGbSettings.StdFormIndex)
+                {
+                    this.LocalGbSettings.JdIndex = stdTempIndex;
+                    this.mmRepo.JumpDashT.text = this.PossibleGenAbiKeys[this.LocalGbSettings.JdIndex];
+                }
+                else if (this.LocalGbSettings.PtIndex == this.LocalGbSettings.StdFormIndex)
+                {
+                    this.LocalGbSettings.PtIndex = stdTempIndex;
+                    this.mmRepo.PasstT.text = this.PossibleGenAbiKeys[this.LocalGbSettings.PtIndex];
+                }
+                
+
+                this.mmRepo.StdT.text = this.PossibleGenAbiKeys[this.LocalGbSettings.StdFormIndex];
                 break;
             case "OKeSixth":
+                var jdTempIndex = this.LocalGbSettings.JdIndex;
+
+                if (this.LocalGbSettings.JdIndex + direction >= 0 && this.LocalGbSettings.JdIndex + direction < this.PossibleGenAbiKeys.Length)
+                {
+                    this.LocalGbSettings.JdIndex += direction;
+                }
+                else
+                {
+                    if (direction < 0)
+                    {
+                        this.LocalGbSettings.JdIndex = this.PossibleGenAbiKeys.Length - 1;
+                    }
+                    else
+                    {
+                        this.LocalGbSettings.JdIndex = 0;
+                    }
+                }
+
+                if (this.LocalGbSettings.StdFormIndex == this.LocalGbSettings.JdIndex)
+                {
+                    this.LocalGbSettings.StdFormIndex = jdTempIndex;
+                    this.mmRepo.StdT.text = this.PossibleGenAbiKeys[this.LocalGbSettings.StdFormIndex];
+                }
+                else if (this.LocalGbSettings.PtIndex == this.LocalGbSettings.JdIndex)
+                {
+                    this.LocalGbSettings.PtIndex = jdTempIndex;
+                    this.mmRepo.PasstT.text = this.PossibleGenAbiKeys[this.LocalGbSettings.PtIndex];
+                }
+
+
+                this.mmRepo.JumpDashT.text = this.PossibleGenAbiKeys[this.LocalGbSettings.JdIndex];
                 break;
             case "OKeSeventh":
-                break;
-            case "OKeEighth":
+                var ptTempIndex = this.LocalGbSettings.PtIndex;
+
+                if (this.LocalGbSettings.PtIndex + direction >= 0 && this.LocalGbSettings.PtIndex + direction < this.PossibleGenAbiKeys.Length)
+                {
+                    this.LocalGbSettings.PtIndex += direction;
+                }
+                else
+                {
+                    if (direction < 0)
+                    {
+                        this.LocalGbSettings.StdFormIndex = this.PossibleGenAbiKeys.Length - 1;
+                    }
+                    else
+                    {
+                        this.LocalGbSettings.StdFormIndex = 0;
+                    }
+                }
+
+                if (this.LocalGbSettings.JdIndex == this.LocalGbSettings.PtIndex)
+                {
+                    this.LocalGbSettings.JdIndex = ptTempIndex;
+                    this.mmRepo.JumpDashT.text = this.PossibleGenAbiKeys[this.LocalGbSettings.JdIndex];
+                }
+                else if (this.LocalGbSettings.StdFormIndex == this.LocalGbSettings.PtIndex)
+                {
+                    this.LocalGbSettings.PtIndex = ptTempIndex;
+                    this.mmRepo.PasstT.text = this.PossibleGenAbiKeys[this.LocalGbSettings.PtIndex];
+                }
+
+
+                this.mmRepo.PasstT.text = this.PossibleGenAbiKeys[this.LocalGbSettings.PtIndex];
                 break;
         }
     }
@@ -620,12 +920,6 @@ public class MenuManager : MonoBehaviour
                     this.mmRepo.LeftArrowPtB.gameObject.SetActive(false);
                     this.mmRepo.RightArrowPtB.gameObject.SetActive(false);
                     EventSystem.current.SetSelectedGameObject(this.mmRepo.PasstB.gameObject);
-                    this.sectionTempRef = "OKeys";
-                    break;
-                case "OKeEighth":
-                    this.mmRepo.LeftArrowEwB.gameObject.SetActive(false);
-                    this.mmRepo.RightArrowEwB.gameObject.SetActive(false);
-                    EventSystem.current.SetSelectedGameObject(this.mmRepo.EpicViewB.gameObject);
                     this.sectionTempRef = "OKeys";
                     break;
             }

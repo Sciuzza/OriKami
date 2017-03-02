@@ -14,9 +14,6 @@ public class GameController : MonoBehaviour
     public string currentScene;
     private AudioListener audioListenerRef;
 
-    
-    
-
 
     #region Private Variables
     private GameObject player; 

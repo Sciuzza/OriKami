@@ -73,6 +73,8 @@ public class EnvDatas
 [System.Serializable]
 public class PlayerNsData
 {
+    public bool Saved;
+
     public int Collectible1;
     public int Collectible2;
     public int Collectible3;
@@ -123,8 +125,6 @@ public class TweakableSettings
     public int JdIndex;
     [Range(0, 3)]
     public int PtIndex;
-    [Range(0, 3)]
-    public int EwIndex;
 }
 #endregion
 
@@ -142,7 +142,7 @@ public class SuperDataManager : MonoBehaviour
     #endregion
 
     #region Private Variables
-    private bool checkSave1 = false, checkSave2 = false;
+
     #endregion
 
     #region Events
@@ -153,7 +153,7 @@ public class SuperDataManager : MonoBehaviour
     #region Taking References and Linking Events and ReWriting Default Data
     private void Awake()
     {
-        this.ErasingData();
+        //this.ErasingData();
 
         this.InitializeOriginalData();
 
@@ -189,7 +189,7 @@ public class SuperDataManager : MonoBehaviour
 
         if (!File.Exists(Application.persistentDataPath + "/TweaksOriData.dat"))
         {
-            var tweaksFile = File.Create(Application.persistentDataPath + "/TweaksData.dat");
+            var tweaksFile = File.Create(Application.persistentDataPath + "/TweaksOriData.dat");
             bf.Serialize(tweaksFile, this.TwkSettings);
             tweaksFile.Close();
         }
@@ -202,9 +202,9 @@ public class SuperDataManager : MonoBehaviour
         switch (SceneManager.GetActiveScene().name)
         {
             case "Main Menu":
-                this.LoadingOnDiskData();
+                if (!this.LoadByFile("/TweaksData.dat", 2)) this.LoadByFile("/TweaksOriData.dat", 2);
                 this.menuInitRequest.Invoke();
-                if (!this.checkSave1 || !this.checkSave2)
+                if (!this.LoadByFile("/EnvSensData.dat", 0) || !this.LoadByFile("/PlNsData.dat", 1) || !this.PlNsData.Saved)
                     this.DisableContinueRequest.Invoke();
                 break;
         }
@@ -217,45 +217,13 @@ public class SuperDataManager : MonoBehaviour
 
     private void NewGameHandler()
     {
-        var bf = new BinaryFormatter();
+        this.LoadByFile("/EnvSensOriData.dat", 0);
+        this.LoadByFile("/PlNsOriData.dat", 1);
 
-        if (File.Exists(Application.persistentDataPath + "/EnvSensOriData.dat"))
-        {
-            var envSensFile = File.Open(Application.persistentDataPath + "/EnvSensOriData.dat", FileMode.Open);
-
-            this.EnvSensData.Clear();
-            this.EnvSensData.TrimExcess();
-
-            this.EnvSensData = (List<EnvDatas>)bf.Deserialize(envSensFile);
-
-            envSensFile.Close();
-           
-        }
-        else
-        {
-           
-            Debug.Log("EnvSensOriData not Found");
-        }
-
-        if (File.Exists(Application.persistentDataPath + "/PlNsData.dat"))
-        {
-            var plSensFile = File.Open(Application.persistentDataPath + "/PlNsOriData.dat", FileMode.Open);
-
-            this.PlNsData = null;
-
-            this.PlNsData = (PlayerNsData)bf.Deserialize(plSensFile);
-
-            plSensFile.Close();
-           
-        }
-        else
-        {
-            Debug.Log("PlNsOriData not Found");
-        }
-
-        this.SavingOnDiskData();
+        this.SaveToFile("/EnvSensData.dat", 0);
+        this.SaveToFile("/PlNsData.dat", 1);
+        this.SaveToFile("/TweaksData.dat", 2);
         this.SwitchSceneRequest.Invoke("Route 1");
-
     }
     #endregion
 
@@ -273,7 +241,7 @@ public class SuperDataManager : MonoBehaviour
         player.GetComponent<EnvInputs>().SaveRequestByCheck.AddListener(this.SaveHandler);
 
         //this.LoadingHandler();
-    } 
+    }
     #endregion
 
     #region Save Handler
@@ -281,39 +249,31 @@ public class SuperDataManager : MonoBehaviour
     {
         Debug.Log("Saving");
         this.RequestLocalUpdateToRepo.Invoke();
-        this.SavingOnDiskData();
+        this.SaveToFile("/EnvSensData.dat", 0);
+        this.SaveToFile("/PlNsData.dat", 1);
+        this.SaveToFile("/TweaksData.dat", 2);
     }
 
-    private void SavingOnDiskData()
+    private void SaveToFile(string fileName, int fileType)
     {
         var bf = new BinaryFormatter();
 
-        if (File.Exists(Application.persistentDataPath + "/EnvSensData.dat"))
+        var fileRef = File.Create(Application.persistentDataPath + fileName);
+
+        switch (fileType)
         {
-            File.Delete(Application.persistentDataPath + "/EnvSensData.dat");
+            case 0:
+                bf.Serialize(fileRef, this.EnvSensData);
+                break;
+            case 1:
+                bf.Serialize(fileRef, this.PlNsData);
+                break;
+            case 2:
+                bf.Serialize(fileRef, this.TwkSettings);
+                break;
         }
 
-        if (File.Exists(Application.persistentDataPath + "/PlNsData.dat"))
-        {
-            File.Delete(Application.persistentDataPath + "/PlNsData.dat");
-        }
-
-        if (File.Exists(Application.persistentDataPath + "/TweaksData.dat"))
-        {
-            File.Delete(Application.persistentDataPath + "/TweaksData.dat");
-        }
-
-        var envSensFile = File.Create(Application.persistentDataPath + "/EnvSensData.dat");
-        var plSensFile = File.Create(Application.persistentDataPath + "/PlNsData.dat");
-        var tweaksFile = File.Create(Application.persistentDataPath + "/TweaksData.dat");
-
-        bf.Serialize(envSensFile, this.EnvSensData);
-        bf.Serialize(plSensFile, this.PlNsData);
-        bf.Serialize(tweaksFile, this.TwkSettings);
-
-        plSensFile.Close();
-        envSensFile.Close();
-        tweaksFile.Close();
+        fileRef.Close();
     }
 
     private void UpdatingQuestData()
@@ -336,8 +296,6 @@ public class SuperDataManager : MonoBehaviour
                 scenedata.SlState.Story[storyIndex].IsCompleted = slRepoToUpdate[slInRepo].Stories[storyIndex].Completed;
             }
         }
-
-
     }
     #endregion
 
@@ -346,64 +304,15 @@ public class SuperDataManager : MonoBehaviour
     private void LoadingHandler()
     {
         Debug.Log("Loading");
-        this.LoadingOnDiskData();
-        this.RequestLocalUpdateByRepo.Invoke();
-    }
-
-    private void LoadingOnDiskData()
-    {
-        var bf = new BinaryFormatter();
-
-        if (File.Exists(Application.persistentDataPath + "/EnvSensData.dat"))
+        if (this.LoadByFile("/EnvSensData.dat", 0) && this.LoadByFile("/PlNsData.dat", 1) && this.LoadByFile("/TweaksData.dat", 2))
         {
-            var envSensFile = File.Open(Application.persistentDataPath + "/EnvSensData.dat", FileMode.Open);
-
-            this.EnvSensData.Clear();
-            this.EnvSensData.TrimExcess();
-
-            this.EnvSensData = (List<EnvDatas>)bf.Deserialize(envSensFile);
-
-            envSensFile.Close();
-            this.checkSave1 = true;
+            this.RequestLocalUpdateByRepo.Invoke();
+            Debug.Log("Loading Successfull");
         }
         else
         {
-            this.checkSave1 = false;
-            Debug.Log("EnvSensData not Found");
+            Debug.Log("There is a problem on Loading");
         }
-
-        if (File.Exists(Application.persistentDataPath + "/PlNsData.dat"))
-        {
-            var plSensFile = File.Open(Application.persistentDataPath + "/PlNsData.dat", FileMode.Open);
-
-            this.PlNsData = null;
-
-            this.PlNsData = (PlayerNsData)bf.Deserialize(plSensFile);
-
-            plSensFile.Close();
-            this.checkSave2 = true;
-        }
-        else
-        {
-            this.checkSave2 = false;
-            Debug.Log("PlNsData not Found");
-        }
-
-        if (File.Exists(Application.persistentDataPath + "/TweaksData.dat"))
-        {
-            var tweakFile = File.Open(Application.persistentDataPath + "/TweaksData.dat", FileMode.Open);
-
-            this.TwkSettings = null;
-
-            this.TwkSettings = (TweakableSettings)bf.Deserialize(tweakFile);
-
-            tweakFile.Close();
-        }
-        else
-        {
-           Debug.Log("TweaksData not Found");
-        }
-
     }
 
     private bool LoadByFile(string fileName, int fileType)
@@ -430,7 +339,7 @@ public class SuperDataManager : MonoBehaviour
                     this.TwkSettings = (TweakableSettings)bf.Deserialize(fileRef);
                     break;
             }
-            
+
             fileRef.Close();
             return true;
         }
@@ -443,6 +352,7 @@ public class SuperDataManager : MonoBehaviour
     #endregion
 
     #region Testing Save (to be Removed)
+    /*
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.J))
@@ -455,6 +365,7 @@ public class SuperDataManager : MonoBehaviour
             this.LoadingOnDiskData();
         }
     }
+    */
     #endregion
 
     #region Edit Mode Called Methods
@@ -542,7 +453,7 @@ public class SuperDataManager : MonoBehaviour
             objToUpdate.ObjRotZ = thisTrans.eulerAngles.z;
 
             objToUpdate.IsActive = obj.activeSelf;
-            
+
 
             sceneData.ObjState.Add(objToUpdate);
         }
@@ -656,6 +567,6 @@ public class SuperDataManager : MonoBehaviour
         {
             File.Delete(Application.persistentDataPath + "/TweaksOriData.dat");
         }
-    } 
+    }
     #endregion
 }

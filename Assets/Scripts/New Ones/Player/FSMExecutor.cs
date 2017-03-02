@@ -4,7 +4,6 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-using UnityEditor.Animations;
 
 using UnityEngine.Events;
 
@@ -21,7 +20,7 @@ public class FSMExecutor : MonoBehaviour
     [HideInInspector]
     public generalTweaks generalValues;
 
-    public AnimatorController[] StoryAni;
+    public Animator[] StoryAni;
     public Animator[] AnimatorRefs;
 
     public List<GameObject> Forms;
@@ -870,22 +869,22 @@ public class FSMExecutor : MonoBehaviour
     {
         this.noControlStory = true;
 
-        this.AnimatorRefs[0].runtimeAnimatorController = this.StoryAni[0];
-        this.AnimatorRefs[1].runtimeAnimatorController = this.StoryAni[1];
-        this.AnimatorRefs[2].runtimeAnimatorController = this.StoryAni[2];
-        this.AnimatorRefs[3].runtimeAnimatorController = this.StoryAni[3];
-        this.AnimatorRefs[4].runtimeAnimatorController = this.StoryAni[4];
+        this.AnimatorRefs[0].runtimeAnimatorController = this.StoryAni[0].runtimeAnimatorController;
+        this.AnimatorRefs[1].runtimeAnimatorController = this.StoryAni[1].runtimeAnimatorController;
+        this.AnimatorRefs[2].runtimeAnimatorController = this.StoryAni[2].runtimeAnimatorController;
+        this.AnimatorRefs[3].runtimeAnimatorController = this.StoryAni[3].runtimeAnimatorController;
+        this.AnimatorRefs[4].runtimeAnimatorController = this.StoryAni[4].runtimeAnimatorController;
 
     }
 
     private void SettingNormalAnimators()
     {
 
-        this.AnimatorRefs[0].runtimeAnimatorController = this.StoryAni[5];
-        this.AnimatorRefs[1].runtimeAnimatorController = this.StoryAni[6];
-        this.AnimatorRefs[2].runtimeAnimatorController = this.StoryAni[7];
-        this.AnimatorRefs[3].runtimeAnimatorController = this.StoryAni[8];
-        this.AnimatorRefs[4].runtimeAnimatorController = this.StoryAni[9];
+        this.AnimatorRefs[0].runtimeAnimatorController = this.StoryAni[5].runtimeAnimatorController;
+        this.AnimatorRefs[1].runtimeAnimatorController = this.StoryAni[6].runtimeAnimatorController;
+        this.AnimatorRefs[2].runtimeAnimatorController = this.StoryAni[7].runtimeAnimatorController;
+        this.AnimatorRefs[3].runtimeAnimatorController = this.StoryAni[8].runtimeAnimatorController;
+        this.AnimatorRefs[4].runtimeAnimatorController = this.StoryAni[9].runtimeAnimatorController;
 
         this.noControlStory = false;
     }

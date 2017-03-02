@@ -101,7 +101,7 @@ public class SceneController : MonoBehaviour
 
     private void NgpInitializer()
     {
-        if (SceneManager.GetActiveScene().buildIndex == 11) StartCoroutine(LoadingNewScene(this.sceneToLoad));
+        if (SceneManager.GetActiveScene().buildIndex == 10) StartCoroutine(LoadingNewScene(this.sceneToLoad));
     }
 
     private IEnumerator LoadingNewScene(string sceneToLoad)

@@ -7,8 +7,6 @@ public class MainMenuRepo : MonoBehaviour
 {
 
     // Main Menu Section
-    public Image FrogIm, ArmaIm, CraneIm, DolphIm;
-
     public Button NewGameB, ContinueB, LegendsB, OptionsB, ExitB;
 
     public GameObject MainPageG, JournalG, OptionsG;
@@ -56,13 +54,13 @@ public class MainMenuRepo : MonoBehaviour
     public Image MasterBar, MusicBar, EffectsBar;
 
 
-    public Button Form1B, Form2B, Form3B, Form4B, StdFormB, JumpDashB, PasstB, EpicViewB;
+    public Button Form1B, Form2B, Form3B, Form4B, StdFormB, JumpDashB, PasstB;
 
-    public GameObject F1Arrow, F2Arrow, F3Arrow, F4Arrow, StdArrow, JdArrow, PtArrow, EvArrow;
+    public GameObject F1Arrow, F2Arrow, F3Arrow, F4Arrow, StdArrow, JdArrow, PtArrow;
 
     public Button LeftArrowF1B, RightArrowF1B, LeftArrowF2B, RightArrowF2B, LeftArrowF3B, RightArrowF3B, LeftArrowF4B, RightArrowF4B, LeftArrowStB, RightArrowStB
-                 ,LeftArrowJdB, RightArrowJdB, LeftArrowPtB, RightArrowPtB, LeftArrowEwB, RightArrowEwB;
+                 ,LeftArrowJdB, RightArrowJdB, LeftArrowPtB, RightArrowPtB;
 
-    public Text Form1T, Form2T, Form3T, Form4T, StdT, JumpDashT, PasstT, EpicViewT;
+    public Text Form1T, Form2T, Form3T, Form4T, StdT, JumpDashT, PasstT;
 
 }

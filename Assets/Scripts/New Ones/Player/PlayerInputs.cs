@@ -1998,7 +1998,7 @@ public class PlayerInputs : MonoBehaviour
     private void ExtraInputsHandler()
     {
 
-        if (SceneManager.GetActiveScene().buildIndex != 11)
+        if (SceneManager.GetActiveScene().buildIndex != 10)
         {
             if (Input.GetKeyDown(KeyCode.Escape))
                 this.switchSceneRequest.Invoke("Main Menu");
