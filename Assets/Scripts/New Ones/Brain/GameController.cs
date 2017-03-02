@@ -67,17 +67,17 @@ public class GameController : MonoBehaviour
 
             Scene scene = SceneManager.GetActiveScene();
             StopAllCoroutines();
-
+         
             if (scene.name == "Game Starter" || scene.name == "Main Menu")
             {
                 audioListenerRef.enabled = true;
+                SceneManager.SetActiveScene(SceneManager.GetSceneByName("Main Menu"));
+                
             }
 
             else {
                 audioListenerRef.enabled = false;
-            }
-
-            
+            }           
 
             if (scene.name=="Frogs' Village")
             {
@@ -99,6 +99,12 @@ public class GameController : MonoBehaviour
                 soundRef.PersistendAudio[0].AudioSourceRef.Stop();
                 soundRef.PersistendAudio[1].AudioSourceRef.Stop();
                 StartCoroutine(ArmadilloVillageSoundTrackCO());
+            }
+
+            else if (scene.name == "Main Menu")
+            {
+                Debug.Log("DIO DIO DIO DIO ");
+                soundRef.PlaySound(0, 6);
             }
 
             else if (scene.name == "Route 1" || scene.name == "Route 2" || scene.name == "route 3" || scene.name == "Route 4")
@@ -165,6 +171,7 @@ public class GameController : MonoBehaviour
     {
         yield return new WaitForSeconds(soundRef.PersistendAudio[1].AudioSourceRef.clip.length);
     }
+    
 
     #endregion
 
