@@ -18,12 +18,9 @@ public class MenuManager : MonoBehaviour
 {
     private string currentScene;
    
-
     #region Public Variables
     public event_int switchSceneRequestByInt;
     public event_string switchSceneRequestByName;
-
-    
 
     public event_int_int soundRequest;
     #endregion
@@ -346,38 +343,6 @@ public class MenuManager : MonoBehaviour
         rightAr.SetActive(true);
         EventSystem.current.SetSelectedGameObject(leftAr);
         this.sectionTempRef = innerSection;
-
-        switch (this.sectionTempRef)
-        {
-            case "OGpFirst":
-                break;
-            case "OGpSecond":
-                break;
-            case "OGrFirst":
-                break;
-            case "OAdFirst":
-                break;
-            case "OAdSecond":
-                break;
-            case "OAdThird":
-                break;
-            case "OKeFirst":
-                break;
-            case "OKeSecond":
-                break;
-            case "OKeThird":
-                break;
-            case "OKeFourth":
-                break;
-            case "OKeFifth":
-                break;
-            case "OKeSixth":
-                break;
-            case "OKeSeventh":
-                break;
-            case "OKeEighth":
-                break;
-        }
     }
 
     private void SettingsHandler(int direction)
@@ -985,8 +950,6 @@ public class MenuManager : MonoBehaviour
     #region Menu In Game Handler
     private void InitializingGpScene(GameObject player)
     {
-      
-
         this.gpUiRef = GameObject.FindGameObjectWithTag("Gameplay Ui").GetComponent<HudRefRepo>();
 
         var storyLineCheck = GameObject.FindGameObjectWithTag("StoryLine");
@@ -1053,6 +1016,8 @@ public class MenuManager : MonoBehaviour
         this.gpUiRef.ContinueB.onClick.AddListener(this.ComeBackToGame);
         this.gpUiRef.MainMenuB.onClick.AddListener(this.MainMenuRequestHandler);
         this.gpUiRef.ExitB.onClick.AddListener(this.QuitWithoutSaving);
+
+        this.sectionTempRef = "Game";
     }
 
     private void PoppingOutDialogue(string name, string label, string sentence, string spritename)

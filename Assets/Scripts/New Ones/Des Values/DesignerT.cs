@@ -333,8 +333,42 @@ public class DesignerT : MonoBehaviour
         playerInputsTempLink.CurrentInputs = GestioneInputs;
         playerInputsTempLink.CurrentPlCameraSettings = this.GestioneCamera;
 
+        SuperDataManager sdmTempLink = this.gameObject.GetComponent<SuperDataManager>();
 
+        playerInputsTempLink.CurrentPlCameraSettings.sensitivityX *= sdmTempLink.TwkSettings.CurCamValue;
+        playerInputsTempLink.CurrentPlCameraSettings.sensitivityY *= sdmTempLink.TwkSettings.CurCamValue;
 
+        playerInputsTempLink.CurrentInputs.standardInputs.joyInputs.toFrog = (buttonsJoy)(sdmTempLink.TwkSettings.Form1Index + 4);
+        playerInputsTempLink.CurrentInputs.armaInputs.joyInputs.toFrog = (buttonsJoy)(sdmTempLink.TwkSettings.Form1Index + 4);
+        playerInputsTempLink.CurrentInputs.craneInputs.joyInputs.toFrog = (buttonsJoy)(sdmTempLink.TwkSettings.Form1Index + 4);
+        playerInputsTempLink.CurrentInputs.dolphinInputs.joyInputs.toFrog = (buttonsJoy)(sdmTempLink.TwkSettings.Form1Index + 4);
+
+        playerInputsTempLink.CurrentInputs.standardInputs.joyInputs.toArma = (buttonsJoy)(sdmTempLink.TwkSettings.Form2Index + 4);
+        playerInputsTempLink.CurrentInputs.frogInputs.joyInputs.toArma = (buttonsJoy)(sdmTempLink.TwkSettings.Form2Index + 4);
+        playerInputsTempLink.CurrentInputs.craneInputs.joyInputs.toArma = (buttonsJoy)(sdmTempLink.TwkSettings.Form2Index + 4);
+        playerInputsTempLink.CurrentInputs.dolphinInputs.joyInputs.toArma = (buttonsJoy)(sdmTempLink.TwkSettings.Form2Index + 4);
+
+        playerInputsTempLink.CurrentInputs.standardInputs.joyInputs.toCrane = (buttonsJoy)(sdmTempLink.TwkSettings.Form3Index + 4);
+        playerInputsTempLink.CurrentInputs.armaInputs.joyInputs.toCrane = (buttonsJoy)(sdmTempLink.TwkSettings.Form3Index + 4);
+        playerInputsTempLink.CurrentInputs.frogInputs.joyInputs.toCrane = (buttonsJoy)(sdmTempLink.TwkSettings.Form3Index + 4);
+        playerInputsTempLink.CurrentInputs.dolphinInputs.joyInputs.toCrane = (buttonsJoy)(sdmTempLink.TwkSettings.Form3Index + 4);
+
+        playerInputsTempLink.CurrentInputs.standardInputs.joyInputs.toDolphin = (buttonsJoy)(sdmTempLink.TwkSettings.Form4Index + 4);
+        playerInputsTempLink.CurrentInputs.armaInputs.joyInputs.toDolphin = (buttonsJoy)(sdmTempLink.TwkSettings.Form4Index + 4);
+        playerInputsTempLink.CurrentInputs.craneInputs.joyInputs.toDolphin = (buttonsJoy)(sdmTempLink.TwkSettings.Form4Index + 4);
+        playerInputsTempLink.CurrentInputs.frogInputs.joyInputs.toDolphin = (buttonsJoy)(sdmTempLink.TwkSettings.Form4Index + 4);
+
+        playerInputsTempLink.CurrentInputs.frogInputs.joyInputs.toStd = (buttonsJoy)sdmTempLink.TwkSettings.StdFormIndex;
+        playerInputsTempLink.CurrentInputs.armaInputs.joyInputs.toStd = (buttonsJoy)sdmTempLink.TwkSettings.StdFormIndex;
+        playerInputsTempLink.CurrentInputs.craneInputs.joyInputs.toStd = (buttonsJoy)sdmTempLink.TwkSettings.StdFormIndex;
+        playerInputsTempLink.CurrentInputs.dolphinInputs.joyInputs.toStd = (buttonsJoy)sdmTempLink.TwkSettings.StdFormIndex;
+
+        playerInputsTempLink.CurrentInputs.standardInputs.joyInputs.VerticalFissure = (buttonsJoy)sdmTempLink.TwkSettings.PtIndex;
+        playerInputsTempLink.CurrentInputs.frogInputs.joyInputs.HorizontalFissure = (buttonsJoy)sdmTempLink.TwkSettings.PtIndex;
+
+        playerInputsTempLink.CurrentInputs.standardInputs.joyInputs.Jump = (buttonsJoy)sdmTempLink.TwkSettings.JdIndex;
+        playerInputsTempLink.CurrentInputs.frogInputs.joyInputs.Jump = (buttonsJoy)sdmTempLink.TwkSettings.JdIndex;
+        playerInputsTempLink.CurrentInputs.dolphinInputs.joyInputs.jump = (buttonsJoy)sdmTempLink.TwkSettings.JdIndex;
     } 
     #endregion
 
