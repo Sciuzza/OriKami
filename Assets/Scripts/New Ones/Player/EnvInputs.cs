@@ -154,6 +154,13 @@ public class EnvInputs : MonoBehaviour
                 if (this.ctTempLink != null && this.ctTempLink.TriggerStory) this.ctTempLink.CheckingStoryCondition();
 
                 break;
+            case "DRocks":
+                this.wallDCheckRequest.Invoke(envTrigger.gameObject);
+
+                this.ctTempLink = envTrigger.gameObject.GetComponent<CollTrigger>();
+                if (this.ctTempLink != null && this.ctTempLink.TriggerStory) this.ctTempLink.CheckingStoryCondition();
+
+                break;
         }
 
     }
@@ -187,6 +194,7 @@ public class EnvInputs : MonoBehaviour
         }
     }
 
+    /*
     void OnControllerColliderHit(ControllerColliderHit hit)
     {
         switch (hit.collider.gameObject.tag)
@@ -200,5 +208,6 @@ public class EnvInputs : MonoBehaviour
                 break;
         }
     }
+    */
     #endregion
 }

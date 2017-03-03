@@ -682,11 +682,11 @@ public class MenuManager : MonoBehaviour
                 {
                     if (direction < 0)
                     {
-                        this.LocalGbSettings.StdFormIndex = this.PossibleGenAbiKeys.Length - 1;
+                        this.LocalGbSettings.PtIndex = this.PossibleGenAbiKeys.Length - 1;
                     }
                     else
                     {
-                        this.LocalGbSettings.StdFormIndex = 0;
+                        this.LocalGbSettings.PtIndex = 0;
                     }
                 }
 
@@ -697,8 +697,8 @@ public class MenuManager : MonoBehaviour
                 }
                 else if (this.LocalGbSettings.StdFormIndex == this.LocalGbSettings.PtIndex)
                 {
-                    this.LocalGbSettings.PtIndex = ptTempIndex;
-                    this.mmRepo.PasstT.text = this.PossibleGenAbiKeys[this.LocalGbSettings.PtIndex];
+                    this.LocalGbSettings.StdFormIndex = ptTempIndex;
+                    this.mmRepo.StdT.text = this.PossibleGenAbiKeys[this.LocalGbSettings.StdFormIndex];
                 }
 
 

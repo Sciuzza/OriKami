@@ -2937,7 +2937,7 @@ public class StoryLineInstance : MonoBehaviour
         {
             for (var index = 0; index < fxEffectToEvaluate.Count; index++)
             {
-                if (fxEffectToEvaluate[index].ParticleEffect != null && !gbParticleCheckTempRepo.Contains(fxEffectToEvaluate[index].ParticleEffect.GbRef))
+                if (fxEffectToEvaluate[index].ParticleEffect.GbRef != null && !gbParticleCheckTempRepo.Contains(fxEffectToEvaluate[index].ParticleEffect.GbRef))
                 {
                     this.PlayParticleActiEffect(fxEffectToEvaluate[index].ParticleEffect);
                     gbParticleCheckTempRepo.Add(fxEffectToEvaluate[index].ParticleEffect.GbRef);
