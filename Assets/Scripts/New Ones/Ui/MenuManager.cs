@@ -1057,10 +1057,9 @@ public class MenuManager : MonoBehaviour
 
     private void PoppingOutDialogue(string name, string label, string sentence, string spritename)
     {
-        audioSourceRef = GameObject.FindGameObjectWithTag("Player").GetComponent<SoundManager>();
+       
         this.gpUiRef.Dialogue.SetActive(true);
-        audioSourceRef.PersistendAudio[1].AudioSourceRef.Stop();
-        
+      
 
         if (label == "Right")
         {
@@ -1090,8 +1089,9 @@ public class MenuManager : MonoBehaviour
 
     private void PoppingOutDialogueWIL(string sentence)
     {
+        audioSourceRef = GameObject.FindGameObjectWithTag("Player").GetComponent<SoundManager>();
         this.gpUiRef.Dialogue.SetActive(true);
-        //audioSourceRef.PersistendAudio[1].AudioSourceRef.Stop();
+        audioSourceRef.PersistendAudio[1].AudioSourceRef.Stop();
 
         this.gpUiRef.RightLabel.SetActive(false);
         this.gpUiRef.LeftLabel.SetActive(false);
