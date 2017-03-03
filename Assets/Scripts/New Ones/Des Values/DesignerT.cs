@@ -369,6 +369,7 @@ public class DesignerT : MonoBehaviour
         playerInputsTempLink.CurrentInputs.standardInputs.joyInputs.Jump = (buttonsJoy)sdmTempLink.TwkSettings.JdIndex;
         playerInputsTempLink.CurrentInputs.frogInputs.joyInputs.Jump = (buttonsJoy)sdmTempLink.TwkSettings.JdIndex;
         playerInputsTempLink.CurrentInputs.dolphinInputs.joyInputs.jump = (buttonsJoy)sdmTempLink.TwkSettings.JdIndex;
+        playerInputsTempLink.CurrentInputs.armaInputs.joyInputs.roll = (buttonsJoy)sdmTempLink.TwkSettings.JdIndex;
     } 
     #endregion
 

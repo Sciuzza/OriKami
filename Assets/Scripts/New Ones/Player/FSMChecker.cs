@@ -2149,9 +2149,14 @@ public class FSMChecker : MonoBehaviour
         {
             DRocksEffect.gameObject.transform.position = wall.transform.position;
             DRocksEffect.gameObject.transform.rotation = wall.transform.rotation;
-            DRocksEffect.Play(); 
-            Destroy(wall);
-            this.DRocks++;
+            DRocksEffect.Play();
+
+            if (wall != null)
+            {
+                Destroy(wall);
+                this.DRocks++;
+                Debug.Log(wall.name);
+            }
         }
     }
     #endregion
