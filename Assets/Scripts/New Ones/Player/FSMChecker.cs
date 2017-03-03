@@ -4,6 +4,7 @@ using UnityEngine.Events;
 using System.Collections.Generic;
 
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 #region Finite State Machine enum Structure
 public enum abilties
@@ -224,6 +225,12 @@ public class event_int_gb : UnityEvent<int, GameObject>
 {
 
 }
+
+[System.Serializable]
+public class event_image : UnityEvent<Image>
+{
+    
+}
 #endregion
 
 public class FSMChecker : MonoBehaviour
@@ -427,7 +434,7 @@ public class FSMChecker : MonoBehaviour
 
         if ((cPlayerState.currentForm == "Standard Form" || cPlayerState.currentForm == "Armadillo Form") && cPlayerState.currentPhState == physicStates.onGround && /*cPlayerState.currentPlState == playerStates.moving &&*/ !isWalkingSound)
         {
-            Debug.Log("SUONOREF");
+            //Debug.Log("SUONOREF");
             this.GetComponent<PlayerInputs>().PlayerSounds(1, 3);
             isWalkingSound = true;
         }
@@ -2189,6 +2196,8 @@ public class FSMChecker : MonoBehaviour
 
         plNsDataToUpdate.SceneToLoad = SceneManager.GetActiveScene().name;
 
+
+        if (!plNsDataToUpdate.Saved) plNsDataToUpdate.Saved = true;
     }
 
     private void LoadingCurrentState()
@@ -2226,7 +2235,7 @@ public class FSMChecker : MonoBehaviour
         this.legUnlocked.Legend4 = plNsDataToUpdate.Legend4Unlocked;
         this.legUnlocked.Legend5 = plNsDataToUpdate.Legend5Unlocked;
 
-
+        this.updateUiCollRequest.Invoke(this.GoldenCrane);
         this.dying = false;
 
     }

@@ -2897,7 +2897,7 @@ public class StoryLineInstance : MonoBehaviour
                 while (timeDelayPassed <= aniEffect.DelayBeginTime)
                 {
                     timeDelayPassed += Time.deltaTime;
-                    Debug.Log(timeDelayPassed);
+                    //Debug.Log(timeDelayPassed);
                     yield return null;
                 }
 
@@ -3136,8 +3136,8 @@ public class StoryLineInstance : MonoBehaviour
 
     public void OnValidate()
     {
-        // GameObject.FindGameObjectWithTag("GameController").GetComponent<SuperDataManager>().AddingStoryLineEditMode(this.CurrentStoryLine);
-        // GameObject.FindGameObjectWithTag("GameController").GetComponent<QuestsManager>().AddToRepository(this.CurrentStoryLine);
+          //GameObject.FindGameObjectWithTag("GameController").GetComponent<SuperDataManager>().AddingStoryLineEditMode(this.CurrentStoryLine);
+          //GameObject.FindGameObjectWithTag("GameController").GetComponent<QuestsManager>().AddToRepository(this.CurrentStoryLine);
     }
 
     #endregion

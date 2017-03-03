@@ -775,44 +775,6 @@ public class MenuManager : MonoBehaviour
 
     private void Update()
     {
-        /*
-        if (Input.GetButtonDown("B") && this.mmRepo.JournalG.activeInHierarchy)
-        {
-            this.mmRepo.MainPageG.SetActive(true);
-            this.mmRepo.JournalG.SetActive(false);
-            EventSystem.current.SetSelectedGameObject(this.mmRepo.LegendsB.gameObject);
-        }
-        else if (Input.GetButtonDown("B") && this.mmRepo.GameplayG.activeInHierarchy)
-        {
-            this.mmRepo.GameplayG.SetActive(false);
-            EventSystem.current.SetSelectedGameObject(this.mmRepo.GameplayMenuB.gameObject);
-            this.sectionTempRef = "Out";
-        }
-        else if (Input.GetButtonDown("B") && this.mmRepo.VideoG.activeInHierarchy)
-        {
-            this.mmRepo.VideoG.SetActive(false);
-            EventSystem.current.SetSelectedGameObject(this.mmRepo.VideoMenuB.gameObject);
-            this.sectionTempRef = "Out";
-        }
-        else if (Input.GetButtonDown("B") && this.mmRepo.AudioG.activeInHierarchy)
-        {
-            this.mmRepo.AudioG.SetActive(false);
-            EventSystem.current.SetSelectedGameObject(this.mmRepo.AudioMenuB.gameObject);
-            this.sectionTempRef = "Out";
-        }
-        else if (Input.GetButtonDown("B") && this.mmRepo.KeyBindingsG.activeInHierarchy)
-        {
-            this.mmRepo.KeyBindingsG.SetActive(false);
-            EventSystem.current.SetSelectedGameObject(this.mmRepo.KeyBindingsMenuB.gameObject);
-            this.sectionTempRef = "Out";
-        }
-        else if (Input.GetButtonDown("B") && this.mmRepo.OptionsG.activeInHierarchy)
-        {
-            this.mmRepo.MainPageG.SetActive(true);
-            this.mmRepo.OptionsG.SetActive(false);
-            EventSystem.current.SetSelectedGameObject(this.mmRepo.OptionsB.gameObject);
-        }
-        */
         if (Input.GetButtonDown("B"))
         {
             switch (this.sectionTempRef)
@@ -930,6 +892,9 @@ public class MenuManager : MonoBehaviour
                     EventSystem.current.SetSelectedGameObject(this.mmRepo.PasstB.gameObject);
                     this.sectionTempRef = "OKeys";
                     break;
+                case "Pause":
+                    this.ComeBackToGame();
+                    break;
             }
 
         }
@@ -1036,6 +1001,58 @@ public class MenuManager : MonoBehaviour
         var fsmTempLink = player.GetComponent<FSMChecker>();
 
         fsmTempLink.updateUiCollRequest.AddListener(this.UpdatingCollectibleNumber);
+
+        var plInputsTempLink = player.GetComponent<PlayerInputs>();
+
+        plInputsTempLink.pauseRequest.AddListener(this.PoppingOutPause);
+
+
+        GameObject[] goldenCrane = GameObject.FindGameObjectsWithTag("GoldenCrane");
+
+        foreach (var coll in goldenCrane)
+        {
+            CollTrigger ctTempLink = coll.GetComponent<CollTrigger>();
+
+            if (ctTempLink != null && ctTempLink.TriggerStory)
+                ctTempLink.UnlockingUiObject.AddListener(this.SettingDiscoveredAlpha);
+        }
+
+        GameObject[] dRocks = GameObject.FindGameObjectsWithTag("DRocks");
+
+        foreach (var coll in dRocks)
+        {
+            CollTrigger ctTempLink = coll.GetComponent<CollTrigger>();
+
+            if (ctTempLink != null && ctTempLink.TriggerStory)
+                ctTempLink.UnlockingUiObject.AddListener(this.SettingDiscoveredAlpha);
+        }
+
+        GameObject[] blackSmith = GameObject.FindGameObjectsWithTag("BlackSmith");
+
+        foreach (var coll in blackSmith)
+        {
+            CollTrigger ctTempLink = coll.GetComponent<CollTrigger>();
+
+            if (ctTempLink != null && ctTempLink.TriggerStory)
+                ctTempLink.UnlockingUiObject.AddListener(this.SettingDiscoveredAlpha);
+        }
+
+        GameObject[] v3 = GameObject.FindGameObjectsWithTag("V3");
+
+        foreach (var coll in v3)
+        {
+            CollTrigger ctTempLink = coll.GetComponent<CollTrigger>();
+
+            if (ctTempLink != null && ctTempLink.TriggerStory)
+                ctTempLink.UnlockingUiObject.AddListener(this.SettingDiscoveredAlpha);
+        }
+
+
+
+
+        this.gpUiRef.ContinueB.onClick.AddListener(this.ComeBackToGame);
+        this.gpUiRef.MainMenuB.onClick.AddListener(this.MainMenuRequestHandler);
+        this.gpUiRef.ExitB.onClick.AddListener(this.QuitWithoutSaving);
     }
 
     private void PoppingOutDialogue(string name, string label, string sentence, string spritename)
@@ -1074,7 +1091,7 @@ public class MenuManager : MonoBehaviour
     private void PoppingOutDialogueWIL(string sentence)
     {
         this.gpUiRef.Dialogue.SetActive(true);
-        audioSourceRef.PersistendAudio[1].AudioSourceRef.Stop();
+        //audioSourceRef.PersistendAudio[1].AudioSourceRef.Stop();
 
         this.gpUiRef.RightLabel.SetActive(false);
         this.gpUiRef.LeftLabel.SetActive(false);
@@ -1148,6 +1165,40 @@ public class MenuManager : MonoBehaviour
     private void UpdatingCollectibleNumber(int goldenCraneNumber)
     {
         this.gpUiRef.CollectibleValue.text = goldenCraneNumber.ToString();
+    }
+
+    private void SettingDiscoveredAlpha(Image collDiscovered)
+    {
+        Color temp = collDiscovered.color;
+
+        temp.a = 1;
+
+        collDiscovered.color = temp;
+    }
+
+    private void PoppingOutPause()
+    {
+        Time.timeScale = 0;
+        this.sectionTempRef = "Pause";
+        this.gpUiRef.Pause.SetActive(true);
+        EventSystem.current.SetSelectedGameObject(this.gpUiRef.ContinueB.gameObject);
+    }
+
+    private void ComeBackToGame()
+    {
+        Time.timeScale = 1;
+        this.sectionTempRef = "Game";
+        this.gpUiRef.Pause.SetActive(false);
+    }
+
+    private void MainMenuRequestHandler()
+    {
+        this.switchSceneRequestByName.Invoke("Main Menu");
+    }
+
+    private void QuitWithoutSaving()
+    {
+        Application.Quit();
     }
     #endregion
 

@@ -241,6 +241,12 @@ public class SuperDataManager : MonoBehaviour
         player.GetComponent<EnvInputs>().SaveRequestByCheck.AddListener(this.SaveHandler);
 
         //this.LoadingHandler();
+        if (SceneManager.GetActiveScene().name != "Cri Testing 2")
+        {
+        this.LoadingHandler();
+        this.SaveHandler();
+            
+        }
     }
     #endregion
 

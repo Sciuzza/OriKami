@@ -278,14 +278,14 @@ public class FSMExecutor : MonoBehaviour
                         if (moveDirInput.sqrMagnitude == 0 && fsmLinker.isWalkingSound)
                         {
 
-                            Debug.Log("magnitude" + moveDirInput.sqrMagnitude);
+                            //Debug.Log("magnitude" + moveDirInput.sqrMagnitude);
                             playerref.StopPlayerSounds(1, 2);
                             fsmLinker.isWalkingSound = false;
 
                         }
                         else if (moveDirInput.sqrMagnitude > 0.1f && !fsmLinker.isWalkingSound)
                         {
-                            Debug.Log("magnitude2" + moveDirInput.sqrMagnitude);
+                            //Debug.Log("magnitude2" + moveDirInput.sqrMagnitude);
                             playerref.PlayerSounds(1, 2);
                             fsmLinker.isWalkingSound = true;
                         }
@@ -500,7 +500,7 @@ public class FSMExecutor : MonoBehaviour
     private IEnumerator VFissureNewExecution(bool vFissureAniOn, VFissure vfTempLink, string vfEntrance)
     {
         CharacterController ccTempLink = this.gameObject.GetComponent<CharacterController>();
-
+        this.AnimatorRefs[0].SetFloat("Moving", 0.0f);
         float radius = ccTempLink.radius;
 
         ccTempLink.radius = 0;
@@ -573,6 +573,7 @@ public class FSMExecutor : MonoBehaviour
         timePassed = 0.0f;
         timeTaken = 1f;
         oriPos = this.gameObject.transform.position;
+        this.AnimatorRefs[0].SetBool("Fissure", true);
 
         while (timePassed <= 1)
         {
@@ -580,7 +581,7 @@ public class FSMExecutor : MonoBehaviour
             this.transform.position = Vector3.Lerp(oriPos, vGuidanceFinPosition, timePassed);
             yield return null;
         }
-
+        this.AnimatorRefs[0].SetBool("Fissure", false);
         this.vFissureAniEnded.Invoke();
         ccTempLink.radius = radius;
     }
@@ -589,7 +590,7 @@ public class FSMExecutor : MonoBehaviour
     {
 
         CharacterController ccTempLink = this.gameObject.GetComponent<CharacterController>();
-
+        this.AnimatorRefs[1].SetFloat("Moving", 0.0f);
 
         ccTempLink.enableOverlapRecovery = false;
 
@@ -647,6 +648,7 @@ public class FSMExecutor : MonoBehaviour
         timePassed = 0.0f;
         timeTaken = 1f;
         oriPos = this.gameObject.transform.position;
+        this.AnimatorRefs[1].SetBool("Fissure", true);
 
         while (timePassed <= 1)
         {
@@ -655,8 +657,8 @@ public class FSMExecutor : MonoBehaviour
             yield return null;
         }
 
+        this.AnimatorRefs[1].SetBool("Fissure", false);
         this.vFissureAniEnded.Invoke();
-
         ccTempLink.enableOverlapRecovery = true;
     }
 

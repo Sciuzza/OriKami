@@ -55,6 +55,7 @@ public class PlayerInputs : MonoBehaviour
     public event_int mainMenuRequest;
     public event_float_float_float camMoveRequest;
     public event_string switchSceneRequest;
+    public UnityEvent pauseRequest;
     #endregion
 
     #region Taking References and Linking Events
@@ -2008,6 +2009,14 @@ public class PlayerInputs : MonoBehaviour
                 this.switchSceneRequest.Invoke(this.CalculatingScene(SceneManager.GetActiveScene().name, -1));
             if (Input.GetKeyDown(KeyCode.End))
                 this.switchSceneRequest.Invoke(this.CalculatingScene(SceneManager.GetActiveScene().name, 0));
+        }
+
+        if (SceneManager.GetActiveScene().buildIndex >= 2 && SceneManager.GetActiveScene().buildIndex < 10)
+        {
+            if (Input.GetButtonDown("Start") && Time.timeScale != 0)
+            {
+                this.pauseRequest.Invoke();
+            }
         }
     }
 

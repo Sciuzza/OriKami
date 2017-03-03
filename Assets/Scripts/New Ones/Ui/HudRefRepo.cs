@@ -12,10 +12,13 @@ public class HudRefRepo : MonoBehaviour
     public Image CollectibleImage;
 
     // to handle image sources
-    public Image LbForm, RbForm, RtForm, LtForm, CurrentForm, rightImage, leftImage;
+    public Image rightImage, leftImage;
 
     // To handle enabling and disabling
     public GameObject Dialogue, Pause, BlackScreen, LeftLabel, RightLabel, rightImageGb, leftImageGb;
+
+    //to hadle buttons
+    public Button ContinueB, MainMenuB, ExitB;
 
     // to handle dialogue texts
     public Text DialogueT, RightLabelT, LeftLabelT;
