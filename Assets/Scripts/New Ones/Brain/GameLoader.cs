@@ -15,7 +15,7 @@ public class GameLoader : MonoBehaviour
     #endregion
 
     #region Sending the Scene Initialization Order
-    void Start()
+    private void Start()
     {
         if (this.gbTempLink != null)
         {
@@ -29,6 +29,4 @@ public class GameLoader : MonoBehaviour
         }
     } 
     #endregion
-
 }
-    

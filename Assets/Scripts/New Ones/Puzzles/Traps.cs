@@ -68,6 +68,7 @@ public class Traps : MonoBehaviour
         }
     }
 
+    /*
     void OnTriggerStay(Collider other)
     {
         if (other.gameObject.tag == "Player" && isPlatform)
@@ -86,7 +87,7 @@ public class Traps : MonoBehaviour
           
         }
     }
-
+    */
     //  playerLinker.transform.SetParent(this.gameObject.transform.GetChild(0));
 
     /*void OnCollisionEnter (Collision coll)
