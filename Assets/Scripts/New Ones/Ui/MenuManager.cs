@@ -1013,7 +1013,7 @@ public class MenuManager : MonoBehaviour
         {
             CollTrigger ctTempLink = coll.GetComponent<CollTrigger>();
 
-            if (ctTempLink != null && ctTempLink.TriggerStory)
+            if (ctTempLink != null && ctTempLink.TriggerStory && ctTempLink.UiObjectRef != null)
                 ctTempLink.UnlockingUiObject.AddListener(this.SettingDiscoveredAlpha);
         }
 
@@ -1023,7 +1023,7 @@ public class MenuManager : MonoBehaviour
         {
             CollTrigger ctTempLink = coll.GetComponent<CollTrigger>();
 
-            if (ctTempLink != null && ctTempLink.TriggerStory)
+            if (ctTempLink != null && ctTempLink.TriggerStory && ctTempLink.UiObjectRef != null)
                 ctTempLink.UnlockingUiObject.AddListener(this.SettingDiscoveredAlpha);
         }
 
@@ -1033,7 +1033,7 @@ public class MenuManager : MonoBehaviour
         {
             CollTrigger ctTempLink = coll.GetComponent<CollTrigger>();
 
-            if (ctTempLink != null && ctTempLink.TriggerStory)
+            if (ctTempLink != null && ctTempLink.TriggerStory && ctTempLink.UiObjectRef != null)
                 ctTempLink.UnlockingUiObject.AddListener(this.SettingDiscoveredAlpha);
         }
 
@@ -1043,7 +1043,7 @@ public class MenuManager : MonoBehaviour
         {
             CollTrigger ctTempLink = coll.GetComponent<CollTrigger>();
 
-            if (ctTempLink != null && ctTempLink.TriggerStory)
+            if (ctTempLink != null && ctTempLink.TriggerStory && ctTempLink.UiObjectRef != null)
                 ctTempLink.UnlockingUiObject.AddListener(this.SettingDiscoveredAlpha);
         }
 
