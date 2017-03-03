@@ -4,7 +4,7 @@ using UnityEngine.SceneManagement;
 
 public class Traps : MonoBehaviour
 {
-    bool isDirectionRight = true;
+    public bool isDirectionRight = true;
     public bool isPlatform;
 
     public float sphereSpeed;
@@ -16,6 +16,9 @@ public class Traps : MonoBehaviour
     Transform targetTr;
     Transform rotationSphere;
     //Transform playerLinker;
+
+    public Vector3 direction;
+   
 
     void Awake()
     {
@@ -36,7 +39,7 @@ public class Traps : MonoBehaviour
         if (targetTr != null)
         {
             Vector3 distance = targetTr.position - this.transform.position;
-            Vector3 direction = (targetTr.position - this.transform.position).normalized;
+            direction = (targetTr.position - this.transform.position).normalized;
             transform.position = transform.position + direction * sphereSpeed * Time.deltaTime;
 
             Vector3 newRotation = transform.localEulerAngles;
@@ -68,7 +71,7 @@ public class Traps : MonoBehaviour
         }
     }
 
-    /*
+    
     void OnTriggerStay(Collider other)
     {
         if (other.gameObject.tag == "Player" && isPlatform)
@@ -87,7 +90,7 @@ public class Traps : MonoBehaviour
           
         }
     }
-    */
+    
     //  playerLinker.transform.SetParent(this.gameObject.transform.GetChild(0));
 
     /*void OnCollisionEnter (Collision coll)
