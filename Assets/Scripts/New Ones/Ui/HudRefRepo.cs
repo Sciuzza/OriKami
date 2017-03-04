@@ -25,6 +25,8 @@ public class HudRefRepo : MonoBehaviour
 
     public MovieLogic MovieRef;
 
+    public Image Spider;
+
     public List<Sprite> Avatars;
     public List<string> AvatarNames;
 }

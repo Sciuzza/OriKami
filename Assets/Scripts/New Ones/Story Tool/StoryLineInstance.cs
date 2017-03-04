@@ -223,6 +223,8 @@ public class UiObjectMoving
 public class UiObjectActivation
 {
     public bool End;
+    public bool IsSpider;
+    public GameObject SpiderRef;
     public GameObject GbRef;
     public float FadingInTime;
     public float Time;
@@ -2420,7 +2422,11 @@ public class StoryLineInstance : MonoBehaviour
 
     private void PlayUiObjActiEffect(UiObjectActivation effectToPlay)
     {
-        if (effectToPlay.Time == 0 && effectToPlay.FadingInTime == 0 && effectToPlay.FadingOutTime == 0)
+        if (effectToPlay.IsSpider && effectToPlay.SpiderRef != null)
+        {
+            this.StartCoroutine(this.UiSpiderActivation(effectToPlay));
+        }
+        else if (effectToPlay.Time == 0 && effectToPlay.FadingInTime == 0 && effectToPlay.FadingOutTime == 0)
         {
             effectToPlay.GbRef.SetActive(true);
             effectToPlay.End = true;
@@ -2430,6 +2436,28 @@ public class StoryLineInstance : MonoBehaviour
         {
             this.StartCoroutine(this.UiObjTimedActi(effectToPlay));
         }
+    }
+
+    private IEnumerator UiSpiderActivation(UiObjectActivation spiderActi)
+    {
+        spiderActi.SpiderRef.SetActive(true);
+        spiderActi.GbRef.SetActive(true);
+
+        SpriteRenderer spiderImageSr = spiderActi.SpiderRef.GetComponent<SpriteRenderer>();
+        Image spiderImageIm = spiderActi.GbRef.GetComponent<Image>();
+
+
+        while (spiderActi.SpiderRef.GetComponent<SpriteRenderer>().sprite.name != "Tsuchigumo Sheet_104")
+        {
+            spiderImageIm.sprite = spiderImageSr.sprite;
+            yield return null;
+        }
+
+        spiderActi.SpiderRef.SetActive(true);
+        spiderActi.GbRef.SetActive(true);
+
+        spiderActi.End = true;
+        this.effectCounter++;
     }
 
     private void PlayUiObjDeActiEffect(UiObjectDeActivation effectToPlay)
