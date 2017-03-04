@@ -1,0 +1,1529 @@
+fileFormatVersion: 2
+guid: 7228cef7fb4d677419cb16f24e98ecd3
+timeCreated: 1488628732
+licenseType: Free
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: Tsuchigumo Sheet_0
+    21300002: Tsuchigumo Sheet_1
+    21300004: Tsuchigumo Sheet_2
+    21300006: Tsuchigumo Sheet_3
+    21300008: Tsuchigumo Sheet_4
+    21300010: Tsuchigumo Sheet_5
+    21300012: Tsuchigumo Sheet_6
+    21300014: Tsuchigumo Sheet_7
+    21300016: Tsuchigumo Sheet_8
+    21300018: Tsuchigumo Sheet_9
+    21300020: Tsuchigumo Sheet_10
+    21300022: Tsuchigumo Sheet_11
+    21300024: Tsuchigumo Sheet_12
+    21300026: Tsuchigumo Sheet_13
+    21300028: Tsuchigumo Sheet_14
+    21300030: Tsuchigumo Sheet_15
+    21300032: Tsuchigumo Sheet_16
+    21300034: Tsuchigumo Sheet_17
+    21300036: Tsuchigumo Sheet_18
+    21300038: Tsuchigumo Sheet_19
+    21300040: Tsuchigumo Sheet_20
+    21300042: Tsuchigumo Sheet_21
+    21300044: Tsuchigumo Sheet_22
+    21300046: Tsuchigumo Sheet_23
+    21300048: Tsuchigumo Sheet_24
+    21300050: Tsuchigumo Sheet_25
+    21300052: Tsuchigumo Sheet_26
+    21300054: Tsuchigumo Sheet_27
+    21300056: Tsuchigumo Sheet_28
+    21300058: Tsuchigumo Sheet_29
+    21300060: Tsuchigumo Sheet_30
+    21300062: Tsuchigumo Sheet_31
+    21300064: Tsuchigumo Sheet_32
+    21300066: Tsuchigumo Sheet_33
+    21300068: Tsuchigumo Sheet_34
+    21300070: Tsuchigumo Sheet_35
+    21300072: Tsuchigumo Sheet_36
+    21300074: Tsuchigumo Sheet_37
+    21300076: Tsuchigumo Sheet_38
+    21300078: Tsuchigumo Sheet_39
+    21300080: Tsuchigumo Sheet_40
+    21300082: Tsuchigumo Sheet_41
+    21300084: Tsuchigumo Sheet_42
+    21300086: Tsuchigumo Sheet_43
+    21300088: Tsuchigumo Sheet_44
+    21300090: Tsuchigumo Sheet_45
+    21300092: Tsuchigumo Sheet_46
+    21300094: Tsuchigumo Sheet_47
+    21300096: Tsuchigumo Sheet_48
+    21300098: Tsuchigumo Sheet_49
+    21300100: Tsuchigumo Sheet_50
+    21300102: Tsuchigumo Sheet_51
+    21300104: Tsuchigumo Sheet_52
+    21300106: Tsuchigumo Sheet_53
+    21300108: Tsuchigumo Sheet_54
+    21300110: Tsuchigumo Sheet_55
+    21300112: Tsuchigumo Sheet_56
+    21300114: Tsuchigumo Sheet_57
+    21300116: Tsuchigumo Sheet_58
+    21300118: Tsuchigumo Sheet_59
+    21300120: Tsuchigumo Sheet_60
+    21300122: Tsuchigumo Sheet_61
+    21300124: Tsuchigumo Sheet_62
+    21300126: Tsuchigumo Sheet_63
+    21300128: Tsuchigumo Sheet_64
+    21300130: Tsuchigumo Sheet_65
+    21300132: Tsuchigumo Sheet_66
+    21300134: Tsuchigumo Sheet_67
+    21300136: Tsuchigumo Sheet_68
+    21300138: Tsuchigumo Sheet_69
+    21300140: Tsuchigumo Sheet_70
+    21300142: Tsuchigumo Sheet_71
+    21300144: Tsuchigumo Sheet_72
+    21300146: Tsuchigumo Sheet_73
+    21300148: Tsuchigumo Sheet_74
+    21300150: Tsuchigumo Sheet_75
+    21300152: Tsuchigumo Sheet_76
+    21300154: Tsuchigumo Sheet_77
+    21300156: Tsuchigumo Sheet_78
+    21300158: Tsuchigumo Sheet_79
+    21300160: Tsuchigumo Sheet_80
+    21300162: Tsuchigumo Sheet_81
+    21300164: Tsuchigumo Sheet_82
+    21300166: Tsuchigumo Sheet_83
+    21300168: Tsuchigumo Sheet_84
+    21300170: Tsuchigumo Sheet_85
+    21300172: Tsuchigumo Sheet_86
+    21300174: Tsuchigumo Sheet_87
+    21300176: Tsuchigumo Sheet_88
+    21300178: Tsuchigumo Sheet_89
+    21300180: Tsuchigumo Sheet_90
+    21300182: Tsuchigumo Sheet_91
+    21300184: Tsuchigumo Sheet_92
+    21300186: Tsuchigumo Sheet_93
+    21300188: Tsuchigumo Sheet_94
+    21300190: Tsuchigumo Sheet_95
+    21300192: Tsuchigumo Sheet_96
+    21300194: Tsuchigumo Sheet_97
+    21300196: Tsuchigumo Sheet_98
+    21300198: Tsuchigumo Sheet_99
+    21300200: Tsuchigumo Sheet_100
+    21300202: Tsuchigumo Sheet_101
+    21300204: Tsuchigumo Sheet_102
+    21300206: Tsuchigumo Sheet_103
+    21300208: Tsuchigumo Sheet_104
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 1
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  cubemapConvolution: 0
+  cubemapConvolutionSteps: 7
+  cubemapConvolutionExponent: 1.5
+  seamlessCubemap: 0
+  textureFormat: -1
+  maxTextureSize: 2048
+  textureSettings:
+    filterMode: -1
+    aniso: 16
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  rGBM: 0
+  compressionQuality: 50
+  allowsAlphaSplitting: 0
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 100
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  buildTargetSettings: []
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Tsuchigumo Sheet_0
+      rect:
+        serializedVersion: 2
+        x: 316
+        y: 6444
+        width: 118
+        height: 674
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Tsuchigumo Sheet_1
+      rect:
+        serializedVersion: 2
+        x: 907
+        y: 6417
+        width: 129
+        height: 712
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Tsuchigumo Sheet_2
+      rect:
+        serializedVersion: 2
+        x: 1493
+        y: 6398
+        width: 144
+        height: 746
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Tsuchigumo Sheet_3
+      rect:
+        serializedVersion: 2
+        x: 2080
+        y: 6379
+        width: 159
+        height: 780
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Tsuchigumo Sheet_4
+      rect:
+        serializedVersion: 2
+        x: 2666
+        y: 6368
+        width: 179
+        height: 799
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Tsuchigumo Sheet_5
+      rect:
+        serializedVersion: 2
+        x: 3257
+        y: 6356
+        width: 190
+        height: 823
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Tsuchigumo Sheet_6
+      rect:
+        serializedVersion: 2
+        x: 3847
+        y: 6349
+        width: 205
+        height: 841
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Tsuchigumo Sheet_7
+      rect:
+        serializedVersion: 2
+        x: 4441
+        y: 6341
+        width: 224
+        height: 857
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Tsuchigumo Sheet_8
+      rect:
+        serializedVersion: 2
+        x: 5035
+        y: 6333
+        width: 266
+        height: 865
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Tsuchigumo Sheet_9
+      rect:
+        serializedVersion: 2
+        x: 5629
+        y: 6330
+        width: 274
+        height: 864
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Tsuchigumo Sheet_10
+      rect:
+        serializedVersion: 2
+        x: 6227
+        y: 6326
+        width: 282
+        height: 864
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Tsuchigumo Sheet_11
+      rect:
+        serializedVersion: 2
+        x: 6821
+        y: 6322
+        width: 286
+        height: 864
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Tsuchigumo Sheet_12
+      rect:
+        serializedVersion: 2
+        x: 7423
+        y: 6318
+        width: 285
+        height: 864
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Tsuchigumo Sheet_13
+      rect:
+        serializedVersion: 2
+        x: 221
+        y: 5419
+        width: 285
+        height: 868
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Tsuchigumo Sheet_14
+      rect:
+        serializedVersion: 2
+        x: 819
+        y: 5416
+        width: 281
+        height: 868
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Tsuchigumo Sheet_15
+      rect:
+        serializedVersion: 2
+        x: 1417
+        y: 5416
+        width: 281
+        height: 860
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Tsuchigumo Sheet_16
+      rect:
+        serializedVersion: 2
+        x: 2019
+        y: 5416
+        width: 277
+        height: 856
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Tsuchigumo Sheet_17
+      rect:
+        serializedVersion: 2
+        x: 2617
+        y: 5416
+        width: 277
+        height: 856
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Tsuchigumo Sheet_18
+      rect:
+        serializedVersion: 2
+        x: 3217
+        y: 5416
+        width: 275
+        height: 845
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Tsuchigumo Sheet_19
+      rect:
+        serializedVersion: 2
+        x: 3816
+        y: 5416
+        width: 274
+        height: 829
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Tsuchigumo Sheet_20
+      rect:
+        serializedVersion: 2
+        x: 4417
+        y: 5416
+        width: 267
+        height: 875
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Tsuchigumo Sheet_21
+      rect:
+        serializedVersion: 2
+        x: 5016
+        y: 5416
+        width: 266
+        height: 883
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Tsuchigumo Sheet_22
+      rect:
+        serializedVersion: 2
+        x: 5618
+        y: 5416
+        width: 258
+        height: 898
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Tsuchigumo Sheet_23
+      rect:
+        serializedVersion: 2
+        x: 6216
+        y: 5416
+        width: 258
+        height: 894
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Tsuchigumo Sheet_24
+      rect:
+        serializedVersion: 2
+        x: 6818
+        y: 5416
+        width: 251
+        height: 894
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Tsuchigumo Sheet_25
+      rect:
+        serializedVersion: 2
+        x: 7418
+        y: 5416
+        width: 245
+        height: 890
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Tsuchigumo Sheet_26
+      rect:
+        serializedVersion: 2
+        x: 217
+        y: 4517
+        width: 240
+        height: 887
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Tsuchigumo Sheet_27
+      rect:
+        serializedVersion: 2
+        x: 818
+        y: 4517
+        width: 237
+        height: 887
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Tsuchigumo Sheet_28
+      rect:
+        serializedVersion: 2
+        x: 1420
+        y: 4517
+        width: 233
+        height: 879
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Tsuchigumo Sheet_29
+      rect:
+        serializedVersion: 2
+        x: 2019
+        y: 4517
+        width: 228
+        height: 879
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Tsuchigumo Sheet_30
+      rect:
+        serializedVersion: 2
+        x: 2619
+        y: 4517
+        width: 226
+        height: 879
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Tsuchigumo Sheet_31
+      rect:
+        serializedVersion: 2
+        x: 3218
+        y: 4517
+        width: 221
+        height: 856
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Tsuchigumo Sheet_32
+      rect:
+        serializedVersion: 2
+        x: 3819
+        y: 4517
+        width: 218
+        height: 860
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Tsuchigumo Sheet_33
+      rect:
+        serializedVersion: 2
+        x: 4418
+        y: 4517
+        width: 213
+        height: 860
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Tsuchigumo Sheet_34
+      rect:
+        serializedVersion: 2
+        x: 5012
+        y: 4517
+        width: 213
+        height: 849
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Tsuchigumo Sheet_35
+      rect:
+        serializedVersion: 2
+        x: 5603
+        y: 4517
+        width: 220
+        height: 856
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Tsuchigumo Sheet_36
+      rect:
+        serializedVersion: 2
+        x: 6197
+        y: 4517
+        width: 220
+        height: 872
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Tsuchigumo Sheet_37
+      rect:
+        serializedVersion: 2
+        x: 6795
+        y: 4517
+        width: 220
+        height: 879
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Tsuchigumo Sheet_38
+      rect:
+        serializedVersion: 2
+        x: 7397
+        y: 4517
+        width: 220
+        height: 883
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Tsuchigumo Sheet_39
+      rect:
+        serializedVersion: 2
+        x: 194
+        y: 3617
+        width: 229
+        height: 888
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Tsuchigumo Sheet_40
+      rect:
+        serializedVersion: 2
+        x: 792
+        y: 3617
+        width: 236
+        height: 896
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Tsuchigumo Sheet_41
+      rect:
+        serializedVersion: 2
+        x: 1390
+        y: 3617
+        width: 247
+        height: 892
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Tsuchigumo Sheet_42
+      rect:
+        serializedVersion: 2
+        x: 1988
+        y: 3614
+        width: 255
+        height: 891
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Tsuchigumo Sheet_43
+      rect:
+        serializedVersion: 2
+        x: 2586
+        y: 3614
+        width: 263
+        height: 887
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Tsuchigumo Sheet_44
+      rect:
+        serializedVersion: 2
+        x: 3184
+        y: 3614
+        width: 270
+        height: 868
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Tsuchigumo Sheet_45
+      rect:
+        serializedVersion: 2
+        x: 3778
+        y: 3614
+        width: 278
+        height: 830
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Tsuchigumo Sheet_46
+      rect:
+        serializedVersion: 2
+        x: 4978
+        y: 3614
+        width: 278
+        height: 823
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Tsuchigumo Sheet_47
+      rect:
+        serializedVersion: 2
+        x: 5580
+        y: 3614
+        width: 274
+        height: 845
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Tsuchigumo Sheet_48
+      rect:
+        serializedVersion: 2
+        x: 6178
+        y: 3614
+        width: 270
+        height: 849
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Tsuchigumo Sheet_49
+      rect:
+        serializedVersion: 2
+        x: 6764
+        y: 4433
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Tsuchigumo Sheet_50
+      rect:
+        serializedVersion: 2
+        x: 6780
+        y: 3614
+        width: 258
+        height: 857
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Tsuchigumo Sheet_51
+      rect:
+        serializedVersion: 2
+        x: 7347
+        y: 4384
+        width: 49
+        height: 56
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Tsuchigumo Sheet_52
+      rect:
+        serializedVersion: 2
+        x: 7381
+        y: 3613
+        width: 244
+        height: 865
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Tsuchigumo Sheet_53
+      rect:
+        serializedVersion: 2
+        x: 4380
+        y: 3614
+        width: 278
+        height: 819
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Tsuchigumo Sheet_54
+      rect:
+        serializedVersion: 2
+        x: 141
+        y: 3435
+        width: 72
+        height: 95
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Tsuchigumo Sheet_55
+      rect:
+        serializedVersion: 2
+        x: 183
+        y: 2716
+        width: 232
+        height: 871
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Tsuchigumo Sheet_56
+      rect:
+        serializedVersion: 2
+        x: 739
+        y: 2712
+        width: 266
+        height: 845
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Tsuchigumo Sheet_57
+      rect:
+        serializedVersion: 2
+        x: 1337
+        y: 2712
+        width: 259
+        height: 871
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Tsuchigumo Sheet_58
+      rect:
+        serializedVersion: 2
+        x: 1935
+        y: 2712
+        width: 259
+        height: 887
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Tsuchigumo Sheet_59
+      rect:
+        serializedVersion: 2
+        x: 2529
+        y: 2712
+        width: 262
+        height: 894
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Tsuchigumo Sheet_60
+      rect:
+        serializedVersion: 2
+        x: 3127
+        y: 2712
+        width: 270
+        height: 894
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Tsuchigumo Sheet_61
+      rect:
+        serializedVersion: 2
+        x: 3729
+        y: 2712
+        width: 281
+        height: 887
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Tsuchigumo Sheet_62
+      rect:
+        serializedVersion: 2
+        x: 4334
+        y: 2708
+        width: 293
+        height: 898
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Tsuchigumo Sheet_63
+      rect:
+        serializedVersion: 2
+        x: 4936
+        y: 2708
+        width: 384
+        height: 887
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Tsuchigumo Sheet_64
+      rect:
+        serializedVersion: 2
+        x: 5538
+        y: 2708
+        width: 380
+        height: 872
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Tsuchigumo Sheet_65
+      rect:
+        serializedVersion: 2
+        x: 6140
+        y: 2708
+        width: 380
+        height: 849
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Tsuchigumo Sheet_66
+      rect:
+        serializedVersion: 2
+        x: 6730
+        y: 2708
+        width: 396
+        height: 826
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Tsuchigumo Sheet_67
+      rect:
+        serializedVersion: 2
+        x: 7324
+        y: 2708
+        width: 415
+        height: 795
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Tsuchigumo Sheet_68
+      rect:
+        serializedVersion: 2
+        x: 4091
+        y: 2826
+        width: 30
+        height: 26
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Tsuchigumo Sheet_69
+      rect:
+        serializedVersion: 2
+        x: 4643
+        y: 2815
+        width: 79
+        height: 45
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Tsuchigumo Sheet_70
+      rect:
+        serializedVersion: 2
+        x: 122
+        y: 1809
+        width: 419
+        height: 769
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Tsuchigumo Sheet_71
+      rect:
+        serializedVersion: 2
+        x: 720
+        y: 1809
+        width: 422
+        height: 742
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Tsuchigumo Sheet_72
+      rect:
+        serializedVersion: 2
+        x: 1318
+        y: 1805
+        width: 422
+        height: 716
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Tsuchigumo Sheet_73
+      rect:
+        serializedVersion: 2
+        x: 1920
+        y: 1805
+        width: 422
+        height: 683
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Tsuchigumo Sheet_74
+      rect:
+        serializedVersion: 2
+        x: 2518
+        y: 1802
+        width: 422
+        height: 650
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Tsuchigumo Sheet_75
+      rect:
+        serializedVersion: 2
+        x: 3123
+        y: 1802
+        width: 415
+        height: 616
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Tsuchigumo Sheet_76
+      rect:
+        serializedVersion: 2
+        x: 3679
+        y: 1802
+        width: 457
+        height: 574
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Tsuchigumo Sheet_77
+      rect:
+        serializedVersion: 2
+        x: 4262
+        y: 1802
+        width: 468
+        height: 533
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Tsuchigumo Sheet_78
+      rect:
+        serializedVersion: 2
+        x: 4856
+        y: 1798
+        width: 472
+        height: 498
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Tsuchigumo Sheet_79
+      rect:
+        serializedVersion: 2
+        x: 5450
+        y: 1790
+        width: 472
+        height: 464
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Tsuchigumo Sheet_80
+      rect:
+        serializedVersion: 2
+        x: 6052
+        y: 1771
+        width: 468
+        height: 438
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Tsuchigumo Sheet_81
+      rect:
+        serializedVersion: 2
+        x: 6650
+        y: 1767
+        width: 464
+        height: 397
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Tsuchigumo Sheet_82
+      rect:
+        serializedVersion: 2
+        x: 7252
+        y: 1766
+        width: 460
+        height: 355
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Tsuchigumo Sheet_83
+      rect:
+        serializedVersion: 2
+        x: 6201
+        y: 1767
+        width: 14
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Tsuchigumo Sheet_84
+      rect:
+        serializedVersion: 2
+        x: 57
+        y: 865
+        width: 449
+        height: 319
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Tsuchigumo Sheet_85
+      rect:
+        serializedVersion: 2
+        x: 659
+        y: 865
+        width: 441
+        height: 281
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Tsuchigumo Sheet_86
+      rect:
+        serializedVersion: 2
+        x: 1261
+        y: 864
+        width: 434
+        height: 248
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Tsuchigumo Sheet_87
+      rect:
+        serializedVersion: 2
+        x: 1863
+        y: 864
+        width: 430
+        height: 229
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Tsuchigumo Sheet_88
+      rect:
+        serializedVersion: 2
+        x: 2464
+        y: 864
+        width: 423
+        height: 236
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Tsuchigumo Sheet_89
+      rect:
+        serializedVersion: 2
+        x: 3066
+        y: 864
+        width: 419
+        height: 255
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Tsuchigumo Sheet_90
+      rect:
+        serializedVersion: 2
+        x: 3672
+        y: 864
+        width: 407
+        height: 259
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Tsuchigumo Sheet_91
+      rect:
+        serializedVersion: 2
+        x: 4266
+        y: 864
+        width: 407
+        height: 255
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Tsuchigumo Sheet_92
+      rect:
+        serializedVersion: 2
+        x: 4860
+        y: 865
+        width: 403
+        height: 247
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Tsuchigumo Sheet_93
+      rect:
+        serializedVersion: 2
+        x: 5450
+        y: 865
+        width: 404
+        height: 232
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Tsuchigumo Sheet_94
+      rect:
+        serializedVersion: 2
+        x: 6045
+        y: 869
+        width: 403
+        height: 212
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Tsuchigumo Sheet_95
+      rect:
+        serializedVersion: 2
+        x: 6654
+        y: 880
+        width: 384
+        height: 186
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Tsuchigumo Sheet_96
+      rect:
+        serializedVersion: 2
+        x: 7271
+        y: 891
+        width: 354
+        height: 160
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Tsuchigumo Sheet_97
+      rect:
+        serializedVersion: 2
+        x: 92
+        y: 0
+        width: 315
+        height: 148
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Tsuchigumo Sheet_98
+      rect:
+        serializedVersion: 2
+        x: 712
+        y: 4
+        width: 278
+        height: 142
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Tsuchigumo Sheet_99
+      rect:
+        serializedVersion: 2
+        x: 1337
+        y: 8
+        width: 236
+        height: 138
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Tsuchigumo Sheet_100
+      rect:
+        serializedVersion: 2
+        x: 1965
+        y: 15
+        width: 194
+        height: 130
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Tsuchigumo Sheet_101
+      rect:
+        serializedVersion: 2
+        x: 2590
+        y: 19
+        width: 163
+        height: 123
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Tsuchigumo Sheet_102
+      rect:
+        serializedVersion: 2
+        x: 3211
+        y: 27
+        width: 137
+        height: 114
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Tsuchigumo Sheet_103
+      rect:
+        serializedVersion: 2
+        x: 3828
+        y: 31
+        width: 114
+        height: 106
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Tsuchigumo Sheet_104
+      rect:
+        serializedVersion: 2
+        x: 4441
+        y: 42
+        width: 91
+        height: 87
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    outline: []
+  spritePackingTag: 
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

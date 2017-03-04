@@ -1886,6 +1886,7 @@ public class FSMChecker : MonoBehaviour
 
         if (this.cPlayerState.currentClState == controlStates.noControl)
         {
+            //TODO qui riki
             this.EnablingMove();
         }
 

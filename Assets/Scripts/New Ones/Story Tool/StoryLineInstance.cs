@@ -1391,6 +1391,7 @@ public class StoryLineInstance : MonoBehaviour
     {
         if (effectToPlay.TimeTaken == 0)
         {
+            this.AniRequest.Invoke(0);
             this.player.transform.LookAt(effectToPlay.GbRef.transform);
             effectToPlay.End = true;
             this.effectCounter++;
@@ -1511,6 +1512,8 @@ public class StoryLineInstance : MonoBehaviour
 
         var timePassed = 0f;
 
+        this.AniRequest.Invoke(1);
+
         while (!posReached)
         {
             timePassed += Time.deltaTime / timeTaken;
@@ -1532,6 +1535,8 @@ public class StoryLineInstance : MonoBehaviour
         this.effectCounter++;
         GameController.Debugging("Effect Counter", this.effectCounter);
         DestroyObject(tempObj);
+
+        this.AniRequest.Invoke(0);
     }
     #endregion
 
@@ -1930,7 +1935,6 @@ public class StoryLineInstance : MonoBehaviour
             }
             else
             {
-
                 this.StartCoroutine(this.MovingObject(effectToPlay));
             }
 
@@ -2190,6 +2194,14 @@ public class StoryLineInstance : MonoBehaviour
 
         var timePassed = 0.0f;
 
+        var animated = false;
+
+        if (objRotEffect.ObjectToRotate.GetComponent<Animator>() != null)
+        {
+            animated = true;
+            objRotEffect.ObjectToRotate.GetComponent<Animator>().SetInteger("AniIndex", 1);
+        }
+
         while (!posReached)
         {
             timePassed += Time.deltaTime / timeTaken;
@@ -2206,6 +2218,9 @@ public class StoryLineInstance : MonoBehaviour
 
             yield return null;
         }
+
+        if (animated)
+            objRotEffect.ObjectToRotate.GetComponent<Animator>().SetInteger("AniIndex", 0);
 
         objRotEffect.End = true;
         this.effectCounter++;
@@ -3045,7 +3060,6 @@ public class StoryLineInstance : MonoBehaviour
 
         if (pointLightActiEffect.FadingOutTime == 0)
         {
-            pointLightActiEffect.GbRef.SetActive(false);
             lightTempLink.intensity = intOriginal;
         }
         else
