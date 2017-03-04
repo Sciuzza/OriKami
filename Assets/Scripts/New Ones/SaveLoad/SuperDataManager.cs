@@ -67,6 +67,7 @@ public class EnvDatas
     public List<ButtonsData> ButState;
     public QuestsData SlState;
 }
+
 #endregion
 
 #region Global Data
@@ -142,6 +143,7 @@ public class SuperDataManager : MonoBehaviour
 
     [SerializeField]
     public TweakableSettings TwkSettings;
+
     #endregion
 
     #region Private Variables
@@ -173,6 +175,15 @@ public class SuperDataManager : MonoBehaviour
 
         gcTempLink.gpInitializer.AddListener(this.InitializingGameplayScene);
         gcTempLink.ngpInitializer.AddListener(this.InitializingNgpScene);
+
+        var changeLevTempLink = GameObject.FindGameObjectsWithTag("ChangeScene");
+
+        foreach (var t in changeLevTempLink)
+        {
+            t.GetComponent<MoveToNextLevel>().RegisterPlayerPosRequest.AddListener(this.ChangingSceneSaveHandler);
+        }
+
+
     }
 
     private void InitializeOriginalData()
@@ -251,13 +262,29 @@ public class SuperDataManager : MonoBehaviour
         if (SceneManager.GetActiveScene().name != "Cri Testing 2")
         {
             this.LoadingHandler();
-            this.SaveHandler();
+           // this.SaveHandler();
 
         }
     }
     #endregion
 
     #region Save Handler
+
+    private void ChangingSceneSaveHandler(Vector3 playerPos)
+    {
+        this.RequestLocalUpdateToRepo.Invoke();
+        EnvDatas tempRef = this.EnvSensData.Find(x => x.GpSceneName == SceneManager.GetActiveScene().name);
+
+        tempRef.PlState.PlayerPosX = playerPos.x;
+        tempRef.PlState.PlayerPosY = playerPos.y;
+        tempRef.PlState.PlayerPosZ = playerPos.z;
+
+        this.SaveToFile("/EnvSensData.dat", 0);
+        this.SaveToFile("/PlNsData.dat", 1);
+        this.SaveToFile("/TweaksData.dat", 2);
+    }
+
+
     private void SaveHandler()
     {
         Debug.Log("Saving");
@@ -470,48 +497,31 @@ public class SuperDataManager : MonoBehaviour
 
         if (sceneData == null) return;
 
-        var newButton = sceneData.ButState.Find(x => x.ButtonName == puzzleType.name);
+        ButtonsData newButton = null;
 
-        if (newButton == null)
+        newButton = new ButtonsData();
+        /*
+        if (sceneData.ButState.Find(x => x.ButtonName == puzzleType.name) != null)
         {
-            newButton = new ButtonsData();
-
-            newButton.ButtonName = puzzleType.name;
-
-            var puzzleScripts = new List<Puzzles>();
-
-            puzzleScripts.AddRange(puzzleType.GetComponents<Puzzles>());
-
-            newButton.IsDisabled = new List<bool>();
-
-            foreach (var puzzle in puzzleScripts)
-            {
-                newButton.IsDisabled.Add(puzzle.keyHit);
-            }
-
-            sceneData.ButState.Add(newButton);
+            puzzleType.name += "." + this.butCounter;
+            this.butCounter++;
         }
-        else
+
+    */
+        newButton.ButtonName = puzzleType.name;
+
+        var puzzleScripts = new List<Puzzles>();
+
+        puzzleScripts.AddRange(puzzleType.GetComponents<Puzzles>());
+
+        newButton.IsDisabled = new List<bool>();
+
+        foreach (var puzzle in puzzleScripts)
         {
-            sceneData.ButState.Remove(newButton);
-
-            newButton = new ButtonsData();
-
-            newButton.ButtonName = puzzleType.name;
-
-            var puzzleScripts = new List<Puzzles>();
-
-            puzzleScripts.AddRange(puzzleType.GetComponents<Puzzles>());
-
-            newButton.IsDisabled = new List<bool>();
-
-            foreach (var puzzle in puzzleScripts)
-            {
-                newButton.IsDisabled.Add(puzzle.keyHit);
-            }
-
-            sceneData.ButState.Add(newButton);
+            newButton.IsDisabled.Add(puzzle.keyHit);
         }
+
+        sceneData.ButState.Add(newButton);
     }
 
     private EnvDatas CheckingSceneBelonging()
@@ -520,6 +530,7 @@ public class SuperDataManager : MonoBehaviour
 
         return this.EnvSensData.Find(x => x.GpSceneName == currentScene);
     }
+
     #endregion
 
     #region General Utilities Methods

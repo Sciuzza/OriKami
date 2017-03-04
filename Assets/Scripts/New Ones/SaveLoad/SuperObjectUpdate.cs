@@ -5,31 +5,48 @@ using UnityEditor;
 
 using UnityEngine.SceneManagement;
 
-//[ExecuteInEditMode]
 public class SuperObjectUpdate : MonoBehaviour
 {
     private Transform memoryTarget;
 
 
-    public bool RepoSaved;
-
-    #region Edit Mode Methods
     /*
-    public void Update()
+    #region Edit Mode Methods
+    public bool RepoSaved;
+    
+    public void OnValidate()
     {
+        
         if (!this.RepoSaved)
         {
             GameObject.FindGameObjectWithTag("GameController").GetComponent<SuperDataManager>().UpdatingObjState(this.gameObject);
-            this.RepoSaved = true;
         }
+        
+        if (!this.gameObject.activeSelf && !this.RepoSaved)
+        {
+            GameObject.FindGameObjectWithTag("InObjRepo").GetComponent<InObjRepo>().SObjInactive.Add(this.gameObject.GetComponent<SuperObjectUpdate>());
+        }
+        
+        this.RepoSaved = true; 
     }
-    */
+    
     #endregion
-
+    */
     private void Awake()
     {
-        //this.RepoSaved = false;
+        var sdmTempLink = GameObject.FindGameObjectWithTag("GameController").GetComponent<SuperDataManager>();
 
+        sdmTempLink.RequestLocalUpdateToRepo.AddListener(this.SavingCurrentState);
+        sdmTempLink.RequestLocalUpdateByRepo.AddListener(this.LoadingCurrentState);
+
+        var slTempLink = GameObject.FindGameObjectWithTag("StoryLine").GetComponent<StoryLineInstance>();
+
+        slTempLink.KoiNewTransfRequest.AddListener(this.UpdatingLocalTransform);
+    }
+
+
+    public void CustomAwake()
+    {
         var sdmTempLink = GameObject.FindGameObjectWithTag("GameController").GetComponent<SuperDataManager>();
 
         sdmTempLink.RequestLocalUpdateToRepo.AddListener(this.SavingCurrentState);

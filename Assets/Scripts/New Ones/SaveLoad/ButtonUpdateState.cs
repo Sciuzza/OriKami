@@ -4,17 +4,42 @@ using System.Collections.Generic;
 
 using UnityEngine.SceneManagement;
 
-public class ButtonUpdateState : MonoBehaviour {
-
+public class ButtonUpdateState : MonoBehaviour
+{
+    /*
     #region Edit Mode Methods
-
+    public bool RepoSaved;
+    
     public void OnValidate()
     {
-        //GameObject.FindGameObjectWithTag("GameController").GetComponent<SuperDataManager>().UpdatingButState(this.gameObject);
+        
+        if (!this.RepoSaved)
+        {
+            GameObject.FindGameObjectWithTag("GameController").GetComponent<SuperDataManager>().UpdatingButState(this.gameObject);
+           
+        }
+            
+        if (!this.gameObject.activeSelf && !this.RepoSaved)
+        {
+            GameObject.FindGameObjectWithTag("InObjRepo").GetComponent<InObjRepo>().ButInactive.Add(this.gameObject.GetComponent<ButtonUpdateState>());
+        }
+
+        this.RepoSaved = true;
+        
     }
+    
     #endregion
+    */
 
     private void Awake()
+    {
+        var sdmTempLink = GameObject.FindGameObjectWithTag("GameController").GetComponent<SuperDataManager>();
+
+        sdmTempLink.RequestLocalUpdateToRepo.AddListener(this.SavingCurrentState);
+        sdmTempLink.RequestLocalUpdateByRepo.AddListener(this.LoadingCurrentState);
+    }
+
+    public void CustomAwake()
     {
         var sdmTempLink = GameObject.FindGameObjectWithTag("GameController").GetComponent<SuperDataManager>();
 
@@ -50,7 +75,7 @@ public class ButtonUpdateState : MonoBehaviour {
         }
         else
         {
-           // Debug.Log(this.gameObject.name + " not present in Temp Repo");
+           Debug.Log(this.gameObject.name + " BUTTON not present in Temp Repo, saving problem");
         }
     }
 
@@ -75,7 +100,7 @@ public class ButtonUpdateState : MonoBehaviour {
        
         else
         {
-            Debug.Log(this.gameObject.name + " not present in Temp Repo");
+            Debug.Log(this.gameObject.name + " BUTTON not present in Temp Repo, loading problem");
         }
     }
 }
