@@ -135,16 +135,16 @@ public class MoveHandler : MonoBehaviour
                 }
                 */
                 
-                if (this.verticalVelocity <=-4f && fsmCheckerLinker.cPlayerState.currentPhState == physicStates.onGround)
+                if (this.verticalVelocity <=-4 /*&& fsmCheckerLinker.cPlayerState.currentPhState == physicStates.onGround*/)
                 {                 
-                    soundRef.PlaySound(0, 1);                                     
+                    soundRef.PlaySound(0, 3);                                     
                 }
 
-                if (this.verticalVelocity <= -4f && fsmCheckerLinker.cPlayerState.currentPhState == physicStates.onWater)
-                {
-                    Debug.LogWarning("ACQUA");
-                    soundRef.PlaySound(0, 0);
-                }
+                //if (this.verticalVelocity <= -4f && fsmCheckerLinker.cPlayerState.currentPhState == physicStates.onWater)
+                //{
+                //    Debug.LogWarning("ACQUA");
+                //    soundRef.PlaySound(0, 0);
+                //}
                 if (this.verticalVelocity <= -this.hitImpactVel) this.deathRequest.Invoke();
                 else
                 {

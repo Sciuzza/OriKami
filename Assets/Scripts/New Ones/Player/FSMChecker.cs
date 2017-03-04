@@ -254,6 +254,7 @@ public class FSMChecker : MonoBehaviour
     #region Private Variables
 
     private PlayerInputs playerTemp;
+    private SoundManager soundRef;
 
     [System.Serializable]
     public struct playerCState
@@ -342,7 +343,8 @@ public class FSMChecker : MonoBehaviour
     void Awake()
     {
         playerRef = this.gameObject.GetComponent<PlayerInputs>();
-       // fsmLinker = this.gameObject.GetComponent<FSMExecutor>();
+        // fsmLinker = this.gameObject.GetComponent<FSMExecutor>();
+        soundRef = this.gameObject.GetComponent<SoundManager>();
 
         ccLink = this.gameObject.GetComponent<CharacterController>();
 
@@ -1887,6 +1889,7 @@ public class FSMChecker : MonoBehaviour
         if (this.cPlayerState.currentClState == controlStates.noControl)
         {
             //TODO qui riki
+            soundRef.PersistendAudio[1].AudioSourceRef.Stop();
             this.EnablingMove();
         }
 
