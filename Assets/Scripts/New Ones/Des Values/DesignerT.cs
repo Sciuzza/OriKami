@@ -276,6 +276,9 @@ public class playerLegends
     public bool Legend3;
     public bool Legend4;
     public bool Legend5;
+    public bool Legend6;
+    public bool Legend7;
+    public bool Legend8;
 }
 #endregion
 

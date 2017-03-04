@@ -81,6 +81,7 @@ public class MenuManager : MonoBehaviour
 
         sdManTempLink.DisableContinueRequest.AddListener(this.DisablingContinue);
         sdManTempLink.menuInitRequest.AddListener(this.InitializingMainMenuPanel);
+        sdManTempLink.MenuReadingFromDataRequest.AddListener(this.ReadingData);
     }
     #endregion
 
@@ -278,6 +279,18 @@ public class MenuManager : MonoBehaviour
         this.mmRepo.JumpDashT.text = this.PossibleGenAbiKeys[this.LocalGbSettings.JdIndex];
         this.mmRepo.PasstT.text = this.PossibleGenAbiKeys[this.LocalGbSettings.PtIndex];
 
+    }
+
+    private void ReadingData(PlayerNsData dataToRead)
+    {
+        if (!dataToRead.Legend1Unlocked) this.mmRepo.Legend1B.interactable = false;
+        if (!dataToRead.Legend2Unlocked) this.mmRepo.Legend2B.interactable = false;
+        if (!dataToRead.Legend3Unlocked) this.mmRepo.Legend3B.interactable = false;
+        if (!dataToRead.Legend4Unlocked) this.mmRepo.Legend4B.interactable = false;
+        if (!dataToRead.Legend5Unlocked) this.mmRepo.Legend5B.interactable = false;
+        if (!dataToRead.Legend6Unlocked) this.mmRepo.Legend6B.interactable = false;
+        if (!dataToRead.Legend7Unlocked) this.mmRepo.Legend7B.interactable = false;
+        if (!dataToRead.Legend8Unlocked) this.mmRepo.Legend8B.interactable = false;
     }
 
     private void DisablingContinue()

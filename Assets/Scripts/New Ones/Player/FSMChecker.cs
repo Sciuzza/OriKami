@@ -231,6 +231,12 @@ public class event_image : UnityEvent<Image>
 {
     
 }
+
+[System.Serializable]
+public class event_plnsdata : UnityEvent<PlayerNsData>
+{
+    
+}
 #endregion
 
 public class FSMChecker : MonoBehaviour
@@ -1797,6 +1803,15 @@ public class FSMChecker : MonoBehaviour
             case 4:
                 this.legUnlocked.Legend5 = true;
                 break;
+            case 5:
+                this.legUnlocked.Legend6 = true;
+                break;
+            case 6:
+                this.legUnlocked.Legend7 = true;
+                break;
+            case 7:
+                this.legUnlocked.Legend8 = true;
+                break;
         }
     }
     #endregion
@@ -2202,6 +2217,9 @@ public class FSMChecker : MonoBehaviour
         plNsDataToUpdate.Legend3Unlocked = this.legUnlocked.Legend3;
         plNsDataToUpdate.Legend4Unlocked = this.legUnlocked.Legend4;
         plNsDataToUpdate.Legend5Unlocked = this.legUnlocked.Legend5;
+        plNsDataToUpdate.Legend6Unlocked = this.legUnlocked.Legend6;
+        plNsDataToUpdate.Legend7Unlocked = this.legUnlocked.Legend7;
+        plNsDataToUpdate.Legend8Unlocked = this.legUnlocked.Legend8;
 
         plNsDataToUpdate.SceneToLoad = SceneManager.GetActiveScene().name;
 
@@ -2243,6 +2261,9 @@ public class FSMChecker : MonoBehaviour
         this.legUnlocked.Legend3 = plNsDataToUpdate.Legend3Unlocked;
         this.legUnlocked.Legend4 = plNsDataToUpdate.Legend4Unlocked;
         this.legUnlocked.Legend5 = plNsDataToUpdate.Legend5Unlocked;
+        this.legUnlocked.Legend6 = plNsDataToUpdate.Legend6Unlocked;
+        this.legUnlocked.Legend7 = plNsDataToUpdate.Legend7Unlocked;
+        this.legUnlocked.Legend8 = plNsDataToUpdate.Legend8Unlocked;
 
         this.updateUiCollRequest.Invoke(this.GoldenCrane);
         this.dying = false;

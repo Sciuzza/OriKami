@@ -90,6 +90,9 @@ public class PlayerNsData
     public bool Legend3Unlocked;
     public bool Legend4Unlocked;
     public bool Legend5Unlocked;
+    public bool Legend6Unlocked;
+    public bool Legend7Unlocked;
+    public bool Legend8Unlocked;
 
     public string SceneToLoad;
 }
@@ -143,17 +146,20 @@ public class SuperDataManager : MonoBehaviour
 
     #region Private Variables
 
+    private int objCounter = 0;
+    private int butCounter = 0;
     #endregion
 
     #region Events
     public UnityEvent RequestLocalUpdateToRepo, RequestLocalUpdateByRepo, DisableContinueRequest, menuInitRequest;
     public event_string SwitchSceneRequest;
+    public event_plnsdata MenuReadingFromDataRequest;
     #endregion
 
     #region Taking References and Linking Events and ReWriting Default Data
     private void Awake()
     {
-        //this.ErasingData();
+        this.ErasingData();
 
         this.InitializeOriginalData();
 
@@ -206,6 +212,7 @@ public class SuperDataManager : MonoBehaviour
                 this.menuInitRequest.Invoke();
                 if (!this.LoadByFile("/EnvSensData.dat", 0) || !this.LoadByFile("/PlNsData.dat", 1) || !this.PlNsData.Saved)
                     this.DisableContinueRequest.Invoke();
+                this.MenuReadingFromDataRequest.Invoke(this.PlNsData);
                 break;
         }
     }
@@ -243,9 +250,9 @@ public class SuperDataManager : MonoBehaviour
         //this.LoadingHandler();
         if (SceneManager.GetActiveScene().name != "Cri Testing 2")
         {
-        this.LoadingHandler();
-        this.SaveHandler();
-            
+            this.LoadingHandler();
+            this.SaveHandler();
+
         }
     }
     #endregion
@@ -358,20 +365,14 @@ public class SuperDataManager : MonoBehaviour
     #endregion
 
     #region Testing Save (to be Removed)
-    /*
+
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.J))
+        if (Input.GetKeyDown(KeyCode.F12))
         {
-            this.SaveHandler();
-        }
-
-        if (Input.GetKeyDown(KeyCode.L))
-        {
-            this.LoadingOnDiskData();
+            this.ErasingData();
         }
     }
-    */
     #endregion
 
     #region Edit Mode Called Methods
@@ -438,49 +439,29 @@ public class SuperDataManager : MonoBehaviour
         if (sceneData == null) return;
 
         Transform thisTrans = obj.transform;
+        ObjectsData objToUpdate = null;
 
-        ObjectsData objToUpdate = sceneData.ObjState.Find(x => x.ObjName == obj.name);
 
+        objToUpdate = new ObjectsData();
 
-        if (objToUpdate != null)
+        if (sceneData.ObjState.Find(x => x.ObjName == obj.name) != null)
         {
-            sceneData.ObjState.Remove(objToUpdate);
-
-            objToUpdate = new ObjectsData();
-
-            objToUpdate.ObjName = obj.name;
-
-            objToUpdate.ObjPosX = thisTrans.position.x;
-            objToUpdate.ObjPosY = thisTrans.position.y;
-            objToUpdate.ObjPosZ = thisTrans.position.z;
-
-            objToUpdate.ObjRotX = thisTrans.eulerAngles.x;
-            objToUpdate.ObjRotY = thisTrans.eulerAngles.y;
-            objToUpdate.ObjRotZ = thisTrans.eulerAngles.z;
-
-            objToUpdate.IsActive = obj.activeSelf;
-
-
-            sceneData.ObjState.Add(objToUpdate);
+            obj.name += "." + this.objCounter;
+            this.objCounter++;
         }
-        else
-        {
-            objToUpdate = new ObjectsData();
+        objToUpdate.ObjName = obj.name;
 
-            objToUpdate.ObjName = obj.name;
+        objToUpdate.ObjPosX = thisTrans.position.x;
+        objToUpdate.ObjPosY = thisTrans.position.y;
+        objToUpdate.ObjPosZ = thisTrans.position.z;
 
-            objToUpdate.ObjPosX = thisTrans.position.x;
-            objToUpdate.ObjPosY = thisTrans.position.y;
-            objToUpdate.ObjPosZ = thisTrans.position.z;
+        objToUpdate.ObjRotX = thisTrans.eulerAngles.x;
+        objToUpdate.ObjRotY = thisTrans.eulerAngles.y;
+        objToUpdate.ObjRotZ = thisTrans.eulerAngles.z;
 
-            objToUpdate.ObjRotX = thisTrans.eulerAngles.x;
-            objToUpdate.ObjRotY = thisTrans.eulerAngles.y;
-            objToUpdate.ObjRotZ = thisTrans.eulerAngles.z;
+        objToUpdate.IsActive = obj.activeSelf;
 
-            objToUpdate.IsActive = obj.activeSelf;
-
-            sceneData.ObjState.Add(objToUpdate);
-        }
+        sceneData.ObjState.Add(objToUpdate);
     }
 
     public void UpdatingButState(GameObject puzzleType)

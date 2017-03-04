@@ -1,22 +1,35 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+using UnityEditor;
+
 using UnityEngine.SceneManagement;
 
+//[ExecuteInEditMode]
 public class SuperObjectUpdate : MonoBehaviour
 {
     private Transform memoryTarget;
 
-    #region Edit Mode Methods
 
-    public void OnValidate()
+    public bool RepoSaved;
+
+    #region Edit Mode Methods
+    /*
+    public void Update()
     {
-        //GameObject.FindGameObjectWithTag("GameController").GetComponent<SuperDataManager>().UpdatingObjState(this.gameObject);
+        if (!this.RepoSaved)
+        {
+            GameObject.FindGameObjectWithTag("GameController").GetComponent<SuperDataManager>().UpdatingObjState(this.gameObject);
+            this.RepoSaved = true;
+        }
     }
+    */
     #endregion
 
     private void Awake()
     {
+        //this.RepoSaved = false;
+
         var sdmTempLink = GameObject.FindGameObjectWithTag("GameController").GetComponent<SuperDataManager>();
 
         sdmTempLink.RequestLocalUpdateToRepo.AddListener(this.SavingCurrentState);
@@ -72,16 +85,14 @@ public class SuperObjectUpdate : MonoBehaviour
         }
         else
         {
-            Debug.Log(this.gameObject.name + " not present in Repo");
+            Debug.Log(this.gameObject.name + " not present in Repo, saving problem");
         }
-
-
     }
 
     private void LoadingCurrentState()
     {
         var currentSceneData =
-    GameObject.FindGameObjectWithTag("GameController")
+        GameObject.FindGameObjectWithTag("GameController")
         .GetComponent<SuperDataManager>()
         .EnvSensData.Find(x => x.GpSceneName == SceneManager.GetActiveScene().name);
 
@@ -97,7 +108,7 @@ public class SuperObjectUpdate : MonoBehaviour
         }
         else
         {
-            Debug.Log(this.gameObject.name + " not present in Repo");
+            Debug.Log(this.gameObject.name + " not present in Repo, loading problem");
         }
     }
 }

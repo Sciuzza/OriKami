@@ -50,7 +50,7 @@ public class ButtonUpdateState : MonoBehaviour {
         }
         else
         {
-            Debug.Log(this.gameObject.name + " not present in Temp Repo");
+           // Debug.Log(this.gameObject.name + " not present in Temp Repo");
         }
     }
 
