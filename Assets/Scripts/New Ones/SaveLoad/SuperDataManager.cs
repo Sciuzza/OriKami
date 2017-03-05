@@ -399,6 +399,14 @@ public class SuperDataManager : MonoBehaviour
         {
             this.ErasingData();
         }
+        if (Input.GetKeyDown(KeyCode.F11))
+        {
+            this.LoadingHandler();
+        }
+        if (Input.GetKeyDown(KeyCode.F10))
+        {
+            this.SaveHandler();
+        }
     }
     #endregion
 
