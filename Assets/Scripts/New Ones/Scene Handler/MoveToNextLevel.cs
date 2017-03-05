@@ -10,7 +10,7 @@ public class MoveToNextLevel : MonoBehaviour
 
 
     public string SceneName;
-    public Vector3 Position;
+    public Transform posTransf;
 
     void OnTriggerEnter(Collider other)
     {
@@ -18,7 +18,7 @@ public class MoveToNextLevel : MonoBehaviour
         {
 
             Debug.Log("Sono dentro");
-            this.RegisterPlayerPosRequest.Invoke(this.Position);
+            this.RegisterPlayerPosRequest.Invoke(this.posTransf.position);
             this.SceneChangeRequest.Invoke(this.SceneName);
             
 
