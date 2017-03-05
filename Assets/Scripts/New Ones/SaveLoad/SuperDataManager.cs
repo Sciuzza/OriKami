@@ -262,7 +262,7 @@ public class SuperDataManager : MonoBehaviour
         if (SceneManager.GetActiveScene().name != "Cri Testing 2")
         {
             this.LoadingHandler();
-           // this.SaveHandler();
+            // this.SaveHandler();
 
         }
     }
@@ -437,9 +437,9 @@ public class SuperDataManager : MonoBehaviour
 
         Transform plTrans = player.transform;
 
-        sceneData.PlState.PlayerPosX = plTrans.position.x;
-        sceneData.PlState.PlayerPosY = plTrans.position.y;
-        sceneData.PlState.PlayerPosZ = plTrans.position.z;
+        sceneData.PlState.PlayerPosX = plTrans.localPosition.x;
+        sceneData.PlState.PlayerPosY = plTrans.localPosition.y;
+        sceneData.PlState.PlayerPosZ = plTrans.localPosition.z;
 
         sceneData.PlState.PlayerRotX = plTrans.eulerAngles.x;
         sceneData.PlState.PlayerRotY = plTrans.eulerAngles.y;
@@ -478,25 +478,43 @@ public class SuperDataManager : MonoBehaviour
 
 
         objToUpdate = new ObjectsData();
-
+        /*
         if (sceneData.ObjState.Find(x => x.ObjName == obj.name) != null)
         {
             obj.name += "." + this.objCounter;
             this.objCounter++;
         }
-        objToUpdate.ObjName = obj.name;
+        */
 
-        objToUpdate.ObjPosX = thisTrans.position.x;
-        objToUpdate.ObjPosY = thisTrans.position.y;
-        objToUpdate.ObjPosZ = thisTrans.position.z;
+        var tempList = sceneData.ObjState.FindAll(x => x.ObjName == obj.name);
 
-        objToUpdate.ObjRotX = thisTrans.eulerAngles.x;
-        objToUpdate.ObjRotY = thisTrans.eulerAngles.y;
-        objToUpdate.ObjRotZ = thisTrans.eulerAngles.z;
+        if (tempList.Count >= 1)
+        {
+            if (tempList.Count >= 2)
+            {
+             Debug.Log(obj.name + " has a same name, not initialized, index = " + sceneData.ObjState.FindIndex(x => x.ObjName == obj.name));
+             Debug.Log(obj.name);
+             Debug.Log(sceneData.ObjState.Find(x => x.ObjName == obj.name).ObjName);
+                
+            }
+        }
+        else
+        {
+            objToUpdate.ObjName = obj.name;
 
-        objToUpdate.IsActive = obj.activeSelf;
+            objToUpdate.ObjPosX = thisTrans.localPosition.x;
+            objToUpdate.ObjPosY = thisTrans.localPosition.y;
+            objToUpdate.ObjPosZ = thisTrans.localPosition.z;
 
-        sceneData.ObjState.Add(objToUpdate);
+            objToUpdate.ObjRotX = thisTrans.eulerAngles.x;
+            objToUpdate.ObjRotY = thisTrans.eulerAngles.y;
+            objToUpdate.ObjRotZ = thisTrans.eulerAngles.z;
+
+            objToUpdate.IsActive = obj.activeSelf;
+
+            sceneData.ObjState.Add(objToUpdate);
+            
+        }
     }
 
     public void UpdatingButState(GameObject puzzleType)
@@ -508,28 +526,41 @@ public class SuperDataManager : MonoBehaviour
         ButtonsData newButton = null;
 
         newButton = new ButtonsData();
-        /*
-        if (sceneData.ButState.Find(x => x.ButtonName == puzzleType.name) != null)
+
+        var tempList = sceneData.ButState.FindAll(x => x.ButtonName == puzzleType.name);
+
+        if (tempList.Count >= 1)
         {
-            puzzleType.name += "." + this.butCounter;
-            this.butCounter++;
+            if (tempList.Count >= 2)
+            {
+                
+            Debug.Log(
+                puzzleType.name + " has a same name, not initialized, index = "
+                + sceneData.ObjState.FindIndex(x => x.ObjName == puzzleType.name));
+            Debug.Log(puzzleType.name);
+            Debug.Log(sceneData.ObjState.Find(x => x.ObjName == puzzleType.name).ObjName);
+            }
+
         }
-
-    */
-        newButton.ButtonName = puzzleType.name;
-
-        var puzzleScripts = new List<Puzzles>();
-
-        puzzleScripts.AddRange(puzzleType.GetComponents<Puzzles>());
-
-        newButton.IsDisabled = new List<bool>();
-
-        foreach (var puzzle in puzzleScripts)
+        else
         {
-            newButton.IsDisabled.Add(puzzle.keyHit);
-        }
 
-        sceneData.ButState.Add(newButton);
+
+            newButton.ButtonName = puzzleType.name;
+
+            var puzzleScripts = new List<Puzzles>();
+
+            puzzleScripts.AddRange(puzzleType.GetComponents<Puzzles>());
+
+            newButton.IsDisabled = new List<bool>();
+
+            foreach (var puzzle in puzzleScripts)
+            {
+                newButton.IsDisabled.Add(puzzle.keyHit);
+            }
+
+            sceneData.ButState.Add(newButton);
+        }
     }
 
     private EnvDatas CheckingSceneBelonging()
@@ -575,4 +606,118 @@ public class SuperDataManager : MonoBehaviour
         }
     }
     #endregion
+
+    /*
+ 
+    public void OnValidate()
+    {
+
+        var ObjsUpdate = GameObject.FindObjectsOfType<ObjectUpdate>();
+        var SuObjsUpdate = GameObject.FindObjectsOfType<SuperObjectUpdate>();
+
+        for (var index = 0; index < ObjsUpdate.Length; index++)
+        {
+
+            var objHasCopy = false;
+
+            for (int j = 0; j < ObjsUpdate.Length && !objHasCopy; j++)
+            {
+                if (index != j && ObjsUpdate[index].name == ObjsUpdate[j].name)
+                {
+                    Debug.Log(ObjsUpdate[index] + " has a copy");
+                    objHasCopy = true;
+                }
+            }
+
+            for (int j = 0; j < SuObjsUpdate.Length && !objHasCopy; j++)
+            {
+                if (ObjsUpdate[index].name == SuObjsUpdate[j].name)
+                {
+                    Debug.Log(ObjsUpdate[index] + " has a copy");
+                    objHasCopy = true;
+                }
+            }
+
+            if (!objHasCopy)
+                ObjsUpdate[index].GetComponent<ObjectUpdate>().OnValidateCustom();
+        }
+
+
+        for (var index = 0; index < SuObjsUpdate.Length; index++)
+        {
+           var suHasCopy = false;
+
+            for (int j = 0; j < ObjsUpdate.Length && !suHasCopy; j++)
+            {
+                if (SuObjsUpdate[index].name == ObjsUpdate[j].name)
+                {
+                    Debug.Log(SuObjsUpdate[index] + " has a copy");
+                    suHasCopy = true;
+                }
+            }
+
+            for (int j = 0; j < SuObjsUpdate.Length && !suHasCopy; j++)
+            {
+                if (index != j && SuObjsUpdate[index].name == SuObjsUpdate[j].name)
+                {
+                    Debug.Log(SuObjsUpdate[index] + " has a copy");
+                    suHasCopy = true;
+                }
+            }
+
+             if (!suHasCopy)
+                SuObjsUpdate[index].GetComponent<SuperObjectUpdate>().OnValidateCustom();
+        }
+
+        Debug.Log(ObjsUpdate.Length + SuObjsUpdate.Length);
+        Debug.Log(SuObjsUpdate.Length);
+
+        var ButsUpdate = GameObject.FindObjectsOfType<ButtonUpdateState>();
+
+        for (var index = 0; index < ButsUpdate.Length; index++)
+        {
+            var butHasCopy = false;
+
+            for (int j = 0; j < ButsUpdate.Length && !butHasCopy; j++)
+            {
+                if (index != j && ButsUpdate[index].name == ButsUpdate[j].name)
+                {
+                    Debug.Log(ButsUpdate[index] + " has a copy");
+                    butHasCopy = true;
+                }
+            }
+
+            if (!butHasCopy)
+                ButsUpdate[index].GetComponent<ButtonUpdateState>().OnValidateCustom();
+        }
+
+        Debug.Log(ButsUpdate.Length);
+
+        this.UpdatingInSuObjs();
+
+    }
+
+
+    private void UpdatingInSuObjs()
+    {
+        InObjRepo inObjRepo = GameObject.FindGameObjectWithTag("InObjRepo").GetComponent<InObjRepo>();
+
+        foreach (var obj in inObjRepo.SObjInactive)
+        {
+            obj.OnValidateCustom();
+        }
+        
+        foreach (var obj in inObjRepo.ObjInactive)
+        {
+            obj.OnValidateCustom();
+        }
+
+        foreach (var obj in inObjRepo.ButInactive)
+        {
+            obj.OnValidateCustom();
+        }
+        
+    }
+    */
+
 }

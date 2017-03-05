@@ -6,29 +6,25 @@ using UnityEngine.SceneManagement;
 
 public class ObjectUpdate : MonoBehaviour
 {
-    /*
-    #region Edit Mode Methods
-    public bool RepoSaved;
-    
-    public void OnValidate()
-    { 
-        
-        if (!this.RepoSaved)
-        {
-            GameObject.FindGameObjectWithTag("GameController").GetComponent<SuperDataManager>().UpdatingObjState(this.gameObject);
 
-        }
-        
-        if (!this.gameObject.activeSelf && !this.RepoSaved)
-        {
+    #region Edit Mode Methods
+    /*
+    public void OnValidate()
+    {
+        var tempList = GameObject.FindGameObjectWithTag("InObjRepo").GetComponent<InObjRepo>().ObjInactive;
+
+        if (!this.gameObject.activeSelf && !tempList.Contains(this.gameObject.GetComponent<ObjectUpdate>()))
             GameObject.FindGameObjectWithTag("InObjRepo").GetComponent<InObjRepo>().ObjInactive.Add(this.gameObject.GetComponent<ObjectUpdate>());
-        }
-        
-        this.RepoSaved = true; 
     }
-    
-    #endregion
+
+
+    public void OnValidateCustom()
+    {
+        GameObject.FindGameObjectWithTag("GameController").GetComponent<SuperDataManager>().UpdatingObjState(this.gameObject);
+    }
     */
+    #endregion
+
     private void Awake()
     {
         var sdmTempLink = GameObject.FindGameObjectWithTag("GameController").GetComponent<SuperDataManager>();
@@ -59,15 +55,15 @@ public class ObjectUpdate : MonoBehaviour
 
         if (objToUpdate != null)
         {
-            objToUpdate.ObjPosX = thisTrans.position.x;
-            objToUpdate.ObjPosY = thisTrans.position.y;
-            objToUpdate.ObjPosZ = thisTrans.position.z;
+            objToUpdate.ObjPosX = thisTrans.localPosition.x;
+            objToUpdate.ObjPosY = thisTrans.localPosition.y;
+            objToUpdate.ObjPosZ = thisTrans.localPosition.z;
 
             objToUpdate.ObjRotX = thisTrans.eulerAngles.x;
             objToUpdate.ObjRotY = thisTrans.eulerAngles.y;
             objToUpdate.ObjRotZ = thisTrans.eulerAngles.z;
 
-            objToUpdate.IsActive = this.gameObject.activeInHierarchy;
+            objToUpdate.IsActive = this.gameObject.activeSelf;
 
         }
         else
@@ -90,7 +86,7 @@ public class ObjectUpdate : MonoBehaviour
 
         if (objToUpdate != null)
         {
-            this.gameObject.transform.position = new Vector3(objToUpdate.ObjPosX, objToUpdate.ObjPosY, objToUpdate.ObjPosZ);
+            this.gameObject.transform.localPosition = new Vector3(objToUpdate.ObjPosX, objToUpdate.ObjPosY, objToUpdate.ObjPosZ);
             this.gameObject.transform.rotation = Quaternion.Euler(objToUpdate.ObjRotX, objToUpdate.ObjRotY, objToUpdate.ObjRotZ);
 
             this.gameObject.SetActive(objToUpdate.IsActive);

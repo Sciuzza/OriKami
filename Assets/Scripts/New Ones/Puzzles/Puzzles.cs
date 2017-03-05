@@ -260,8 +260,7 @@ public class Puzzles : MonoBehaviour
 
             yield return null;
         }
-
-
+        this.soundTrigger = true;
     }
 
     IEnumerator RotateMe(Vector3 byAngles, float inTime)
@@ -303,6 +302,7 @@ public class Puzzles : MonoBehaviour
             {
                 disabledObject.gameObject.SetActive(false);
                 //disableObject = false;
+                this.keyHit = true;
             }
 
         }
@@ -312,6 +312,7 @@ public class Puzzles : MonoBehaviour
             {
                 disabledObject.gameObject.SetActive(false);
                 //disableObject = false;
+                this.keyHit = true;
             }
         }
 

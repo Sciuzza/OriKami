@@ -6,30 +6,26 @@ using UnityEngine.SceneManagement;
 
 public class ButtonUpdateState : MonoBehaviour
 {
-    /*
+
     #region Edit Mode Methods
-    public bool RepoSaved;
-    
+
+    /*
     public void OnValidate()
     {
-        
-        if (!this.RepoSaved)
-        {
-            GameObject.FindGameObjectWithTag("GameController").GetComponent<SuperDataManager>().UpdatingButState(this.gameObject);
-           
-        }
-            
-        if (!this.gameObject.activeSelf && !this.RepoSaved)
-        {
-            GameObject.FindGameObjectWithTag("InObjRepo").GetComponent<InObjRepo>().ButInactive.Add(this.gameObject.GetComponent<ButtonUpdateState>());
-        }
+        var tempList = GameObject.FindGameObjectWithTag("InObjRepo").GetComponent<InObjRepo>().ButInactive;
 
-        this.RepoSaved = true;
-        
+        if (!this.gameObject.activeSelf && !tempList.Contains(this.gameObject.GetComponent<ButtonUpdateState>()))
+            GameObject.FindGameObjectWithTag("InObjRepo").GetComponent<InObjRepo>().ButInactive.Add(this.gameObject.GetComponent<ButtonUpdateState>());
     }
-    
-    #endregion
+
+
+    public void OnValidateCustom()
+    {
+        GameObject.FindGameObjectWithTag("GameController").GetComponent<SuperDataManager>().UpdatingButState(this.gameObject);
+    }
     */
+    #endregion
+
 
     private void Awake()
     {
@@ -75,7 +71,7 @@ public class ButtonUpdateState : MonoBehaviour
         }
         else
         {
-           Debug.Log(this.gameObject.name + " BUTTON not present in Temp Repo, saving problem");
+            Debug.Log(this.gameObject.name + " BUTTON not present in Temp Repo, saving problem");
         }
     }
 
@@ -97,7 +93,7 @@ public class ButtonUpdateState : MonoBehaviour
                 puzzleScripts[index].keyHit = butToUpdate.IsDisabled[index];
             }
         }
-       
+
         else
         {
             Debug.Log(this.gameObject.name + " BUTTON not present in Temp Repo, loading problem");

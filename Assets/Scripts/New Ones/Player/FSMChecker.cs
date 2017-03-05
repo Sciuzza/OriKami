@@ -2191,9 +2191,9 @@ public class FSMChecker : MonoBehaviour
 
         var plTrans = this.gameObject.transform;
 
-        dataToUpdate.PlayerPosX = plTrans.position.x;
-        dataToUpdate.PlayerPosY = plTrans.position.y;
-        dataToUpdate.PlayerPosZ = plTrans.position.z;
+        dataToUpdate.PlayerPosX = plTrans.localPosition.x;
+        dataToUpdate.PlayerPosY = plTrans.localPosition.y;
+        dataToUpdate.PlayerPosZ = plTrans.localPosition.z;
 
         dataToUpdate.PlayerRotX = plTrans.eulerAngles.x;
         dataToUpdate.PlayerRotY = plTrans.eulerAngles.y;
@@ -2237,7 +2237,7 @@ public class FSMChecker : MonoBehaviour
 
         var plTrans = this.gameObject.transform;
 
-        plTrans.position = new Vector3(dataToUpdate.PlayerPosX, dataToUpdate.PlayerPosY, dataToUpdate.PlayerPosZ);
+        plTrans.localPosition = new Vector3(dataToUpdate.PlayerPosX, dataToUpdate.PlayerPosY, dataToUpdate.PlayerPosZ);
         plTrans.rotation = Quaternion.Euler(dataToUpdate.PlayerRotX, dataToUpdate.PlayerRotY, dataToUpdate.PlayerRotZ);
 
         var plNsDataToUpdate =

@@ -469,7 +469,6 @@ public class StoryLineInstance : MonoBehaviour
     public event_abi TransfRequest;
     public event_int AniRequest;
     public event_string UiDialogueWILRequest;
-    public event_transform KoiNewTransfRequest;
     public UnityEvent SaveRequest;
     #endregion
 
@@ -1910,7 +1909,8 @@ public class StoryLineInstance : MonoBehaviour
         {
             if (effectToPlay.SpecialKoi)
             {
-                this.KoiNewTransfRequest.Invoke(effectToPlay.GbTarget.transform);
+                if (effectToPlay.GbToMove.GetComponent<SuperObjectUpdate>() != null)
+                    effectToPlay.GbToMove.GetComponent<SuperObjectUpdate>().UpdatingLocalTransform(effectToPlay.GbTarget.transform);
                 effectToPlay.End = true;
                 this.effectCounter++;
                 GameController.Debugging("Effect Counter", this.effectCounter);
