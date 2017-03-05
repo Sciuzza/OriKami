@@ -12,6 +12,7 @@ public class ObjectUpdate : MonoBehaviour
     
     public void OnValidate()
     { 
+        
         if (!this.RepoSaved)
         {
             GameObject.FindGameObjectWithTag("GameController").GetComponent<SuperDataManager>().UpdatingObjState(this.gameObject);

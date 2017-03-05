@@ -8,8 +8,6 @@ using UnityEngine.SceneManagement;
 public class SuperObjectUpdate : MonoBehaviour
 {
     private Transform memoryTarget;
-
-
     /*
     #region Edit Mode Methods
     public bool RepoSaved;
@@ -21,6 +19,7 @@ public class SuperObjectUpdate : MonoBehaviour
         {
             GameObject.FindGameObjectWithTag("GameController").GetComponent<SuperDataManager>().UpdatingObjState(this.gameObject);
         }
+        
         
         if (!this.gameObject.activeSelf && !this.RepoSaved)
         {
