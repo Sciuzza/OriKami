@@ -1,7 +1,7 @@
 Koi/Right/Koi_Standard/What... What happened?
 Iki/Left/Iki_Standard/Hi, my dear friend.
-Koi/Right/Koi_Standard/Iki?*Can you speak!?
+Koi/Right/Koi_Astonished/Iki?*Can you speak!?
 Iki/Left/Iki_Standard/Now, I do.
-Koi/Right/Koi_Standard/What’s... Going on?*All I can remember is is a huge light... And a crane...
+Koi/Right/Koi_Standard/What's... Going on?*All I can remember is is a huge light... And a crane...
 Hibi/Left/Hibi_Standard/Greetings, carp.
-Koi/Right/Koi_Astonished/And why the hell is he here!?*Just tell me what’s up!
+Koi/Right/Koi_Astonished/And why the hell is she here!?*Just tell me what's up!
