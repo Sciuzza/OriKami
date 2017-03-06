@@ -1020,54 +1020,86 @@ public class StoryLineInstance : MonoBehaviour
     {
         foreach (var storyName in this.storySelected.StoryActiveOnActivation)
         {
-            var found = false;
+
 
             SingleStory storyToFind = this.SearchingStoryInside(storyName);
 
             if (storyToFind != null)
             {
                 storyToFind.Active = true;
-                found = true;
+
             }
             else
             {
                 Debug.Log(storyName + " Not Found inside this Storyline");
             }
 
-            if (found && this.questRepo.StoryLineRepo.Find(x => x.StoryLineName == this.CurrentStoryLine.StoryLineName)
-                      .Stories.Find(x => x.StoryName == storyName) != null)
+            var index1 = 0;
+            var index0 = 0;
+            var found = false;
+
+            for (var index = 0; index < this.questRepo.StoryLineRepo.Count; index++)
             {
-                this.questRepo.StoryLineRepo.Find(x => x.StoryLineName == this.CurrentStoryLine.StoryLineName)
-                    .Stories.Find(x => x.StoryName == storyName)
-                    .Active = true;
+                var storyLine = this.questRepo.StoryLineRepo[index];
+                if (storyLine.Stories.Find(x => x.StoryName == storyName) != null)
+                {
+                    found = true;
+                    index1 = storyLine.Stories.FindIndex(x => x.StoryName == storyName);
+                    index0 = index;
+                    break;
+                }
+            }
+
+            if (found)
+            {
+                this.questRepo.StoryLineRepo[index0].Stories[index1].Active = true;
             }
             else
             {
                 Debug.Log(storyName + " Not Found inside Repo");
+
             }
         }
 
         foreach (var storyName in this.storySelected.StoryCompleteOnActivation)
         {
-            var found = false;
+
             SingleStory storyToFind = this.SearchingStoryInside(storyName);
 
             if (storyToFind != null)
             {
                 storyToFind.Completed = true;
-                found = true;
+
             }
             else
             {
                 Debug.Log(storyName + " Not Found inside this Storyline");
             }
 
-            if (found && this.questRepo.StoryLineRepo.Find(x => x.StoryLineName == this.CurrentStoryLine.StoryLineName)
-                              .Stories.Find(x => x.StoryName == storyName) != null)
+            var index1 = 0;
+            var index0 = 0;
+            var found = false;
+
+            for (var index = 0; index < this.questRepo.StoryLineRepo.Count; index++)
             {
-                this.questRepo.StoryLineRepo.Find(x => x.StoryLineName == this.CurrentStoryLine.StoryLineName)
-                    .Stories.Find(x => x.StoryName == storyName)
-                    .Completed = true;
+                var storyLine = this.questRepo.StoryLineRepo[index];
+                if (storyLine.Stories.Find(x => x.StoryName == storyName) != null)
+                {
+                    found = true;
+                    index1 = storyLine.Stories.FindIndex(x => x.StoryName == storyName);
+                    index0 = index;
+                    break;
+                }
+            }
+
+            if (found)
+            {
+                this.questRepo.StoryLineRepo[index0].Stories[index1].Completed = true;
+            }
+            else
+            {
+                Debug.Log(storyName + " Not Found inside Repo");
+
             }
         }
 
@@ -1090,43 +1122,58 @@ public class StoryLineInstance : MonoBehaviour
     {
         foreach (var storyName in this.storySelected.StoryActiveOnCompletion)
         {
-            var found = false;
+
 
             SingleStory storyToFind = this.SearchingStoryInside(storyName);
 
             if (storyToFind != null)
             {
                 storyToFind.Active = true;
-                found = true;
+
             }
             else
             {
                 Debug.Log(storyName + " Not Found inside this Storyline");
             }
 
-            if (found && this.questRepo.StoryLineRepo.Find(x => x.StoryLineName == this.CurrentStoryLine.StoryLineName)
-                    .Stories.Find(x => x.StoryName == storyName) != null)
+            var index1 = 0;
+            var index0 = 0;
+            var found = false;
+
+            for (var index = 0; index < this.questRepo.StoryLineRepo.Count; index++)
             {
-                this.questRepo.StoryLineRepo.Find(x => x.StoryLineName == this.CurrentStoryLine.StoryLineName)
-                    .Stories.Find(x => x.StoryName == storyName)
-                    .Active = true;
+                var storyLine = this.questRepo.StoryLineRepo[index];
+                if (storyLine.Stories.Find(x => x.StoryName == storyName) != null)
+                {
+                    found = true;
+                    index1 = storyLine.Stories.FindIndex(x => x.StoryName == storyName);
+                    index0 = index;
+                    break;
+                }
+            }
+
+            if (found)
+            {
+                this.questRepo.StoryLineRepo[index0].Stories[index1].Active = true;
             }
             else
             {
                 Debug.Log(storyName + " Not Found inside Repo");
+
             }
+
         }
 
         foreach (var storyName in this.storySelected.StoryCompleteOnCompletion)
         {
-            var found = false;
+
 
             SingleStory storyToFind = this.SearchingStoryInside(storyName);
 
             if (storyToFind != null)
             {
                 storyToFind.Completed = true;
-                found = true;
+
             }
             else
             {
@@ -1134,16 +1181,30 @@ public class StoryLineInstance : MonoBehaviour
             }
 
 
-            if (found && this.questRepo.StoryLineRepo.Find(x => x.StoryLineName == this.CurrentStoryLine.StoryLineName)
-                    .Stories.Find(x => x.StoryName == storyName) != null)
+            var index1 = 0;
+            var index0 = 0;
+            var found = false;
+
+            for (var index = 0; index < this.questRepo.StoryLineRepo.Count; index++)
             {
-                this.questRepo.StoryLineRepo.Find(x => x.StoryLineName == this.CurrentStoryLine.StoryLineName)
-                    .Stories.Find(x => x.StoryName == storyName)
-                    .Completed = true;
+                var storyLine = this.questRepo.StoryLineRepo[index];
+                if (storyLine.Stories.Find(x => x.StoryName == storyName) != null)
+                {
+                    found = true;
+                    index1 = storyLine.Stories.FindIndex(x => x.StoryName == storyName);
+                    index0 = index;
+                    break;
+                }
+            }
+
+            if (found)
+            {
+                this.questRepo.StoryLineRepo[index0].Stories[index1].Completed = true;
             }
             else
             {
                 Debug.Log(storyName + " Not Found inside Repo");
+
             }
         }
 
@@ -3067,8 +3128,8 @@ public class StoryLineInstance : MonoBehaviour
     {
         if (effectToPlay.GbRef.GetComponent<ParticleSystem>() != null)
         {
-          effectToPlay.GbRef.GetComponent<ParticleSystem>().Play();
-            
+            effectToPlay.GbRef.GetComponent<ParticleSystem>().Play();
+
         }
         else
         {
@@ -3148,7 +3209,7 @@ public class StoryLineInstance : MonoBehaviour
         else
         {
             float intConvFactor = intOriginal / pointLightActiEffect.FadingOutTime;
-            
+
 
             while (lightTempLink.intensity > 0)
             {
@@ -3233,8 +3294,8 @@ public class StoryLineInstance : MonoBehaviour
 
     public void OnValidate()
     {
-          //GameObject.FindGameObjectWithTag("GameController").GetComponent<SuperDataManager>().AddingStoryLineEditMode(this.CurrentStoryLine);
-          //GameObject.FindGameObjectWithTag("GameController").GetComponent<QuestsManager>().AddToRepository(this.CurrentStoryLine);
+        //GameObject.FindGameObjectWithTag("GameController").GetComponent<SuperDataManager>().AddingStoryLineEditMode(this.CurrentStoryLine);
+        //GameObject.FindGameObjectWithTag("GameController").GetComponent<QuestsManager>().AddToRepository(this.CurrentStoryLine);
     }
 
     #endregion
