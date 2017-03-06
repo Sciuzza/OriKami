@@ -10,6 +10,18 @@ public class PointerHandler : MonoBehaviour, IPointerEnterHandler, ISelectHandle
 
     public event_Gb ActivationRequest, DeActivationRequest;
 
+    private int personalFontSize;
+
+    private void Awake()
+    {
+        switch (this.gameObject.tag)
+        {
+            case "But1":
+                this.personalFontSize = this.GetComponentInChildren<Text>().fontSize;
+                break;
+        }
+    }
+
     public void OnPointerEnter(PointerEventData eventData)
     {
         EventSystem.current.SetSelectedGameObject(this.gameObject);
@@ -22,7 +34,7 @@ public class PointerHandler : MonoBehaviour, IPointerEnterHandler, ISelectHandle
         switch (this.gameObject.tag)
         {
             case "But1":
-                this.GetComponentInChildren<Text>().fontSize = 30;
+                this.GetComponentInChildren<Text>().fontSize = (int)(this.personalFontSize * 1.2f);
                 break;
             case "But2":
                 this.ActivationRequest.Invoke(this.GbRef);
@@ -38,7 +50,7 @@ public class PointerHandler : MonoBehaviour, IPointerEnterHandler, ISelectHandle
         switch (this.gameObject.tag)
         {
             case "But1":
-                this.GetComponentInChildren<Text>().fontSize = 25;
+                this.GetComponentInChildren<Text>().fontSize = this.personalFontSize;
                 break;
             case "But2":
                 this.DeActivationRequest.Invoke(this.GbRef);

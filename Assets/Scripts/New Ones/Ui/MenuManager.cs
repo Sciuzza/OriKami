@@ -283,14 +283,33 @@ public class MenuManager : MonoBehaviour
 
     private void ReadingData(PlayerNsData dataToRead)
     {
+        var journalEnabled = false;
+
         if (!dataToRead.Legend1Unlocked) this.mmRepo.Legend1B.interactable = false;
+        else journalEnabled = true;
+
         if (!dataToRead.Legend2Unlocked) this.mmRepo.Legend2B.interactable = false;
+        else journalEnabled = true;
+
         if (!dataToRead.Legend3Unlocked) this.mmRepo.Legend3B.interactable = false;
+        else journalEnabled = true;
+
         if (!dataToRead.Legend4Unlocked) this.mmRepo.Legend4B.interactable = false;
+        else journalEnabled = true;
+
         if (!dataToRead.Legend5Unlocked) this.mmRepo.Legend5B.interactable = false;
+        else journalEnabled = true;
+
         if (!dataToRead.Legend6Unlocked) this.mmRepo.Legend6B.interactable = false;
+        else journalEnabled = true;
+
         if (!dataToRead.Legend7Unlocked) this.mmRepo.Legend7B.interactable = false;
+        else journalEnabled = true;
+
         if (!dataToRead.Legend8Unlocked) this.mmRepo.Legend8B.interactable = false;
+        else journalEnabled = true;
+
+        if (!journalEnabled) this.mmRepo.LegendsB.interactable = false;
     }
 
     private void DisablingContinue()
