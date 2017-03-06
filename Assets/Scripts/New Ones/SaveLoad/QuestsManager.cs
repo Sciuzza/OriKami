@@ -25,8 +25,6 @@ public class QuestsManager : MonoBehaviour
         if (storyLineTempRepo == null) return;
 
 
-        Debug.Log(this.StoryLineRepo.Find(x => x.StoryLineName == "Route1")
-            .Stories.FindIndex(x => x.StoryName == "Dialogo_Jiraiya"));
 
         /*
         foreach (var t in storyLineTempRepo)

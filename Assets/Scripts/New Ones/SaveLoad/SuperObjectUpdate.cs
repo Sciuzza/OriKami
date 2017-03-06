@@ -16,7 +16,7 @@ public class SuperObjectUpdate : MonoBehaviour
 
     public void OnValidate()
     {
-        var tempList = GameObject.FindGameObjectWithTag("InObjRepo").GetComponent<InObjRepo>().SObjInactive;
+         var tempList = GameObject.FindGameObjectWithTag("InObjRepo").GetComponent<InObjRepo>().SObjInactive;
 
         if (!this.gameObject.activeSelf && !tempList.Contains(this.gameObject.GetComponent<SuperObjectUpdate>()))
           GameObject.FindGameObjectWithTag("InObjRepo").GetComponent<InObjRepo>().SObjInactive.Add(this.gameObject.GetComponent<SuperObjectUpdate>());
