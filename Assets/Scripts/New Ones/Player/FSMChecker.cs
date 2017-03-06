@@ -2159,7 +2159,7 @@ public class FSMChecker : MonoBehaviour
                 break;
         }
 
-        Destroy(collTaken);
+        collTaken.SetActive(false);
     }
 
     private void WallDestructibleHandler(GameObject wall)
@@ -2172,7 +2172,7 @@ public class FSMChecker : MonoBehaviour
 
             if (wall != null)
             {
-                Destroy(wall);
+                wall.SetActive(false);
                 this.DRocks++;
                 Debug.Log(wall.name);
             }

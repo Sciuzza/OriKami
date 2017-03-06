@@ -1074,7 +1074,11 @@ public class StoryLineInstance : MonoBehaviour
         {
             SingleStory storyToFind = this.SearchingStoryInside(storyName);
 
-            if (storyToFind != null) storyToFind.Active = true;
+            if (storyToFind != null)
+            {
+                storyToFind.Active = true;
+                Debug.Log(storyToFind.StoryName + " Activated in Ciro Repo");
+            }
             else
             {
                 Debug.Log(storyName + " Not Found inside this Storyline");
@@ -1082,7 +1086,11 @@ public class StoryLineInstance : MonoBehaviour
 
             SingleStory storyToFindInRepo = this.SearchingStoryInRepo(storyName);
 
-            if (storyToFindInRepo != null) storyToFindInRepo.Active = true;
+            if (storyToFindInRepo != null)
+            {
+                storyToFindInRepo.Active = true;
+                Debug.Log(storyToFind.StoryName + " Activated in Quest Repo");
+            }
             else
             {
                 Debug.Log(storyName + " Not Found inside Repo");
@@ -1129,6 +1137,8 @@ public class StoryLineInstance : MonoBehaviour
                 Debug.Log(this.storySelected.StoryName + " Not Found inside Repo");
             }
         }
+
+        Debug.Log(this.storySelected.StoryName);
     }
 
     private SingleStory SearchingStoryInside(string storyName)

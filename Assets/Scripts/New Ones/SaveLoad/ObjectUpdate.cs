@@ -90,6 +90,9 @@ public class ObjectUpdate : MonoBehaviour
             this.gameObject.transform.rotation = Quaternion.Euler(objToUpdate.ObjRotX, objToUpdate.ObjRotY, objToUpdate.ObjRotZ);
 
             this.gameObject.SetActive(objToUpdate.IsActive);
+
+            if (objToUpdate.ObjName == "Oggetto41")
+            Debug.Log(this.gameObject.name + " " + currentSceneData.ObjState.FindIndex(x => x.ObjName == this.gameObject.name));
         }
         else
         {
