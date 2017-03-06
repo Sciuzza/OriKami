@@ -437,9 +437,9 @@ public class SuperDataManager : MonoBehaviour
 
         Transform plTrans = player.transform;
 
-        sceneData.PlState.PlayerPosX = plTrans.localPosition.x;
-        sceneData.PlState.PlayerPosY = plTrans.localPosition.y;
-        sceneData.PlState.PlayerPosZ = plTrans.localPosition.z;
+        sceneData.PlState.PlayerPosX = plTrans.position.x;
+        sceneData.PlState.PlayerPosY = plTrans.position.y;
+        sceneData.PlState.PlayerPosZ = plTrans.position.z;
 
         sceneData.PlState.PlayerRotX = plTrans.eulerAngles.x;
         sceneData.PlState.PlayerRotY = plTrans.eulerAngles.y;
@@ -502,9 +502,9 @@ public class SuperDataManager : MonoBehaviour
         {
             objToUpdate.ObjName = obj.name;
 
-            objToUpdate.ObjPosX = thisTrans.localPosition.x;
-            objToUpdate.ObjPosY = thisTrans.localPosition.y;
-            objToUpdate.ObjPosZ = thisTrans.localPosition.z;
+            objToUpdate.ObjPosX = thisTrans.position.x;
+            objToUpdate.ObjPosY = thisTrans.position.y;
+            objToUpdate.ObjPosZ = thisTrans.position.z;
 
             objToUpdate.ObjRotX = thisTrans.eulerAngles.x;
             objToUpdate.ObjRotY = thisTrans.eulerAngles.y;
@@ -607,11 +607,11 @@ public class SuperDataManager : MonoBehaviour
     }
     #endregion
 
-    /*
+    
  
     public void OnValidate()
     {
-
+        var updatePossible = true;
         var ObjsUpdate = GameObject.FindObjectsOfType<ObjectUpdate>();
         var SuObjsUpdate = GameObject.FindObjectsOfType<SuperObjectUpdate>();
 
@@ -626,6 +626,7 @@ public class SuperDataManager : MonoBehaviour
                 {
                     Debug.Log(ObjsUpdate[index] + " has a copy");
                     objHasCopy = true;
+                    updatePossible = false;
                 }
             }
 
@@ -635,6 +636,7 @@ public class SuperDataManager : MonoBehaviour
                 {
                     Debug.Log(ObjsUpdate[index] + " has a copy");
                     objHasCopy = true;
+                    updatePossible = false;
                 }
             }
 
@@ -653,6 +655,7 @@ public class SuperDataManager : MonoBehaviour
                 {
                     Debug.Log(SuObjsUpdate[index] + " has a copy");
                     suHasCopy = true;
+                    updatePossible = false;
                 }
             }
 
@@ -662,6 +665,7 @@ public class SuperDataManager : MonoBehaviour
                 {
                     Debug.Log(SuObjsUpdate[index] + " has a copy");
                     suHasCopy = true;
+                    updatePossible = false;
                 }
             }
 
@@ -684,6 +688,7 @@ public class SuperDataManager : MonoBehaviour
                 {
                     Debug.Log(ButsUpdate[index] + " has a copy");
                     butHasCopy = true;
+                    updatePossible = false;
                 }
             }
 
@@ -693,6 +698,7 @@ public class SuperDataManager : MonoBehaviour
 
         Debug.Log(ButsUpdate.Length);
 
+        if (updatePossible)
         this.UpdatingInSuObjs();
 
     }
@@ -718,6 +724,6 @@ public class SuperDataManager : MonoBehaviour
         }
         
     }
-    */
+    
 
 }

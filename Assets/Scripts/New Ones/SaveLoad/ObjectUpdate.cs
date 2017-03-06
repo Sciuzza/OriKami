@@ -8,7 +8,7 @@ public class ObjectUpdate : MonoBehaviour
 {
 
     #region Edit Mode Methods
-    /*
+    
     public void OnValidate()
     {
         var tempList = GameObject.FindGameObjectWithTag("InObjRepo").GetComponent<InObjRepo>().ObjInactive;
@@ -22,7 +22,7 @@ public class ObjectUpdate : MonoBehaviour
     {
         GameObject.FindGameObjectWithTag("GameController").GetComponent<SuperDataManager>().UpdatingObjState(this.gameObject);
     }
-    */
+    
     #endregion
 
     private void Awake()
@@ -55,9 +55,9 @@ public class ObjectUpdate : MonoBehaviour
 
         if (objToUpdate != null)
         {
-            objToUpdate.ObjPosX = thisTrans.localPosition.x;
-            objToUpdate.ObjPosY = thisTrans.localPosition.y;
-            objToUpdate.ObjPosZ = thisTrans.localPosition.z;
+            objToUpdate.ObjPosX = thisTrans.position.x;
+            objToUpdate.ObjPosY = thisTrans.position.y;
+            objToUpdate.ObjPosZ = thisTrans.position.z;
 
             objToUpdate.ObjRotX = thisTrans.eulerAngles.x;
             objToUpdate.ObjRotY = thisTrans.eulerAngles.y;
@@ -86,7 +86,7 @@ public class ObjectUpdate : MonoBehaviour
 
         if (objToUpdate != null)
         {
-            this.gameObject.transform.localPosition = new Vector3(objToUpdate.ObjPosX, objToUpdate.ObjPosY, objToUpdate.ObjPosZ);
+            this.gameObject.transform.position = new Vector3(objToUpdate.ObjPosX, objToUpdate.ObjPosY, objToUpdate.ObjPosZ);
             this.gameObject.transform.rotation = Quaternion.Euler(objToUpdate.ObjRotX, objToUpdate.ObjRotY, objToUpdate.ObjRotZ);
 
             this.gameObject.SetActive(objToUpdate.IsActive);

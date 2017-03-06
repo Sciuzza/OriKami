@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-using UnityEditor;
+//using UnityEditor;
 
 using UnityEngine.SceneManagement;
 
@@ -12,7 +12,7 @@ public class SuperObjectUpdate : MonoBehaviour
 
 
     #region Edit Mode Methods
-    /*
+    
 
     public void OnValidate()
     {
@@ -27,7 +27,7 @@ public class SuperObjectUpdate : MonoBehaviour
     {
         GameObject.FindGameObjectWithTag("GameController").GetComponent<SuperDataManager>().UpdatingObjState(this.gameObject);
     }
-    */
+    
     #endregion
 
     private void Awake()
@@ -66,29 +66,30 @@ public class SuperObjectUpdate : MonoBehaviour
 
         if (objToUpdate != null && this.memoryTarget != null)
         {
-            objToUpdate.ObjPosX = this.memoryTarget.localPosition.x;
-            objToUpdate.ObjPosY = this.memoryTarget.localPosition.y;
-            objToUpdate.ObjPosZ = this.memoryTarget.localPosition.z;
+            objToUpdate.ObjPosX = this.memoryTarget.position.x;
+            objToUpdate.ObjPosY = this.memoryTarget.position.y;
+            objToUpdate.ObjPosZ = this.memoryTarget.position.z;
 
             objToUpdate.ObjRotX = this.memoryTarget.eulerAngles.x;
             objToUpdate.ObjRotY = this.memoryTarget.eulerAngles.y;
             objToUpdate.ObjRotZ = this.memoryTarget.eulerAngles.z;
 
             objToUpdate.IsActive = this.gameObject.activeSelf;
-
+            Debug.Log("Saved with memory" + " " + objToUpdate.ObjName + " " + objToUpdate.ObjPosX + objToUpdate.ObjPosY + objToUpdate.ObjPosZ);
             this.memoryTarget = null;
         }
         else if (objToUpdate != null && this.memoryTarget == null)
         {
-            objToUpdate.ObjPosX = thisTrans.localPosition.x;
-            objToUpdate.ObjPosY = thisTrans.localPosition.y;
-            objToUpdate.ObjPosZ = thisTrans.localPosition.z;
+            objToUpdate.ObjPosX = thisTrans.position.x;
+            objToUpdate.ObjPosY = thisTrans.position.y;
+            objToUpdate.ObjPosZ = thisTrans.position.z;
 
             objToUpdate.ObjRotX = thisTrans.eulerAngles.x;
             objToUpdate.ObjRotY = thisTrans.eulerAngles.y;
             objToUpdate.ObjRotZ = thisTrans.eulerAngles.z;
 
             objToUpdate.IsActive = this.gameObject.activeSelf;
+            Debug.Log("Saved without memory" + " " + objToUpdate.ObjName + " " + objToUpdate.ObjPosX + objToUpdate.ObjPosY + objToUpdate.ObjPosZ);
         }
         else
         {
@@ -108,7 +109,7 @@ public class SuperObjectUpdate : MonoBehaviour
 
         if (objToUpdate != null)
         {
-            this.gameObject.transform.localPosition = new Vector3(objToUpdate.ObjPosX, objToUpdate.ObjPosY, objToUpdate.ObjPosZ);
+            this.gameObject.transform.position = new Vector3(objToUpdate.ObjPosX, objToUpdate.ObjPosY, objToUpdate.ObjPosZ);
             this.gameObject.transform.rotation = Quaternion.Euler(objToUpdate.ObjRotX, objToUpdate.ObjRotY, objToUpdate.ObjRotZ);
 
             this.gameObject.SetActive(objToUpdate.IsActive);

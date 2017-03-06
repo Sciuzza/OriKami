@@ -231,6 +231,7 @@ public class Puzzles : MonoBehaviour
         {
             currentLerpTime += Time.deltaTime;
 
+            
             if (currentLerpTime >= lerpTime)
             {
                 currentLerpTime = lerpTime;
@@ -238,6 +239,7 @@ public class Puzzles : MonoBehaviour
 
             float leftPerc = currentLerpTime / lerpTime;
             float rightPerc = currentLerpTime / lerpTime;
+            
 
             if (moveUp)
             {
