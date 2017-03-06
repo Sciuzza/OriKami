@@ -8,7 +8,6 @@ public class ButtonUpdateState : MonoBehaviour
 {
 
     #region Edit Mode Methods
-
     /*
     public void OnValidate()
     {
@@ -93,7 +92,6 @@ public class ButtonUpdateState : MonoBehaviour
                 puzzleScripts[index].keyHit = butToUpdate.IsDisabled[index];
             }
         }
-
         else
         {
             Debug.Log(this.gameObject.name + " BUTTON not present in Temp Repo, loading problem");

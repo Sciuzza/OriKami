@@ -12,7 +12,6 @@ public class SuperObjectUpdate : MonoBehaviour
 
 
     #region Edit Mode Methods
-    
     /*
     public void OnValidate()
     {

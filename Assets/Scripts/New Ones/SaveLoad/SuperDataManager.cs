@@ -157,7 +157,7 @@ public class SuperDataManager : MonoBehaviour
     public event_string SwitchSceneRequest;
     public event_plnsdata MenuReadingFromDataRequest;
     #endregion
-
+    
     #region Taking References and Linking Events and ReWriting Default Data
     private void Awake()
     {
@@ -175,10 +175,6 @@ public class SuperDataManager : MonoBehaviour
 
         gcTempLink.gpInitializer.AddListener(this.InitializingGameplayScene);
         gcTempLink.ngpInitializer.AddListener(this.InitializingNgpScene);
-
-
-
-
     }
 
     private void InitializeOriginalData()
