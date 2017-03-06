@@ -8,21 +8,12 @@ public class ObjectUpdate : MonoBehaviour
 {
 
     #region Edit Mode Methods
-    /*
-    public void OnValidate()
-    {
-        var tempList = GameObject.FindGameObjectWithTag("InObjRepo").GetComponent<InObjRepo>().ObjInactive;
-
-        if (!this.gameObject.activeSelf && !tempList.Contains(this.gameObject.GetComponent<ObjectUpdate>()))
-            GameObject.FindGameObjectWithTag("InObjRepo").GetComponent<InObjRepo>().ObjInactive.Add(this.gameObject.GetComponent<ObjectUpdate>());
-    }
-
 
     public void OnValidateCustom()
     {
         GameObject.FindGameObjectWithTag("GameController").GetComponent<SuperDataManager>().UpdatingObjState(this.gameObject);
     }
-    */
+    
     #endregion
 
     private void Awake()
@@ -90,9 +81,6 @@ public class ObjectUpdate : MonoBehaviour
             this.gameObject.transform.rotation = Quaternion.Euler(objToUpdate.ObjRotX, objToUpdate.ObjRotY, objToUpdate.ObjRotZ);
 
             this.gameObject.SetActive(objToUpdate.IsActive);
-
-            if (objToUpdate.ObjName == "Oggetto41")
-            Debug.Log(this.gameObject.name + " " + currentSceneData.ObjState.FindIndex(x => x.ObjName == this.gameObject.name));
         }
         else
         {

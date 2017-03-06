@@ -8,21 +8,12 @@ public class ButtonUpdateState : MonoBehaviour
 {
 
     #region Edit Mode Methods
-    /*
-    public void OnValidate()
-    {
-        var tempList = GameObject.FindGameObjectWithTag("InObjRepo").GetComponent<InObjRepo>().ButInactive;
-
-        if (!this.gameObject.activeSelf && !tempList.Contains(this.gameObject.GetComponent<ButtonUpdateState>()))
-            GameObject.FindGameObjectWithTag("InObjRepo").GetComponent<InObjRepo>().ButInactive.Add(this.gameObject.GetComponent<ButtonUpdateState>());
-    }
-
 
     public void OnValidateCustom()
     {
         GameObject.FindGameObjectWithTag("GameController").GetComponent<SuperDataManager>().UpdatingButState(this.gameObject);
     }
-    */
+    
     #endregion
 
 

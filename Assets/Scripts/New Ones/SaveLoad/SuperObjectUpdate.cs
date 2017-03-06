@@ -12,21 +12,11 @@ public class SuperObjectUpdate : MonoBehaviour
 
 
     #region Edit Mode Methods
-    /*
-    public void OnValidate()
-    {
-         var tempList = GameObject.FindGameObjectWithTag("InObjRepo").GetComponent<InObjRepo>().SObjInactive;
-
-        if (!this.gameObject.activeSelf && !tempList.Contains(this.gameObject.GetComponent<SuperObjectUpdate>()))
-          GameObject.FindGameObjectWithTag("InObjRepo").GetComponent<InObjRepo>().SObjInactive.Add(this.gameObject.GetComponent<SuperObjectUpdate>());
-    }
-    
-
     public void OnValidateCustom()
     {
         GameObject.FindGameObjectWithTag("GameController").GetComponent<SuperDataManager>().UpdatingObjState(this.gameObject);
     }
-    */
+    
     #endregion
 
     private void Awake()

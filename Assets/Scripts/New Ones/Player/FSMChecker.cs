@@ -2280,9 +2280,9 @@ public class FSMChecker : MonoBehaviour
 
     #region Edit Mode Methods
 
-    public void OnValidate()
+    public void OnValidateCustom()
     {
-        //GameObject.FindGameObjectWithTag("GameController").GetComponent<SuperDataManager>().UpdatingPlState(this.gameObject);
+        GameObject.FindGameObjectWithTag("GameController").GetComponent<SuperDataManager>().UpdatingPlState(this.gameObject);
     }
     #endregion
 }

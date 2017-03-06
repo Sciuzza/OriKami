@@ -614,8 +614,9 @@ public class SuperDataManager : MonoBehaviour
     public void OnValidate()
     {
         var updatePossible = true;
-        var ObjsUpdate = GameObject.FindObjectsOfType<ObjectUpdate>();
-        var SuObjsUpdate = GameObject.FindObjectsOfType<SuperObjectUpdate>();
+        
+        var ObjsUpdate = GameObject.FindGameObjectWithTag("Dyn").GetComponentsInChildren<ObjectUpdate>(true);
+        var SuObjsUpdate = GameObject.FindGameObjectWithTag("Dyn").GetComponentsInChildren<SuperObjectUpdate>(true);
 
         for (var index = 0; index < ObjsUpdate.Length; index++)
         {
@@ -675,10 +676,7 @@ public class SuperDataManager : MonoBehaviour
                 SuObjsUpdate[index].GetComponent<SuperObjectUpdate>().OnValidateCustom();
         }
 
-        Debug.Log(ObjsUpdate.Length + SuObjsUpdate.Length);
-        Debug.Log(SuObjsUpdate.Length);
-
-        var ButsUpdate = GameObject.FindObjectsOfType<ButtonUpdateState>();
+        var ButsUpdate = GameObject.FindGameObjectWithTag("Dyn").GetComponentsInChildren<ButtonUpdateState>(true);
 
         for (var index = 0; index < ButsUpdate.Length; index++)
         {
@@ -698,34 +696,52 @@ public class SuperDataManager : MonoBehaviour
                 ButsUpdate[index].GetComponent<ButtonUpdateState>().OnValidateCustom();
         }
 
-        Debug.Log(ButsUpdate.Length);
+        Debug.Log("Total Objects " + ObjsUpdate.Length);
+        Debug.Log("Total SuperObjects " + SuObjsUpdate.Length);
+        Debug.Log("Total Buttons " + ButsUpdate.Length);
 
         if (updatePossible)
-        this.UpdatingInSuObjs();
+        {
+          this.UpdatingInSuObjs(ObjsUpdate, SuObjsUpdate, ButsUpdate);
+          GameObject.FindGameObjectWithTag("Player").GetComponent<FSMChecker>().OnValidateCustom();
+          GameObject.FindGameObjectWithTag("StoryLine").GetComponent<StoryLineInstance>().OnValidateCustom();  
+        }
 
     }
 
 
-    private void UpdatingInSuObjs()
+    private void UpdatingInSuObjs(ObjectUpdate[] objsRepo, SuperObjectUpdate[] suObjsRepo, ButtonUpdateState[] butRepo)
     {
         InObjRepo inObjRepo = GameObject.FindGameObjectWithTag("InObjRepo").GetComponent<InObjRepo>();
 
-        foreach (var obj in inObjRepo.SObjInactive)
+        List<ObjectUpdate> objsRepoList = new List<ObjectUpdate>();
+        objsRepoList.AddRange(objsRepo);
+
+        List<SuperObjectUpdate> suObjsRepoList = new List<SuperObjectUpdate>();
+        suObjsRepoList.AddRange(suObjsRepo);
+
+        List<ButtonUpdateState> butRepoList = new List<ButtonUpdateState>();
+        butRepoList.AddRange(butRepo);
+
+        foreach (var obj in objsRepoList)
         {
-            obj.OnValidateCustom();
+            if (obj.gameObject.activeSelf && !inObjRepo.ObjInactive.Contains(obj))
+                inObjRepo.ObjInactive.Add(obj);
         }
         
-        foreach (var obj in inObjRepo.ObjInactive)
+        foreach (var obj in suObjsRepoList)
         {
-            obj.OnValidateCustom();
+            if (obj.gameObject.activeSelf && !inObjRepo.SObjInactive.Contains(obj))
+                inObjRepo.SObjInactive.Add(obj);
         }
 
-        foreach (var obj in inObjRepo.ButInactive)
+        foreach (var obj in butRepoList)
         {
-            obj.OnValidateCustom();
+            if (obj.gameObject.activeSelf && !inObjRepo.ButInactive.Contains(obj))
+                inObjRepo.ButInactive.Add(obj);
         }
         
     }
-    
     */
+    
 }

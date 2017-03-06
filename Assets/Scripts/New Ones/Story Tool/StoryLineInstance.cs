@@ -1053,6 +1053,8 @@ public class StoryLineInstance : MonoBehaviour
             if (found)
             {
                 this.questRepo.StoryLineRepo[index0].Stories[index1].Active = true;
+                Debug.Log(this.questRepo.StoryLineRepo[index0].Stories[index1].StoryName + " Active on Completion Found");
+                Debug.Log("First index is " + index0 + " and Second Index is " + index1);
             }
             else
             {
@@ -1095,6 +1097,8 @@ public class StoryLineInstance : MonoBehaviour
             if (found)
             {
                 this.questRepo.StoryLineRepo[index0].Stories[index1].Completed = true;
+                Debug.Log(this.questRepo.StoryLineRepo[index0].Stories[index1].StoryName + " Active on Completion Found");
+                Debug.Log("First index is " + index0 + " and Second Index is " + index1);
             }
             else
             {
@@ -1155,6 +1159,8 @@ public class StoryLineInstance : MonoBehaviour
             if (found)
             {
                 this.questRepo.StoryLineRepo[index0].Stories[index1].Active = true;
+                Debug.Log(this.questRepo.StoryLineRepo[index0].Stories[index1].StoryName + " Active on Completion Found");
+                Debug.Log("First index is " + index0 + " and Second Index is " + index1);
             }
             else
             {
@@ -1200,6 +1206,8 @@ public class StoryLineInstance : MonoBehaviour
             if (found)
             {
                 this.questRepo.StoryLineRepo[index0].Stories[index1].Completed = true;
+                Debug.Log(this.questRepo.StoryLineRepo[index0].Stories[index1].StoryName + " Complete on Completion Found");
+                Debug.Log("First index is " + index0 + " and Second Index is " + index1);
             }
             else
             {
@@ -1254,7 +1262,7 @@ public class StoryLineInstance : MonoBehaviour
         if (storyline != null)
         {
             int index = storyline.Stories.FindIndex(x => x.StoryName == storyName);
-            Debug.Log(storyline.Stories.Find(x => x.StoryName == storyName).StoryName + " " + index);
+            //Debug.Log(storyline.Stories.Find(x => x.StoryName == storyName).StoryName + " " + index);
             return storyline.Stories.Find(x => x.StoryName == storyName);
         }
         else
@@ -3292,10 +3300,10 @@ public class StoryLineInstance : MonoBehaviour
 
     #region Edit Mode Methods
 
-    public void OnValidate()
+    public void OnValidateCustom()
     {
-        //GameObject.FindGameObjectWithTag("GameController").GetComponent<SuperDataManager>().AddingStoryLineEditMode(this.CurrentStoryLine);
-        //GameObject.FindGameObjectWithTag("GameController").GetComponent<QuestsManager>().AddToRepository(this.CurrentStoryLine);
+        GameObject.FindGameObjectWithTag("GameController").GetComponent<SuperDataManager>().AddingStoryLineEditMode(this.CurrentStoryLine);
+        GameObject.FindGameObjectWithTag("GameController").GetComponent<QuestsManager>().AddToRepository(this.CurrentStoryLine);
     }
 
     #endregion
