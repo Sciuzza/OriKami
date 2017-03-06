@@ -22,6 +22,8 @@ public class SceneController : MonoBehaviour
 
     public UnityEvent stoppingLogicRequest;
 
+
+
     #region Taking References and linking Events
     void Awake()
     {
@@ -85,12 +87,7 @@ public class SceneController : MonoBehaviour
 
         plTempLink.switchSceneRequest.AddListener(this.ChangingScenehandler);
 
-        var changeLevTempLink = GameObject.FindGameObjectsWithTag("ChangeScene");
 
-        foreach (var t in changeLevTempLink)
-        {
-            t.GetComponent<MoveToNextLevel>().SceneChangeRequest.AddListener(this.ChangingScenehandler);
-        }
 
 
 
@@ -107,6 +104,8 @@ public class SceneController : MonoBehaviour
     private IEnumerator LoadingNewScene(string sceneToLoad)
     {
       
+        this.SelectingLoadingBackground(sceneToLoad);
+
         this.loadingStatus = SceneManager.LoadSceneAsync(sceneToLoad, LoadSceneMode.Additive);
       
         this.loadingStatus.allowSceneActivation = false;
@@ -146,6 +145,42 @@ public class SceneController : MonoBehaviour
         //SceneManager.LoadScene(sceneToLoad);
 
     }
+
+    private void SelectingLoadingBackground(string sceneToLoad)
+    {
+        loadingRepo ldRefRepo = GameObject.FindGameObjectWithTag("Loading").GetComponent<loadingRepo>();
+
+        Image LoadingBackGround = ldRefRepo.LoadingBackGround;
+        var LoadingBackgrounds = ldRefRepo.LoadingBcs;
+
+        switch (sceneToLoad)
+        {
+            case "Route 1":
+                LoadingBackGround.sprite = LoadingBackgrounds[0];
+                break;
+            case "Route 2":
+                LoadingBackGround.sprite = LoadingBackgrounds[1];
+                break;
+            case "Frogs' Village":
+                LoadingBackGround.sprite = LoadingBackgrounds[2];
+                break;
+            case "route 3":
+                LoadingBackGround.sprite = LoadingBackgrounds[3];
+                break;
+            case "Armadillos' Village":
+                LoadingBackGround.sprite = LoadingBackgrounds[4];
+                break;
+            case "Route 4":
+                LoadingBackGround.sprite = LoadingBackgrounds[5];
+                break;
+            case "Dolphins and Swallows' Village":
+                LoadingBackGround.sprite = LoadingBackgrounds[6];
+                break;
+            case "Dragon's Spring Temple":
+                LoadingBackGround.sprite = LoadingBackgrounds[7];
+                break;
+        }
+    }
     #endregion
 
     #region Scene Switch GeneraL Methods
@@ -174,7 +209,7 @@ public class SceneController : MonoBehaviour
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
-    private void ChangingScenehandler(string sceneName)
+    public void ChangingScenehandler(string sceneName)
     {
         if (sceneName == "Main Menu")
         {

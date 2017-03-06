@@ -237,6 +237,13 @@ public class event_plnsdata : UnityEvent<PlayerNsData>
 {
     
 }
+
+[System.Serializable]
+public class event_vector3_string : UnityEvent<Vector3, string>
+{
+    
+}
+
 #endregion
 
 public class FSMChecker : MonoBehaviour
@@ -2275,7 +2282,7 @@ public class FSMChecker : MonoBehaviour
 
     public void OnValidate()
     {
-        GameObject.FindGameObjectWithTag("GameController").GetComponent<SuperDataManager>().UpdatingPlState(this.gameObject);
+        //GameObject.FindGameObjectWithTag("GameController").GetComponent<SuperDataManager>().UpdatingPlState(this.gameObject);
     }
     #endregion
 }

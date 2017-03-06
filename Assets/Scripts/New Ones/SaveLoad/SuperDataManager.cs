@@ -176,12 +176,7 @@ public class SuperDataManager : MonoBehaviour
         gcTempLink.gpInitializer.AddListener(this.InitializingGameplayScene);
         gcTempLink.ngpInitializer.AddListener(this.InitializingNgpScene);
 
-        var changeLevTempLink = GameObject.FindGameObjectsWithTag("ChangeScene");
 
-        foreach (var t in changeLevTempLink)
-        {
-            t.GetComponent<MoveToNextLevel>().RegisterPlayerPosRequest.AddListener(this.ChangingSceneSaveHandler);
-        }
 
 
     }
@@ -258,6 +253,13 @@ public class SuperDataManager : MonoBehaviour
         player.GetComponent<FSMChecker>().deathRequest.AddListener(this.LoadingHandler);
         player.GetComponent<EnvInputs>().SaveRequestByCheck.AddListener(this.SaveHandler);
 
+        var changeLevTempLink = GameObject.FindGameObjectsWithTag("ChangeScene");
+
+        foreach (var t in changeLevTempLink)
+        {
+            t.GetComponent<MoveToNextLevel>().RegisterPlayerPosRequest.AddListener(this.ChangingSceneSaveHandler);
+        }
+
         //this.LoadingHandler();
         if (SceneManager.GetActiveScene().name != "Cri Testing 2")
         {
@@ -270,7 +272,7 @@ public class SuperDataManager : MonoBehaviour
 
     #region Save Handler
 
-    private void ChangingSceneSaveHandler(Vector3 playerPos)
+    private void ChangingSceneSaveHandler(Vector3 playerPos, string sceneName)
     {
         this.RequestLocalUpdateToRepo.Invoke();
         EnvDatas tempRef = this.EnvSensData.Find(x => x.GpSceneName == SceneManager.GetActiveScene().name);
@@ -282,6 +284,9 @@ public class SuperDataManager : MonoBehaviour
         this.SaveToFile("/EnvSensData.dat", 0);
         this.SaveToFile("/PlNsData.dat", 1);
         this.SaveToFile("/TweaksData.dat", 2);
+        Debug.Log("Saved");
+
+        this.gameObject.GetComponent<SceneController>().ChangingScenehandler(sceneName);
     }
 
 
@@ -608,7 +613,7 @@ public class SuperDataManager : MonoBehaviour
     #endregion
 
     
- 
+ /*
     public void OnValidate()
     {
         var updatePossible = true;
@@ -725,5 +730,5 @@ public class SuperDataManager : MonoBehaviour
         
     }
     
-
+    */
 }

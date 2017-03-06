@@ -13,7 +13,7 @@ public class SuperObjectUpdate : MonoBehaviour
 
     #region Edit Mode Methods
     
-
+    /*
     public void OnValidate()
     {
          var tempList = GameObject.FindGameObjectWithTag("InObjRepo").GetComponent<InObjRepo>().SObjInactive;
@@ -27,7 +27,7 @@ public class SuperObjectUpdate : MonoBehaviour
     {
         GameObject.FindGameObjectWithTag("GameController").GetComponent<SuperDataManager>().UpdatingObjState(this.gameObject);
     }
-    
+    */
     #endregion
 
     private void Awake()

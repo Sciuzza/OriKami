@@ -9,7 +9,7 @@ public class ButtonUpdateState : MonoBehaviour
 
     #region Edit Mode Methods
 
-    
+    /*
     public void OnValidate()
     {
         var tempList = GameObject.FindGameObjectWithTag("InObjRepo").GetComponent<InObjRepo>().ButInactive;
@@ -23,7 +23,7 @@ public class ButtonUpdateState : MonoBehaviour
     {
         GameObject.FindGameObjectWithTag("GameController").GetComponent<SuperDataManager>().UpdatingButState(this.gameObject);
     }
-    
+    */
     #endregion
 
 

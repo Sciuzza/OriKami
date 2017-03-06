@@ -5,8 +5,7 @@ using UnityEngine.SceneManagement;
 public class MoveToNextLevel : MonoBehaviour
 {
 
-    public event_string SceneChangeRequest;
-    public event_vector3 RegisterPlayerPosRequest;
+    public event_vector3_string RegisterPlayerPosRequest;
 
 
     public string SceneName;
@@ -18,10 +17,7 @@ public class MoveToNextLevel : MonoBehaviour
         {
 
             Debug.Log("Sono dentro");
-            this.RegisterPlayerPosRequest.Invoke(this.posTransf.position);
-            this.SceneChangeRequest.Invoke(this.SceneName);
-            
-
+            this.RegisterPlayerPosRequest.Invoke(this.posTransf.position, this.SceneName);
         }
     }
 }
