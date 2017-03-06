@@ -161,7 +161,7 @@ public class SuperDataManager : MonoBehaviour
     #region Taking References and Linking Events and ReWriting Default Data
     private void Awake()
     {
-        this.ErasingData();
+        //this.ErasingData();
 
         this.InitializeOriginalData();
 
@@ -725,23 +725,23 @@ public class SuperDataManager : MonoBehaviour
 
         foreach (var obj in objsRepoList)
         {
-            if (obj.gameObject.activeSelf && !inObjRepo.ObjInactive.Contains(obj))
+            if (!obj.gameObject.activeSelf && !inObjRepo.ObjInactive.Contains(obj))
                 inObjRepo.ObjInactive.Add(obj);
         }
         
         foreach (var obj in suObjsRepoList)
         {
-            if (obj.gameObject.activeSelf && !inObjRepo.SObjInactive.Contains(obj))
+            if (!obj.gameObject.activeSelf && !inObjRepo.SObjInactive.Contains(obj))
                 inObjRepo.SObjInactive.Add(obj);
         }
 
         foreach (var obj in butRepoList)
         {
-            if (obj.gameObject.activeSelf && !inObjRepo.ButInactive.Contains(obj))
+            if (!obj.gameObject.activeSelf && !inObjRepo.ButInactive.Contains(obj))
                 inObjRepo.ButInactive.Add(obj);
         }
         
     }
-    */
     
+    */
 }
