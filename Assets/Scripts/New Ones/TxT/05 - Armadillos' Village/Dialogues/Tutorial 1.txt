@@ -1,1 +1,1 @@
-Koi/Left/Koi_Relieved/When you are in "armadillo form" you can dash pressing "A".*In exchange, you will be slower when you walk.
+Koi/Left/Koi_Relieved/When you are in "armadillo form" you can dash pressing "A" and break some boulders.*In exchange, you will be slower when you walk.
