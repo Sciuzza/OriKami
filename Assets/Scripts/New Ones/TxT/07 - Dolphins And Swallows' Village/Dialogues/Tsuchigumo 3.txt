@@ -1,5 +1,5 @@
-Tsuchigumo/Right/Tsuchigumo_Standard/This is not good.
+Tsuchigumo/Right/Tsuchigumo_Scared/This is not good.
 Iki/Left/Iki_Standard/...
-Tsuchigumo/Right/Tsuchigumo_Standard/You are dangerous.
+Tsuchigumo/Right/Tsuchigumo_Scared/You are dangerous.
 Iki/Left/Iki_Standard/...
-Tsuchigumo/Right/Tsuchigumo_Standard/Fine. You won. I'm leaving.
+Tsuchigumo/Right/Tsuchigumo_Scared/Fine. You won. I'm leaving.
