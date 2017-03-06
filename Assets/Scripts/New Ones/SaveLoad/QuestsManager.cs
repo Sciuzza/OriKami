@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 
 using UnityEngine;
-
+using UnityEngine.SceneManagement;
 
 public class QuestsManager : MonoBehaviour
 {
@@ -23,6 +23,10 @@ public class QuestsManager : MonoBehaviour
         var storyLineTempRepo = GameObject.FindGameObjectsWithTag("StoryLine");
 
         if (storyLineTempRepo == null) return;
+
+
+        Debug.Log(this.StoryLineRepo.Find(x => x.StoryLineName == "Route1")
+            .Stories.FindIndex(x => x.StoryName == "Dialogo_Jiraiya"));
 
         /*
         foreach (var t in storyLineTempRepo)

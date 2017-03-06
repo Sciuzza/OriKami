@@ -1089,7 +1089,7 @@ public class StoryLineInstance : MonoBehaviour
             if (storyToFindInRepo != null)
             {
                 storyToFindInRepo.Active = true;
-                Debug.Log(storyToFind.StoryName + " Activated in Quest Repo");
+                Debug.Log(storyToFindInRepo.StoryName + " Activated in Quest Repo");
             }
             else
             {
@@ -1150,7 +1150,12 @@ public class StoryLineInstance : MonoBehaviour
     {
         StoryLine storyline = this.questRepo.StoryLineRepo.Find(x => x.Stories.Find(y => y.StoryName == storyName) != null);
 
-        if (storyline != null) return storyline.Stories.Find(x => x.StoryName == storyName);
+        if (storyline != null)
+        {
+            int index = storyline.Stories.FindIndex(x => x.StoryName == storyName);
+            Debug.Log(storyline.Stories.Find(x => x.StoryName == storyName) + " " + index);
+            return storyline.Stories.Find(x => x.StoryName == storyName);
+        }
         else
         {
             return null;
