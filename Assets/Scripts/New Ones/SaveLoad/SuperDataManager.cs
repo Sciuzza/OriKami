@@ -161,7 +161,7 @@ public class SuperDataManager : MonoBehaviour
     #region Taking References and Linking Events and ReWriting Default Data
     private void Awake()
     {
-        this.ErasingData();
+        //this.ErasingData();
 
         this.InitializeOriginalData();
 
@@ -329,6 +329,7 @@ public class SuperDataManager : MonoBehaviour
 
         for (var slInRepo = 0; slInRepo < slRepoToUpdate.Count; slInRepo++)
         {
+            //Debug.Log(slRepoToUpdate[slInRepo].StoryLineName + ", index = "  + slInRepo);
             var scenedata = this.EnvSensData.Find(x => x.SlState.SlName == slRepoToUpdate[slInRepo].StoryLineName);
 
             if (scenedata == null) continue;
@@ -337,6 +338,7 @@ public class SuperDataManager : MonoBehaviour
 
             for (var storyIndex = 0; storyIndex < scenedata.SlState.Story.Count; storyIndex++)
             {
+                //Debug.Log(slRepoToUpdate[slInRepo].Stories[storyIndex].StoryName + " " + storyIndex);
                 scenedata.SlState.Story[storyIndex].IsActive = slRepoToUpdate[slInRepo].Stories[storyIndex].Active;
                 scenedata.SlState.Story[storyIndex].IsCompleted = slRepoToUpdate[slInRepo].Stories[storyIndex].Completed;
             }
@@ -612,8 +614,7 @@ public class SuperDataManager : MonoBehaviour
     }
     #endregion
 
-    
- /*
+    /*
     public void OnValidate()
     {
         var updatePossible = true;
