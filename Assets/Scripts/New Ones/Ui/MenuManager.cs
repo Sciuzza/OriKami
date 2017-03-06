@@ -109,6 +109,8 @@ public class MenuManager : MonoBehaviour
         this.InitializingOptions();
         this.InitializingValues();
 
+        EventSystem.current.SetSelectedGameObject(this.mmRepo.NewGameB.gameObject);
+
         // Options Listeners on Select
         /*
         this.mmRepo.GameplayMenuB.GetComponent<PointerHandler>().ActivationRequest.AddListener(this.ActivatingGb);
@@ -1179,6 +1181,7 @@ public class MenuManager : MonoBehaviour
         this.sectionTempRef = "Pause";
         this.gpUiRef.Pause.SetActive(true);
         EventSystem.current.SetSelectedGameObject(this.gpUiRef.ContinueB.gameObject);
+        //Debug.Log(EventSystem.current); 
     }
 
     private void ComeBackToGame()
