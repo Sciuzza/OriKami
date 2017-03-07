@@ -3299,8 +3299,6 @@ public class StoryLineInstance : MonoBehaviour
     private void PlayMovieEffect(MovieEffect movEffect)
     {
         this.MovieRequest.Invoke(movEffect.MovieIndex - 1, movEffect.SmoothInTime);
-        
-        
 
         soundPlayerRef.PersistendAudio[0].AudioSourceRef.volume = 0f;
         soundPlayerRef.PersistendAudio[1].AudioSourceRef.volume = 0f;
