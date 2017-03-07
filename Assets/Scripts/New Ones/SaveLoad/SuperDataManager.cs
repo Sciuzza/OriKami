@@ -629,8 +629,7 @@ public class SuperDataManager : MonoBehaviour
         }
     }
     #endregion
-
-    
+    /*
     public void OnValidate()
     {
         var updatePossible = true;
@@ -762,6 +761,6 @@ public class SuperDataManager : MonoBehaviour
         }
         
     }
-    
-    
+    */
+
 }
