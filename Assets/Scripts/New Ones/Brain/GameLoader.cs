@@ -11,6 +11,7 @@ public class GameLoader : MonoBehaviour
     void Awake()
     {
         gbTempLink = GameObject.FindGameObjectWithTag("GameController");
+        Application.targetFrameRate = 60;
     }
     #endregion
 

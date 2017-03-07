@@ -437,12 +437,10 @@ public class MenuManager : MonoBehaviour
                 this.mmRepo.Quality.text = this.Quality[this.LocalGbSettings.QualityIndex];
 
 #if UNITY_STANDALONE
-                if (this.LocalGbSettings.QualityIndex == 1)
-                {
-                    
+               
                     Debug.Log("Sweetfx");
                     InputSimulator.SimulateKeyDown(VirtualKeyCode.SCROLL);
-                }
+                
 #endif
                 break;
             case "OAdFirst":
