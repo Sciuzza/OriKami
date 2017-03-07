@@ -3,6 +3,7 @@ using System.Collections;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 
+using VolumetricFogAndMist;
 
 public class GameController : MonoBehaviour
 {
@@ -124,7 +125,7 @@ public class GameController : MonoBehaviour
             #endregion
 
             StartCoroutine(this.player.GetComponent<MoveHandler>().MoveHandlerUpdate());
-
+            this.SettingCameraImageEffect();
         }
         else
         {
@@ -188,27 +189,29 @@ public class GameController : MonoBehaviour
             return true;
     }
 
-    private void SettingDLight()
+    private void SettingCameraImageEffect()
     {
-        var dLightInScene = GameObject.FindGameObjectWithTag("DLight");
+        VolumetricFog vfTempLink = Camera.main.GetComponent<VolumetricFog>();
 
-        this.dLight.transform.rotation = dLightInScene.transform.rotation;
-
-        var dLightComp = this.dLight.GetComponent<Light>();
-        var dLightInSceneComp = dLightInScene.GetComponent<Light>();
-
-        dLightComp.type = dLightInSceneComp.type;
-        dLightComp.bakedIndex = dLightInSceneComp.bakedIndex;
-        dLightComp.color = dLightInSceneComp.color;
-        dLightComp.intensity = dLightInSceneComp.intensity;
-        dLightComp.bounceIntensity = dLightInSceneComp.bounceIntensity;
-        dLightComp.shadows = dLightInSceneComp.shadows;
-        dLightComp.shadowStrength = dLightInSceneComp.shadowStrength;
-        dLightComp.shadowBias = dLightInSceneComp.shadowBias;
-        dLightComp.shadowNormalBias = dLightInSceneComp.shadowNormalBias;
-        dLightComp.shadowNearPlane = dLightInSceneComp.shadowNearPlane;
-
-        dLightInScene.SetActive(false);
+        switch (SceneManager.GetActiveScene().name)
+        {
+            case "Route 1":
+                break;
+            case "Route 2":
+                break;
+            case "route 3":
+                break;
+            case "Route 4":
+                break;
+            case "Armadillos' Village":
+                break;
+            case "Dolphins and Swallows' Village":
+                break;
+            case "Dragon's Spring Temple":
+                break;
+            case "Frogs' Village":
+                break;
+        }
     }
     #endregion
 

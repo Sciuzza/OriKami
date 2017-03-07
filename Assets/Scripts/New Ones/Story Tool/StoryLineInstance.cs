@@ -2999,8 +2999,9 @@ public class StoryLineInstance : MonoBehaviour
             if (aniEffect.DelayBeginTime > 0)
             {
                 var timeTransitionPassed = 0.0f;
+                
 
-                while (timeTransitionPassed <= 0.2f)
+                while (timeTransitionPassed <= 0.3f)
                 {
                     timeTransitionPassed += Time.deltaTime;
                     yield return null;
@@ -3008,6 +3009,7 @@ public class StoryLineInstance : MonoBehaviour
 
                 var timeDelayPassed = 0.0f;
                 currentAni.speed = 0;
+
 
                 while (timeDelayPassed <= aniEffect.DelayBeginTime)
                 {
