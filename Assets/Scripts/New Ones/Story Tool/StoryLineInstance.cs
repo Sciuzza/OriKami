@@ -3297,7 +3297,7 @@ public class StoryLineInstance : MonoBehaviour
     private void PlayMovieEffect(MovieEffect movEffect)
     {
         this.MovieRequest.Invoke(movEffect.MovieIndex - 1, movEffect.SmoothInTime);
-        //TODO qui stoppi tutto il suono master perchè parte la cutscene
+        
         
 
         soundPlayerRef.PersistendAudio[0].AudioSourceRef.volume = 0f;
@@ -3312,7 +3312,7 @@ public class StoryLineInstance : MonoBehaviour
     private void MovieEnd()
     {
         this.effectCounter++;
-        //TODO qui lo reimposti a come era prima
+     
         soundPlayerRef.PersistendAudio[0].AudioSourceRef.volume = 0.2f;
         soundPlayerRef.PersistendAudio[1].AudioSourceRef.volume = 0.2f;
 

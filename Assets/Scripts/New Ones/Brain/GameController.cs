@@ -129,6 +129,7 @@ public class GameController : MonoBehaviour
         else
         {
             Debug.Log("Not on Gameplay Scene");
+            this.cameraRef.GetComponent<AudioListener>().enabled = true;
             ngpInitializer.Invoke();
         }
     }

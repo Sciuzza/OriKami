@@ -99,7 +99,7 @@ public class CameraManager : MonoBehaviour
 
         this.reAdjustingCamValues.Invoke(this.currentX, this.currentY, this.currentDistance);
 
-        while (this.currentCamera == CameraStyle.player)
+        while (this.currentCamera == CameraStyle.player && this.playerTransform != null)
         {
             var dir = new Vector3(0, 0, -this.currentDistance);
             var rotation = Quaternion.Euler(this.currentY, this.currentX, 0);
