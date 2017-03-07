@@ -1,2 +1,2 @@
-Swallows King/Right/SwallowKing_Standard/I'm sorry for the bad manners I've shown you before.*I shouldn't have done that. If you want, you can stay with us a bit more.* The other villages chiefs told me about you, you are a desirable guest.
+Swallows King/Right/SwallowsKing_Standard/I'm sorry for the bad manners I've shown you before.*I shouldn't have done that. If you want, you can stay with us a bit more.* The other villages chiefs told me about you, you are a desirable guest.
 Iki/Left/Iki_Sad/...
