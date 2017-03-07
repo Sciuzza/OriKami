@@ -64,7 +64,7 @@ public class QuestsManager : MonoBehaviour
                     {
                         if (this.StoryLineRepo[index0].Stories[index1].StoryName
                             == this.StoryLineRepo[index2].Stories[index3].StoryName && (index0 != index2)
-                            && (index1 != index3))
+                            && (index1 != index3) && !this.StoryLineRepo[index0].Stories[index1].StoryName.Contains("Map"))
                         {
                             Debug.Log(this.StoryLineRepo[index0].Stories[index1].StoryName + " with index " + index0 + " " + index1);
                             Debug.Log("has a copy");
