@@ -36,6 +36,7 @@ public class MenuManager : MonoBehaviour
     private EventSystem esLink;
 
     private SoundManager audioSourceRef;
+    private SoundManager audioMenuSourceRef;
 
     private HudRefRepo gpUiRef;
 
@@ -110,6 +111,9 @@ public class MenuManager : MonoBehaviour
         this.InitializingValues();
 
         EventSystem.current.SetSelectedGameObject(this.mmRepo.NewGameB.gameObject);
+
+        audioMenuSourceRef = GameObject.FindGameObjectWithTag("GameController").GetComponent<SoundManager>();
+        audioMenuSourceRef.PersistendAudio[3].AudioSourceRef.volume = this.mmRepo.MusicBar.fillAmount;
 
         //TODO qui setti il volume della musica e del master per il main menu leggendolo dai valori sotto come moltiplicatori da 0 a 1
         //TODO 1 vuol dire valore standard che hai messo
