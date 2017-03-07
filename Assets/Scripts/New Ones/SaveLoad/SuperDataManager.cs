@@ -325,7 +325,7 @@ public class SuperDataManager : MonoBehaviour
 
         for (var slInRepo = 0; slInRepo < slRepoToUpdate.Count; slInRepo++)
         {
-            //Debug.Log(slRepoToUpdate[slInRepo].StoryLineName + ", index = "  + slInRepo);
+           // Debug.Log(slRepoToUpdate[slInRepo].StoryLineName + ", index = "  + slInRepo);
             var scenedata = this.EnvSensData.Find(x => x.SlState.SlName == slRepoToUpdate[slInRepo].StoryLineName);
 
             if (scenedata == null) continue;
