@@ -163,7 +163,7 @@ public class SuperDataManager : MonoBehaviour
     #region Taking References and Linking Events and ReWriting Default Data
     private void Awake()
     {
-        //this.ErasingData();
+        this.ErasingData();
 
         this.InitializeOriginalData();
 
