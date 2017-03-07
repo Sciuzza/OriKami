@@ -3290,11 +3290,13 @@ public class StoryLineInstance : MonoBehaviour
     private void PlayMovieEffect(MovieEffect movEffect)
     {
         this.MovieRequest.Invoke(movEffect.MovieIndex - 1, movEffect.SmoothInTime);
+        //TODO qui stoppi tutto il suono master perchè parte la cutscene
     }
 
     private void MovieEnd()
     {
         this.effectCounter++;
+        //TODO qui lo reimposti a come era prima
     }
     #endregion
 

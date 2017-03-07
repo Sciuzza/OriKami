@@ -111,20 +111,13 @@ public class MenuManager : MonoBehaviour
 
         EventSystem.current.SetSelectedGameObject(this.mmRepo.NewGameB.gameObject);
 
-        // Options Listeners on Select
-        /*
-        this.mmRepo.GameplayMenuB.GetComponent<PointerHandler>().ActivationRequest.AddListener(this.ActivatingGb);
-        this.mmRepo.GameplayMenuB.GetComponent<PointerHandler>().DeActivationRequest.AddListener(this.DeActivatingGb);
+        //TODO qui setti il volume della musica e del master per il main menu leggendolo dai valori sotto come moltiplicatori da 0 a 1
+        //TODO 1 vuol dire valore standard che hai messo
 
-        this.mmRepo.VideoMenuB.GetComponent<PointerHandler>().ActivationRequest.AddListener(this.ActivatingGb);
-        this.mmRepo.VideoMenuB.GetComponent<PointerHandler>().DeActivationRequest.AddListener(this.DeActivatingGb);
+        //this.mmRepo.MusicBar.fillAmount
+        //this.mmRepo.MasterBar.fillAmount
+        //this.mmRepo.EffectsBar.fillAmount
 
-        this.mmRepo.AudioMenuB.GetComponent<PointerHandler>().ActivationRequest.AddListener(this.ActivatingGb);
-        this.mmRepo.AudioMenuB.GetComponent<PointerHandler>().DeActivationRequest.AddListener(this.DeActivatingGb);
-
-        this.mmRepo.KeyBindingsMenuB.GetComponent<PointerHandler>().ActivationRequest.AddListener(this.ActivatingGb);
-        this.mmRepo.KeyBindingsMenuB.GetComponent<PointerHandler>().DeActivationRequest.AddListener(this.DeActivatingGb);
-        */
     }
 
     private void InitializingMainMenu()
@@ -280,7 +273,7 @@ public class MenuManager : MonoBehaviour
         this.mmRepo.StdT.text = this.PossibleGenAbiKeys[this.LocalGbSettings.StdFormIndex];
         this.mmRepo.JumpDashT.text = this.PossibleGenAbiKeys[this.LocalGbSettings.JdIndex];
         this.mmRepo.PasstT.text = this.PossibleGenAbiKeys[this.LocalGbSettings.PtIndex];
-
+ 
     }
 
     private void ReadingData(PlayerNsData dataToRead)
