@@ -196,56 +196,56 @@ public class GameController : MonoBehaviour
         switch (SceneManager.GetActiveScene().name)
         {
             case "Route 1":
-                vfTempLink.height = -9;
+                vfTempLink.baselineHeight = -9;
                 vfTempLink.specularColor = new Color(255 / 255.0f, 224 / 255.0f, 255 / 255.0f, 255 / 255.0f);
                 vfTempLink.color = new Color(255 / 255.0f, 210 / 255.0f, 250 / 255.0f, 244 / 255.0f);
                 vfTempLink.lightColor = new Color(255 / 255.0f, 208 / 255.0f, 231 / 255.0f, 255 / 255.0f);
                 vfTempLink.skyColor = new Color(255 / 255.0f, 208 / 255.0f, 231 / 255.0f, 255 / 255.0f);
                 break;
             case "Route 2":
-                vfTempLink.height = -9;
+                vfTempLink.baselineHeight = -9;
                 vfTempLink.specularColor = new Color(215 / 255.0f, 255 / 255.0f, 226 / 255.0f, 255 / 255.0f);
                 vfTempLink.color = new Color(171 / 255.0f, 255 / 255.0f, 171 / 255.0f, 244 / 255.0f);
                 vfTempLink.lightColor = new Color(241 / 255.0f, 241 / 255.0f, 241 / 255.0f, 255 / 255.0f);
                 vfTempLink.skyColor = new Color(233 / 255.0f, 255 / 255.0f, 241 / 255.0f, 245 / 255.0f);
                 break;
             case "route 3":
-                vfTempLink.height = 8;
+                vfTempLink.baselineHeight = 8;
                 vfTempLink.specularColor = new Color(251 / 255.0f, 220 / 255.0f, 255 / 255.0f, 255 / 255.0f);
                 vfTempLink.color = new Color(215 / 255.0f, 176 / 255.0f, 237 / 255.0f, 244 / 255.0f);
                 vfTempLink.lightColor = new Color(241 / 255.0f, 197 / 255.0f, 253 / 255.0f, 255 / 255.0f);
                 vfTempLink.skyColor = new Color(255 / 255.0f, 224 / 255.0f, 255 / 255.0f, 245 / 255.0f);
                 break;
             case "Route 4":
-                vfTempLink.height = -6;
+                vfTempLink.baselineHeight = -6;
                 vfTempLink.specularColor = new Color(255 / 255.0f, 224 / 255.0f, 255 / 255.0f, 255 / 255.0f);
                 vfTempLink.color = new Color(255 / 255.0f, 210 / 255.0f, 250 / 255.0f, 244 / 255.0f);
                 vfTempLink.lightColor = new Color(255 / 255.0f, 208 / 255.0f, 231 / 255.0f, 255 / 255.0f);
                 vfTempLink.skyColor = new Color(255 / 255.0f, 208 / 255.0f, 231 / 255.0f, 255 / 255.0f);
                 break;
             case "Armadillos' Village":
-                vfTempLink.height = 15;
+                vfTempLink.baselineHeight = 15;
                 vfTempLink.specularColor = new Color(203 / 255.0f, 255 / 255.0f, 255 / 255.0f, 255 / 255.0f);
                 vfTempLink.color = new Color(184 / 255.0f, 255 / 255.0f, 255 / 255.0f, 244 / 255.0f);
                 vfTempLink.lightColor = new Color(252 / 255.0f, 255 / 255.0f, 255 / 255.0f, 255 / 255.0f);
                 vfTempLink.skyColor = new Color(218 / 255.0f, 255 / 255.0f, 255 / 255.0f, 245 / 255.0f);
                 break;
             case "Dolphins and Swallows' Village":
-                vfTempLink.height = 3;
+                vfTempLink.baselineHeight = 3;
                 vfTempLink.specularColor = new Color(152 / 255.0f, 165 / 255.0f, 173 / 255.0f, 255 / 255.0f);
                 vfTempLink.color = new Color(75 / 255.0f, 140 / 255.0f, 182 / 255.0f, 244 / 255.0f);
                 vfTempLink.lightColor = new Color(101 / 255.0f, 176 / 255.0f, 137 / 255.0f, 255 / 255.0f);
                 vfTempLink.skyColor = new Color(0 / 255.0f, 66 / 255.0f, 69 / 255.0f, 245 / 255.0f);
                 break;
             case "Dragon's Spring Temple":
-                vfTempLink.height = -2;
+                vfTempLink.baselineHeight = -2;
                 vfTempLink.specularColor = new Color(155 / 255.0f, 244 / 255.0f, 209 / 255.0f, 255 / 255.0f);
                 vfTempLink.color = new Color(255 / 255.0f, 179 / 255.0f, 152 / 255.0f, 244 / 255.0f);
                 vfTempLink.lightColor = new Color(255 / 255.0f, 255 / 255.0f, 246 / 255.0f, 255 / 255.0f);
                 vfTempLink.skyColor = new Color(255 / 255.0f, 18 / 255.0f, 135 / 255.0f, 245 / 255.0f);
                 break;
             case "Frogs' Village":
-                vfTempLink.height = -9;
+                vfTempLink.baselineHeight = -9;
                 vfTempLink.specularColor = new Color(255 / 255.0f, 255 / 255.0f, 254 / 255.0f, 255 / 255.0f);
                 vfTempLink.color = new Color(255 / 255.0f, 243 / 255.0f, 166 / 255.0f, 244 / 255.0f);
                 vfTempLink.lightColor = new Color(255 / 255.0f, 244 / 255.0f, 214 / 255.0f, 255 / 255.0f);
