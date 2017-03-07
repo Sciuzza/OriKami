@@ -50,7 +50,7 @@ public class QuestsManager : MonoBehaviour
             this.StoryLineRepo.Add(currentSlTemp);
         }
     }
-
+    /*
     public void OnValidate()
     {
         for (int index0 = 0; index0 < this.StoryLineRepo.Count; index0++)
@@ -75,5 +75,5 @@ public class QuestsManager : MonoBehaviour
             }
         }
     }
-
+    */
 }
