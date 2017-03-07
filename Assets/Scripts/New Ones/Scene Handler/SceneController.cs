@@ -115,7 +115,7 @@ public class SceneController : MonoBehaviour
 
         float timer = 0;
 
-
+        Debug.Log("d");
 
         while (timer <= this.standardLoadingTime || this.loadingStatus.progress < 0.9f)
         {
