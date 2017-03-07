@@ -510,7 +510,7 @@ public class FSMExecutor : MonoBehaviour
 
         Quaternion vTriggerRotation, vGuidanceRotation;
         Vector3 vTriggerMidPosition, vGuidanceFinPosition;
-
+        soundManagerLinker.PersistendAudio[1].AudioSourceRef.Stop();
         if (vfEntrance == "vAbilityta")
         {
             vTriggerRotation = vfTempLink.aTrigger.transform.rotation;
