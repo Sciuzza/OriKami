@@ -1143,7 +1143,7 @@ public class MenuManager : MonoBehaviour
         colorLink.a = 1;
         this.gpUiRef.MovieRef.ImLink.color = colorLink;
 
-        while (this.gpUiRef.MovieRef.Movie[movieIndex].isPlaying)
+        while (this.gpUiRef.MovieRef.Movie[movieIndex].isPlaying && !Input.GetButtonDown(buttonsJoy.Y.ToString()))
         {
             yield return null;
         }

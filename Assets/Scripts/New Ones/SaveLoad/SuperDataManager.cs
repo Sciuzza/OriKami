@@ -123,11 +123,11 @@ public class TweakableSettings
     public int Form3Index;
     [Range(0, 3)]
     public int Form4Index;
-    [Range(0, 3)]
+    [Range(0, 2)]
     public int StdFormIndex;
-    [Range(0, 3)]
+    [Range(0, 2)]
     public int JdIndex;
-    [Range(0, 3)]
+    [Range(0, 2)]
     public int PtIndex;
 }
 #endregion
