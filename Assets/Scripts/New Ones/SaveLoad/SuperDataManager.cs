@@ -248,17 +248,17 @@ public class SuperDataManager : MonoBehaviour
            StoryLineInstance currentSlInScene =
           GameObject.FindGameObjectWithTag("StoryLine").GetComponent<StoryLineInstance>();
         playerAudioRef = GameObject.FindGameObjectWithTag("Player").GetComponent<SoundManager>();
+        //TODO AUDIO COLLEGAMENTO MENU X CRI BY RICKY 
+        //playerAudioRef.PersistendAudio[0].AudioSourceRef.volume = TwkSettings.MasterValue;
+        //playerAudioRef.PersistendAudio[1].AudioSourceRef.volume = TwkSettings.MasterValue;
+        //gcAudioRef.PersistendAudio[0].AudioSourceRef.volume = TwkSettings.MasterValue;
+        //gcAudioRef.PersistendAudio[1].AudioSourceRef.volume = TwkSettings.MasterValue;
+        //gcAudioRef.PersistendAudio[2].AudioSourceRef.volume = TwkSettings.MasterValue;
+        //gcAudioRef.PersistendAudio[3].AudioSourceRef.volume = TwkSettings.MasterValue;
 
-        playerAudioRef.PersistendAudio[0].AudioSourceRef.volume = TwkSettings.MasterValue;
-        playerAudioRef.PersistendAudio[1].AudioSourceRef.volume = TwkSettings.MasterValue;
-        gcAudioRef.PersistendAudio[0].AudioSourceRef.volume = TwkSettings.MasterValue;
-        gcAudioRef.PersistendAudio[1].AudioSourceRef.volume = TwkSettings.MasterValue;
-        gcAudioRef.PersistendAudio[2].AudioSourceRef.volume = TwkSettings.MasterValue;
-        gcAudioRef.PersistendAudio[3].AudioSourceRef.volume = TwkSettings.MasterValue;
-
-        gcAudioRef.PersistendAudio[0].AudioSourceRef.volume = TwkSettings.MusicValue;
-        gcAudioRef.PersistendAudio[1].AudioSourceRef.volume = TwkSettings.EffectsValue;
-        gcAudioRef.PersistendAudio[2].AudioSourceRef.volume = TwkSettings.EffectsValue;
+        //gcAudioRef.PersistendAudio[0].AudioSourceRef.volume = TwkSettings.MusicValue;
+        //gcAudioRef.PersistendAudio[1].AudioSourceRef.volume = TwkSettings.EffectsValue;
+        //gcAudioRef.PersistendAudio[2].AudioSourceRef.volume = TwkSettings.EffectsValue;
 
         currentSlInScene.RequestRepoUpdateQuests.AddListener(this.UpdatingQuestData);
         currentSlInScene.SaveRequest.AddListener(this.SaveHandler);
