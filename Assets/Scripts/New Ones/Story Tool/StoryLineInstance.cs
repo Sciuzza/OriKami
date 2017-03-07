@@ -494,12 +494,19 @@ public class StoryLineInstance : MonoBehaviour
 
     private bool switchCooldown;
     private List<Coroutine> baloonStories = new List<Coroutine>();
+
+    private SoundManager soundPlayerRef;
+    private SoundManager soundGcRef;
+
     #endregion
 
     #region Taking References and Linking Events
     private void Awake()
     {
         this.player = GameObject.FindGameObjectWithTag("Player");
+
+        soundPlayerRef = GameObject.FindGameObjectWithTag("Player").GetComponent<SoundManager>();
+        soundGcRef = GameObject.FindGameObjectWithTag("GameController").GetComponent<SoundManager>();
 
         var envTempLink = this.player.GetComponent<EnvInputs>();
         envTempLink.storyActivationRequest.AddListener(this.CheckingAccessAndExistenceConditions);
@@ -3291,12 +3298,28 @@ public class StoryLineInstance : MonoBehaviour
     {
         this.MovieRequest.Invoke(movEffect.MovieIndex - 1, movEffect.SmoothInTime);
         //TODO qui stoppi tutto il suono master perchè parte la cutscene
+        
+
+        soundPlayerRef.PersistendAudio[0].AudioSourceRef.volume = 0f;
+        soundPlayerRef.PersistendAudio[1].AudioSourceRef.volume = 0f;
+
+        soundGcRef.PersistendAudio[0].AudioSourceRef.volume = 0f;
+        soundGcRef.PersistendAudio[1].AudioSourceRef.volume = 0f;
+        soundGcRef.PersistendAudio[2].AudioSourceRef.volume = 0f;
+
     }
 
     private void MovieEnd()
     {
         this.effectCounter++;
         //TODO qui lo reimposti a come era prima
+        soundPlayerRef.PersistendAudio[0].AudioSourceRef.volume = 0.2f;
+        soundPlayerRef.PersistendAudio[1].AudioSourceRef.volume = 0.2f;
+
+        soundGcRef.PersistendAudio[0].AudioSourceRef.volume = 0.15f;
+        soundGcRef.PersistendAudio[1].AudioSourceRef.volume = 0.15f;
+        soundGcRef.PersistendAudio[2].AudioSourceRef.volume = 0.15f;
+
     }
     #endregion
 

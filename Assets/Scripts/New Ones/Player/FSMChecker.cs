@@ -1910,7 +1910,7 @@ public class FSMChecker : MonoBehaviour
 
         if (this.cPlayerState.currentClState == controlStates.noControl)
         {
-            //TODO qui riki
+            
             soundRef.PersistendAudio[1].AudioSourceRef.Stop();
             this.EnablingMove();
         }
