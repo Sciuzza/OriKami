@@ -1154,6 +1154,10 @@ public class MenuManager : MonoBehaviour
         this.gpUiRef.MovieRef.ImLink.color = colorLink;
 
         this.movieEndNotification.Invoke();
+
+        if (movieIndex == 7)
+            changingSceneRequest.Invoke("Main Menu");
+
     }
 
     private void UpdatingCollectibleNumber(int goldenCraneNumber)
