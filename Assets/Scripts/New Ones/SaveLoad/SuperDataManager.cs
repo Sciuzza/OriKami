@@ -150,6 +150,8 @@ public class SuperDataManager : MonoBehaviour
 
     private int objCounter = 0;
     private int butCounter = 0;
+    private SoundManager playerAudioRef;
+    private SoundManager gcAudioRef;
     #endregion
 
     #region Events
@@ -164,6 +166,9 @@ public class SuperDataManager : MonoBehaviour
         //this.ErasingData();
 
         this.InitializeOriginalData();
+
+       
+        gcAudioRef = this.gameObject.GetComponent<SoundManager>();
 
         var mmTempLink = this.gameObject.GetComponent<MenuManager>();
 
@@ -240,14 +245,29 @@ public class SuperDataManager : MonoBehaviour
     private void InitializingGameplayScene(GameObject player)
     {
 
-        StoryLineInstance currentSlInScene =
+           StoryLineInstance currentSlInScene =
           GameObject.FindGameObjectWithTag("StoryLine").GetComponent<StoryLineInstance>();
+        playerAudioRef = GameObject.FindGameObjectWithTag("Player").GetComponent<SoundManager>();
+
+        playerAudioRef.PersistendAudio[0].AudioSourceRef.volume = TwkSettings.MasterValue;
+        playerAudioRef.PersistendAudio[1].AudioSourceRef.volume = TwkSettings.MasterValue;
+        gcAudioRef.PersistendAudio[0].AudioSourceRef.volume = TwkSettings.MasterValue;
+        gcAudioRef.PersistendAudio[1].AudioSourceRef.volume = TwkSettings.MasterValue;
+        gcAudioRef.PersistendAudio[2].AudioSourceRef.volume = TwkSettings.MasterValue;
+        gcAudioRef.PersistendAudio[3].AudioSourceRef.volume = TwkSettings.MasterValue;
+
+        gcAudioRef.PersistendAudio[0].AudioSourceRef.volume = TwkSettings.MusicValue;
+        gcAudioRef.PersistendAudio[1].AudioSourceRef.volume = TwkSettings.EffectsValue;
+        gcAudioRef.PersistendAudio[2].AudioSourceRef.volume = TwkSettings.EffectsValue;
 
         currentSlInScene.RequestRepoUpdateQuests.AddListener(this.UpdatingQuestData);
         currentSlInScene.SaveRequest.AddListener(this.SaveHandler);
 
         player.GetComponent<FSMChecker>().deathRequest.AddListener(this.LoadingHandler);
         player.GetComponent<EnvInputs>().SaveRequestByCheck.AddListener(this.SaveHandler);
+
+
+
 
         var changeLevTempLink = GameObject.FindGameObjectsWithTag("ChangeScene");
 
