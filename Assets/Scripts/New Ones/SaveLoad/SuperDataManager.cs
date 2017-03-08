@@ -639,7 +639,7 @@ public class SuperDataManager : MonoBehaviour
         var SuObjsUpdate = GameObject.FindGameObjectWithTag("Dyn").GetComponentsInChildren<SuperObjectUpdate>(true);
 
         var CameraUpdate = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<ObjectUpdate>();
-        var CameraTarget = GameObject.FindGameObjectWithTag("MainCamera").GetComponentInChildren<ObjectUpdate>();
+        var CameraTarget = GameObject.FindGameObjectWithTag("GameController").GetComponentInChildren<ObjectUpdate>();
         var uiObjects = GameObject.FindGameObjectWithTag("Gameplay Ui").GetComponentsInChildren<ObjectUpdate>(true);
 
         foreach(var ioObj in uiObjects)
