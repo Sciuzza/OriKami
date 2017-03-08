@@ -743,7 +743,7 @@ public class MenuManager : MonoBehaviour
 
     private void QuitGame()
     {
-        this.SaveDataRequest.Invoke();
+        //this.SaveDataRequest.Invoke();
         Application.Quit();
     }
 
