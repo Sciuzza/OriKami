@@ -638,6 +638,18 @@ public class SuperDataManager : MonoBehaviour
         var ObjsUpdate = GameObject.FindGameObjectWithTag("Dyn").GetComponentsInChildren<ObjectUpdate>(true);
         var SuObjsUpdate = GameObject.FindGameObjectWithTag("Dyn").GetComponentsInChildren<SuperObjectUpdate>(true);
 
+        var CameraUpdate = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<ObjectUpdate>();
+        var CameraTarget = GameObject.FindGameObjectWithTag("GameController").GetComponentInChildren<ObjectUpdate>();
+        var uiObjects = GameObject.FindGameObjectWithTag("Gameplay Ui").GetComponentsInChildren<ObjectUpdate>(true);
+
+        foreach(var ioObj in uiObjects)
+        {
+            ioObj.OnValidateCustom();
+        }
+
+        CameraUpdate.OnValidateCustom();
+        CameraTarget.OnValidateCustom();
+
         for (var index = 0; index < ObjsUpdate.Length; index++)
         {
 

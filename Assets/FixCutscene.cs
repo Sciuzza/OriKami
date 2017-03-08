@@ -17,7 +17,7 @@ public class FixCutscene : MonoBehaviour
     private IEnumerator Moving()
     {
         var timer = 0.0f;
-        var timeTaker = 0.05f;
+        var timeTaker = 0.35f;
 
         var oriPos = this.startTrigger.transform.position;
         var tarPos = this.gbRef.transform.position;
