@@ -13,9 +13,10 @@ public class MainMenuRepo : MonoBehaviour
     }
     IEnumerator MainMenuCO()
     {
+        soundRef.PersistendAudio[0].AudioSourceRef.Stop();
         soundRef.PlaySound(3, 0);
         yield return new WaitForSeconds(soundRef.PersistendAudio[3].AudioSourceRef.clip.length);
-        soundRef.PlaySound(0, 6);
+        soundRef.PlaySound(4, 0);
     }
 
     // Main Menu Section

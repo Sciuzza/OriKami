@@ -105,7 +105,7 @@ public class GameController : MonoBehaviour
             else if (scene.name == "Main Menu")
             {
                 Debug.Log("DIO DIO DIO DIO ");
-                soundRef.PlaySound(0, 6);
+               // soundRef.PlaySound(0, 6);
             }
 
             else if (scene.name == "Route 1" || scene.name == "Route 2" || scene.name == "route 3" || scene.name == "Route 4")
