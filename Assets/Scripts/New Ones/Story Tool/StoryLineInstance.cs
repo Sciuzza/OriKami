@@ -3306,6 +3306,7 @@ public class StoryLineInstance : MonoBehaviour
         soundGcRef.PersistendAudio[0].AudioSourceRef.volume = 0f;
         soundGcRef.PersistendAudio[1].AudioSourceRef.volume = 0f;
         soundGcRef.PersistendAudio[2].AudioSourceRef.volume = 0f;
+        soundGcRef.PersistendAudio[4].AudioSourceRef.Stop();
 
     }
 
@@ -3319,6 +3320,8 @@ public class StoryLineInstance : MonoBehaviour
         soundGcRef.PersistendAudio[0].AudioSourceRef.volume = 0.15f;
         soundGcRef.PersistendAudio[1].AudioSourceRef.volume = 0.15f;
         soundGcRef.PersistendAudio[2].AudioSourceRef.volume = 0.15f;
+        soundGcRef.PersistendAudio[4].AudioSourceRef.Stop();
+
 
     }
     #endregion
