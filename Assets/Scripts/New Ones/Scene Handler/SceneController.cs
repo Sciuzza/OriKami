@@ -115,13 +115,13 @@ public class SceneController : MonoBehaviour
 
         float timer = 0;
 
-        Debug.Log("d");
+        //Debug.Log("d");
 
         while (timer <= this.standardLoadingTime || this.loadingStatus.progress < 0.9f)
         {
             timer += Time.deltaTime;
             this.ProgressUpdateRequest.Invoke(Mathf.InverseLerp(0, this.standardLoadingTime, timer));
-
+            Debug.Log(timer);
             yield return null;
         }
 

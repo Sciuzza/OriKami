@@ -1043,6 +1043,7 @@ public class MenuManager : MonoBehaviour
 
 
         this.gpUiRef.ContinueB.onClick.AddListener(this.ComeBackToGame);
+        this.gpUiRef.MainMenuB.onClick.AddListener(this.ComeBackToGame);
         this.gpUiRef.MainMenuB.onClick.AddListener(this.MainMenuRequestHandler);
         this.gpUiRef.ExitB.onClick.AddListener(this.QuitWithoutSaving);
 
@@ -1138,10 +1139,13 @@ public class MenuManager : MonoBehaviour
         colorLink.a = 1;
         this.gpUiRef.MovieRef.ImLink.color = colorLink;
 
-        while (this.gpUiRef.MovieRef.Movie[movieIndex].isPlaying)
+        while (this.gpUiRef.MovieRef.Movie[movieIndex].isPlaying && !Input.GetButtonDown("Y"))
         {
             yield return null;
         }
+
+        gpUiRef.MovieRef.Movie[movieIndex].Stop();
+        gpUiRef.MovieRef.AudioLink.Stop();
 
         while (colorLink.a > 0)
         {
