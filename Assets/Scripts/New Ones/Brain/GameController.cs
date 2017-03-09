@@ -8,6 +8,7 @@ using VolumetricFogAndMist;
 public class GameController : MonoBehaviour
 {
     public Camera cameraRef;
+    public VolumetricFog CameraGb;
     public GameObject dLight;
     private AudioClip audioRef;
     private SoundManager soundRef;
@@ -56,6 +57,13 @@ public class GameController : MonoBehaviour
     #region Initialization Methods
     public void InitializingScene()
     {
+        if (SceneManager.GetActiveScene().name == "Main Menu" && !CameraGb.enabled)
+        {
+            CameraGb.enabled = true;
+            cameraRef.clearFlags = CameraClearFlags.Skybox;
+        }
+
+
         if (FindingPlayer())
         {
             Debug.Log("Initializer Invoked Once");

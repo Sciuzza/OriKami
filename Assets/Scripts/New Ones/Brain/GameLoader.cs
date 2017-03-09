@@ -12,6 +12,7 @@ public class GameLoader : MonoBehaviour
     {
         gbTempLink = GameObject.FindGameObjectWithTag("GameController");
         Application.targetFrameRate = 60;
+        //gbTempLink.GetComponent<GameController>().cameraRef.
     }
     #endregion
 
