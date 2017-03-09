@@ -176,7 +176,7 @@ public class CameraManager : MonoBehaviour
 
         this.currentX = calPos.transform.eulerAngles.y;
         this.currentY = calPos.transform.eulerAngles.x;
-        this.currentDistance = (this.lastDesignCamera.transform.position - this.playerTransform.position).magnitude / 2;
+        this.currentDistance = (this.lastDesignCamera.transform.position - this.playerTransform.position).magnitude * (2/3.0f);
 
         Destroy(calPos);
        
