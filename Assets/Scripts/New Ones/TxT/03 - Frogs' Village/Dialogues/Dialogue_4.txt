@@ -1,6 +1,6 @@
-Jiraiya/Left/Jiriaya_Determinated/Father.
+Jiraiya/Left/Jiraiya_Determinated/Father.
 Frogs Emperor/Right/FrogsEmperor_Standard/Son.*Are you here to beg me to forgive you?
-Jiraiya/Left/Jiriaya_Determinated/No. We need to talk.
+Jiraiya/Left/Jiraiya_Determinated/No. We need to talk.
 Frogs Emperor/Right/FrogsEmperor_Standard/...
 Frogs Emperor/Right/FrogsEmperor_Standard/Your voice has changed.*All right, I'll listen to you.
 Jiraiya/Left/Jiraiya_Determinated/I will become emperor. This is what you want and the village relies on me.*Just... Not now.
